@@ -43,8 +43,6 @@ export const formatToTimeDifference = (
   };
   const formatter = new Intl.RelativeTimeFormat(locale, options);
 
-  console.log(timeDifference);
-
   if (timeDifference < 60000) {
     return formatter.format(-Math.floor(timeDifference / 1000), "second");
   } else if (timeDifference < 3600) {

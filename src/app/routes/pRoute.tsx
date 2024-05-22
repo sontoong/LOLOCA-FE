@@ -1,6 +1,5 @@
 import { Navigate } from "react-router-dom";
 import { useAppSelector } from "../redux/hook";
-// import Forbidden from "../pages/ForbiddenPage";
 import ErrorPage from "../pages/public/404Page";
 
 interface PrivateRouteProps {
@@ -40,7 +39,9 @@ const PrivateRoute = ({
     }
   }
 
-  if (role && !requiredRoles?.some((r) => role === r)) return <ErrorPage />;
+  if (role && !requiredRoles?.some((r) => role === r)) {
+    return <ErrorPage />;
+  }
 
   return isAuth ? children : <Navigate to="/login" />;
 };

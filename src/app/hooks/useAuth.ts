@@ -37,7 +37,6 @@ export function useAuth() {
       localStorage.setItem("userId", decode.id);
       navigate("/");
     } catch (error) {
-      console.log(error);
       if (error instanceof AxiosError) {
         const errorResponse = error?.response?.data?.message;
         notification.error({
