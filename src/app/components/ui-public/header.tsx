@@ -61,8 +61,9 @@ export default function MyHeader() {
         ];
       default:
         return [
-          generateItem("Tìm Project", "/projects"),
-          generateItem("Tìm Hồ Sơ", "/candidates"),
+          generateItem("Cities", "/city"),
+          generateItem("Tours", "/tour"),
+          generateItem("Guides", "/guide"),
         ];
     }
   };
