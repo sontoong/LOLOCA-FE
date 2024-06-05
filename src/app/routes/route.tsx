@@ -8,7 +8,9 @@ import PublicLayout from "../layout/public-layout";
 //public
 import LoginPage from "../pages/public/LoginPage";
 import SignupPage from "../pages/public/SignupPage";
-import HomePage from "../pages/public/HomePage";
+import CitiesPage from "../pages/public/CitiesPage";
+import ToursPage from "../pages/public/ToursPage";
+import GuidesPage from "../pages/public/GuidesPage";
 import ErrorPage from "../pages/public/404Page";
 
 //other page
@@ -27,17 +29,37 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "",
+        element: <Navigate to={"/cities"} />,
+      },
+      {
+        path: "cities",
         element: (
           <Suspense fallback={<></>}>
             <PrivateRoute inverted={true}>
-              <HomePage />
+              <CitiesPage />
             </PrivateRoute>
           </Suspense>
         ),
       },
       {
-        path: "home",
-        element: <Navigate to={"/"} />,
+        path: "tours",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={true}>
+              <ToursPage />
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "guides",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={true}>
+              <GuidesPage />
+            </PrivateRoute>
+          </Suspense>
+        ),
       },
       {
         path: "test",

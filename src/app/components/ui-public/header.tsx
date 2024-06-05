@@ -1,10 +1,13 @@
 import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, Dropdown, Menu, MenuProps, Modal, Spin } from "antd";
-import { Header } from "antd/es/layout/layout";
+import { Avatar, Dropdown, Layout, Menu, MenuProps, Modal, Spin } from "antd";
 import { ItemType } from "antd/es/menu/interface";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useAppSelector } from "../../redux/hook";
+import logo from "../../../assets/logo.png";
+import { PrimaryButton } from "../buttons";
+
+const { Header } = Layout;
 
 export default function MyHeader() {
   const location = useLocation();
@@ -17,67 +20,39 @@ export default function MyHeader() {
     handleLogout({ userId: "abc" }, navigate);
   };
 
-  function generateItem(
-    label: React.ReactNode,
-    key: React.Key,
-    icon?: React.ReactNode,
-    children?: ItemType[]
-  ): ItemType {
-    return {
-      key,
-      icon,
-      children,
-      label,
-    };
-  }
-
-  const getHeader = (): ItemType[] => {
+  function getHeader(): ItemType[] {
     switch (currentUser.role) {
-      case "candidate":
+      case "user":
         return [
-          generateItem("Tìm Project", "/projects"),
-          generateItem("Quản Lý Project", "/fd/projects"),
-          generateItem("Thống Kê", "/fd/report", "", [
-            {
-              label: "Thống Kê Thu Nhập",
-              key: "/fd/report/earnings",
-            },
-            {
-              label: "Lịch Sử Giao Dịch",
-              key: "/fd/report/transactions",
-            },
-          ]),
+          generateItem("Cities", "/cities", ""),
+          generateItem("Tours", "/tours"),
+          generateItem("Guides", "/guides"),
         ];
-      case "enterprise":
+      case "trainer":
         return [
           generateItem("Quản Lý Project", "abc", "", [
-            { label: "Danh Sách Project", key: "/ed/projects" },
-            { label: "Đăng Tuyển Dụng", key: "/ed/new-project" },
-          ]),
-          generateItem("Tìm Hồ Sơ", "/candidates"),
-          generateItem("Thống Kê", "/ed/report", "", [
-            { label: "Lịch Sử Giao Dịch", key: "/ed/report/transactions" },
+            generateItem("abc", "abc"),
           ]),
         ];
       default:
         return [
-          generateItem("Cities", "/city"),
-          generateItem("Tours", "/tour"),
-          generateItem("Guides", "/guide"),
+          generateItem("Cities", "/cities"),
+          generateItem("Tours", "/tours"),
+          generateItem("Guides", "/guides"),
         ];
     }
-  };
+  }
 
-  const getProfileDropdown = (): ItemType[] => {
+  function getProfileDropdown(): ItemType[] {
     switch (currentUser.role) {
       case "candidate":
         return [
-          generateItem(
+          generateItemProfile(
             <Link to={`/fd/account`}>Thông tin cá nhân</Link>,
             "/account",
             <UserOutlined />
           ),
-          generateItem(
+          generateItemProfile(
             <div onClick={logOut}>Đăng xuất</div>,
             "",
             <LogoutOutlined />
@@ -85,12 +60,12 @@ export default function MyHeader() {
         ];
       case "enterprise":
         return [
-          generateItem(
+          generateItemProfile(
             <Link to={`/ed/account`}>Thông tin cá nhân</Link>,
             "/account",
             <UserOutlined />
           ),
-          generateItem(
+          generateItemProfile(
             <div onClick={logOut}>Đăng xuất</div>,
             "",
             <LogoutOutlined />
@@ -98,64 +73,100 @@ export default function MyHeader() {
         ];
       default:
         return [
-          generateItem(
+          generateItemProfile(
             <div onClick={logOut}>Đăng xuất</div>,
             "",
             <LogoutOutlined />
           ),
         ];
     }
-  };
+  }
 
   const onClick: MenuProps["onClick"] = (e) => {
     if (e.key) navigate(e.key);
   };
+
   return (
-    <Header className="fixed z-50 flex w-full border-b border-gray-200 bg-white px-5">
-      <img
-        alt=""
-        className="px-10 py-1 hover:cursor-pointer"
-        onClick={() => navigate("/")}
-      />
-      <Menu
-        mode="horizontal"
-        items={getHeader()}
-        style={{ flex: 1, minWidth: 0 }}
-        selectedKeys={location.pathname
-          .split("/")
-          .slice(1)
-          .map((_, index, arr) => `/${arr.slice(0, index + 1).join("/")}`)}
-        onClick={onClick}
-      />
-      {Object.values(currentUser).length ? (
-        <Dropdown
-          menu={{ items: getProfileDropdown() }}
-          placement="bottomRight"
-          trigger={["click"]}
-          arrow
-        >
-          <Avatar
-            className="fixed right-4 top-3 cursor-pointer"
-            size={"large"}
-            icon={<UserOutlined />}
-            src={currentUser.avatar}
-          />
-        </Dropdown>
-      ) : (
-        <Button
-          className="self-center"
-          type="default"
-          onClick={() => navigate("/login")}
-        >
-          Đăng nhập
-        </Button>
-      )}
+    <>
+      <Header className="fixed z-50 flex w-full border-b border-gray-200 bg-white px-5">
+        <img
+          alt=""
+          className="px-10 py-1 hover:cursor-pointer"
+          onClick={() => navigate("/")}
+          src={logo}
+        />
+        <Menu
+          mode="horizontal"
+          items={getHeader()}
+          style={{
+            flex: 1,
+            minWidth: 0,
+            borderBottom: "none",
+          }}
+          selectedKeys={location.pathname
+            .split("/")
+            .slice(1)
+            .map((_, index, arr) => `/${arr.slice(0, index + 1).join("/")}`)}
+          onClick={onClick}
+        />
+        {Object.values(currentUser).length ? (
+          <Dropdown
+            menu={{ items: getProfileDropdown() }}
+            placement="bottomRight"
+            trigger={["click"]}
+            arrow
+          >
+            <Avatar
+              className="fixed right-4 top-3 cursor-pointer"
+              size={"large"}
+              icon={<UserOutlined />}
+              src={currentUser.avatar}
+            />
+          </Dropdown>
+        ) : (
+          <PrimaryButton
+            className="rounded-full self-center"
+            bgColor="#000000"
+            onClick={() => navigate("/login")}
+          >
+            Get started
+          </PrimaryButton>
+        )}
+      </Header>
       <Modal footer={null} closable={false} open={state.isFetching}>
         <div className="flex flex-col items-center justify-center">
           <Spin size="large"></Spin>
           <span>Đang đăng xuất...</span>
         </div>
       </Modal>
-    </Header>
+    </>
   );
+}
+
+function generateItem(
+  label: string,
+  key: React.Key,
+  icon?: React.ReactNode,
+  children?: ItemType[]
+): ItemType {
+  return {
+    key,
+    icon,
+    children,
+    label: <span className="font-bold text-lg">{label}</span>,
+  };
+}
+
+function generateItemProfile(
+  label: React.ReactNode,
+  key: React.Key,
+  icon?: React.ReactNode,
+  children?: ItemType[]
+): ItemType {
+  return {
+    key,
+    icon,
+    children,
+    label,
+  };
 }

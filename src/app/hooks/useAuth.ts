@@ -11,8 +11,11 @@ export type LoginParams = {
 };
 
 export type SignupParams = {
+  email: string;
+  firstName: string;
+  lastName: string;
   password: string;
-  passwordConfirm: string;
+  phone: string;
 };
 
 export type LogoutParams = {
