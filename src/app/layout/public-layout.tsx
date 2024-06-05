@@ -1,6 +1,6 @@
-import Header from "../components/ui-public/header";
-import Footer from "../components/ui-public/footer";
-import Content from "../components/ui-public/content";
+import Header from "./public/header";
+import Footer from "./public/footer";
+import Content from "./public/content";
 import { Layout } from "antd";
 // import { useCallback, useEffect, useState } from "react";
 // import agent from "../../utils/agent";

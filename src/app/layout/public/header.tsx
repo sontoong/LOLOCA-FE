@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useAppSelector } from "../../redux/hook";
 import logo from "../../../assets/logo.png";
-import { PrimaryButton } from "../buttons";
+import { PrimaryButton } from "../../components/buttons";
 
 const { Header } = Layout;
 
@@ -125,12 +125,12 @@ export default function MyHeader() {
           </Dropdown>
         ) : (
           <PrimaryButton
+            text="Get started"
             className="rounded-full self-center"
             bgColor="#000000"
+            size="middle"
             onClick={() => navigate("/login")}
-          >
-            Get started
-          </PrimaryButton>
+          />
         )}
       </Header>
       <Modal footer={null} closable={false} open={state.isFetching}>

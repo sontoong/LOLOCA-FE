@@ -2,27 +2,33 @@ import { Col, Row, Space, Tooltip, Typography } from "antd";
 import { InfoCircleOutlined, UserOutlined } from "@ant-design/icons";
 
 import { PrimaryButton } from "../components/buttons";
-import { Input, InputNumber, InputPassword } from "../components/inputs";
+import { Input, InputNumber } from "../components/inputs";
 
 const { Title } = Typography;
 
 export default function TestPage() {
   const baseComponents = [
     <Input placeholder="Text" />,
-    <InputPassword placeholder="Password" />,
+    <Input.Password placeholder="Password" />,
     <InputNumber placeholder="Number" />,
-    <PrimaryButton>Primary button</PrimaryButton>,
+    <PrimaryButton text="Primary button" />,
   ];
   const sampleComponents = [
-    <ExampleInput />,
-    <PrimaryButton>
-      <span style={{ fontWeight: "bold", color: "white", fontSize: "16px" }}>
-        Create
-      </span>
-    </PrimaryButton>,
-    <PrimaryButton className="rounded-full" bgColor="#000000">
-      Get started
-    </PrimaryButton>,
+    <Input
+      placeholder="Enter your username"
+      prefix={<UserOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+      suffix={
+        <Tooltip title="Extra information">
+          <InfoCircleOutlined style={{ color: "rgba(0,0,0,.45)" }} />
+        </Tooltip>
+      }
+    />,
+    <PrimaryButton.BoldText size="large" text="Create" />,
+    <PrimaryButton
+      text="Get started"
+      className="rounded-full"
+      bgColor="#000000"
+    />,
   ];
 
   return (
@@ -48,19 +54,5 @@ export default function TestPage() {
         </Row>
       </div>
     </Space>
-  );
-}
-
-function ExampleInput() {
-  return (
-    <Input
-      placeholder="Enter your username"
-      prefix={<UserOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
-      suffix={
-        <Tooltip title="Extra information">
-          <InfoCircleOutlined style={{ color: "rgba(0,0,0,.45)" }} />
-        </Tooltip>
-      }
-    />
   );
 }

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import agent from "../../utils/agent";
 import { AxiosError } from "axios";
-import { LoginParams, LogoutParams, SignupParams } from "../../hooks/useAuth";
+import { LoginParams, SignupParams } from "../../hooks/useAuth";
 
 export interface IAuth {
   isFetching: boolean;
@@ -52,26 +52,7 @@ export const signup = createAsyncThunk<any, SignupParams>(
   "auth/login",
   async (data) => {
     try {
-      const response = await agent.Auth.signup({
-        ...data,
-      });
-      return response;
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        return {
-          message: error.response?.data.error.message,
-          status: error.response?.status,
-        };
-      }
-    }
-  }
-);
-
-export const logout = createAsyncThunk<any, LogoutParams>(
-  "auth/login",
-  async (data) => {
-    try {
-      const response = await agent.Auth.logout({
+      const response = await agent.Register.registerCustomer({
         ...data,
       });
       return response;
