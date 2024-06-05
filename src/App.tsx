@@ -8,7 +8,7 @@ function AppWrapper() {
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: "#00b96b",
+          colorPrimary: "#004AAD",
         },
       }}
       form={{ validateMessages }}
