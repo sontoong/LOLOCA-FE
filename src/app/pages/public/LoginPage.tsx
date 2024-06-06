@@ -18,14 +18,19 @@ export default function LoginPage() {
   };
 
   const handleSubmit = async (values: LoginParams) => {
-    handleLogin(values, navigate);
+    handleLogin(values);
   };
 
   return (
     <div className="h-screen flex justify-center items-center">
       <Space className="w-1/3" direction="vertical" size="large">
         <div className="flex justify-center">
-          <Image src={logoAuth} preview={false} />
+          <Image
+            src={logoAuth}
+            preview={false}
+            onClick={() => navigate("/")}
+            className="cursor-pointer"
+          />
         </div>
         <div>
           <Form
@@ -71,17 +76,12 @@ export default function LoginPage() {
           <Link to="/">Forgot Password?</Link>
         </div>
         <div className="flex justify-end">
-          <PrimaryButton.BoldText text="Log In" />
+          <PrimaryButton.BoldText text="Log In" loading={state.isFetching} />
         </div>
         <div>
           Don't have an account? <Link to="/register">Sign Up</Link>
         </div>
       </Space>
-      {state.error && (
-        <article className="text-red-500">
-          Login Failed, Please try later
-        </article>
-      )}
     </div>
   );
 }

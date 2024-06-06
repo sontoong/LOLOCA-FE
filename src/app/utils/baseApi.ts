@@ -5,7 +5,7 @@ const baseURL = Envs.apiLocal;
 
 const baseApi = axios.create({
   baseURL,
-  withCredentials: true,
+  // withCredentials: true,
 });
 
 export default baseApi;

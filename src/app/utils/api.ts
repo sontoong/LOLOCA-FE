@@ -1,23 +1,23 @@
 import axios, { AxiosError } from "axios";
+import { jwtDecode } from "jwt-decode";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
-import { jwtDecode } from "jwt-decode";
 import { router } from "../routes/route";
-import baseApi from "./baseApi";
+import agent from "./agent";
 import { Envs } from "./env";
 
 const baseURL = Envs.apiLocal;
 
 const apiJWT = axios.create({
   baseURL,
-  withCredentials: true,
+  // withCredentials: true,
 });
 
 const sleep = () => new Promise((resolve) => setTimeout(resolve, 500));
 
 apiJWT.interceptors.request.use(async (config) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("access_token");
   const user = localStorage.getItem("user");
   const userObj = user ? JSON.parse(user) : {};
   if (token) {
@@ -26,11 +26,11 @@ apiJWT.interceptors.request.use(async (config) => {
 
     if (decodeToken.exp < date.getTime() / 1000) {
       try {
-        const { data } = await baseApi.post(`/auth/refresh-token`);
+        const { data } = await agent.Auth.refreshToken({ refreshToken: token });
         config.headers["Authorization"] = `Bearer ${data.data.access_token}`;
-        config.headers["uid"] = `Bearer ${data.data.id}`;
+        // config.headers["uid"] = `Bearer ${data.data.id}`;
         localStorage.setItem("access_token", data.data.access_token);
-        localStorage.setItem("uid", data.data.id);
+        // localStorage.setItem("uid", data.data.id);
       } catch (error) {
         if (error instanceof AxiosError) {
           // console.log(error.response?.data.error);
@@ -62,19 +62,19 @@ apiJWT.interceptors.response.use(
   },
   (error) => {
     NProgress.done();
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("access_token");
     if (error.response && error.response?.status === 401) {
       localStorage.clear();
       router.navigate("/login");
     }
-    if (
-      error.response &&
-      error.response?.status === 403 &&
-      error.response?.data?.error?.message !== "User has been blocked" &&
-      token
-    ) {
-      router.navigate("/forbidden");
-    }
+    // if (
+    //   error.response &&
+    //   error.response?.status === 403 &&
+    //   error.response?.data?.error?.message !== "User has been blocked" &&
+    //   token
+    // ) {
+    //   router.navigate("/forbidden");
+    // }
     return Promise.reject(error.response);
   }
 );

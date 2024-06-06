@@ -13,7 +13,7 @@ const PrivateRoute = ({
   children,
   requiredRoles,
 }: PrivateRouteProps) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("access_token");
   const isAuth = token ? true : false;
   const { role } = useAppSelector((state) => state.user.currentUser);
   // const user = localStorage.getItem('user');
@@ -27,12 +27,12 @@ const PrivateRoute = ({
   if (inverted) {
     if (isAuth) {
       switch (role) {
-        case "enterprise":
-          return <Navigate to="/ed/projects" />;
-        case "candidate":
+        case "customer":
+          return <Navigate to="/cities" />;
+        case "tourguide":
           return <Navigate to="/projects" />;
         default:
-          return <Navigate to="/" />;
+          return <Navigate to="/cities" />;
       }
     } else {
       return children;
