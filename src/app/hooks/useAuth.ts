@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { NavigateFunction } from "react-router-dom";
 import { AxiosError } from "axios";
 import { jwtDecode } from "jwt-decode";
-import { login, logout, signup } from "../redux/slice/authSlice";
+import { login, signup } from "../redux/slice/authSlice";
 import { App } from "antd";
 
 export type LoginParams = {
@@ -80,11 +80,11 @@ export function useAuth() {
     navigate: NavigateFunction
   ) => {
     try {
-      const response = await dispatch(logout(value));
-      if (response) {
-        localStorage.clear();
-        navigate("/login");
-      }
+      // const response = await dispatch(logout(value));
+      // if (response) {
+      //   localStorage.clear();
+      //   navigate("/login");
+      // }
     } catch (error) {
       if (error instanceof AxiosError) {
         const errorResponse = error?.response?.data?.message;
