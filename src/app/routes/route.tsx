@@ -7,7 +7,7 @@ import PublicLayout from "../layout/public-layout";
 
 //public
 import LoginPage from "../pages/public/LoginPage";
-import SignupPage from "../pages/public/SignupPage";
+import RegisterPage from "../pages/public/RegisterPage";
 import CitiesPage from "../pages/public/CitiesPage";
 import ToursPage from "../pages/public/ToursPage";
 import GuidesPage from "../pages/public/GuidesPage";
@@ -35,7 +35,7 @@ export const router = createBrowserRouter([
         path: "cities",
         element: (
           <Suspense fallback={<></>}>
-            <PrivateRoute inverted={true}>
+            <PrivateRoute inverted={false}>
               <CitiesPage />
             </PrivateRoute>
           </Suspense>
@@ -45,7 +45,7 @@ export const router = createBrowserRouter([
         path: "tours",
         element: (
           <Suspense fallback={<></>}>
-            <PrivateRoute inverted={true}>
+            <PrivateRoute inverted={false}>
               <ToursPage />
             </PrivateRoute>
           </Suspense>
@@ -55,7 +55,7 @@ export const router = createBrowserRouter([
         path: "guides",
         element: (
           <Suspense fallback={<></>}>
-            <PrivateRoute inverted={true}>
+            <PrivateRoute inverted={false}>
               <GuidesPage />
             </PrivateRoute>
           </Suspense>
@@ -104,7 +104,7 @@ export const router = createBrowserRouter([
     element: (
       <Suspense fallback={<></>}>
         <PrivateRoute inverted={true}>
-          <SignupPage />
+          <RegisterPage />
         </PrivateRoute>
       </Suspense>
     ),

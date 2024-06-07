@@ -9,6 +9,7 @@ function CustomInputPassword(props: TCustomInput) {
 }
 
 CustomInput.Password = CustomInputPassword;
+CustomInput.OTP = Input.OTP;
 
 export default CustomInput;
 

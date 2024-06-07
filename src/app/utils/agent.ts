@@ -28,62 +28,65 @@ const baseRequests = {
 };
 
 //base APIs
-const _authBase = "v1/auth";
+const _authBase = "Authenticate";
 const Auth = {
-  login: (data: any) => baseRequests.post(`${_authBase}`, data),
-  verify: (data: any) => baseRequests.post(`${_authBase}/verify`, data),
-  refreshToken: (data: any) => baseRequests.post(`${_authBase}/refresh`, data),
+  // auth
+  login: (data: any) => baseRequests.post(`${_authBase}/auth`, data),
+  authVerify: (data: any) =>
+    baseRequests.post(`${_authBase}/auth/verify`, data),
+  refreshToken: (data: any) =>
+    baseRequests.post(`${_authBase}/auth/refresh`, data),
   forgetPassword: (data: any) =>
-    baseRequests.post(`${_authBase}/forget-password`, data),
+    baseRequests.post(`${_authBase}/auth/forget-password`, data),
   forgetPasswordVerify: (data: any) =>
-    baseRequests.post(`${_authBase}/forget-password/verify`, data),
+    baseRequests.post(`${_authBase}/auth/forget-password/verify`, data),
   forgetPasswordNewpassword: (data: any) =>
-    baseRequests.post(`${_authBase}/forget-password/new-password`, data),
-};
-
-const _registerBase = "v1/register";
-const Register = {
+    baseRequests.post(`${_authBase}/auth/forget-password/new-password`, data),
+  // register
   registerCustomer: (data: any) =>
-    baseRequests.post(`${_registerBase}/customer`, data),
+    baseRequests.post(`${_authBase}/register/customer`, data),
   registerTourguide: (data: any) =>
-    baseRequests.post(`${_registerBase}/tourguide`, data),
-  verify: (data: any) => baseRequests.post(`${_registerBase}/verify`, data),
+    baseRequests.post(`${_authBase}/register/tourguide`, data),
+  registerVerify: (data: any) =>
+    baseRequests.post(`${_authBase}/register/verify`, data),
 };
 
 //APIs
 const _bookingTour = "BookingTour";
 const BookingTour = {
-  bookingTour: (data: any) => requests.post(`${_bookingTour}`, data),
-  getBookingTour: () => requests.get(`${_bookingTour}`),
-  getBookingTourDetail: (param: any) =>
-    requests.get(`${_bookingTour}/${param}`),
-  getBookingTourCustomer: (param: any) =>
+  createBookingTour: (data: any) =>
+    requests.post(`${_bookingTour}/create-booking-tour-request`, data),
+  getAllBookingTour: () =>
+    requests.get(`${_bookingTour}/get-all-booking-tour-reuqest`),
+  getBookingTourById: (param: any) => requests.get(`${_bookingTour}/${param}`),
+  getBookingTourByCustomerId: (param: any) =>
     requests.get(`${_bookingTour}/customer/${param}`),
-  getBookingTourTourguide: (param: any) =>
+  getBookingTourByTourguideId: (param: any) =>
     requests.get(`${_bookingTour}/tourguide/${param}`),
 };
 
 const _bookingTourGuideRequest = "BookingTourGuideRequest";
 const BookingTourGuideRequest = {
-  bookingTourGuideRequest: (data: any) =>
-    requests.post(`${_bookingTourGuideRequest}`, data),
-  getBookingTourGuideRequest: () => requests.get(`${_bookingTourGuideRequest}`),
-  getBookingTourGuideRequestDetail: (param: any) =>
+  createBookingTourGuide: (data: any) =>
+    requests.post(`${_bookingTourGuideRequest}/create-booking-tourguide`, data),
+  getAllBookingTourGuide: () =>
+    requests.get(`${_bookingTourGuideRequest}/get-all-bookingtourguide`),
+  getBookingTourGuideById: (param: any) =>
     requests.get(`${_bookingTourGuideRequest}/${param}`),
-  getBookingTourGuideRequestCustomer: (param: any) =>
+  getBookingTourGuideByCustomerId: (param: any) =>
     requests.get(`${_bookingTourGuideRequest}/customer/${param}`),
-  getBookingTourGuideRequestTourguide: (param: any) =>
+  getBookingTourGuideByTourguideId: (param: any) =>
     requests.get(`${_bookingTourGuideRequest}/tourguide/${param}`),
 };
 
 const _cities = "Cities";
 const Cities = {
   getCities: () => requests.get(`${_cities}`),
-  addCity: (data: any) => requests.post(`${_cities}`, data),
-  getCityDetail: (param: any) => requests.get(`${_cities}/${param}`),
-  updateCityDetail: (param: any, data: any) =>
+  addNewCity: (data: any) => requests.post(`${_cities}`, data),
+  getCityById: (param: any) => requests.get(`${_cities}/${param}`),
+  updateCityById: (param: any, data: any) =>
     requests.put(`${_cities}/${param}`, data),
-  deleteCity: (param: any) => requests.del(`${_cities}/${param}`),
+  deleteCityById: (param: any) => requests.del(`${_cities}/${param}`),
 };
 
 const _customer = "Customer";
@@ -91,14 +94,22 @@ const Customer = {
   updateInfo: (data: any) => requests.post(`${_customer}/update-info`, data),
   changePassword: (data: any) =>
     requests.post(`${_customer}/change-password`, data),
-  updateAvatar: (data: any) => requests.post(`v1/customer/update-avatar`, data),
-  getDetail: () => requests.get(`${_customer}/api/v1/customer`),
-  getPrivate: () => requests.get(`${_customer}/api/v1/customer/private`),
+  updateAvatar: (data: any) =>
+    requests.post(`${_customer}/update-avatar`, data),
+  getAllCustomer: () => requests.get(`${_customer}`),
+  getCustomerById: (params: any) => requests.get(`${_customer}/${params}`),
+  getPrivate: () => requests.get(`${_customer}/private`),
+  changeStatusBookingTourGuide: (params: any, data: any) =>
+    requests.post(
+      `${_customer}/change-status-booking-tour-guide/${params}`,
+      data
+    ),
+  changeStatusBookingTour: (params: any, data: any) =>
+    requests.post(`${_customer}/change-status-booking-tour/${params}`, data),
 };
 
 const agent = {
   Auth,
-  Register,
   BookingTour,
   BookingTourGuideRequest,
   Cities,

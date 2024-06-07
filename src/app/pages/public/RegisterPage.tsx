@@ -1,44 +1,69 @@
 import { InfoCircleOutlined, UserOutlined } from "@ant-design/icons";
-import { Checkbox, Image, Space, Tooltip } from "antd";
+import { Checkbox, Image, Space, Tooltip, Typography } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import logoAuth from "../../../assets/logoAuth.png";
-import bannerSignup from "../../../assets/signup.png";
+import bannerRegister from "../../../assets/registerBanner.png";
 import { Form } from "../../components/form";
 import { Input } from "../../components/inputs";
-import { SignupParams, useAuth } from "../../hooks/useAuth";
+import { RegisterParams, useAuth, VerifyParams } from "../../hooks/useAuth";
 import { useState } from "react";
 import { PrimaryButton } from "../../components/buttons";
+import { Modal } from "../../components/modals";
 
-export default function SignupPage() {
+const { Text, Paragraph } = Typography;
+
+export default function RegisterPage() {
   const navigate = useNavigate();
-  const { state, handleSignup } = useAuth();
+  const { state, handleRegister, handleRegisterVerify } = useAuth();
   const [policyAccept, setPolicyAccept] = useState(false);
+  const [form] = Form.useForm();
 
-  const initialValues: SignupParams = {
+  const initialValues: RegisterParams = {
     email: "",
     firstName: "",
     lastName: "",
     password: "",
-    phone: "",
+    phoneNumber: "",
+    dateOfBirth: "",
+    gender: 0,
   };
 
-  const handleSubmit = async (values: SignupParams) => {
-    handleSignup(values, navigate);
+  const handlePolicyAccept = () => {
+    setPolicyAccept(!policyAccept);
+  };
+
+  const handleSubmit = (values: RegisterParams) => {
+    handleRegister({
+      ...values,
+      gender: 0,
+      dateOfBirth: "2024-06-06T18:53:27.744Z",
+    });
+  };
+
+  const handleOk = (values: VerifyParams) => {
+    handleRegisterVerify(values, navigate);
   };
 
   return (
     <div className="h-screen flex justify-center items-center">
       <Space size={10}>
         <div className="m-[50px]">
-          <Image width={600} src={bannerSignup} preview={false} />
+          <Image width={600} src={bannerRegister} preview={false} />
         </div>
         <Space direction="vertical" size="large">
           <div className="flex justify-center">
-            <Image width={300} src={logoAuth} preview={false} sizes="" />
+            <Image
+              width={300}
+              src={logoAuth}
+              preview={false}
+              onClick={() => navigate("/")}
+              className="cursor-pointer"
+            />
           </div>
           <Form
+            form={form}
             initialValues={initialValues}
-            name="SignupPage"
+            name="RegisterPage"
             onFinish={handleSubmit}
           >
             <Form.Item
@@ -75,7 +100,7 @@ export default function SignupPage() {
             >
               <Input.Password placeholder="Enter new password" />
             </Form.Item>
-            <Space>
+            <Space className="w-full justify-between">
               <Form.Item
                 name="firstName"
                 label="First Name"
@@ -87,7 +112,7 @@ export default function SignupPage() {
                   },
                 ]}
               >
-                <Input.Password placeholder="Enter new password" />
+                <Input placeholder="Enter your first name" />
               </Form.Item>
               <Form.Item
                 name="lastname"
@@ -100,11 +125,11 @@ export default function SignupPage() {
                   },
                 ]}
               >
-                <Input.Password placeholder="Enter new password" />
+                <Input placeholder="Enter your last name" />
               </Form.Item>
             </Space>
             <Form.Item
-              name="phone"
+              name="phoneNumber"
               label="Phone"
               rules={[
                 {
@@ -119,25 +144,39 @@ export default function SignupPage() {
             >
               <Input placeholder="0868 *** ****" />
             </Form.Item>
-            <Checkbox
-              checked={policyAccept}
-              onChange={() => setPolicyAccept((prev) => !prev)}
-            >
+            <Checkbox checked={policyAccept} onChange={handlePolicyAccept}>
               I have read and accept the{" "}
               <Link to="/">Terms and Conditions</Link> &{" "}
               <Link to="/">Privacy Policy</Link>
             </Checkbox>
           </Form>
+          {/* submit button */}
           <div className="flex justify-end">
-            <PrimaryButton.BoldText text="Create" disabled={!policyAccept} />
+            <PrimaryButton.BoldText
+              text="Create"
+              disabled={!policyAccept}
+              onClick={() => form.submit()}
+              loading={state.isFetching}
+            />
+          </div>
+          <div>
+            Already have an account? <Link to="/login">Log In</Link>
           </div>
         </Space>
       </Space>
-      {state.error && (
-        <article className="text-red-500">
-          Login Failed, Please try later
-        </article>
-      )}
+      <Modal.OTP
+        email={state.showOTPModal.email}
+        open={state.showOTPModal.open}
+        handleOk={handleOk}
+        confirmLoading={state.isFetching}
+      >
+        <Paragraph>
+          An OTP has been sent to your email{" "}
+          <Text className="text-blue-500">{state.showOTPModal.email}</Text>.
+          Please check your inbox (and spam folder if not found) for the OTP to
+          proceed with the verification process.
+        </Paragraph>
+      </Modal.OTP>
     </div>
   );
 }

@@ -17,7 +17,7 @@ export default function MyHeader() {
   const { state, handleLogout } = useAuth();
 
   const logOut = async () => {
-    handleLogout({ userId: "abc" }, navigate);
+    handleLogout(navigate);
   };
 
   function getHeader(): ItemType[] {
