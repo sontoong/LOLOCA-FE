@@ -1,6 +1,6 @@
 import { Typography } from 'antd';
 
-const Banner = ({ image, title, description }: {image : string, title: string, description: string}) => {
+const BannerContainer = ({ image, title, description }: {image : string, title: string, description: string}) => {
   const { Title, Text } = Typography;
 
   return (
@@ -32,4 +32,4 @@ const Banner = ({ image, title, description }: {image : string, title: string, d
   );
 }
 
-export default Banner;
+export default BannerContainer;
