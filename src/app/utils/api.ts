@@ -18,16 +18,19 @@ const sleep = () => new Promise((resolve) => setTimeout(resolve, 500));
 
 apiJWT.interceptors.request.use(async (config) => {
   const token = localStorage.getItem("access_token");
-  const user = localStorage.getItem("user");
-  const userObj = user ? JSON.parse(user) : {};
+  const refreshToken = localStorage.getItem("refresh_token");
+  // const user = localStorage.getItem("user");
+  // const userObj = user ? JSON.parse(user) : {};
   if (token) {
     const date = new Date();
     const decodeToken = jwtDecode(token) as { exp: number };
 
     if (decodeToken.exp < date.getTime() / 1000) {
       try {
-        const { data } = await agent.Auth.refreshToken({ refreshToken: token });
-        config.headers["Authorization"] = `Bearer ${data.data.access_token}`;
+        const { data } = await agent.Auth.refreshToken({
+          refreshToken: refreshToken,
+        });
+        config.headers["Authorization"] = `Bearer ${data.data.accessToken}`;
         // config.headers["uid"] = `Bearer ${data.data.id}`;
         localStorage.setItem("access_token", data.data.access_token);
         // localStorage.setItem("uid", data.data.id);
@@ -47,7 +50,7 @@ apiJWT.interceptors.request.use(async (config) => {
       }
     } else {
       config.headers["Authorization"] = `Bearer ${token}`;
-      config.headers["uid"] = `${userObj.user.id}`;
+      // config.headers["uid"] = `${userObj.user.id}`;
     }
   }
   NProgress.start();
@@ -58,7 +61,7 @@ apiJWT.interceptors.response.use(
   async (response) => {
     await sleep();
     NProgress.done();
-    return response.data;
+    return response;
   },
   (error) => {
     NProgress.done();

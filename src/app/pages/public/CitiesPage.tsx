@@ -15,7 +15,7 @@ export default function CitiesPage() {
           "Việt Nam, một đất nước tuy nhỏ nhưng đa dạng về văn hóa, phong cảnh và ẩm thực. Từ những dãy núi hùng vĩ đến những bãi biển tuyệt đẹp, Việt Nam là điểm đến hấp dẫn của du khách."
         }
       />
-      <Row gutter={[16, 16]} style={{ margin: "2%"}}>
+      <Row gutter={[16, 16]} style={{ margin: "2%" }}>
         {cities.map((city, index) => (
           <Col span={6} key={index}>
             <Card
@@ -29,7 +29,9 @@ export default function CitiesPage() {
                 />
               }
             >
-              <Title level={2} className="mt-0">{city.title}</Title>
+              <Title level={2} className="mt-0">
+                {city.title}
+              </Title>
               <Text>{city.description}</Text>
             </Card>
           </Col>

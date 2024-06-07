@@ -1,4 +1,4 @@
 export const ROLE = {
-  customer: "Customer",
-  guide: "Guide",
+  tourguide: "2",
+  customer: "3",
 };

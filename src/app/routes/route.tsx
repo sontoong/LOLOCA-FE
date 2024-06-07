@@ -35,9 +35,7 @@ export const router = createBrowserRouter([
         path: "cities",
         element: (
           <Suspense fallback={<></>}>
-            <PrivateRoute inverted={false}>
-              <CitiesPage />
-            </PrivateRoute>
+            <CitiesPage />
           </Suspense>
         ),
       },
@@ -45,9 +43,7 @@ export const router = createBrowserRouter([
         path: "tours",
         element: (
           <Suspense fallback={<></>}>
-            <PrivateRoute inverted={false}>
-              <ToursPage />
-            </PrivateRoute>
+            <ToursPage />
           </Suspense>
         ),
       },
@@ -55,9 +51,7 @@ export const router = createBrowserRouter([
         path: "guides",
         element: (
           <Suspense fallback={<></>}>
-            <PrivateRoute inverted={false}>
-              <GuidesPage />
-            </PrivateRoute>
+            <GuidesPage />
           </Suspense>
         ),
       },

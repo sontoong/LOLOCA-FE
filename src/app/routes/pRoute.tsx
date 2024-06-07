@@ -1,6 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useAppSelector } from "../redux/hook";
 import ErrorPage from "../pages/public/404Page";
+import { ROLE } from "../../constants/role";
 
 interface PrivateRouteProps {
   inverted: boolean;
@@ -15,7 +16,7 @@ const PrivateRoute = ({
 }: PrivateRouteProps) => {
   const token = localStorage.getItem("access_token");
   const isAuth = token ? true : false;
-  const { role } = useAppSelector((state) => state.user.currentUser);
+  const { Role } = useAppSelector((state) => state.auth.currentUser);
   // const user = localStorage.getItem('user');
   // const userObj = user ? JSON.parse(user) : {};
   // const isFirstLogin = userObj.user.isFirstLogin;
@@ -26,10 +27,10 @@ const PrivateRoute = ({
 
   if (inverted) {
     if (isAuth) {
-      switch (role) {
-        case "customer":
+      switch (Role) {
+        case ROLE.customer:
           return <Navigate to="/cities" />;
-        case "tourguide":
+        case ROLE.tourguide:
           return <Navigate to="/projects" />;
         default:
           return <Navigate to="/cities" />;
@@ -39,7 +40,7 @@ const PrivateRoute = ({
     }
   }
 
-  if (role && !requiredRoles?.some((r) => role === r)) {
+  if (Role && !requiredRoles?.some((r) => Role === r)) {
     return <ErrorPage />;
   }
 

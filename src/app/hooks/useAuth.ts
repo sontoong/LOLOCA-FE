@@ -1,79 +1,43 @@
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { NavigateFunction } from "react-router-dom";
-import { AxiosError } from "axios";
 import { jwtDecode } from "jwt-decode";
 import {
   login,
+  // loginVerify,
   register,
   registerVerify,
+  resetOTPModal,
   setShowOTPModal,
 } from "../redux/slice/authSlice";
 import { App } from "antd";
+import { ROLE } from "../../constants/role";
+import { useCustomer } from "./useCustomer";
+import { useTourguide } from "./useTourguide";
 
 export function useAuth() {
   const { notification } = App.useApp();
   const state = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
+  const { handleGetCustomerbyId } = useCustomer();
+  const { handleGetTourguidebyId } = useTourguide();
 
-  const handleLogin = async (value: LoginParams) => {
-    const resultAction = await dispatch(login(value));
-    if (login.fulfilled.match(resultAction)) {
-      console.log("ok");
-    } else {
-      if (resultAction.payload) {
-        notification.error({
-          message: "Lỗi",
-          description: `${resultAction.payload}`,
-          placement: "topRight",
-        });
-      } else {
-        notification.error({
-          message: "Lỗi",
-          description: resultAction.error.message,
-          placement: "topRight",
-        });
-      }
-    }
-  };
-
-  const handleRegister = async (value: RegisterParams) => {
-    const resultAction = await dispatch(register(value));
-    if (register.fulfilled.match(resultAction)) {
-      console.log("ok");
-      dispatch(
-        setShowOTPModal({
-          open: true,
-          email: value.email,
-        })
-      );
-    } else {
-      if (resultAction.payload) {
-        notification.error({
-          message: "Lỗi",
-          description: `${resultAction.payload}`,
-          placement: "topRight",
-        });
-      } else {
-        notification.error({
-          message: "Lỗi",
-          description: resultAction.error.message,
-          placement: "topRight",
-        });
-      }
-    }
-  };
-
-  const handleRegisterVerify = async (
-    value: VerifyParams,
+  const handleLogin = async (
+    value: LoginParams,
     navigate: NavigateFunction
   ) => {
-    const resultAction = await dispatch(registerVerify(value));
-    if (registerVerify.fulfilled.match(resultAction)) {
+    const resultAction = await dispatch(login(value));
+    if (login.fulfilled.match(resultAction)) {
+      // dispatch(
+      //   setShowOTPModal({
+      //     open: true,
+      //     email: value.email,
+      //   })
+      // );
       const { accessToken, refreshToken } = resultAction.payload;
       localStorage.setItem("access_token", accessToken);
       localStorage.setItem("refresh_token", refreshToken);
       const decode = jwtDecode(accessToken) as any;
-      localStorage.setItem("userId", decode.AccountId);
+      localStorage.setItem("userId", decode.CustomerId ?? decode.TourguideId);
       navigate("/");
     } else {
       if (resultAction.payload) {
@@ -92,22 +56,114 @@ export function useAuth() {
     }
   };
 
-  const handleLogout = async (navigate: NavigateFunction) => {
-    try {
-      // const response = await dispatch(logout(value));
-      // if (response) {
-      localStorage.clear();
-      navigate("/login");
-      // }
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        const errorResponse = error?.response?.data?.message;
+  // const handleLoginVerify = async (
+  //   value: VerifyParams,
+  //   navigate: NavigateFunction
+  // ) => {
+  //   const resultAction = await dispatch(loginVerify(value));
+  //   if (loginVerify.fulfilled.match(resultAction)) {
+  //     dispatch(resetOTPModal());
+  //     const { accessToken, refreshToken } = resultAction.payload;
+  //     localStorage.setItem("access_token", accessToken);
+  //     localStorage.setItem("refresh_token", refreshToken);
+  //     const decode = jwtDecode(accessToken) as any;
+  //     localStorage.setItem("userId", decode.CustomerId ?? decode.TourguideId);
+  //     navigate("/");
+  //   } else {
+  //     if (resultAction.payload) {
+  //       notification.error({
+  //         message: "Error",
+  //         description: `${resultAction.payload}`,
+  //         placement: "topRight",
+  //       });
+  //     } else {
+  //       notification.error({
+  //         message: "Error",
+  //         description: resultAction.error.message,
+  //         placement: "topRight",
+  //       });
+  //     }
+  //   }
+  // };
+
+  const handleRegister = async (value: RegisterParams) => {
+    const resultAction = await dispatch(register(value));
+    if (register.fulfilled.match(resultAction)) {
+      dispatch(
+        setShowOTPModal({
+          open: true,
+          email: value.email,
+        })
+      );
+    } else {
+      if (resultAction.payload) {
         notification.error({
-          message: "Lỗi",
-          description: errorResponse,
+          message: "Error",
+          description: `${resultAction.payload}`,
+          placement: "topRight",
+        });
+      } else {
+        notification.error({
+          message: "Error",
+          description: resultAction.error.message,
           placement: "topRight",
         });
       }
+    }
+  };
+
+  const handleRegisterVerify = async (
+    value: VerifyParams,
+    navigate: NavigateFunction
+  ) => {
+    const resultAction = await dispatch(registerVerify(value));
+    if (registerVerify.fulfilled.match(resultAction)) {
+      dispatch(resetOTPModal());
+      const { accessToken, refreshToken } = resultAction.payload;
+      localStorage.setItem("access_token", accessToken);
+      localStorage.setItem("refresh_token", refreshToken);
+      const decode = jwtDecode(accessToken) as any;
+      localStorage.setItem("userId", decode.CustomerId ?? decode.TourguideId);
+      navigate("/");
+    } else {
+      if (resultAction.payload) {
+        notification.error({
+          message: "Error",
+          description: `${resultAction.payload}`,
+          placement: "topRight",
+        });
+      } else {
+        notification.error({
+          message: "Error",
+          description: resultAction.error.message,
+          placement: "topRight",
+        });
+      }
+    }
+  };
+
+  const handleLogout = async (navigate: NavigateFunction) => {
+    localStorage.clear();
+    navigate("/login");
+  };
+
+  const handleGetUserInfo = async () => {
+    const userId = localStorage.getItem("userId") ?? "";
+    const role = state.currentUser.Role;
+
+    switch (role) {
+      case ROLE.customer: {
+        handleGetCustomerbyId({ customerId: userId });
+        break;
+      }
+
+      case ROLE.tourguide: {
+        handleGetTourguidebyId({ tourGuideId: userId });
+        break;
+      }
+
+      default:
+        break;
     }
   };
 
@@ -116,7 +172,9 @@ export function useAuth() {
     handleLogin,
     handleRegister,
     handleLogout,
+    // handleLoginVerify,
     handleRegisterVerify,
+    handleGetUserInfo,
   };
 }
 

@@ -20,7 +20,6 @@ function OTP(props: OTPProps) {
 
   const handleSubmit = async (values: typeof initialValues) => {
     handleOk({ code: values.code, email });
-    dispatch(resetOTPModal());
   };
 
   const handleCancel = () => {

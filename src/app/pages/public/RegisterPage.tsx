@@ -36,7 +36,7 @@ export default function RegisterPage() {
     handleRegister({
       ...values,
       gender: 0,
-      dateOfBirth: "2024-06-06T18:53:27.744Z",
+      dateOfBirth: new Date().toISOString(),
     });
   };
 

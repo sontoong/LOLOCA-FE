@@ -1,22 +1,37 @@
 export type User = {
-  user_id: string;
-  first_name: string;
-  middle_name: string;
-  last_name: string;
-  password_hashed: string;
-  email: string;
-  phone_number: string;
-  last_update: string;
-  is_active: string;
-  address: string;
+  Role: string;
+  Email: string;
 };
 
-export type UserInfo = {
-  address: string;
-  email: string;
-  full_name: string;
-  phone_number: string;
-  user_id: string;
-  role: string;
-  avatar: string;
+export type Customer = {
+  customerId: number;
+  email: string | null;
+  firstName: string;
+  gender: number; // 0 for male, 1 for female
+  lastName: string;
+  dateOfBirth: string; // ISO 8601 format string
+  phoneNumber: string | null;
+  addressCustomer: string | null;
+  avatar: string | null;
+  avatarUploadTime: string | null;
+  accountStatus: number;
+  balance: number | null;
+};
+
+export type Tourguide = {
+  accountStatus: number;
+  cityName: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string; // ISO 8601 date format
+  gender: number;
+  description: string;
+  zaloLink: string;
+  facebookLink: string;
+  instagramLink: string;
+  pricePerDay: number;
+  avatar: string | null;
+  avatarUploadedTime: string | null;
+  cover: string | null;
+  coverUploadedTime: string | null;
 };

@@ -11,6 +11,7 @@ import { PrimaryButton } from "../../components/buttons";
 export default function LoginPage() {
   const navigate = useNavigate();
   const { state, handleLogin } = useAuth();
+  const [form] = Form.useForm();
 
   const initialValues: LoginParams = {
     email: "",
@@ -18,8 +19,12 @@ export default function LoginPage() {
   };
 
   const handleSubmit = async (values: LoginParams) => {
-    handleLogin(values);
+    handleLogin(values, navigate);
   };
+
+  // const handleOk = (values: VerifyParams) => {
+  //   handleLoginVerify(values, navigate);
+  // };
 
   return (
     <div className="h-screen flex justify-center items-center">
@@ -34,6 +39,7 @@ export default function LoginPage() {
         </div>
         <div>
           <Form
+            form={form}
             initialValues={initialValues}
             name="LoginPage"
             onFinish={handleSubmit}
@@ -76,12 +82,29 @@ export default function LoginPage() {
           <Link to="/">Forgot Password?</Link>
         </div>
         <div className="flex justify-end">
-          <PrimaryButton.BoldText text="Log In" loading={state.isFetching} />
+          <PrimaryButton.BoldText
+            text="Log In"
+            loading={state.isFetching}
+            onClick={() => form.submit()}
+          />
         </div>
         <div>
           Don't have an account? <Link to="/register">Sign Up</Link>
         </div>
       </Space>
+      {/* <Modal.OTP
+        email={state.showOTPModal.email}
+        open={state.showOTPModal.open}
+        handleOk={handleOk}
+        confirmLoading={state.isFetching}
+      >
+        <Paragraph>
+          An OTP has been sent to your email{" "}
+          <Text className="text-blue-500">{state.showOTPModal.email}</Text>.
+          Please check your inbox (and spam folder if not found) for the OTP to
+          proceed with the verification process.
+        </Paragraph>
+      </Modal.OTP> */}
     </div>
   );
 }

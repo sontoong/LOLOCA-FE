@@ -3,32 +3,55 @@ import { Avatar, Dropdown, Layout, Menu, MenuProps, Modal, Spin } from "antd";
 import { ItemType } from "antd/es/menu/interface";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
-import { useAppSelector } from "../../redux/hook";
 import logo from "../../../assets/logo.png";
 import { PrimaryButton } from "../../components/buttons";
+import { ROLE } from "../../../constants/role";
+import { useEffect, useRef } from "react";
+import { useCustomer } from "../../hooks/useCustomer";
+import { useTourguide } from "../../hooks/useTourguide";
+import { Customer, Tourguide } from "../../models/user";
 
 const { Header } = Layout;
 
 export default function MyHeader() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { currentUser } = useAppSelector((state) => state.user);
+  const { state, handleLogout, handleGetUserInfo } = useAuth();
+  const { currentCustomer } = useCustomer().state;
+  const { currentTourguide } = useTourguide().state;
 
-  const { state, handleLogout } = useAuth();
+  const user = useRef({} as Customer | Tourguide);
+
+  useEffect(() => {
+    handleGetUserInfo();
+  }, []);
+
+  useEffect(() => {
+    switch (state.currentUser.Role) {
+      case ROLE.customer:
+        user.current = currentCustomer;
+        break;
+      case ROLE.tourguide:
+        user.current = currentTourguide;
+        break;
+      default:
+        break;
+    }
+  }, [currentCustomer, currentTourguide, state.currentUser.Role]);
 
   const logOut = async () => {
     handleLogout(navigate);
   };
 
   function getHeader(): ItemType[] {
-    switch (currentUser.role) {
-      case "user":
+    switch (state.currentUser.Role) {
+      case ROLE.customer:
         return [
           generateItem("Cities", "/cities", ""),
           generateItem("Tours", "/tours"),
           generateItem("Guides", "/guides"),
         ];
-      case "trainer":
+      case ROLE.tourguide:
         return [
           generateItem("Quản Lý Project", "abc", "", [
             generateItem("abc", "abc"),
@@ -44,8 +67,8 @@ export default function MyHeader() {
   }
 
   function getProfileDropdown(): ItemType[] {
-    switch (currentUser.role) {
-      case "candidate":
+    switch (state.currentUser.Role) {
+      case ROLE.customer:
         return [
           generateItemProfile(
             <Link to={`/fd/account`}>Thông tin cá nhân</Link>,
@@ -58,7 +81,7 @@ export default function MyHeader() {
             <LogoutOutlined />
           ),
         ];
-      case "enterprise":
+      case ROLE.tourguide:
         return [
           generateItemProfile(
             <Link to={`/ed/account`}>Thông tin cá nhân</Link>,
@@ -88,7 +111,7 @@ export default function MyHeader() {
 
   return (
     <>
-      <Header className="fixed z-50 flex w-full border-b border-gray-200 bg-white px-5">
+      <Header className="fixed z-50 flex w-full  bg-white ">
         <img
           alt=""
           className="px-10 py-1 hover:cursor-pointer"
@@ -109,7 +132,7 @@ export default function MyHeader() {
             .map((_, index, arr) => `/${arr.slice(0, index + 1).join("/")}`)}
           onClick={onClick}
         />
-        {Object.values(currentUser).length ? (
+        {localStorage.getItem("access_token") ? (
           <Dropdown
             menu={{ items: getProfileDropdown() }}
             placement="bottomRight"
@@ -120,7 +143,7 @@ export default function MyHeader() {
               className="fixed right-4 top-3 cursor-pointer"
               size={"large"}
               icon={<UserOutlined />}
-              src={currentUser.avatar}
+              src={user.current?.avatar}
             />
           </Dropdown>
         ) : (
