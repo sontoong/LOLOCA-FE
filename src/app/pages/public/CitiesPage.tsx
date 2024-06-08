@@ -14,7 +14,7 @@ import { cities } from "../../utils/testData";
 import { DownOutlined } from "@ant-design/icons";
 
 export default function CitiesPage() {
-  const { Title, Text } = Typography;
+  const { Title, Paragraph } = Typography;
 
   const filterItems: MenuProps["items"] = [
     {
@@ -70,7 +70,7 @@ export default function CitiesPage() {
               <Title level={2} className="mt-0">
                 {city.title}
               </Title>
-              <Text>{city.description}</Text>
+              <Paragraph ellipsis={{ rows: 3, expandable: false }}>{city.description}</Paragraph>
             </Card>
           </Col>
         ))}
