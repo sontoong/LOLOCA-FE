@@ -1,18 +1,25 @@
 import { ConfigProvider, Input, InputProps, theme } from "antd";
 
-function CustomInput(props: TCustomInput) {
+function CustomInput({
+  colorBgContainer,
+  colorTextPlaceholder,
+  ...rest
+}: TCustomInput) {
   const { token } = theme.useToken();
 
-  return <ConfigProvider
-  theme={{
-    token: {
-      colorBgContainer: props.colorBgContainer ?? token.colorBgContainer,
-      colorTextPlaceholder: props.colorTextPlaceholder	?? token.colorTextPlaceholder,
-    },
-  }}
-  >
-    <Input size="large" {...props} />
-  </ConfigProvider>;
+  return (
+    <ConfigProvider
+      theme={{
+        token: {
+          colorBgContainer: colorBgContainer ?? token.colorBgContainer,
+          colorTextPlaceholder:
+            colorTextPlaceholder ?? token.colorTextPlaceholder,
+        },
+      }}
+    >
+      <Input size="large" {...rest} />
+    </ConfigProvider>
+  );
 }
 
 function CustomInputPassword(props: TCustomInput) {
@@ -25,6 +32,6 @@ CustomInput.OTP = Input.OTP;
 export default CustomInput;
 
 type TCustomInput = Omit<InputProps, "style"> & {
-  colorBgContainer?: string,
-  colorTextPlaceholder?: string,
+  colorBgContainer?: string;
+  colorTextPlaceholder?: string;
 };

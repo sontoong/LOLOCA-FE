@@ -24,7 +24,7 @@ export default function MyHeader() {
 
   useEffect(() => {
     handleGetUserInfo();
-  }, []);
+  }, [handleGetUserInfo]);
 
   useEffect(() => {
     switch (state.currentUser.Role) {
@@ -75,6 +75,9 @@ export default function MyHeader() {
             "/account",
             <UserOutlined />
           ),
+          {
+            type: "divider",
+          },
           generateItemProfile(
             <div onClick={logOut}>Đăng xuất</div>,
             "",

@@ -30,13 +30,13 @@ apiJWT.interceptors.request.use(async (config) => {
         const { data } = await agent.Auth.refreshToken({
           refreshToken: refreshToken,
         });
-        config.headers["Authorization"] = `Bearer ${data.data.accessToken}`;
+        config.headers["Authorization"] = `Bearer ${data.accessToken}`;
         // config.headers["uid"] = `Bearer ${data.data.id}`;
-        localStorage.setItem("access_token", data.data.access_token);
+        localStorage.setItem("access_token", data.accessToken);
+        localStorage.setItem("refresh_token", data.refreshToken);
         // localStorage.setItem("uid", data.data.id);
       } catch (error) {
         if (error instanceof AxiosError) {
-          // console.log(error.response?.data.error);
           if (
             error.response?.data.error.message === "You are not authenticated"
           ) {

@@ -11,15 +11,20 @@ import {
 } from "../redux/slice/authSlice";
 import { App } from "antd";
 import { ROLE } from "../../constants/role";
-import { useCustomer } from "./useCustomer";
-import { useTourguide } from "./useTourguide";
+import {
+  getCustomerById,
+  setCurrentCustomer,
+} from "../redux/slice/customerSlice";
+import { useCallback } from "react";
+import {
+  getTourguideById,
+  setCurrentTourguide,
+} from "../redux/slice/tourguideSlice";
 
 export function useAuth() {
   const { notification } = App.useApp();
   const state = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-  const { handleGetCustomerbyId } = useCustomer();
-  const { handleGetTourguidebyId } = useTourguide();
 
   const handleLogin = async (
     value: LoginParams,
@@ -147,25 +152,49 @@ export function useAuth() {
     navigate("/login");
   };
 
-  const handleGetUserInfo = async () => {
+  const handleGetUserInfo = useCallback(async () => {
     const userId = localStorage.getItem("userId") ?? "";
     const role = state.currentUser.Role;
 
     switch (role) {
       case ROLE.customer: {
-        handleGetCustomerbyId({ customerId: userId });
+        const resultAction = await dispatch(
+          getCustomerById({ customerId: userId })
+        );
+        if (getCustomerById.fulfilled.match(resultAction)) {
+          dispatch(setCurrentCustomer(resultAction.payload));
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.payload
+              ? `${resultAction.payload}`
+              : resultAction.error.message,
+            placement: "topRight",
+          });
+        }
         break;
       }
-
       case ROLE.tourguide: {
-        handleGetTourguidebyId({ tourGuideId: userId });
+        const resultAction = await dispatch(
+          getTourguideById({ tourGuideId: userId })
+        );
+        if (getTourguideById.fulfilled.match(resultAction)) {
+          dispatch(setCurrentTourguide(resultAction.payload));
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.payload
+              ? `${resultAction.payload}`
+              : resultAction.error.message,
+            placement: "topRight",
+          });
+        }
         break;
       }
-
       default:
         break;
     }
-  };
+  }, [dispatch, state.currentUser.Role, notification]);
 
   return {
     state,
