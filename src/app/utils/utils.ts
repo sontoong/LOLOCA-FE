@@ -100,3 +100,7 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
     totalPages,
   ];
 };
+
+export const isEmptyObject = (obj: object) => {
+  return Object.keys(obj).length === 0;
+};

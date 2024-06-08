@@ -27,6 +27,9 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    setCurrentUser: (state, action: PayloadAction<IAuth["currentUser"]>) => {
+      state.currentUser = action.payload;
+    },
     setShowOTPModal: (state, action: PayloadAction<IAuth["showOTPModal"]>) => {
       state.showOTPModal = action.payload;
     },
@@ -133,6 +136,7 @@ export const registerVerify = createAsyncThunk<any, VerifyParams>(
   }
 );
 
-export const { setShowOTPModal, resetOTPModal } = authSlice.actions;
+export const { setCurrentUser, setShowOTPModal, resetOTPModal } =
+  authSlice.actions;
 
 export default authSlice.reducer;

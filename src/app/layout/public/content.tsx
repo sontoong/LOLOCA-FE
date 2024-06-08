@@ -6,7 +6,7 @@ export default function MyContent({ children }: { children: React.ReactNode }) {
   //   const { headerTitle } = useAppSelector((state) => state.header);
   //   const currentHeader = headerTitle[headerTitle.length - 1];
   return (
-    <Content className="mx-5 pb-20 pt-16">
+    <Content className="pb-20">
       {/* {currentHeader.title && (
         <div className="pb-5 text-xl uppercase">{currentHeader.title}</div>
       )} */}

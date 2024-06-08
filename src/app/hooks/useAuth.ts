@@ -7,6 +7,7 @@ import {
   register,
   registerVerify,
   resetOTPModal,
+  setCurrentUser,
   setShowOTPModal,
 } from "../redux/slice/authSlice";
 import { App } from "antd";
@@ -43,6 +44,7 @@ export function useAuth() {
       localStorage.setItem("refresh_token", refreshToken);
       const decode = jwtDecode(accessToken) as any;
       localStorage.setItem("userId", decode.CustomerId ?? decode.TourguideId);
+      dispatch(setCurrentUser(decode));
       navigate("/");
     } else {
       if (resultAction.payload) {
@@ -129,6 +131,7 @@ export function useAuth() {
       localStorage.setItem("refresh_token", refreshToken);
       const decode = jwtDecode(accessToken) as any;
       localStorage.setItem("userId", decode.CustomerId ?? decode.TourguideId);
+      dispatch(setCurrentUser(decode));
       navigate("/");
     } else {
       if (resultAction.payload) {
@@ -147,9 +150,9 @@ export function useAuth() {
     }
   };
 
-  const handleLogout = async (navigate: NavigateFunction) => {
+  const handleLogout = async () => {
     localStorage.clear();
-    navigate("/login");
+    window.location.href = "/login";
   };
 
   const handleGetUserInfo = useCallback(async () => {

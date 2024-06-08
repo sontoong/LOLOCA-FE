@@ -10,6 +10,7 @@ import { useEffect, useRef } from "react";
 import { useCustomer } from "../../hooks/useCustomer";
 import { useTourguide } from "../../hooks/useTourguide";
 import { Customer, Tourguide } from "../../models/user";
+import { isEmptyObject } from "../../utils/utils";
 
 const { Header } = Layout;
 
@@ -40,7 +41,7 @@ export default function MyHeader() {
   }, [currentCustomer, currentTourguide, state.currentUser.Role]);
 
   const logOut = async () => {
-    handleLogout(navigate);
+    handleLogout();
   };
 
   function getHeader(): ItemType[] {
@@ -114,10 +115,10 @@ export default function MyHeader() {
 
   return (
     <>
-      <Header className="fixed z-50 flex w-full  bg-white ">
+      <Header className="sticky top-0 z-50 flex w-full  bg-white items-center">
         <img
           alt=""
-          className="px-10 py-1 hover:cursor-pointer"
+          className="w-[150px] hover:cursor-pointer"
           onClick={() => navigate("/")}
           src={logo}
         />
@@ -135,7 +136,15 @@ export default function MyHeader() {
             .map((_, index, arr) => `/${arr.slice(0, index + 1).join("/")}`)}
           onClick={onClick}
         />
-        {localStorage.getItem("access_token") ? (
+        {isEmptyObject(state.currentUser) ? (
+          <PrimaryButton
+            text="Get started"
+            className="rounded-full self-center"
+            bgColor="#000000"
+            size="middle"
+            onClick={() => navigate("/login")}
+          />
+        ) : (
           <Dropdown
             menu={{ items: getProfileDropdown() }}
             placement="bottomRight"
@@ -149,14 +158,6 @@ export default function MyHeader() {
               src={user.current?.avatar}
             />
           </Dropdown>
-        ) : (
-          <PrimaryButton
-            text="Get started"
-            className="rounded-full self-center"
-            bgColor="#000000"
-            size="middle"
-            onClick={() => navigate("/login")}
-          />
         )}
       </Header>
       <Modal footer={null} closable={false} open={state.isFetching}>
