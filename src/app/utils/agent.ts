@@ -141,12 +141,30 @@ const TourGuide = {
     requests.post(`${_tourGuide}/reject-booking-tour-request`, data),
 };
 
+const _tour = "Tour";
+const Tour = {
+  uploadTour: (data: any) => requests.post(`${_tour}`, data),
+  updateTour: (tourId: string, data: any) =>
+    requests.put(`${_tour}/${tourId}`, data),
+  acceptTourChangeStatus: (tourId: string, data: any) =>
+    requests.put(`${_tour}/${tourId}`, data),
+  deleteTour: (tourId: string) => requests.del(`${_tour}/${tourId}`),
+  getTourById: (tourId: string) => requests.get(`${_tour}/${tourId}`),
+  getRandomTours: (params: any) => requests.get(`${_tour}/random`, params),
+  getTourByCity: (params: any) => requests.get(`${_tour}/city`, params),
+  getTourByTourguide: (params: any) =>
+    requests.get(`${_tour}/tour-guide`, params),
+  getTourByStatus: (status: string) =>
+    requests.get(`${_tour}/status/${status}`),
+};
+
 const agent = {
   Auth,
   BookingTour,
   BookingTourGuideRequest,
   Cities,
   Customer,
+  Tour,
   TourGuide,
 };
 export default agent;

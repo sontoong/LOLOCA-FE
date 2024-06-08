@@ -4,12 +4,12 @@ import agent from "../../utils/agent";
 import { GetCustomerByIdParams } from "../../hooks/useCustomer";
 import { AxiosError } from "axios";
 
-type ICustomer = {
+type TCustomer = {
   currentCustomer: Customer;
   isFetching: boolean;
 };
 
-const initialState: ICustomer = {
+const initialState: TCustomer = {
   currentCustomer: {} as Customer,
   isFetching: false,
 };

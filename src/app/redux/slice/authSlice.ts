@@ -11,13 +11,13 @@ if (token) {
   initUser = jwtDecode(token);
 }
 
-export interface IAuth {
+export type TAuth = {
   currentUser: User;
   isFetching: boolean;
   showOTPModal: { open: boolean; email: string };
-}
+};
 
-const initialState: IAuth = {
+const initialState: TAuth = {
   currentUser: initUser as User,
   isFetching: false,
   showOTPModal: { open: false, email: "" },
@@ -27,10 +27,10 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setCurrentUser: (state, action: PayloadAction<IAuth["currentUser"]>) => {
+    setCurrentUser: (state, action: PayloadAction<TAuth["currentUser"]>) => {
       state.currentUser = action.payload;
     },
-    setShowOTPModal: (state, action: PayloadAction<IAuth["showOTPModal"]>) => {
+    setShowOTPModal: (state, action: PayloadAction<TAuth["showOTPModal"]>) => {
       state.showOTPModal = action.payload;
     },
     resetOTPModal: (state) => {

@@ -93,67 +93,70 @@ export function useAuth() {
   //   }
   // };
 
-  const handleRegister = async (value: RegisterParams) => {
-    const resultAction = await dispatch(register(value));
-    if (register.fulfilled.match(resultAction)) {
-      dispatch(
-        setShowOTPModal({
-          open: true,
-          email: value.email,
-        })
-      );
-    } else {
-      if (resultAction.payload) {
-        notification.error({
-          message: "Error",
-          description: `${resultAction.payload}`,
-          placement: "topRight",
-        });
+  const handleRegister = useCallback(
+    async (value: RegisterParams) => {
+      const resultAction = await dispatch(register(value));
+      if (register.fulfilled.match(resultAction)) {
+        dispatch(
+          setShowOTPModal({
+            open: true,
+            email: value.email,
+          })
+        );
       } else {
-        notification.error({
-          message: "Error",
-          description: resultAction.error.message,
-          placement: "topRight",
-        });
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
       }
-    }
-  };
+    },
+    [dispatch, notification]
+  );
 
-  const handleRegisterVerify = async (
-    value: VerifyParams,
-    navigate: NavigateFunction
-  ) => {
-    const resultAction = await dispatch(registerVerify(value));
-    if (registerVerify.fulfilled.match(resultAction)) {
-      dispatch(resetOTPModal());
-      const { accessToken, refreshToken } = resultAction.payload;
-      localStorage.setItem("access_token", accessToken);
-      localStorage.setItem("refresh_token", refreshToken);
-      const decode = jwtDecode(accessToken) as any;
-      localStorage.setItem("userId", decode.CustomerId ?? decode.TourguideId);
-      dispatch(setCurrentUser(decode));
-      navigate("/");
-    } else {
-      if (resultAction.payload) {
-        notification.error({
-          message: "Error",
-          description: `${resultAction.payload}`,
-          placement: "topRight",
-        });
+  const handleRegisterVerify = useCallback(
+    async (value: VerifyParams, navigate: NavigateFunction) => {
+      const resultAction = await dispatch(registerVerify(value));
+      if (registerVerify.fulfilled.match(resultAction)) {
+        dispatch(resetOTPModal());
+        const { accessToken, refreshToken } = resultAction.payload;
+        localStorage.setItem("access_token", accessToken);
+        localStorage.setItem("refresh_token", refreshToken);
+        const decode = jwtDecode(accessToken) as any;
+        localStorage.setItem("userId", decode.CustomerId ?? decode.TourguideId);
+        dispatch(setCurrentUser(decode));
+        navigate("/");
       } else {
-        notification.error({
-          message: "Error",
-          description: resultAction.error.message,
-          placement: "topRight",
-        });
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
       }
-    }
-  };
+    },
+    [dispatch, notification]
+  );
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     localStorage.clear();
     window.location.href = "/login";
-  };
+  }, []);
 
   const handleGetUserInfo = useCallback(async () => {
     const userId = localStorage.getItem("userId") ?? "";

@@ -4,12 +4,12 @@ import agent from "../../utils/agent";
 import { GetTourguideByIdParams } from "../../hooks/useTourguide";
 import { AxiosError } from "axios";
 
-type ITourguide = {
+type TTourguide = {
   currentTourguide: Tourguide;
   isFetching: boolean;
 };
 
-const initialState: ITourguide = {
+const initialState: TTourguide = {
   currentTourguide: {} as Tourguide,
   isFetching: false,
 };
