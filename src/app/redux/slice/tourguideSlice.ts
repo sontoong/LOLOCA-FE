@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Tourguide } from "../../models/user";
 import agent from "../../utils/agent";
-import { GetTourguideByIdParams } from "../../hooks/useTourguide";
 import { AxiosError } from "axios";
 
 type TTourguide = {
@@ -65,3 +64,7 @@ export const getTourguideById = createAsyncThunk<any, GetTourguideByIdParams>(
 export const { setCurrentTourguide } = tourguideSlice.actions;
 
 export default tourguideSlice.reducer;
+
+export type GetTourguideByIdParams = {
+  tourGuideId: string;
+};

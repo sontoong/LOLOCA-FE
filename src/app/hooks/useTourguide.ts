@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { App } from "antd";
 import {
   getTourguideById,
+  GetTourguideByIdParams,
   setCurrentTourguide,
 } from "../redux/slice/tourguideSlice";
 import { useCallback } from "react";
@@ -41,7 +42,3 @@ export function useTourguide() {
     handleGetTourguidebyId,
   };
 }
-
-export type GetTourguideByIdParams = {
-  tourGuideId: string;
-};

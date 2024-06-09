@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { App } from "antd";
 import {
   getCustomerById,
+  GetCustomerByIdParams,
   setCurrentCustomer,
 } from "../redux/slice/customerSlice";
 import { useCallback } from "react";
@@ -41,7 +42,3 @@ export function useCustomer() {
     handleGetCustomerbyId,
   };
 }
-
-export type GetCustomerByIdParams = {
-  customerId: string;
-};

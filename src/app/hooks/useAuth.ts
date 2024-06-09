@@ -1,22 +1,25 @@
-import { useAppDispatch, useAppSelector } from "../redux/hook";
-import { NavigateFunction } from "react-router-dom";
+import { App } from "antd";
 import { jwtDecode } from "jwt-decode";
+import { useCallback } from "react";
+import { NavigateFunction } from "react-router-dom";
+import { ROLE } from "../../constants/role";
+import { useAppDispatch, useAppSelector } from "../redux/hook";
 import {
   login,
+  LoginParams,
   // loginVerify,
   register,
+  RegisterParams,
   registerVerify,
   resetOTPModal,
   setCurrentUser,
   setShowOTPModal,
+  VerifyParams,
 } from "../redux/slice/authSlice";
-import { App } from "antd";
-import { ROLE } from "../../constants/role";
 import {
   getCustomerById,
   setCurrentCustomer,
 } from "../redux/slice/customerSlice";
-import { useCallback } from "react";
 import {
   getTourguideById,
   setCurrentTourguide,
@@ -27,43 +30,43 @@ export function useAuth() {
   const state = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
-  const handleLogin = async (
-    value: LoginParams,
-    navigate: NavigateFunction
-  ) => {
-    const resultAction = await dispatch(login(value));
-    if (login.fulfilled.match(resultAction)) {
-      // dispatch(
-      //   setShowOTPModal({
-      //     open: true,
-      //     email: value.email,
-      //   })
-      // );
-      const { accessToken, refreshToken } = resultAction.payload;
-      localStorage.setItem("access_token", accessToken);
-      localStorage.setItem("refresh_token", refreshToken);
-      const decode = jwtDecode(accessToken) as any;
-      localStorage.setItem("userId", decode.CustomerId ?? decode.TourguideId);
-      dispatch(setCurrentUser(decode));
-      navigate("/");
-    } else {
-      if (resultAction.payload) {
-        notification.error({
-          message: "Lỗi",
-          description: `${resultAction.payload}`,
-          placement: "topRight",
-        });
+  const handleLogin = useCallback(
+    async (value: LoginParams, navigate: NavigateFunction) => {
+      const resultAction = await dispatch(login(value));
+      if (login.fulfilled.match(resultAction)) {
+        // dispatch(
+        //   setShowOTPModal({
+        //     open: true,
+        //     email: value.email,
+        //   })
+        // );
+        const { accessToken, refreshToken } = resultAction.payload;
+        localStorage.setItem("access_token", accessToken);
+        localStorage.setItem("refresh_token", refreshToken);
+        const decode = jwtDecode(accessToken) as any;
+        localStorage.setItem("userId", decode.CustomerId ?? decode.TourguideId);
+        dispatch(setCurrentUser(decode));
+        navigate("/");
       } else {
-        notification.error({
-          message: "Lỗi",
-          description: resultAction.error.message,
-          placement: "topRight",
-        });
+        if (resultAction.payload) {
+          notification.error({
+            message: "Lỗi",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Lỗi",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
       }
-    }
-  };
+    },
+    [dispatch, notification]
+  );
 
-  // const handleLoginVerify = async (
+  // const handleLoginVerify = useCallback(async (
   //   value: VerifyParams,
   //   navigate: NavigateFunction
   // ) => {
@@ -91,7 +94,7 @@ export function useAuth() {
   //       });
   //     }
   //   }
-  // };
+  // }, [dispatch, notification]);
 
   const handleRegister = useCallback(
     async (value: RegisterParams) => {
@@ -212,27 +215,3 @@ export function useAuth() {
     handleGetUserInfo,
   };
 }
-
-export type LoginParams = {
-  email: string;
-  password: string;
-};
-
-export type RegisterParams = {
-  email: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-  phoneNumber: string;
-  gender: number;
-  dateOfBirth: string;
-};
-
-export type LogoutParams = {
-  userId: string;
-};
-
-export type VerifyParams = {
-  email: string;
-  code: string;
-};

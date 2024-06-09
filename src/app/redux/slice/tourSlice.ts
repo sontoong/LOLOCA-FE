@@ -2,12 +2,6 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import agent from "../../utils/agent";
 import { AxiosError } from "axios";
 import { Tour, TourList } from "../../models/tour";
-import {
-  GetTourByIdParams,
-  GetTourCityParams,
-  GetTourRandomParams,
-} from "../../hooks/useTour";
-
 type TTour = {
   currentTour: Tour;
   randomTours: TourList;
@@ -122,3 +116,18 @@ export const { setCurrentTour, setRandomTourlist, setRandomCitylist } =
   tourSlice.actions;
 
 export default tourSlice.reducer;
+
+export type GetTourRandomParams = {
+  page: number;
+  pageSize: number;
+};
+
+export type GetTourCityParams = {
+  cityId: number;
+  page: number;
+  pageSize: number;
+};
+
+export type GetTourByIdParams = {
+  tourId: string;
+};

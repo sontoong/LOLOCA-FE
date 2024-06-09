@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import agent from "../../utils/agent";
 import { AxiosError } from "axios";
-import { LoginParams, RegisterParams, VerifyParams } from "../../hooks/useAuth";
 import { User } from "../../models/user";
 import { jwtDecode } from "jwt-decode";
 
@@ -140,3 +139,27 @@ export const { setCurrentUser, setShowOTPModal, resetOTPModal } =
   authSlice.actions;
 
 export default authSlice.reducer;
+
+export type LoginParams = {
+  email: string;
+  password: string;
+};
+
+export type RegisterParams = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  phoneNumber: string;
+  gender: number;
+  dateOfBirth: string;
+};
+
+export type LogoutParams = {
+  userId: string;
+};
+
+export type VerifyParams = {
+  email: string;
+  code: string;
+};

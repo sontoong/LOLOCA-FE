@@ -10,7 +10,7 @@ export default function MyContent({ children }: { children: React.ReactNode }) {
       {/* {currentHeader.title && (
         <div className="pb-5 text-xl uppercase">{currentHeader.title}</div>
       )} */}
-      <main className="flex h-full justify-center bg-white">{children}</main>
+      <main className="h-full justify-center bg-white">{children}</main>
     </Content>
   );
 }

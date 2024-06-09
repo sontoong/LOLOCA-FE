@@ -30,6 +30,7 @@ apiJWT.interceptors.request.use(async (config) => {
         const { data } = await agent.Auth.refreshToken({
           refreshToken: refreshToken,
         });
+        console.log(data);
         config.headers["Authorization"] = `Bearer ${data.accessToken}`;
         // config.headers["uid"] = `Bearer ${data.data.id}`;
         localStorage.setItem("access_token", data.accessToken);
@@ -37,9 +38,7 @@ apiJWT.interceptors.request.use(async (config) => {
         // localStorage.setItem("uid", data.data.id);
       } catch (error) {
         if (error instanceof AxiosError) {
-          if (
-            error.response?.data.error.message === "You are not authenticated"
-          ) {
+          if (error.response?.status === 400) {
             localStorage.clear();
             router.navigate("/login");
             throw error;
@@ -65,6 +64,7 @@ apiJWT.interceptors.response.use(
   },
   (error) => {
     NProgress.done();
+    console.log(error);
     // const token = localStorage.getItem("access_token");
     if (error.response && error.response?.status === 401) {
       localStorage.clear();
@@ -78,7 +78,7 @@ apiJWT.interceptors.response.use(
     // ) {
     //   router.navigate("/forbidden");
     // }
-    return Promise.reject(error.response);
+    return Promise.reject(error.response ?? error);
   }
 );
 

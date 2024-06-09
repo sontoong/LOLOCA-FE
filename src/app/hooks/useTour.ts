@@ -3,7 +3,10 @@ import { App } from "antd";
 import {
   getTourByCity,
   getTourById,
+  GetTourByIdParams,
+  GetTourCityParams,
   getTourRandom,
+  GetTourRandomParams,
   setCurrentTour,
   setRandomCitylist,
   setRandomTourlist,
@@ -94,18 +97,3 @@ export function useTour() {
     handleGetTourByCityId,
   };
 }
-
-export type GetTourRandomParams = {
-  page: number;
-  pageSize: number;
-};
-
-export type GetTourCityParams = {
-  cityId: number;
-  page: number;
-  pageSize: number;
-};
-
-export type GetTourByIdParams = {
-  tourId: string;
-};

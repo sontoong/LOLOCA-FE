@@ -18,17 +18,26 @@ import { useTour } from "../../hooks/useTour";
 import { useSearchParams } from "react-router-dom";
 import Loader from "../../components/loader/loader";
 import { defaultImage } from "../../../constants/images";
+import NotFound from "../../components/not-found/not-found";
+import { useCity } from "../../hooks/useCity";
 
 const { Title, Paragraph } = Typography;
 
 export default function ToursPage() {
   const [searchParams] = useSearchParams();
-  const { state, handleGetTourRandom, handleGetTourByCityId } = useTour();
+  const {
+    state: stateTour,
+    handleGetTourRandom,
+    handleGetTourByCityId,
+  } = useTour();
+  const { state: stateCity, handleGetCityById } = useCity();
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageSize, setCurrentPageSize] = useState(8);
 
   const currentCity = searchParams.get("city");
-  const renderTours = currentCity ? state.currentCityTours : state.randomTours;
+  const renderTours = currentCity
+    ? stateTour.currentCityTours
+    : stateTour.randomTours;
 
   const onChangePage: PaginationProps["onChange"] = (page) => {
     setCurrentPage(page);
@@ -44,6 +53,7 @@ export default function ToursPage() {
 
   useEffect(() => {
     if (currentCity) {
+      handleGetCityById({ cityId: currentCity });
       handleGetTourByCityId({
         page: currentPage,
         pageSize: currentPageSize,
@@ -55,20 +65,29 @@ export default function ToursPage() {
   }, [
     currentPage,
     currentPageSize,
+    currentCity,
     handleGetTourRandom,
     handleGetTourByCityId,
-    currentCity,
+    handleGetCityById,
   ]);
 
   return (
     <div>
-      <Banner
-        image={VietNamBanner}
-        title={"Các tour ở Việt Nam"}
-        description={
-          "Việt Nam, một đất nước tuy nhỏ nhưng đa dạng về văn hóa, phong cảnh và ẩm thực. Từ những dãy núi hùng vĩ đến những bãi biển tuyệt đẹp, Việt Nam là điểm đến hấp dẫn của du khách."
-        }
-      />
+      {currentCity ? (
+        <Banner
+          image={stateCity.currentCity.cityBanner}
+          title={stateCity.currentCity.name}
+          description={stateCity.currentCity.cityDescription}
+        />
+      ) : (
+        <Banner
+          image={VietNamBanner}
+          title={"Các tour ở Việt Nam"}
+          description={
+            "Việt Nam, một đất nước tuy nhỏ nhưng đa dạng về văn hóa, phong cảnh và ẩm thực. Từ những dãy núi hùng vĩ đến những bãi biển tuyệt đẹp, Việt Nam là điểm đến hấp dẫn của du khách."
+          }
+        />
+      )}
       <div className="mt-[3%]">
         <Dropdown menu={{ items: filterItems }} trigger={["click"]}>
           <a
@@ -82,9 +101,9 @@ export default function ToursPage() {
           </a>
         </Dropdown>
       </div>
-      {state.isFetching ? (
+      {stateTour.isFetching ? (
         <Loader />
-      ) : (
+      ) : renderTours ? (
         <>
           <Row gutter={[16, 16]} style={{ margin: "2%" }}>
             {renderTours.tours.map((tour, index) => (
@@ -102,6 +121,7 @@ export default function ToursPage() {
                         height: "200px",
                         objectFit: "cover",
                       }}
+                      preview={false}
                     />
                   }
                 >
@@ -119,12 +139,14 @@ export default function ToursPage() {
             <Pagination
               current={currentPage}
               onChange={onChangePage}
-              total={renderTours.totalPage}
+              total={renderTours?.totalPage}
               showSizeChanger
               onShowSizeChange={onShowSizeChange}
             />
           </div>
         </>
+      ) : (
+        <NotFound />
       )}
     </div>
   );

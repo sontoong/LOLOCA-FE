@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Customer } from "../../models/user";
 import agent from "../../utils/agent";
-import { GetCustomerByIdParams } from "../../hooks/useCustomer";
 import { AxiosError } from "axios";
 
 type TCustomer = {
@@ -65,3 +64,7 @@ export const getCustomerById = createAsyncThunk<any, GetCustomerByIdParams>(
 export const { setCurrentCustomer } = customerSlice.actions;
 
 export default customerSlice.reducer;
+
+export type GetCustomerByIdParams = {
+  customerId: string;
+};

@@ -4,32 +4,29 @@ import {
   Card,
   Col,
   Dropdown,
+  Image,
   MenuProps,
-  Pagination,
   Row,
   Space,
   Typography,
 } from "antd";
-import { cities } from "../../utils/testData";
 import { DownOutlined } from "@ant-design/icons";
+import { useCity } from "../../hooks/useCity";
+import { useEffect } from "react";
+import Loader from "../../components/loader/loader";
+import { useNavigate } from "react-router-dom";
+
+const { Title, Paragraph } = Typography;
 
 export default function CitiesPage() {
-  const { Title, Paragraph } = Typography;
+  const navigate = useNavigate();
+  const { state, handleGetCities } = useCity();
 
-  const filterItems: MenuProps["items"] = [
-    {
-      label: "Great Job",
-      key: "1",
-    },
-    {
-      label: "Keep Going",
-      key: "2",
-    },
-    {
-      label: "We'll be fine",
-      key: "3",
-    },
-  ];
+  const renderCities = state.cityList;
+
+  useEffect(() => {
+    handleGetCities();
+  }, [handleGetCities]);
 
   return (
     <div>
@@ -53,31 +50,55 @@ export default function CitiesPage() {
           </a>
         </Dropdown>
       </div>
-      <Row gutter={[16, 16]} style={{ margin: "2%" }}>
-        {cities.map((city, index) => (
-          <Col span={6} key={index}>
-            <Card
-              className="h-[390px]"
-              hoverable
-              cover={
-                <img
-                  alt={city.title}
-                  src={VietNamBanner}
-                  style={{ width: "100%", height: "200px", objectFit: "cover" }}
-                />
-              }
-            >
-              <Title level={2} className="mt-0">
-                {city.title}
-              </Title>
-              <Paragraph ellipsis={{ rows: 3, expandable: false }}>{city.description}</Paragraph>
-            </Card>
-          </Col>
-        ))}
-      </Row>
-      <div className="flex justify-end mr-[5%]">
-        <Pagination defaultCurrent={1} total={500} />
-      </div>
+      {state.isFetching ? (
+        <Loader />
+      ) : (
+        <Row gutter={[16, 16]} style={{ margin: "2%" }}>
+          {renderCities?.map((city, index) => (
+            <Col span={6} key={index}>
+              <Card
+                className="h-[390px]"
+                hoverable
+                cover={
+                  <Image
+                    alt={city.name}
+                    src={VietNamBanner}
+                    style={{
+                      width: "100%",
+                      height: "200px",
+                      objectFit: "cover",
+                    }}
+                    preview={false}
+                  />
+                }
+                onClick={() => navigate(`/tours?city=${city.cityId}`)}
+              >
+                <Title level={2} className="mt-0">
+                  {city.name}
+                </Title>
+                <Paragraph ellipsis={{ rows: 3, expandable: false }}>
+                  {city.cityDescription}
+                </Paragraph>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      )}
     </div>
   );
 }
+
+const filterItems: MenuProps["items"] = [
+  {
+    label: "Great Job",
+    key: "1",
+  },
+  {
+    label: "Keep Going",
+    key: "2",
+  },
+  {
+    label: "We'll be fine",
+    key: "3",
+  },
+];

@@ -1,4 +1,5 @@
 import { Typography } from "antd";
+import { defaultImage } from "../../../constants/images";
 
 const BannerContainer = ({
   image,
@@ -14,7 +15,7 @@ const BannerContainer = ({
   return (
     <div
       style={{
-        backgroundImage: `url(${image})`,
+        backgroundImage: `url(${image ?? defaultImage})`,
         boxShadow: "600px -6px 22px -4px rgba(0,0,0,0.49) inset",
         WebkitBoxShadow: "60px -6px 22px -4px rgba(0,0,0,0.49) inset",
         MozBoxShadow: "60px -6px 22px -4px rgba(0,0,0,0.49) inset",

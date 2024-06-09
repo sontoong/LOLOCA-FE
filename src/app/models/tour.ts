@@ -24,4 +24,4 @@ export type TourList = {
     thumbnailTourImage: string | null;
   }[];
   totalPage: number;
-};
+} | null;

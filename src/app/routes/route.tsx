@@ -11,9 +11,10 @@ import RegisterPage from "../pages/public/RegisterPage";
 import CitiesPage from "../pages/public/CitiesPage";
 import ToursPage from "../pages/public/ToursPage";
 import GuidesPage from "../pages/public/GuidesPage";
-import ErrorPage from "../pages/public/404Page";
+import NotFoundPage from "../pages/public/404Page";
 
 //other page
+import ErrorPage from "../pages/public/ErrorPage";
 import TestPage from "../pages/TestPage";
 
 export const router = createBrowserRouter([
@@ -64,6 +65,14 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "error",
+        element: (
+          <Suspense fallback={<></>}>
+            <ErrorPage />
+          </Suspense>
+        ),
+      },
+      {
         path: "template",
         element: (
           <Suspense fallback={<></>}>
@@ -77,7 +86,7 @@ export const router = createBrowserRouter([
         path: "*",
         element: (
           <Suspense fallback={<></>}>
-            <ErrorPage />
+            <NotFoundPage />
           </Suspense>
         ),
       },
