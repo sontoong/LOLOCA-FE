@@ -15,7 +15,7 @@ import {
 import { DownOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useTour } from "../../hooks/useTour";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Loader from "../../components/loader/loader";
 import { defaultImage } from "../../../constants/images";
 import NotFound from "../../components/not-found/not-found";
@@ -25,6 +25,7 @@ const { Title, Paragraph } = Typography;
 
 export default function ToursPage() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const {
     state: stateTour,
     handleGetTourRandom,
@@ -70,6 +71,11 @@ export default function ToursPage() {
     handleGetTourByCityId,
     handleGetCityById,
   ]);
+
+  const handleCardClick = (tourId : number) => {
+    navigate(`/tours/${tourId}`);
+  };
+
 
   return (
     <div>
@@ -122,6 +128,7 @@ export default function ToursPage() {
                         objectFit: "cover",
                       }}
                       preview={false}
+                      onClick={() => handleCardClick(tour.tourId)}
                     />
                   }
                 >
