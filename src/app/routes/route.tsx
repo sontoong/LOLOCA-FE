@@ -10,6 +10,7 @@ import LoginPage from "../pages/public/LoginPage";
 import RegisterPage from "../pages/public/RegisterPage";
 import CitiesPage from "../pages/public/CitiesPage";
 import ToursPage from "../pages/public/ToursPage";
+import TourDetailPage from "../pages/public/TourDetailPage";
 import GuidesPage from "../pages/public/GuidesPage";
 import NotFoundPage from "../pages/public/404Page";
 
@@ -45,6 +46,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<></>}>
             <ToursPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "tours/:tourId",
+        element: (
+          <Suspense fallback={<></>}>
+            <TourDetailPage />
           </Suspense>
         ),
       },
