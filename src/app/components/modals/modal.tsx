@@ -1,9 +1,8 @@
 import { Modal, ModalProps } from "antd";
 import { useAppDispatch } from "../../redux/hook";
-import { resetOTPModal } from "../../redux/slice/authSlice";
+import { resetOTPModal, VerifyParams } from "../../redux/slice/authSlice";
 import { Form } from "../form";
 import { Input } from "../inputs";
-import { VerifyParams } from "../../hooks/useAuth";
 
 function CustomModal() {
   return <div></div>;

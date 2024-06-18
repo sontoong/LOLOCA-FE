@@ -13,8 +13,10 @@ import {
 import { DownOutlined } from "@ant-design/icons";
 import { useCity } from "../../hooks/useCity";
 import { useEffect } from "react";
-import Loader from "../../components/loader/loader";
+import { Loader } from "../../components/loader/loader";
 import { useNavigate } from "react-router-dom";
+import NotFound from "../../components/not-found/not-found";
+import { defaultImage } from "../../../constants/images";
 
 const { Title, Paragraph } = Typography;
 
@@ -27,6 +29,49 @@ export default function CitiesPage() {
   useEffect(() => {
     handleGetCities();
   }, [handleGetCities]);
+
+  const renderContent = () => {
+    if (state.isFetching) {
+      return <Loader />;
+    }
+
+    if (renderCities) {
+      return (
+        <Row gutter={[16, 16]} style={{ margin: "2%" }}>
+          {renderCities.map((city, index) => (
+            <Col span={6} key={index}>
+              <Card
+                className="h-[390px]"
+                hoverable
+                cover={
+                  <Image
+                    src={city?.cityThumbnail}
+                    fallback={defaultImage}
+                    style={{
+                      width: "100%",
+                      height: "200px",
+                      objectFit: "cover",
+                    }}
+                    preview={false}
+                  />
+                }
+                onClick={() => navigate(`/cities/${city?.cityId}`)}
+              >
+                <Title level={2} className="mt-0">
+                  {city?.name}
+                </Title>
+                <Paragraph ellipsis={{ rows: 3, expandable: false }}>
+                  {city?.cityDescription}
+                </Paragraph>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      );
+    }
+
+    return <NotFound />;
+  };
 
   return (
     <div>
@@ -50,40 +95,7 @@ export default function CitiesPage() {
           </a>
         </Dropdown>
       </div>
-      {state.isFetching ? (
-        <Loader />
-      ) : (
-        <Row gutter={[16, 16]} style={{ margin: "2%" }}>
-          {renderCities?.map((city, index) => (
-            <Col span={6} key={index}>
-              <Card
-                className="h-[390px]"
-                hoverable
-                cover={
-                  <Image
-                    alt={city.name}
-                    src={VietNamBanner}
-                    style={{
-                      width: "100%",
-                      height: "200px",
-                      objectFit: "cover",
-                    }}
-                    preview={false}
-                  />
-                }
-                onClick={() => navigate(`/tours?city=${city.cityId}`)}
-              >
-                <Title level={2} className="mt-0">
-                  {city.name}
-                </Title>
-                <Paragraph ellipsis={{ rows: 3, expandable: false }}>
-                  {city.cityDescription}
-                </Paragraph>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      )}
+      {renderContent()}
     </div>
   );
 }

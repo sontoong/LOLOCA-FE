@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTour } from "../../hooks/useTour";
-import Loader from "../../components/loader/loader";
+import { Loader } from "../../components/loader/loader";
 import NotFound from "../../components/not-found/not-found";
 import { Typography, Row, Col, Steps, Carousel } from "antd";
 import VietNamBanner from "../../../assets/banner.png";
@@ -273,30 +273,39 @@ const TourDetailPage = () => {
           </div>
           <Divider colorSplit="black" />
           <div>
-            <Title style={{ color: "#004AAD", fontWeight: "bolder", marginBottom: 0 }}>
+            <Title
+              style={{
+                color: "#004AAD",
+                fontWeight: "bolder",
+                marginBottom: 0,
+              }}
+            >
               Recent Reviews
             </Title>
-            <Text>{tourDetailData.reviews.stars} <StarFilled/> ({tourDetailData.reviews.amount} reviews)</Text>
+            <Text>
+              {tourDetailData.reviews.stars} <StarFilled /> (
+              {tourDetailData.reviews.amount} reviews)
+            </Text>
             {tourDetailData.reviews.ratings.map((rating, index) => (
               <div key={index} className="my-[3rem]">
                 <Row>
                   <Col>
                     <img
-                    src={VietNamBanner}
-                    className="rounded-full object-cover w-[3rem] h-[3rem]"
+                      src={VietNamBanner}
+                      className="rounded-full object-cover w-[3rem] h-[3rem]"
                     />
                   </Col>
                   <Col className="ml-[0.5rem]">
-                    <Paragraph style={{ fontWeight: "bold", marginBottom:"0"}}>
+                    <Paragraph
+                      style={{ fontWeight: "bold", marginBottom: "0" }}
+                    >
                       {rating.name}
                     </Paragraph>
-                    <Paragraph>
-                      {formatUnixToLocal(rating.date)}
-                    </Paragraph>
+                    <Paragraph>{formatUnixToLocal(rating.date)}</Paragraph>
                   </Col>
                   <Col offset={1}>
                     <Paragraph>
-                      <StarFilled/> {rating.star} 
+                      <StarFilled /> {rating.star}
                     </Paragraph>
                   </Col>
                 </Row>

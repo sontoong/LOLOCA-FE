@@ -68,7 +68,8 @@ apiJWT.interceptors.response.use(
     // const token = localStorage.getItem("access_token");
     if (error.response && error.response?.status === 401) {
       localStorage.clear();
-      router.navigate("/login");
+      window.location.href = "/login";
+      // router.navigate("/login");
     }
     // if (
     //   error.response &&

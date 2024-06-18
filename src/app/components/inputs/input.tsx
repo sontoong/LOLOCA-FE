@@ -4,7 +4,7 @@ function CustomInput({
   colorBgContainer,
   colorTextPlaceholder,
   ...rest
-}: CustomInput) {
+}: TCustomInput) {
   const { token } = theme.useToken();
 
   return (
@@ -22,7 +22,7 @@ function CustomInput({
   );
 }
 
-function CustomInputPassword(props: CustomInput) {
+function CustomInputPassword(props: TCustomInput) {
   return <Input.Password size="large" {...props} />;
 }
 
@@ -31,7 +31,7 @@ CustomInput.OTP = Input.OTP;
 
 export default CustomInput;
 
-type CustomInput = Omit<InputProps, "style"> & {
+type TCustomInput = Omit<InputProps, "style"> & {
   colorBgContainer?: string;
   colorTextPlaceholder?: string;
 };

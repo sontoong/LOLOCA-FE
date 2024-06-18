@@ -3,10 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 
 import logoAuth from "../../../assets/logoAuth.png";
 import { Form } from "../../components/form";
-import { LoginParams, useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 import { Input } from "../../components/inputs";
 import { InfoCircleOutlined, UserOutlined } from "@ant-design/icons";
 import { PrimaryButton } from "../../components/buttons";
+import { LoginParams } from "../../redux/slice/authSlice";
 
 export default function LoginPage() {
   const navigate = useNavigate();
