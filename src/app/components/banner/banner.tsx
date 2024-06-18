@@ -5,12 +5,12 @@ const BannerContainer = ({
   image,
   title,
   description,
-}: {
-  image: string;
-  title: string;
-  description: string;
-}) => {
+}: BannerContainerProps) => {
   const { Title, Text } = Typography;
+
+  // const onTabPaneChange = (key: string) => {
+  //   console.log(key);
+  // };
 
   return (
     <div
@@ -42,8 +42,28 @@ const BannerContainer = ({
       >
         {description}
       </Text>
+      {/* <div style={{ marginTop: "auto" }}>
+        <Tabs onChange={onTabPaneChange} type="card" items={tabPaneItems} />
+      </div> */}
     </div>
   );
 };
 
 export default BannerContainer;
+
+type BannerContainerProps = {
+  image?: string;
+  title?: string;
+  description?: string;
+};
+
+// const tabPaneItems: TabsProps["items"] = [
+//   {
+//     key: "tours",
+//     label: "Tours",
+//   },
+//   {
+//     key: "tourguide",
+//     label: "Tour guides",
+//   },
+// ];

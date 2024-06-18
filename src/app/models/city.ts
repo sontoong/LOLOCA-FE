@@ -7,6 +7,6 @@ export type City = {
   cityBannerUploadDate: string;
   cityThumbnailUploadDate: string;
   status: boolean;
-};
+} | null;
 
-export type CityList = City[] | null;
+export type CityList = City[];

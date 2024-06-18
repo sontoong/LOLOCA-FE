@@ -8,7 +8,7 @@ export type Tour = {
   status: number;
   price: number | null;
   tourImgViewList: string[];
-};
+} | null;
 
 export type TourList = {
   tours: {
@@ -21,7 +21,7 @@ export type TourList = {
     price: number | null;
     cityName: string;
     tourGuideName: string;
-    thumbnailTourImage: string | null;
+    thumbnailTourImage: string;
   }[];
   totalPage: number;
-} | null;
+};

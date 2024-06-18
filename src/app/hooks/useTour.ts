@@ -8,7 +8,7 @@ import {
   getTourRandom,
   GetTourRandomParams,
   setCurrentTour,
-  setRandomCitylist,
+  setCurrentCityToursList,
   setRandomTourlist,
 } from "../redux/slice/tourSlice";
 import { useCallback } from "react";
@@ -46,7 +46,7 @@ export function useTour() {
     async (value: GetTourCityParams) => {
       const resultAction = await dispatch(getTourByCity(value));
       if (getTourByCity.fulfilled.match(resultAction)) {
-        dispatch(setRandomCitylist(resultAction.payload));
+        dispatch(setCurrentCityToursList(resultAction.payload));
       } else {
         if (resultAction.payload) {
           notification.error({

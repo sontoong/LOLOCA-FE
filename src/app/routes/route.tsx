@@ -1,5 +1,10 @@
 import { Suspense } from "react";
-import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
+import {
+  Navigate,
+  Outlet,
+  ScrollRestoration,
+  createBrowserRouter,
+} from "react-router-dom";
 import { ROLE } from "../../constants/role";
 
 import PrivateRoute from "./pRoute";
@@ -9,6 +14,7 @@ import PublicLayout from "../layout/public-layout";
 import LoginPage from "../pages/public/LoginPage";
 import RegisterPage from "../pages/public/RegisterPage";
 import CitiesPage from "../pages/public/CitiesPage";
+import CityDetailPage from "../pages/public/CityDetailPage";
 import ToursPage from "../pages/public/ToursPage";
 import TourDetailPage from "../pages/public/TourDetailPage";
 import GuidesPage from "../pages/public/GuidesPage";
@@ -26,6 +32,7 @@ export const router = createBrowserRouter([
         <PublicLayout>
           <Outlet />
         </PublicLayout>
+        <ScrollRestoration />
       </Suspense>
     ),
     children: [
@@ -38,6 +45,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<></>}>
             <CitiesPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "cities/:cityId",
+        element: (
+          <Suspense fallback={<></>}>
+            <CityDetailPage />
           </Suspense>
         ),
       },

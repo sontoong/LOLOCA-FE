@@ -26,7 +26,7 @@ const tourSlice = createSlice({
     setRandomTourlist: (state, action: PayloadAction<TTour["randomTours"]>) => {
       state.randomTours = action.payload;
     },
-    setRandomCitylist: (
+    setCurrentCityToursList: (
       state,
       action: PayloadAction<TTour["currentCityTours"]>
     ) => {
@@ -112,7 +112,7 @@ export const getTourById = createAsyncThunk<any, GetTourByIdParams>(
   }
 );
 
-export const { setCurrentTour, setRandomTourlist, setRandomCitylist } =
+export const { setCurrentTour, setRandomTourlist, setCurrentCityToursList } =
   tourSlice.actions;
 
 export default tourSlice.reducer;

@@ -5,10 +5,11 @@ import logoAuth from "../../../assets/logoAuth.png";
 import bannerRegister from "../../../assets/registerBanner.png";
 import { Form } from "../../components/form";
 import { Input } from "../../components/inputs";
-import { RegisterParams, useAuth, VerifyParams } from "../../hooks/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 import { useState } from "react";
 import { PrimaryButton } from "../../components/buttons";
 import { Modal } from "../../components/modals";
+import { RegisterParams, VerifyParams } from "../../redux/slice/authSlice";
 
 const { Text, Paragraph } = Typography;
 

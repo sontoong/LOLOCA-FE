@@ -1,5 +1,4 @@
 import Banner from "../../components/banner/banner";
-import VietNamBanner from "../../../assets/banner.png";
 import {
   Card,
   Col,
@@ -10,13 +9,15 @@ import {
   PaginationProps,
   Row,
   Space,
+  Tabs,
+  TabsProps,
   Typography,
 } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useTour } from "../../hooks/useTour";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { Loader } from "../../components/loader/loader";
+import { useNavigate, useParams } from "react-router-dom";
+import { Loader, LoaderFullScreen } from "../../components/loader/loader";
 import { defaultImage } from "../../../constants/images";
 import NotFound from "../../components/not-found/not-found";
 import { useCity } from "../../hooks/useCity";
@@ -24,7 +25,7 @@ import { useCity } from "../../hooks/useCity";
 const { Title, Paragraph } = Typography;
 
 export default function ToursPage() {
-  const [searchParams] = useSearchParams();
+  const { cityId } = useParams();
   const navigate = useNavigate();
   const {
     state: stateTour,
@@ -35,26 +36,21 @@ export default function ToursPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageSize, setCurrentPageSize] = useState(8);
 
-  const currentCity = searchParams.get("city");
-  const renderTours = currentCity
-    ? stateTour.currentCityTours
-    : stateTour.randomTours;
+  const renderTours = stateTour.currentCityTours;
 
   useEffect(() => {
-    if (currentCity) {
-      handleGetCityById({ cityId: currentCity });
+    if (cityId) {
+      handleGetCityById({ cityId: cityId });
       handleGetTourByCityId({
         page: currentPage,
         pageSize: currentPageSize,
-        cityId: parseInt(currentCity),
+        cityId: parseInt(cityId),
       });
-    } else {
-      handleGetTourRandom({ page: currentPage, pageSize: currentPageSize });
     }
   }, [
+    cityId,
     currentPage,
     currentPageSize,
-    currentCity,
     handleGetTourRandom,
     handleGetTourByCityId,
     handleGetCityById,
@@ -76,9 +72,13 @@ export default function ToursPage() {
     navigate(`/tours/${tourId}`);
   };
 
+  const onTabPaneChange = (key: string) => {
+    navigate(key);
+  };
+
   const renderContent = () => {
     if (stateTour.isFetching) {
-      return <Loader />;
+      return <LoaderFullScreen spinning={stateTour.isFetching} />;
     }
 
     if (renderTours) {
@@ -131,23 +131,28 @@ export default function ToursPage() {
     return <NotFound />;
   };
 
+  const renderBanner = () => {
+    if (stateCity.isFetching) {
+      return <Loader />;
+    }
+
+    if (stateCity.currentCity) {
+      return (
+        <div>
+          <Banner
+            image={stateCity.currentCity?.cityBanner}
+            title={stateCity.currentCity?.name}
+            description={stateCity.currentCity?.cityDescription}
+          />
+          <Tabs onChange={onTabPaneChange} type="card" items={tabPaneItems} />
+        </div>
+      );
+    }
+  };
+
   return (
     <div>
-      {currentCity ? (
-        <Banner
-          image={stateCity.currentCity?.cityBanner}
-          title={stateCity.currentCity?.name}
-          description={stateCity.currentCity?.cityDescription}
-        />
-      ) : (
-        <Banner
-          image={VietNamBanner}
-          title={"Các tour ở Việt Nam"}
-          description={
-            "Việt Nam, một đất nước tuy nhỏ nhưng đa dạng về văn hóa, phong cảnh và ẩm thực. Từ những dãy núi hùng vĩ đến những bãi biển tuyệt đẹp, Việt Nam là điểm đến hấp dẫn của du khách."
-          }
-        />
-      )}
+      {renderBanner()}
       <div className="mt-[3%]">
         <Dropdown menu={{ items: filterItems }} trigger={["click"]}>
           <a
@@ -178,5 +183,16 @@ const filterItems: MenuProps["items"] = [
   {
     label: "We'll be fine",
     key: "3",
+  },
+];
+
+const tabPaneItems: TabsProps["items"] = [
+  {
+    key: "tours",
+    label: "Tours",
+  },
+  {
+    key: "tourguide",
+    label: "Tour guides",
   },
 ];
