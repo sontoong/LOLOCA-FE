@@ -115,7 +115,7 @@ export default function ToursPage() {
               </Col>
             ))}
           </Row>
-          <div className="flex justify-end mr-[5%]">
+          <div className="flex justify-end mr-[5%] mb-[2%]">
             <Pagination
               current={currentPage}
               onChange={onChangePage}

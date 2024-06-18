@@ -1,16 +1,21 @@
-import Banner from "../components/banner/banner";
-import DefaultBanner from "../../assets/banner.png";
+import { PrimaryButton } from "../components/buttons";
+import { Card } from "../components/card";
+import BookingModal from "../components/customer_ui/bookingInfoModal";
+import { Form } from "antd";
 
 export default function TestPage() {
+  const [form] = Form.useForm();
+
+  const onSubmitClick = () => {
+    form.submit();
+  };
+
   return (
     <>
-      <Banner
-        image={DefaultBanner}
-        title={"Viet Nam"}
-        description={
-          "Việt Nam, một đất nước tuy nhỏ nhưng đa dạng về văn hóa, phong cảnh và ẩm thực. Từ những dãy núi hùng vĩ đến những bãi biển tuyệt đẹp, Việt Nam là điểm đến hấp dẫn của du khách."
-        }
-      />
+      <Card cardTitle="Create your tour" className="w-[30%] my-[2rem] mx-auto">
+        <BookingModal form={form} />
+        <PrimaryButton text="Submit" onClick={() => onSubmitClick()} />
+      </Card>
     </>
   );
 }

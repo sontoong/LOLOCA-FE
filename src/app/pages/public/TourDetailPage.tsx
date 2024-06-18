@@ -125,7 +125,7 @@ const TourDetailPage = () => {
           </div>
           <div>
             <img
-              src={VietNamBanner} // You can replace this with another image URL for the second default image
+              src={VietNamBanner} 
               alt="Default Image 2"
               style={{
                 width: "100%",

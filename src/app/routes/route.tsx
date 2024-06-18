@@ -23,6 +23,7 @@ import NotFoundPage from "../pages/public/404Page";
 //other page
 import ErrorPage from "../pages/public/ErrorPage";
 import TestPage from "../pages/TestPage";
+import BookingPage from "../pages/public/BookingPage";
 
 export const router = createBrowserRouter([
   {
@@ -85,6 +86,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<></>}>
             <TestPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "booking",
+        element: (
+          <Suspense fallback={<></>}>
+            <BookingPage />
           </Suspense>
         ),
       },
