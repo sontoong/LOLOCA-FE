@@ -6,6 +6,7 @@ import {
   Dropdown,
   Image,
   MenuProps,
+  Pagination,
   Row,
   Space,
   Typography,
@@ -37,6 +38,7 @@ export default function CitiesPage() {
 
     if (renderCities) {
       return (
+        <>
         <Row gutter={[16, 16]} style={{ margin: "2%" }}>
           {renderCities.map((city, index) => (
             <Col span={6} key={index}>
@@ -67,6 +69,16 @@ export default function CitiesPage() {
             </Col>
           ))}
         </Row>
+        {/* <div className="flex justify-end mr-[5%] mb-[2%]">
+            <Pagination
+              current={currentPage}
+              onChange={onChangePage}
+              total={renderTours?.totalPage}
+              showSizeChanger
+              onShowSizeChange={onShowSizeChange}
+            />
+          </div> */}
+        </>
       );
     }
 
@@ -96,6 +108,9 @@ export default function CitiesPage() {
         </Dropdown>
       </div>
       {renderContent()}
+      <div className="flex justify-end">
+        <Pagination defaultCurrent={1} total={500} className="mb-[1%] mr-[2%]"/>
+      </div>
     </div>
   );
 }

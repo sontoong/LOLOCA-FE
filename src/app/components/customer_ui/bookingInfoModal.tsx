@@ -1,4 +1,4 @@
-import { Col, InputNumber, Row, Space } from "antd";
+import { Col, InputNumber, Row } from "antd";
 import { Form } from "../form";
 import { Input, InputDate, InputSelectTag, InputTime } from "../inputs";
 
@@ -65,86 +65,54 @@ const BookingModal = ({ form }: { form: any }) => {
       >
         <Input placeholder="Type your tour request here" />
       </Form.Item>
-      <Row>
-        <Col>
+      <Row gutter={[16, 16]}>
+        <Col span={12}>
           <Form.Item
             name="startDate"
             label="Start"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
+            rules={[{ required: true, message: "Please select start date" }]}
           >
             <InputDate placeholder="Enter start date" />
           </Form.Item>
-        </Col>
-        <Col offset={4}>
-          <Form.Item
-            name="endDate"
-            label="End"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <InputDate placeholder="Enter end date" />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
           <Form.Item
             name="arrivalTime"
             label="Arrival"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
+            rules={[{ required: true, message: "Please enter arrival time" }]}
           >
             <InputTime placeholder="Enter arrival time" />
           </Form.Item>
+          <Form.Item
+            name="adults"
+            label="Adults"
+            rules={[{ required: true, message: "Please enter number of adults" }]}
+          >
+            <InputNumber placeholder="How many adults will there be?" />
+          </Form.Item>
         </Col>
-        <Col offset={5}>
+        <Col span={12}>
+          <Form.Item
+            name="endDate"
+            label="End"
+            rules={[{ required: true, message: "Please select end date" }]}
+          >
+            <InputDate placeholder="Enter end date" />
+          </Form.Item>
           <Form.Item
             name="departureTime"
             label="Departure"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
+            rules={[{ required: true, message: "Please enter departure time" }]}
           >
             <InputTime placeholder="Enter departure time" />
           </Form.Item>
+          <Form.Item
+            name="children"
+            label="Child/Children (2-12y)"
+            rules={[{ required: true, message: "Please enter number of children" }]}
+          >
+            <InputNumber placeholder="How many children will there be?" />
+          </Form.Item>
         </Col>
       </Row>
-          <Space className="w-full justify-between">
-            <Form.Item
-              name="adults"
-              label="Adults"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <InputNumber placeholder="How many adults will there be?" />
-            </Form.Item>
-            <Form.Item
-              name="children"
-              label="Child/Children (2-12y)"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <InputNumber placeholder="How many children will there be?" />
-            </Form.Item>
-          </Space>
       <Form.Item
         name="tourRequirement"
         label="Your Requirement"

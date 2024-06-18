@@ -14,7 +14,7 @@ export default function TestPage() {
     <>
       <Card cardTitle="Create your tour" className="w-[30%] my-[2rem] mx-auto">
         <BookingModal form={form} />
-        <PrimaryButton text="Submit" onClick={onSubmitClick} />
+        <PrimaryButton text="Submit" onClick={() => onSubmitClick()} />
       </Card>
     </>
   );
