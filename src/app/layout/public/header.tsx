@@ -6,11 +6,11 @@ import { useAuth } from "../../hooks/useAuth";
 import logo from "../../../assets/logo.png";
 import { PrimaryButton } from "../../components/buttons";
 import { ROLE } from "../../../constants/role";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useCustomer } from "../../hooks/useCustomer";
 import { useTourguide } from "../../hooks/useTourguide";
-import { Customer, Tourguide } from "../../models/user";
 import { isEmptyObject } from "../../utils/utils";
+import { Customer, Tourguide } from "../../models/user";
 
 const { Header } = Layout;
 
@@ -21,24 +21,21 @@ export default function MyHeader() {
   const { currentCustomer } = useCustomer().state;
   const { currentTourguide } = useTourguide().state;
 
-  const user = useRef({} as Customer | Tourguide);
-
   useEffect(() => {
     handleGetUserInfo();
   }, [handleGetUserInfo]);
 
-  useEffect(() => {
-    switch (state.currentUser.Role) {
-      case ROLE.customer:
-        user.current = currentCustomer;
-        break;
-      case ROLE.tourguide:
-        user.current = currentTourguide;
-        break;
-      default:
-        break;
-    }
-  }, [currentCustomer, currentTourguide, state.currentUser.Role]);
+  let user = {} as Customer | Tourguide;
+  switch (state.currentUser.Role) {
+    case ROLE.customer:
+      user = currentCustomer;
+      break;
+    case ROLE.tourguide:
+      user = currentTourguide;
+      break;
+    default:
+      break;
+  }
 
   const logOut = async () => {
     handleLogout();
@@ -74,7 +71,7 @@ export default function MyHeader() {
           generateItemProfile(
             <Link to={`/fd/account`}>Thông tin cá nhân</Link>,
             "/account",
-            <UserOutlined />
+            <UserOutlined />,
           ),
           {
             type: "divider",
@@ -82,7 +79,7 @@ export default function MyHeader() {
           generateItemProfile(
             <div onClick={logOut}>Đăng xuất</div>,
             "",
-            <LogoutOutlined />
+            <LogoutOutlined />,
           ),
         ];
       case ROLE.tourguide:
@@ -90,12 +87,12 @@ export default function MyHeader() {
           generateItemProfile(
             <Link to={`/ed/account`}>Thông tin cá nhân</Link>,
             "/account",
-            <UserOutlined />
+            <UserOutlined />,
           ),
           generateItemProfile(
             <div onClick={logOut}>Đăng xuất</div>,
             "",
-            <LogoutOutlined />
+            <LogoutOutlined />,
           ),
         ];
       default:
@@ -103,7 +100,7 @@ export default function MyHeader() {
           generateItemProfile(
             <div onClick={logOut}>Đăng xuất</div>,
             "",
-            <LogoutOutlined />
+            <LogoutOutlined />,
           ),
         ];
     }
@@ -115,7 +112,7 @@ export default function MyHeader() {
 
   return (
     <>
-      <Header className="sticky top-0 z-50 flex w-full  bg-white items-center">
+      <Header className="sticky top-0 z-50 flex w-full  items-center bg-white">
         <img
           alt=""
           className="w-[150px] hover:cursor-pointer"
@@ -139,7 +136,7 @@ export default function MyHeader() {
         {isEmptyObject(state.currentUser) ? (
           <PrimaryButton
             text="Get started"
-            className="rounded-full self-center"
+            className="self-center rounded-full"
             bgColor="#000000"
             size="middle"
             onClick={() => navigate("/login")}
@@ -155,7 +152,7 @@ export default function MyHeader() {
               className="fixed right-4 top-3 cursor-pointer"
               size={"large"}
               icon={<UserOutlined />}
-              src={user.current?.avatar}
+              src={user?.avatar}
             />
           </Dropdown>
         )}
@@ -174,13 +171,13 @@ function generateItem(
   label: string,
   key: React.Key,
   icon?: React.ReactNode,
-  children?: ItemType[]
+  children?: ItemType[],
 ): ItemType {
   return {
     key,
     icon,
     children,
-    label: <span className="font-bold text-lg">{label}</span>,
+    label: <span className="text-lg font-bold">{label}</span>,
   };
 }
 
@@ -188,7 +185,7 @@ function generateItemProfile(
   label: React.ReactNode,
   key: React.Key,
   icon?: React.ReactNode,
-  children?: ItemType[]
+  children?: ItemType[],
 ): ItemType {
   return {
     key,

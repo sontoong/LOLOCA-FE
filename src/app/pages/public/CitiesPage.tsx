@@ -6,7 +6,6 @@ import {
   Dropdown,
   Image,
   MenuProps,
-  Pagination,
   Row,
   Space,
   Typography,
@@ -39,37 +38,37 @@ export default function CitiesPage() {
     if (renderCities) {
       return (
         <>
-        <Row gutter={[16, 16]} style={{ margin: "2%" }}>
-          {renderCities.map((city, index) => (
-            <Col span={6} key={index}>
-              <Card
-                className="h-[390px]"
-                hoverable
-                cover={
-                  <Image
-                    src={city?.cityThumbnail}
-                    fallback={defaultImage}
-                    style={{
-                      width: "100%",
-                      height: "200px",
-                      objectFit: "cover",
-                    }}
-                    preview={false}
-                  />
-                }
-                onClick={() => navigate(`/cities/${city?.cityId}`)}
-              >
-                <Title level={2} className="mt-0">
-                  {city?.name}
-                </Title>
-                <Paragraph ellipsis={{ rows: 3, expandable: false }}>
-                  {city?.cityDescription}
-                </Paragraph>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-        {/* <div className="flex justify-end mr-[5%] mb-[2%]">
+          <Row gutter={[16, 16]} style={{ margin: "2%" }}>
+            {renderCities.map((city, index) => (
+              <Col span={6} key={index}>
+                <Card
+                  className="h-[390px]"
+                  hoverable
+                  cover={
+                    <Image
+                      src={city?.cityThumbnail}
+                      fallback={defaultImage}
+                      style={{
+                        width: "100%",
+                        height: "200px",
+                        objectFit: "cover",
+                      }}
+                      preview={false}
+                    />
+                  }
+                  onClick={() => navigate(`/cities/${city?.cityId}`)}
+                >
+                  <Title level={2} className="mt-0">
+                    {city?.name}
+                  </Title>
+                  <Paragraph ellipsis={{ rows: 3, expandable: false }}>
+                    {city?.cityDescription}
+                  </Paragraph>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+          {/* <div className="flex justify-end mr-[5%] mb-[2%]">
             <Pagination
               current={currentPage}
               onChange={onChangePage}
@@ -98,7 +97,7 @@ export default function CitiesPage() {
         <Dropdown menu={{ items: filterItems }} trigger={["click"]}>
           <a
             onClick={(e) => e.preventDefault()}
-            className="text-black text-[1.5rem] font-bold ml-[4%]"
+            className="ml-[4%] text-[1.5rem] font-bold text-black"
           >
             <Space>
               Click me
@@ -108,9 +107,9 @@ export default function CitiesPage() {
         </Dropdown>
       </div>
       {renderContent()}
-      <div className="flex justify-end">
+      {/* <div className="flex justify-end">
         <Pagination defaultCurrent={1} total={500} className="mb-[1%] mr-[2%]"/>
-      </div>
+      </div> */}
     </div>
   );
 }

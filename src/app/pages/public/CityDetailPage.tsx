@@ -1,134 +1,28 @@
 import Banner from "../../components/banner/banner";
-import {
-  Card,
-  Col,
-  Dropdown,
-  Image,
-  MenuProps,
-  Pagination,
-  PaginationProps,
-  Row,
-  Space,
-  Tabs,
-  TabsProps,
-  Typography,
-} from "antd";
+import { Dropdown, MenuProps, Space, TabsProps } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useTour } from "../../hooks/useTour";
-import { useNavigate, useParams } from "react-router-dom";
-import { Loader, LoaderFullScreen } from "../../components/loader/loader";
-import { defaultImage } from "../../../constants/images";
-import NotFound from "../../components/not-found/not-found";
+import { useParams } from "react-router-dom";
+import { Loader } from "../../components/loader/loader";
 import { useCity } from "../../hooks/useCity";
-
-const { Title, Paragraph } = Typography;
+import CityTours from "../../ui/public/cityTours";
+import CityGuides from "../../ui/public/cityGuides";
 
 export default function ToursPage() {
   const { cityId } = useParams();
-  const navigate = useNavigate();
-  const {
-    state: stateTour,
-    handleGetTourRandom,
-    handleGetTourByCityId,
-  } = useTour();
+  const { handleGetTourRandom, handleGetTourByCityId } = useTour();
   const { state: stateCity, handleGetCityById } = useCity();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [currentPageSize, setCurrentPageSize] = useState(8);
-
-  const renderTours = stateTour.currentCityTours;
+  const [currentTab, setCurrentTab] = useState<string>("tours");
 
   useEffect(() => {
     if (cityId) {
       handleGetCityById({ cityId: cityId });
-      handleGetTourByCityId({
-        page: currentPage,
-        pageSize: currentPageSize,
-        cityId: parseInt(cityId),
-      });
     }
-  }, [
-    cityId,
-    currentPage,
-    currentPageSize,
-    handleGetTourRandom,
-    handleGetTourByCityId,
-    handleGetCityById,
-  ]);
-
-  const onChangePage: PaginationProps["onChange"] = (page) => {
-    setCurrentPage(page);
-  };
-
-  const onShowSizeChange: PaginationProps["onShowSizeChange"] = (
-    current,
-    pageSize
-  ) => {
-    setCurrentPage(current);
-    setCurrentPageSize(pageSize);
-  };
-
-  const handleCardClick = (tourId: number) => {
-    navigate(`/tours/${tourId}`);
-  };
+  }, [cityId, handleGetTourRandom, handleGetTourByCityId, handleGetCityById]);
 
   const onTabPaneChange = (key: string) => {
-    navigate(key);
-  };
-
-  const renderContent = () => {
-    if (stateTour.isFetching) {
-      return <LoaderFullScreen spinning={stateTour.isFetching} />;
-    }
-
-    if (renderTours) {
-      return (
-        <>
-          <Row gutter={[16, 16]} style={{ margin: "2%" }}>
-            {renderTours.tours.map((tour, index) => (
-              <Col span={6} key={index}>
-                <Card
-                  className="h-[390px]"
-                  hoverable
-                  onClick={() => handleCardClick(tour.tourId)}
-                  cover={
-                    <Image
-                      alt={tour.name}
-                      src={tour.thumbnailTourImage}
-                      fallback={defaultImage}
-                      style={{
-                        width: "100%",
-                        height: "200px",
-                        objectFit: "cover",
-                      }}
-                      preview={false}
-                    />
-                  }
-                >
-                  <Title level={2} className="mt-0">
-                    {tour.name}
-                  </Title>
-                  <Paragraph ellipsis={{ rows: 3, expandable: false }}>
-                    {tour.description}
-                  </Paragraph>
-                </Card>
-              </Col>
-            ))}
-          </Row>
-          <div className="flex justify-end mr-[5%]">
-            <Pagination
-              current={currentPage}
-              onChange={onChangePage}
-              total={renderTours?.totalPage}
-              showSizeChanger
-              onShowSizeChange={onShowSizeChange}
-            />
-          </div>
-        </>
-      );
-    }
-
-    return <NotFound />;
+    setCurrentTab(key);
   };
 
   const renderBanner = () => {
@@ -143,10 +37,23 @@ export default function ToursPage() {
             image={stateCity.currentCity?.cityBanner}
             title={stateCity.currentCity?.name}
             description={stateCity.currentCity?.cityDescription}
+            tabPane={{ onTabPaneChange, tabPaneItems, activeKey: currentTab }}
           />
-          <Tabs onChange={onTabPaneChange} type="card" items={tabPaneItems} />
         </div>
       );
+    }
+  };
+
+  const renderContent = () => {
+    switch (currentTab) {
+      case "tours":
+        return <CityTours />;
+
+      case "tourGuides":
+        return <CityGuides />;
+
+      default:
+        break;
     }
   };
 
@@ -157,7 +64,7 @@ export default function ToursPage() {
         <Dropdown menu={{ items: filterItems }} trigger={["click"]}>
           <a
             onClick={(e) => e.preventDefault()}
-            className="text-black text-[1.5rem] font-bold ml-[4%]"
+            className="ml-[4%] text-[1.5rem] font-bold text-black"
           >
             <Space>
               Click me

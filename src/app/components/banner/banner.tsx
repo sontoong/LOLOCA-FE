@@ -1,17 +1,15 @@
-import { Typography } from "antd";
+import { TabsProps, Typography } from "antd";
 import { defaultImage } from "../../../constants/images";
+import { BannerTabs } from "../tabs";
+
+const { Title, Paragraph } = Typography;
 
 const BannerContainer = ({
   image,
   title,
   description,
+  tabPane,
 }: BannerContainerProps) => {
-  const { Title, Text } = Typography;
-
-  // const onTabPaneChange = (key: string) => {
-  //   console.log(key);
-  // };
-
   return (
     <div
       style={{
@@ -21,30 +19,43 @@ const BannerContainer = ({
         MozBoxShadow: "60px -6px 22px -4px rgba(0,0,0,0.49) inset",
         backgroundAttachment: "fixed",
       }}
-      className="bg-cover bg-center h-[400px] p-[5%] pt-[3%]"
+      className="bg-cover bg-center px-[5%]"
     >
-      <Title
-        style={{
-          color: "white",
-          fontSize: "500%",
-          fontWeight: "bold",
-        }}
-      >
-        {title}
-      </Title>
-      <Text
-        style={{
-          color: "white",
-          fontSize: "120%",
-          display: "block",
-          width: "40%",
-        }}
-      >
-        {description}
-      </Text>
-      {/* <div style={{ marginTop: "auto" }}>
-        <Tabs onChange={onTabPaneChange} type="card" items={tabPaneItems} />
-      </div> */}
+      <div className="py-5">
+        <Title
+          style={{
+            color: "white",
+            fontSize: "500%",
+            fontWeight: "bold",
+          }}
+        >
+          {title}
+        </Title>
+        <Paragraph
+          style={{
+            color: "white",
+            fontSize: "120%",
+            display: "block",
+            width: "40%",
+          }}
+          ellipsis={{ rows: 6, expandable: true }}
+        >
+          {description}
+        </Paragraph>
+      </div>
+      {tabPane ? (
+        <BannerTabs
+          onChange={tabPane.onTabPaneChange}
+          type="card"
+          items={tabPane.tabPaneItems}
+          activeKey={tabPane.activeKey}
+          size="large"
+          tabBarGutter={10}
+          tabPosition="top"
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
@@ -55,15 +66,9 @@ type BannerContainerProps = {
   image?: string;
   title?: string;
   description?: string;
+  tabPane?: {
+    tabPaneItems: TabsProps["items"];
+    onTabPaneChange: TabsProps["onChange"];
+    activeKey: TabsProps["activeKey"];
+  };
 };
-
-// const tabPaneItems: TabsProps["items"] = [
-//   {
-//     key: "tours",
-//     label: "Tours",
-//   },
-//   {
-//     key: "tourguide",
-//     label: "Tour guides",
-//   },
-// ];
