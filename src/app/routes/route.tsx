@@ -23,7 +23,7 @@ import NotFoundPage from "../pages/public/404Page";
 //other page
 import ErrorPage from "../pages/public/ErrorPage";
 import TestPage from "../pages/TestPage";
-import BookingPage from "../pages/public/BookingPage";
+import BookingPage from "../pages/public/TourBookingPage";
 
 export const router = createBrowserRouter([
   {
@@ -90,7 +90,15 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "booking",
+        path: "tours/:tourId/booking",
+        element: (
+          <Suspense fallback={<></>}>
+            <BookingPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "guides/:tourGuideId/booking",
         element: (
           <Suspense fallback={<></>}>
             <BookingPage />

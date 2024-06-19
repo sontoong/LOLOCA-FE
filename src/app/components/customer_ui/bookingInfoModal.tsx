@@ -1,12 +1,15 @@
-import { Col, InputNumber, Row } from "antd";
-import { Form } from "../form";
-import { Input, InputDate, InputSelectTag, InputTime } from "../inputs";
+import { Col, InputNumber, Row } from 'antd';
+import { Form } from '../form';
+import { Input, InputDate, InputSelectTag, InputTime } from '../inputs';
+import { useParams } from 'react-router-dom';
 
-const BookingModal = ({ form }: { form: any }) => {
+const BookingModal = ({ form } : { form : any}) => {
+  const { tourId, tourGuideId } = useParams();
 
   const initialValues = {
-    tourGuideId: 0,
+    tourGuideId: tourGuideId ? parseInt(tourGuideId, 10) : 0,
     customerId: 0,
+    tourId: tourId ? parseInt(tourId, 10) : 0,
     tourName: "",
     tourRequirement: "",
     startDate: "",
@@ -18,8 +21,21 @@ const BookingModal = ({ form }: { form: any }) => {
     tourType: [],
   };
 
-  const handleSubmit = (values: object) => {
-    console.log("Form Values: ", values);
+  const onFinish = (values : any) => {
+    console.log(tourId)
+    if (!tourId) {
+      const submitValues = { ...values, tourGuideId, customerId};
+      console.log("Success:", submitValues);
+    }
+    if (!tourGuideId) {
+      const submitValues = { ...values, tourId };
+      console.log("Success:", submitValues);
+    }
+    
+  };
+
+  const onFinishFailed = (errorInfo : any) => {
+    console.log("Failed:", errorInfo);
   };
 
   const tourTypes = [
@@ -49,8 +65,9 @@ const BookingModal = ({ form }: { form: any }) => {
     <Form
       form={form}
       initialValues={initialValues}
-      onFinish={handleSubmit}
       name="BookingForm"
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
     >
       <Form.Item
         name="tourName"

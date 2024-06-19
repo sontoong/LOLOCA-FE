@@ -1,21 +1,12 @@
-import { PrimaryButton } from "../components/buttons";
-import { Card } from "../components/card";
-import BookingModal from "../components/customer_ui/bookingInfoModal";
-import { Form } from "antd";
+import { Link } from 'react-router-dom';
 
-export default function TestPage() {
-  const [form] = Form.useForm();
-
-  const onSubmitClick = () => {
-    form.submit();
-  };
-
+const TestPage = () => {
   return (
-    <>
-      <Card cardTitle="Create your tour" className="w-[30%] my-[2rem] mx-auto">
-        <BookingModal form={form} />
-        <PrimaryButton text="Submit" onClick={() => onSubmitClick()} />
-      </Card>
-    </>
+    <div>
+      <Link to={'/tours/1/booking'}>Tour</Link>
+      <Link to={'/guides/1/booking'} style={{ marginLeft: '10px' }}>Guide</Link>
+    </div>
   );
-}
+};
+
+export default TestPage;
