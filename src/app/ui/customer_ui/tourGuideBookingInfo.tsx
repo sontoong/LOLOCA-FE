@@ -1,25 +1,34 @@
-import { Col, InputNumber, Row } from "antd";
-import { Form } from "../form";
-import { Input, InputDate, InputSelectTag, InputTime } from "../inputs";
+import { Col, InputNumber, Row } from 'antd';
 
-const BookingModal = ({ form }: { form: any }) => {
+import { Input, InputDate, InputSelectTag, InputTime } from '../../components/inputs';
+import { useParams } from 'react-router-dom';
+import { Form } from '../../components/form';
+import { useState } from 'react';
+
+const TourGuideBookingInfo = ({ form } : { form : any}) => {
+  const { tourGuideId } = useParams();
+  const userId = localStorage.getItem("userId") ?? "";
+  const [totalPrice, setTotalPrice] = useState<number | undefined>(0)
 
   const initialValues = {
-    tourGuideId: 0,
-    customerId: 0,
     tourName: "",
-    tourRequirement: "",
+    note: "",
     startDate: "",
     endDate: "",
     arrivalTime: "",
     departureTime: "",
-    adults: 0,
-    children: 0,
+    numOfAdult: 0,
+    numOfChild: 0,
     tourType: [],
   };
 
-  const handleSubmit = (values: object) => {
-    console.log("Form Values: ", values);
+  const onFinish = (values : any) => {
+    const submitValues = { ...values, tourGuideId: tourGuideId, customerId: userId, price: totalPrice};
+    console.log("Form Values: ", submitValues);    
+  };
+
+  const onFinishFailed = (errorInfo : any) => {
+    console.log("Failed:", errorInfo);
   };
 
   const tourTypes = [
@@ -49,8 +58,9 @@ const BookingModal = ({ form }: { form: any }) => {
     <Form
       form={form}
       initialValues={initialValues}
-      onFinish={handleSubmit}
       name="BookingForm"
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
     >
       <Form.Item
         name="tourName"
@@ -74,15 +84,15 @@ const BookingModal = ({ form }: { form: any }) => {
           >
             <InputDate placeholder="Enter start date" />
           </Form.Item>
-          <Form.Item
+          {/* <Form.Item
             name="arrivalTime"
             label="Arrival"
             rules={[{ required: true, message: "Please enter arrival time" }]}
           >
             <InputTime placeholder="Enter arrival time" />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
-            name="adults"
+            name="numOfAdult"
             label="Adults"
             rules={[{ required: true, message: "Please enter number of adults" }]}
           >
@@ -97,15 +107,15 @@ const BookingModal = ({ form }: { form: any }) => {
           >
             <InputDate placeholder="Enter end date" />
           </Form.Item>
-          <Form.Item
+          {/* <Form.Item
             name="departureTime"
             label="Departure"
             rules={[{ required: true, message: "Please enter departure time" }]}
           >
             <InputTime placeholder="Enter departure time" />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
-            name="children"
+            name="numOfChild"
             label="Child/Children (2-12y)"
             rules={[{ required: true, message: "Please enter number of children" }]}
           >
@@ -114,7 +124,7 @@ const BookingModal = ({ form }: { form: any }) => {
         </Col>
       </Row>
       <Form.Item
-        name="tourRequirement"
+        name="note"
         label="Your Requirement"
         rules={[
           {
@@ -142,4 +152,4 @@ const BookingModal = ({ form }: { form: any }) => {
   );
 };
 
-export default BookingModal;
+export default TourGuideBookingInfo;

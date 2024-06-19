@@ -26,5 +26,6 @@ function DefaultForm(props: DefaultFormProps) {
 
 DefaultForm.Item = Form.Item;
 DefaultForm.useForm = Form.useForm;
+DefaultForm.Provider = Form.Provider
 
 export default DefaultForm;
