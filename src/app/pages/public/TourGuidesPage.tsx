@@ -1,43 +1,74 @@
-import { DownOutlined } from "@ant-design/icons";
-import { Card, Col, Dropdown, MenuProps, Row, Space, Typography } from "antd";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import VietNamBanner from "../../../assets/banner.png";
 import Banner from "../../components/banner/banner";
-import { Image } from "../../components/image";
-import { Loader } from "../../components/loader/loader";
+import VietNamBanner from "../../../assets/banner.png";
+import {
+  Card,
+  Col,
+  Dropdown,
+  MenuProps,
+  Pagination,
+  PaginationProps,
+  Row,
+  Space,
+  Typography,
+} from "antd";
+import { DownOutlined } from "@ant-design/icons";
+import { useTourGuide } from "../../hooks/useTourGuide";
 import NotFound from "../../components/not-found/not-found";
-import { useCity } from "../../hooks/useCity";
+import { useEffect, useState } from "react";
+import { Loader } from "../../components/loader/loader";
+import { Image } from "../../components/image";
+import { useNavigate } from "react-router-dom";
 
 const { Title, Paragraph } = Typography;
 
-export default function CitiesPage() {
+export default function GuidesPage() {
   const navigate = useNavigate();
-  const { state, handleGetCities } = useCity();
 
-  const renderCities = state.cityList;
+  const { state, handleGetRandomTourGuides } = useTourGuide();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPageSize, setCurrentPageSize] = useState(8);
+
+  const renderTourGuides = state.currentTourGuideList;
 
   useEffect(() => {
-    handleGetCities();
-  }, [handleGetCities]);
+    handleGetRandomTourGuides({ page: currentPage, pageSize: currentPageSize });
+  }, [currentPage, currentPageSize, handleGetRandomTourGuides]);
+
+  const onChangePage: PaginationProps["onChange"] = (page) => {
+    setCurrentPage(page);
+  };
+
+  const onShowSizeChange: PaginationProps["onShowSizeChange"] = (
+    current,
+    pageSize,
+  ) => {
+    setCurrentPage(current);
+    setCurrentPageSize(pageSize);
+  };
+
+  const handleCardClick = (tourGuideId: number) => {
+    navigate(`/guides/${tourGuideId}`);
+  };
 
   const renderContent = () => {
     if (state.isFetching) {
       return <Loader />;
     }
 
-    if (renderCities) {
+    if (renderTourGuides) {
       return (
         <>
           <Row gutter={[16, 16]} style={{ margin: "2%" }}>
-            {renderCities.map((city, index) => (
+            {renderTourGuides.tourGuides.map((tourGuide, index) => (
               <Col span={6} key={index}>
                 <Card
                   className="h-[390px]"
                   hoverable
+                  onClick={() => handleCardClick(tourGuide.id)}
                   cover={
                     <Image
-                      src={city?.cityThumbnail}
+                      alt={tourGuide.firstName}
+                      src={tourGuide.avatar}
                       style={{
                         width: "100%",
                         height: "200px",
@@ -46,27 +77,26 @@ export default function CitiesPage() {
                       preview={false}
                     />
                   }
-                  onClick={() => navigate(`/cities/${city?.cityId}`)}
                 >
                   <Title level={2} className="mt-0">
-                    {city?.name}
+                    {`${tourGuide.firstName} ${tourGuide.lastName}`}
                   </Title>
                   <Paragraph ellipsis={{ rows: 3, expandable: false }}>
-                    {city?.cityDescription}
+                    {tourGuide.description}
                   </Paragraph>
                 </Card>
               </Col>
             ))}
           </Row>
-          {/* <div className="flex justify-end mr-[5%] mb-[2%]">
+          <div className="mb-[2%] mr-[5%] flex justify-end">
             <Pagination
               current={currentPage}
               onChange={onChangePage}
-              total={renderTours?.totalPage}
+              total={renderTourGuides?.totalPage}
               showSizeChanger
               onShowSizeChange={onShowSizeChange}
             />
-          </div> */}
+          </div>
         </>
       );
     }
@@ -97,9 +127,6 @@ export default function CitiesPage() {
         </Dropdown>
       </div>
       {renderContent()}
-      {/* <div className="flex justify-end">
-        <Pagination defaultCurrent={1} total={500} className="mb-[1%] mr-[2%]"/>
-      </div> */}
     </div>
   );
 }

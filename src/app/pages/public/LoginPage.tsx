@@ -1,12 +1,13 @@
-import { Image, Space, Tooltip } from "antd";
+import { Space, Tooltip } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 
-import logoAuth from "../../../assets/logoAuth.png";
-import { Form } from "../../components/form";
-import { useAuth } from "../../hooks/useAuth";
-import { Input } from "../../components/inputs";
 import { InfoCircleOutlined, UserOutlined } from "@ant-design/icons";
+import logoAuth from "../../../assets/logoAuth.png";
 import { PrimaryButton } from "../../components/buttons";
+import { Form } from "../../components/form";
+import { Image } from "../../components/image";
+import { Input } from "../../components/inputs";
+import { useAuth } from "../../hooks/useAuth";
 import { LoginParams } from "../../redux/slice/authSlice";
 
 export default function LoginPage() {
@@ -28,7 +29,7 @@ export default function LoginPage() {
   // };
 
   return (
-    <div className="h-screen flex justify-center items-center">
+    <div className="flex h-screen items-center justify-center">
       <Space className="w-1/3" direction="vertical" size="large">
         <div className="flex justify-center">
           <Image

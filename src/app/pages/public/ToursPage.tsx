@@ -1,10 +1,8 @@
-import Banner from "../../components/banner/banner";
-import VietNamBanner from "../../../assets/banner.png";
+import { DownOutlined } from "@ant-design/icons";
 import {
   Card,
   Col,
   Dropdown,
-  Image,
   MenuProps,
   Pagination,
   PaginationProps,
@@ -12,13 +10,14 @@ import {
   Space,
   Typography,
 } from "antd";
-import { DownOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { useTour } from "../../hooks/useTour";
 import { useNavigate } from "react-router-dom";
+import VietNamBanner from "../../../assets/banner.png";
+import Banner from "../../components/banner/banner";
+import { Image } from "../../components/image";
 import { Loader } from "../../components/loader/loader";
-import { defaultImage } from "../../../constants/images";
 import NotFound from "../../components/not-found/not-found";
+import { useTour } from "../../hooks/useTour";
 
 const { Title, Paragraph } = Typography;
 
@@ -69,7 +68,6 @@ export default function ToursPage() {
                     <Image
                       alt={tour.name}
                       src={tour.thumbnailTourImage}
-                      fallback={defaultImage}
                       style={{
                         width: "100%",
                         height: "200px",

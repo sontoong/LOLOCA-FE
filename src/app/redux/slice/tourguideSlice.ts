@@ -88,6 +88,28 @@ export const getRandomTourGuide = createAsyncThunk<
   }
 });
 
+export const getRandomTourGuideInCity = createAsyncThunk<
+  any,
+  GetRandomTourGuideInCityParams
+>("tourguide/getRandomTourGuideInCity", async (data, { rejectWithValue }) => {
+  const { page, pageSize, CityId } = data;
+  try {
+    const response = await agent.TourGuide.getRandomTourGuideInCity({
+      CityId,
+      page,
+      pageSize,
+    });
+    return response;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+});
+
 export const { setCurrentUserTourGuide, setCurrentTourGuideList } =
   tourguideSlice.actions;
 
@@ -98,6 +120,12 @@ export type GetTourGuideByIdParams = {
 };
 
 export type GetRandomTourGuideParams = {
-  page: string;
-  pageSize: string;
+  page: number;
+  pageSize: number;
+};
+
+export type GetRandomTourGuideInCityParams = {
+  page: number;
+  pageSize: number;
+  CityId: number;
 };

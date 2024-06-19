@@ -17,7 +17,7 @@ import CitiesPage from "../pages/public/CitiesPage";
 import CityDetailPage from "../pages/public/CityDetailPage";
 import ToursPage from "../pages/public/ToursPage";
 import TourDetailPage from "../pages/public/TourDetailPage";
-import GuidesPage from "../pages/public/GuidesPage";
+import GuidesPage from "../pages/public/TourGuidesPage";
 import NotFoundPage from "../pages/public/404Page";
 
 //other page

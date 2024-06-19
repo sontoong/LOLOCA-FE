@@ -1,14 +1,15 @@
 import { InfoCircleOutlined, UserOutlined } from "@ant-design/icons";
-import { Checkbox, Image, Space, Tooltip, Typography } from "antd";
+import { Checkbox, Space, Tooltip, Typography } from "antd";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logoAuth from "../../../assets/logoAuth.png";
 import bannerRegister from "../../../assets/registerBanner.png";
-import { Form } from "../../components/form";
-import { Input } from "../../components/inputs";
-import { useAuth } from "../../hooks/useAuth";
-import { useState } from "react";
 import { PrimaryButton } from "../../components/buttons";
+import { Form } from "../../components/form";
+import { Image } from "../../components/image";
+import { Input } from "../../components/inputs";
 import { Modal } from "../../components/modals";
+import { useAuth } from "../../hooks/useAuth";
 import { RegisterParams, VerifyParams } from "../../redux/slice/authSlice";
 
 const { Text, Paragraph } = Typography;

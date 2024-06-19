@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Loader } from "../../components/loader/loader";
 import { useCity } from "../../hooks/useCity";
-import CityTours from "../../ui/public/cityTours";
-import CityGuides from "../../ui/public/cityGuides";
+import CityTours from "../../ui/public/city-tours";
+import CityGuides from "../../ui/public/city-tour-guides";
 
 export default function ToursPage() {
   const { cityId } = useParams();

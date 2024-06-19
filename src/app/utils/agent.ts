@@ -127,11 +127,11 @@ const TourGuide = {
     requests.get(`${_tourGuide}/info/${tourGuideId}`),
   getTourGuidePrivateById: (tourGuideId: string) =>
     requests.get(`${_tourGuide}/private-info/${tourGuideId}`),
-  getRandomTourGuide: (data: any) =>
-    requests.get(`${_tourGuide}/get-random-tourguide`, data),
+  getRandomTourGuide: (params: any) =>
+    requests.get(`${_tourGuide}/get-random-tourguide`, params),
   getAllTourGuides: () => requests.get(`${_tourGuide}/get-all-tourguides`),
-  getRandomTourGuideInCity: () =>
-    requests.get(`${_tourGuide}/get-random-tourguide-in-city`),
+  getRandomTourGuideInCity: (params: any) =>
+    requests.get(`${_tourGuide}/get-random-tourguide-in-city`, params),
   acceptBookingTourGuideRequest: (data: any) =>
     requests.post(`${_tourGuide}/accept-booking-tourguide-request`, data),
   rejectBookingTourGuideRequest: (data: any) =>

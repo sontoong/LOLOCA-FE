@@ -1,18 +1,10 @@
+import { Card, Col, Pagination, PaginationProps, Row, Typography } from "antd";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Image } from "../../components/image";
 import { Loader } from "../../components/loader/loader";
 import NotFound from "../../components/not-found/not-found";
-import { useEffect, useState } from "react";
 import { useTour } from "../../hooks/useTour";
-import {
-  Card,
-  Col,
-  Image,
-  Pagination,
-  PaginationProps,
-  Row,
-  Typography,
-} from "antd";
-import { defaultImage } from "../../../constants/images";
 
 const { Title, Paragraph } = Typography;
 
@@ -21,11 +13,7 @@ export default function CityTours() {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageSize, setCurrentPageSize] = useState(8);
-  const {
-    state: stateTour,
-    handleGetTourRandom,
-    handleGetTourByCityId,
-  } = useTour();
+  const { state: stateTour, handleGetTourByCityId } = useTour();
 
   const renderTours = stateTour.currentTourList;
 
@@ -37,13 +25,7 @@ export default function CityTours() {
         cityId: parseInt(cityId),
       });
     }
-  }, [
-    cityId,
-    currentPage,
-    currentPageSize,
-    handleGetTourRandom,
-    handleGetTourByCityId,
-  ]);
+  }, [cityId, currentPage, currentPageSize, handleGetTourByCityId]);
 
   const onChangePage: PaginationProps["onChange"] = (page) => {
     setCurrentPage(page);
@@ -80,7 +62,6 @@ export default function CityTours() {
                     <Image
                       alt={tour.name}
                       src={tour.thumbnailTourImage}
-                      fallback={defaultImage}
                       style={{
                         width: "100%",
                         height: "200px",

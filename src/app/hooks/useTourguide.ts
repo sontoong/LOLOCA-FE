@@ -8,6 +8,8 @@ import {
   GetTourGuideByIdParams,
   setCurrentUserTourGuide,
   setCurrentTourGuideList,
+  getRandomTourGuideInCity,
+  GetRandomTourGuideInCityParams,
 } from "../redux/slice/tourguideSlice";
 import { useCallback } from "react";
 
@@ -64,9 +66,34 @@ export function useTourGuide() {
     [dispatch, notification],
   );
 
+  const handleGetRandomTourGuidesInCity = useCallback(
+    async (value: GetRandomTourGuideInCityParams) => {
+      const resultAction = await dispatch(getRandomTourGuideInCity(value));
+      if (getRandomTourGuideInCity.fulfilled.match(resultAction)) {
+        dispatch(setCurrentTourGuideList(resultAction.payload));
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
   return {
     state,
     handleGetTourGuidebyId,
     handleGetRandomTourGuides,
+    handleGetRandomTourGuidesInCity,
   };
 }
