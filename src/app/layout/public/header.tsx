@@ -8,9 +8,9 @@ import { PrimaryButton } from "../../components/buttons";
 import { ROLE } from "../../../constants/role";
 import { useEffect } from "react";
 import { useCustomer } from "../../hooks/useCustomer";
-import { useTourguide } from "../../hooks/useTourguide";
+import { useTourGuide } from "../../hooks/useTourGuide";
 import { isEmptyObject } from "../../utils/utils";
-import { Customer, Tourguide } from "../../models/user";
+import { Customer, TourGuide } from "../../models/user";
 
 const { Header } = Layout;
 
@@ -18,20 +18,20 @@ export default function MyHeader() {
   const location = useLocation();
   const navigate = useNavigate();
   const { state, handleLogout, handleGetUserInfo } = useAuth();
-  const { currentCustomer } = useCustomer().state;
-  const { currentTourguide } = useTourguide().state;
+  const { currentUser: currentUserCustomer } = useCustomer().state;
+  const { currentUser: currentUserTourGuide } = useTourGuide().state;
 
   useEffect(() => {
     handleGetUserInfo();
   }, [handleGetUserInfo]);
 
-  let user = {} as Customer | Tourguide;
+  let user = {} as Customer | TourGuide;
   switch (state.currentUser.Role) {
     case ROLE.customer:
-      user = currentCustomer;
+      user = currentUserCustomer;
       break;
     case ROLE.tourguide:
-      user = currentTourguide;
+      user = currentUserTourGuide;
       break;
     default:
       break;

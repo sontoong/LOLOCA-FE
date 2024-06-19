@@ -15,50 +15,24 @@ import {
 import { DownOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useTour } from "../../hooks/useTour";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Loader } from "../../components/loader/loader";
 import { defaultImage } from "../../../constants/images";
 import NotFound from "../../components/not-found/not-found";
-import { useCity } from "../../hooks/useCity";
 
 const { Title, Paragraph } = Typography;
 
 export default function ToursPage() {
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const {
-    state: stateTour,
-    handleGetTourRandom,
-    handleGetTourByCityId,
-  } = useTour();
-  const { state: stateCity, handleGetCityById } = useCity();
+  const { state: stateTour, handleGetTourRandom } = useTour();
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageSize, setCurrentPageSize] = useState(8);
 
-  const currentCity = searchParams.get("city");
-  const renderTours = currentCity
-    ? stateTour.currentCityTours
-    : stateTour.randomTours;
+  const renderTours = stateTour.currentTourList;
 
   useEffect(() => {
-    if (currentCity) {
-      handleGetCityById({ cityId: currentCity });
-      handleGetTourByCityId({
-        page: currentPage,
-        pageSize: currentPageSize,
-        cityId: parseInt(currentCity),
-      });
-    } else {
-      handleGetTourRandom({ page: currentPage, pageSize: currentPageSize });
-    }
-  }, [
-    currentPage,
-    currentPageSize,
-    currentCity,
-    handleGetTourRandom,
-    handleGetTourByCityId,
-    handleGetCityById,
-  ]);
+    handleGetTourRandom({ page: currentPage, pageSize: currentPageSize });
+  }, [currentPage, currentPageSize, handleGetTourRandom]);
 
   const onChangePage: PaginationProps["onChange"] = (page) => {
     setCurrentPage(page);
@@ -66,7 +40,7 @@ export default function ToursPage() {
 
   const onShowSizeChange: PaginationProps["onShowSizeChange"] = (
     current,
-    pageSize
+    pageSize,
   ) => {
     setCurrentPage(current);
     setCurrentPageSize(pageSize);
@@ -115,7 +89,7 @@ export default function ToursPage() {
               </Col>
             ))}
           </Row>
-          <div className="flex justify-end mr-[5%] mb-[2%]">
+          <div className="mb-[2%] mr-[5%] flex justify-end">
             <Pagination
               current={currentPage}
               onChange={onChangePage}
@@ -133,26 +107,18 @@ export default function ToursPage() {
 
   return (
     <div>
-      {currentCity ? (
-        <Banner
-          image={stateCity.currentCity?.cityBanner}
-          title={stateCity.currentCity?.name}
-          description={stateCity.currentCity?.cityDescription}
-        />
-      ) : (
-        <Banner
-          image={VietNamBanner}
-          title={"Các tour ở Việt Nam"}
-          description={
-            "Việt Nam, một đất nước tuy nhỏ nhưng đa dạng về văn hóa, phong cảnh và ẩm thực. Từ những dãy núi hùng vĩ đến những bãi biển tuyệt đẹp, Việt Nam là điểm đến hấp dẫn của du khách."
-          }
-        />
-      )}
+      <Banner
+        image={VietNamBanner}
+        title={"Các tour ở Việt Nam"}
+        description={
+          "Việt Nam, một đất nước tuy nhỏ nhưng đa dạng về văn hóa, phong cảnh và ẩm thực. Từ những dãy núi hùng vĩ đến những bãi biển tuyệt đẹp, Việt Nam là điểm đến hấp dẫn của du khách."
+        }
+      />
       <div className="mt-[3%]">
         <Dropdown menu={{ items: filterItems }} trigger={["click"]}>
           <a
             onClick={(e) => e.preventDefault()}
-            className="text-black text-[1.5rem] font-bold ml-[4%]"
+            className="ml-[4%] text-[1.5rem] font-bold text-black"
           >
             <Space>
               Click me

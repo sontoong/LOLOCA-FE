@@ -27,7 +27,7 @@ export default function CityTours() {
     handleGetTourByCityId,
   } = useTour();
 
-  const renderTours = stateTour.currentCityTours;
+  const renderTours = stateTour.currentTourList;
 
   useEffect(() => {
     if (cityId) {

@@ -8,8 +8,7 @@ import {
   getTourRandom,
   GetTourRandomParams,
   setCurrentTour,
-  setCurrentCityToursList,
-  setRandomTourlist,
+  setCurrentTourList,
 } from "../redux/slice/tourSlice";
 import { useCallback } from "react";
 
@@ -22,7 +21,7 @@ export function useTour() {
     async (value: GetTourRandomParams) => {
       const resultAction = await dispatch(getTourRandom(value));
       if (getTourRandom.fulfilled.match(resultAction)) {
-        dispatch(setRandomTourlist(resultAction.payload));
+        dispatch(setCurrentTourList(resultAction.payload));
       } else {
         if (resultAction.payload) {
           notification.error({
@@ -39,14 +38,14 @@ export function useTour() {
         }
       }
     },
-    [dispatch, notification]
+    [dispatch, notification],
   );
 
   const handleGetTourByCityId = useCallback(
     async (value: GetTourCityParams) => {
       const resultAction = await dispatch(getTourByCity(value));
       if (getTourByCity.fulfilled.match(resultAction)) {
-        dispatch(setCurrentCityToursList(resultAction.payload));
+        dispatch(setCurrentTourList(resultAction.payload));
       } else {
         if (resultAction.payload) {
           notification.error({
@@ -63,7 +62,7 @@ export function useTour() {
         }
       }
     },
-    [dispatch, notification]
+    [dispatch, notification],
   );
 
   const handleGetTourById = useCallback(
@@ -87,7 +86,7 @@ export function useTour() {
         }
       }
     },
-    [dispatch, notification]
+    [dispatch, notification],
   );
 
   return {

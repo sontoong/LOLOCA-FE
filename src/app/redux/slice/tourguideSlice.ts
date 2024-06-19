@@ -1,15 +1,18 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Tourguide } from "../../models/user";
+import { TourGuide } from "../../models/user";
 import agent from "../../utils/agent";
 import { AxiosError } from "axios";
+import { TourGuideList } from "../../models/tourGuide";
 
-type TTourguide = {
-  currentTourguide: Tourguide;
+type TTourGuide = {
+  currentUser: TourGuide;
+  currentTourGuideList: TourGuideList;
   isFetching: boolean;
 };
 
-const initialState: TTourguide = {
-  currentTourguide: {} as Tourguide,
+const initialState: TTourGuide = {
+  currentUser: {} as TourGuide,
+  currentTourGuideList: { tourGuides: [], totalPage: 0 },
   isFetching: false,
 };
 
@@ -17,8 +20,11 @@ const tourguideSlice = createSlice({
   name: "tourguide",
   initialState,
   reducers: {
-    setCurrentTourguide: (state, action: PayloadAction<Tourguide>) => {
-      state.currentTourguide = action.payload;
+    setCurrentUserTourGuide: (state, action: PayloadAction<TourGuide>) => {
+      state.currentUser = action.payload;
+    },
+    setCurrentTourGuideList: (state, action: PayloadAction<TourGuideList>) => {
+      state.currentTourGuideList = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -29,7 +35,7 @@ const tourguideSlice = createSlice({
           action.type.endsWith("/pending"),
         (state) => {
           state.isFetching = true;
-        }
+        },
       )
       .addMatcher(
         (action) =>
@@ -38,17 +44,17 @@ const tourguideSlice = createSlice({
             action.type.endsWith("/rejected")),
         (state) => {
           state.isFetching = false;
-        }
+        },
       );
   },
 });
 
-export const getTourguideById = createAsyncThunk<any, GetTourguideByIdParams>(
-  "tourguide/getTourguideById",
+export const getTourGuideById = createAsyncThunk<any, GetTourGuideByIdParams>(
+  "tourguide/getTourGuideById",
   async (data, { rejectWithValue }) => {
     const { tourGuideId } = data;
     try {
-      const response = await agent.TourGuide.getTourguideById(tourGuideId);
+      const response = await agent.TourGuide.getTourGuideById(tourGuideId);
       return response;
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -58,16 +64,16 @@ export const getTourguideById = createAsyncThunk<any, GetTourguideByIdParams>(
         return rejectWithValue(error.response.data);
       }
     }
-  }
+  },
 );
 
-export const getRandomTourguide = createAsyncThunk<
+export const getRandomTourGuide = createAsyncThunk<
   any,
-  GetRandomTourguideParams
->("tourguide/getRandomTourguide", async (data, { rejectWithValue }) => {
+  GetRandomTourGuideParams
+>("tourguide/getRandomTourGuide", async (data, { rejectWithValue }) => {
   const { page, pageSize } = data;
   try {
-    const response = await agent.TourGuide.getRandomTourguide({
+    const response = await agent.TourGuide.getRandomTourGuide({
       page,
       pageSize,
     });
@@ -82,15 +88,16 @@ export const getRandomTourguide = createAsyncThunk<
   }
 });
 
-export const { setCurrentTourguide } = tourguideSlice.actions;
+export const { setCurrentUserTourGuide, setCurrentTourGuideList } =
+  tourguideSlice.actions;
 
 export default tourguideSlice.reducer;
 
-export type GetTourguideByIdParams = {
+export type GetTourGuideByIdParams = {
   tourGuideId: string;
 };
 
-export type GetRandomTourguideParams = {
+export type GetRandomTourGuideParams = {
   page: string;
   pageSize: string;
 };

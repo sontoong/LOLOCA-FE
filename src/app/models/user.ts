@@ -18,7 +18,7 @@ export type Customer = {
   balance: number | null;
 };
 
-export type Tourguide = {
+export type TourGuide = {
   accountStatus: number;
   cityName: string;
   firstName: string;

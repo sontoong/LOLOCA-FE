@@ -2,17 +2,16 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import agent from "../../utils/agent";
 import { AxiosError } from "axios";
 import { Tour, TourList } from "../../models/tour";
+
 type TTour = {
   currentTour: Tour;
-  randomTours: TourList;
-  currentCityTours: TourList;
+  currentTourList: TourList;
   isFetching: boolean;
 };
 
 const initialState: TTour = {
   currentTour: {} as Tour,
-  randomTours: { tours: [], totalPage: 0 },
-  currentCityTours: { tours: [], totalPage: 0 },
+  currentTourList: { tours: [], totalPage: 0 },
   isFetching: false,
 };
 
@@ -23,14 +22,11 @@ const tourSlice = createSlice({
     setCurrentTour: (state, action: PayloadAction<TTour["currentTour"]>) => {
       state.currentTour = action.payload;
     },
-    setRandomTourlist: (state, action: PayloadAction<TTour["randomTours"]>) => {
-      state.randomTours = action.payload;
-    },
-    setCurrentCityToursList: (
+    setCurrentTourList: (
       state,
-      action: PayloadAction<TTour["currentCityTours"]>
+      action: PayloadAction<TTour["currentTourList"]>,
     ) => {
-      state.currentCityTours = action.payload;
+      state.currentTourList = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -40,7 +36,7 @@ const tourSlice = createSlice({
           action.type.startsWith("tour/") && action.type.endsWith("/pending"),
         (state) => {
           state.isFetching = true;
-        }
+        },
       )
       .addMatcher(
         (action) =>
@@ -49,7 +45,7 @@ const tourSlice = createSlice({
             action.type.endsWith("/rejected")),
         (state) => {
           state.isFetching = false;
-        }
+        },
       );
   },
 });
@@ -69,7 +65,7 @@ export const getTourRandom = createAsyncThunk<any, GetTourRandomParams>(
         return rejectWithValue(error.response.data);
       }
     }
-  }
+  },
 );
 
 export const getTourByCity = createAsyncThunk<any, GetTourCityParams>(
@@ -91,7 +87,7 @@ export const getTourByCity = createAsyncThunk<any, GetTourCityParams>(
         return rejectWithValue(error.response.data);
       }
     }
-  }
+  },
 );
 
 export const getTourById = createAsyncThunk<any, GetTourByIdParams>(
@@ -109,11 +105,10 @@ export const getTourById = createAsyncThunk<any, GetTourByIdParams>(
         return rejectWithValue(error.response.data);
       }
     }
-  }
+  },
 );
 
-export const { setCurrentTour, setRandomTourlist, setCurrentCityToursList } =
-  tourSlice.actions;
+export const { setCurrentTour, setCurrentTourList } = tourSlice.actions;
 
 export default tourSlice.reducer;
 

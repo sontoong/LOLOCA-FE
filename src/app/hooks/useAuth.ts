@@ -18,11 +18,11 @@ import {
 } from "../redux/slice/authSlice";
 import {
   getCustomerById,
-  setCurrentCustomer,
+  setCurrentUserCustomer,
 } from "../redux/slice/customerSlice";
 import {
-  getTourguideById,
-  setCurrentTourguide,
+  getTourGuideById,
+  setCurrentUserTourGuide,
 } from "../redux/slice/tourguideSlice";
 
 export function useAuth() {
@@ -44,7 +44,7 @@ export function useAuth() {
         localStorage.setItem("access_token", accessToken);
         localStorage.setItem("refresh_token", refreshToken);
         const decode = jwtDecode(accessToken) as any;
-        localStorage.setItem("userId", decode.CustomerId ?? decode.TourguideId);
+        localStorage.setItem("userId", decode.CustomerId ?? decode.TourGuideId);
         dispatch(setCurrentUser(decode));
         navigate("/");
       } else {
@@ -63,7 +63,7 @@ export function useAuth() {
         }
       }
     },
-    [dispatch, notification]
+    [dispatch, notification],
   );
 
   // const handleLoginVerify = useCallback(async (
@@ -77,7 +77,7 @@ export function useAuth() {
   //     localStorage.setItem("access_token", accessToken);
   //     localStorage.setItem("refresh_token", refreshToken);
   //     const decode = jwtDecode(accessToken) as any;
-  //     localStorage.setItem("userId", decode.CustomerId ?? decode.TourguideId);
+  //     localStorage.setItem("userId", decode.CustomerId ?? decode.TourGuideId);
   //     navigate("/");
   //   } else {
   //     if (resultAction.payload) {
@@ -104,7 +104,7 @@ export function useAuth() {
           setShowOTPModal({
             open: true,
             email: value.email,
-          })
+          }),
         );
       } else {
         if (resultAction.payload) {
@@ -122,7 +122,7 @@ export function useAuth() {
         }
       }
     },
-    [dispatch, notification]
+    [dispatch, notification],
   );
 
   const handleRegisterVerify = useCallback(
@@ -134,7 +134,7 @@ export function useAuth() {
         localStorage.setItem("access_token", accessToken);
         localStorage.setItem("refresh_token", refreshToken);
         const decode = jwtDecode(accessToken) as any;
-        localStorage.setItem("userId", decode.CustomerId ?? decode.TourguideId);
+        localStorage.setItem("userId", decode.CustomerId ?? decode.TourGuideId);
         dispatch(setCurrentUser(decode));
         navigate("/");
       } else {
@@ -153,7 +153,7 @@ export function useAuth() {
         }
       }
     },
-    [dispatch, notification]
+    [dispatch, notification],
   );
 
   const handleLogout = useCallback(async () => {
@@ -168,10 +168,10 @@ export function useAuth() {
     switch (role) {
       case ROLE.customer: {
         const resultAction = await dispatch(
-          getCustomerById({ customerId: userId })
+          getCustomerById({ customerId: userId }),
         );
         if (getCustomerById.fulfilled.match(resultAction)) {
-          dispatch(setCurrentCustomer(resultAction.payload));
+          dispatch(setCurrentUserCustomer(resultAction.payload));
         } else {
           notification.error({
             message: "Error",
@@ -185,10 +185,10 @@ export function useAuth() {
       }
       case ROLE.tourguide: {
         const resultAction = await dispatch(
-          getTourguideById({ tourGuideId: userId })
+          getTourGuideById({ tourGuideId: userId }),
         );
-        if (getTourguideById.fulfilled.match(resultAction)) {
-          dispatch(setCurrentTourguide(resultAction.payload));
+        if (getTourGuideById.fulfilled.match(resultAction)) {
+          dispatch(setCurrentUserTourGuide(resultAction.payload));
         } else {
           notification.error({
             message: "Error",

@@ -2,7 +2,6 @@ import Banner from "../../components/banner/banner";
 import { Dropdown, MenuProps, Space, TabsProps } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { useTour } from "../../hooks/useTour";
 import { useParams } from "react-router-dom";
 import { Loader } from "../../components/loader/loader";
 import { useCity } from "../../hooks/useCity";
@@ -11,7 +10,6 @@ import CityGuides from "../../ui/public/cityGuides";
 
 export default function ToursPage() {
   const { cityId } = useParams();
-  const { handleGetTourRandom, handleGetTourByCityId } = useTour();
   const { state: stateCity, handleGetCityById } = useCity();
   const [currentTab, setCurrentTab] = useState<string>("tours");
 
@@ -19,7 +17,7 @@ export default function ToursPage() {
     if (cityId) {
       handleGetCityById({ cityId: cityId });
     }
-  }, [cityId, handleGetTourRandom, handleGetTourByCityId, handleGetCityById]);
+  }, [cityId, handleGetCityById]);
 
   const onTabPaneChange = (key: string) => {
     setCurrentTab(key);
@@ -49,7 +47,7 @@ export default function ToursPage() {
       case "tours":
         return <CityTours />;
 
-      case "tourGuides":
+      case "tourguide":
         return <CityGuides />;
 
       default:

@@ -68,8 +68,8 @@ apiJWT.interceptors.response.use(
     // const token = localStorage.getItem("access_token");
     if (error.response && error.response?.status === 401) {
       localStorage.clear();
-      window.location.href = "/login";
-      // router.navigate("/login");
+      // window.location.href = "/login";
+      router.navigate("/login");
     }
     // if (
     //   error.response &&
@@ -80,7 +80,7 @@ apiJWT.interceptors.response.use(
     //   router.navigate("/forbidden");
     // }
     return Promise.reject(error.response ?? error);
-  }
+  },
 );
 
 export default apiJWT;

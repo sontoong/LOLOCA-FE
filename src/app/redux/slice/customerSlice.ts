@@ -4,12 +4,12 @@ import agent from "../../utils/agent";
 import { AxiosError } from "axios";
 
 type TCustomer = {
-  currentCustomer: Customer;
+  currentUser: Customer;
   isFetching: boolean;
 };
 
 const initialState: TCustomer = {
-  currentCustomer: {} as Customer,
+  currentUser: {} as Customer,
   isFetching: false,
 };
 
@@ -17,8 +17,8 @@ const customerSlice = createSlice({
   name: "customer",
   initialState,
   reducers: {
-    setCurrentCustomer: (state, action: PayloadAction<Customer>) => {
-      state.currentCustomer = action.payload;
+    setCurrentUserCustomer: (state, action: PayloadAction<Customer>) => {
+      state.currentUser = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -29,7 +29,7 @@ const customerSlice = createSlice({
           action.type.endsWith("/pending"),
         (state) => {
           state.isFetching = true;
-        }
+        },
       )
       .addMatcher(
         (action) =>
@@ -38,7 +38,7 @@ const customerSlice = createSlice({
             action.type.endsWith("/rejected")),
         (state) => {
           state.isFetching = false;
-        }
+        },
       );
   },
 });
@@ -58,10 +58,10 @@ export const getCustomerById = createAsyncThunk<any, GetCustomerByIdParams>(
         return rejectWithValue(error.response.data);
       }
     }
-  }
+  },
 );
 
-export const { setCurrentCustomer } = customerSlice.actions;
+export const { setCurrentUserCustomer } = customerSlice.actions;
 
 export default customerSlice.reducer;
 

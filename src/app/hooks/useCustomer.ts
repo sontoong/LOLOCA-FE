@@ -4,7 +4,7 @@ import { App } from "antd";
 import {
   getCustomerById,
   GetCustomerByIdParams,
-  setCurrentCustomer,
+  setCurrentUserCustomer,
 } from "../redux/slice/customerSlice";
 import { useCallback } from "react";
 
@@ -17,7 +17,7 @@ export function useCustomer() {
     async (value: GetCustomerByIdParams) => {
       const resultAction = await dispatch(getCustomerById(value));
       if (getCustomerById.fulfilled.match(resultAction)) {
-        dispatch(setCurrentCustomer(resultAction.payload));
+        dispatch(setCurrentUserCustomer(resultAction.payload));
       } else {
         if (resultAction.payload) {
           notification.error({
@@ -34,7 +34,7 @@ export function useCustomer() {
         }
       }
     },
-    [dispatch, notification]
+    [dispatch, notification],
   );
 
   return {

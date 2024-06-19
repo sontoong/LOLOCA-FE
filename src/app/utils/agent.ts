@@ -45,7 +45,7 @@ const Auth = {
   // register
   registerCustomer: (data: any) =>
     baseRequests.post(`${_authBase}/register/customer`, data),
-  registerTourguide: (data: any) =>
+  registerTourGuide: (data: any) =>
     baseRequests.post(`${_authBase}/register/tourguide`, data),
   registerVerify: (data: any) =>
     baseRequests.post(`${_authBase}/register/verify`, data),
@@ -61,7 +61,7 @@ const BookingTour = {
   getBookingTourById: (id: string) => requests.get(`${_bookingTour}/${id}`),
   getBookingTourByCustomerId: (customerId: any) =>
     requests.get(`${_bookingTour}/customer/${customerId}`),
-  getBookingTourByTourguideId: (tourGuideId: any) =>
+  getBookingTourByTourGuideId: (tourGuideId: any) =>
     requests.get(`${_bookingTour}/tourguide/${tourGuideId}`),
 };
 
@@ -75,7 +75,7 @@ const BookingTourGuideRequest = {
     requests.get(`${_bookingTourGuideRequest}/${id}`),
   getBookingTourGuideByCustomerId: (customerId: any) =>
     requests.get(`${_bookingTourGuideRequest}/customer/${customerId}`),
-  getBookingTourGuideByTourguideId: (tourGuideId: any) =>
+  getBookingTourGuideByTourGuideId: (tourGuideId: any) =>
     requests.get(`${_bookingTourGuideRequest}/tourguide/${tourGuideId}`),
 };
 
@@ -102,16 +102,16 @@ const Customer = {
   getPrivate: () => requests.get(`${_customer}/private`),
   changeStatusBookingTourGuide: (
     bookingTourGuideRequestId: string,
-    data: any
+    data: any,
   ) =>
     requests.post(
       `${_customer}/change-status-booking-tour-guide/${bookingTourGuideRequestId}`,
-      data
+      data,
     ),
   changeStatusBookingTour: (bookingTourRequestId: string, data: any) =>
     requests.post(
       `${_customer}/change-status-booking-tour/${bookingTourRequestId}`,
-      data
+      data,
     ),
 };
 
@@ -123,18 +123,18 @@ const TourGuide = {
   updateInfo: (data: any) => requests.post(`${_tourGuide}/update-info`, data),
   changePassword: (data: any) =>
     requests.post(`${_tourGuide}/change-password`, data),
-  getTourguideById: (tourGuideId: string) =>
+  getTourGuideById: (tourGuideId: string) =>
     requests.get(`${_tourGuide}/info/${tourGuideId}`),
-  getTourguidePrivateById: (tourGuideId: string) =>
+  getTourGuidePrivateById: (tourGuideId: string) =>
     requests.get(`${_tourGuide}/private-info/${tourGuideId}`),
-  getRandomTourguide: (data: any) =>
+  getRandomTourGuide: (data: any) =>
     requests.get(`${_tourGuide}/get-random-tourguide`, data),
-  getAllTourguides: () => requests.get(`${_tourGuide}/get-all-tourguides`),
-  getRandomTourguideInCity: () =>
+  getAllTourGuides: () => requests.get(`${_tourGuide}/get-all-tourguides`),
+  getRandomTourGuideInCity: () =>
     requests.get(`${_tourGuide}/get-random-tourguide-in-city`),
-  acceptBookingTourguideRequest: (data: any) =>
+  acceptBookingTourGuideRequest: (data: any) =>
     requests.post(`${_tourGuide}/accept-booking-tourguide-request`, data),
-  rejectBookingTourguideRequest: (data: any) =>
+  rejectBookingTourGuideRequest: (data: any) =>
     requests.post(`${_tourGuide}/reject-booking-tourguide-request`, data),
   acceptBookingTourRequest: (data: any) =>
     requests.post(`${_tourGuide}/accept-booking-tour-request`, data),
@@ -153,7 +153,7 @@ const Tour = {
   getTourById: (tourId: string) => requests.get(`${_tour}/${tourId}`),
   getRandomTours: (params: any) => requests.get(`${_tour}/random`, params),
   getTourByCity: (params: any) => requests.get(`${_tour}/city`, params),
-  getTourByTourguide: (params: any) =>
+  getTourByTourGuide: (params: any) =>
     requests.get(`${_tour}/tour-guide`, params),
   getTourByStatus: (status: string) =>
     requests.get(`${_tour}/status/${status}`),
