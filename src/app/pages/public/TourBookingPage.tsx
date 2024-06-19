@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Steps } from "antd";
-import BookingModal from "../../components/customer_ui/bookingInfoModal";
-import GuideInfoModal from "../../components/customer_ui/guideInfoModal";
-import InstructionModal from "../../components/customer_ui/instructionModal";
+
 import { PrimaryButton } from "../../components/buttons";
 import { Form } from "../../components/form";
 import { Card } from "../../components/card";
 import VietNamBanner from "../../../assets/banner.png";
+import InstructionModal from "../../ui/customer_ui/instructionModal";
+import TourBookingInfoModal from "../../ui/customer_ui/tourBookingInfoModal";
+import GuideInfoModal from "../../ui/customer_ui/guideInfoModal";
 
 const { Step } = Steps;
 
@@ -33,7 +34,7 @@ const TourBookingPage = () => {
     },
     {
       title: "Step 2",
-      content: <BookingModal form={form} />,
+      content: <TourBookingInfoModal form={form} />,
     },
     {
       title: "Step 3",
@@ -46,17 +47,11 @@ const TourBookingPage = () => {
   };
 
   const initialValues = {
-    tourId: 0,
-    customerId: 0,
-    tourName: "",
-    tourRequirement: "",
+    note: "",
     startDate: "",
     endDate: "",
-    arrivalTime: "",
-    departureTime: "",
-    adults: 0,
-    children: 0,
-    tourType: [],
+    numOfAdult: 0,
+    numOfChild: 0,
   };
 
   return (
@@ -77,7 +72,6 @@ const TourBookingPage = () => {
           onFormFinish={(name, { values, forms }) => {
             const { mainForm } = forms;
             if (name === "BookingForm") {
-              console.log("Form Values: ", values);
               mainForm.setFieldsValue({ ...values });
               next()
             }
@@ -90,16 +84,11 @@ const TourBookingPage = () => {
             form={mainForm}
             onFinish={handleSubmit}
           >
-            <Form.Item name="tourName" hidden />
-            <Form.Item name="tourRequirement" hidden />
+            <Form.Item name="note" hidden />
             <Form.Item name="startDate" hidden />
             <Form.Item name="endDate" hidden />
-            <Form.Item name="arrivalTime" hidden />
-            <Form.Item name="departureTime" hidden />
-            <Form.Item name="adults" hidden />
-            <Form.Item name="children" hidden />
-            <Form.Item name="tourType" hidden />
-
+            <Form.Item name="numOfAdult" hidden />
+            <Form.Item name="numOfChild" hidden />
             <div>
               <div className="flex justify-end mt-4">
                 {currentStep > 0 && (

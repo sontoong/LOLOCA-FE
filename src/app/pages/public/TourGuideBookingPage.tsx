@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Steps } from "antd";
-import BookingModal from "../../components/customer_ui/bookingInfoModal";
-import GuideInfoModal from "../../components/customer_ui/guideInfoModal";
-import InstructionModal from "../../components/customer_ui/instructionModal";
+
 import { PrimaryButton } from "../../components/buttons";
 import { Form } from "../../components/form";
 import { Card } from "../../components/card";
 import VietNamBanner from "../../../assets/banner.png";
+import InstructionModal from "../../ui/customer_ui/instructionModal";
+import TourGuideBookingInfo from "../../ui/customer_ui/tourGuideBookingInfo";
+import GuideInfoModal from "../../ui/customer_ui/guideInfoModal";
 
 const { Step } = Steps;
 
@@ -33,7 +34,7 @@ const TourGuideBookingPage = () => {
     },
     {
       title: "Step 2",
-      content: <BookingModal form={form} />,
+      content: <TourGuideBookingInfo form={form} />,
     },
     {
       title: "Step 3",
@@ -46,16 +47,14 @@ const TourGuideBookingPage = () => {
   };
 
   const initialValues = {
-    tourGuideId: 0,
-    customerId: 0,
     tourName: "",
-    tourRequirement: "",
+    note: "",
     startDate: "",
     endDate: "",
     arrivalTime: "",
     departureTime: "",
-    adults: 0,
-    children: 0,
+    numOfAdult: 0,
+    numOfChild: 0,
     tourType: [],
   };
 
@@ -77,7 +76,6 @@ const TourGuideBookingPage = () => {
           onFormFinish={(name, { values, forms }) => {
             const { mainForm } = forms;
             if (name === "BookingForm") {
-              console.log("Form Values: ", values);
               mainForm.setFieldsValue({ ...values });
               next()
             }
@@ -91,7 +89,7 @@ const TourGuideBookingPage = () => {
             onFinish={handleSubmit}
           >
             <Form.Item name="tourName" hidden />
-            <Form.Item name="tourRequirement" hidden />
+            <Form.Item name="note" hidden />
             <Form.Item name="startDate" hidden />
             <Form.Item name="endDate" hidden />
             <Form.Item name="arrivalTime" hidden />

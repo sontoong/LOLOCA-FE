@@ -23,7 +23,8 @@ import NotFoundPage from "../pages/public/404Page";
 //other page
 import ErrorPage from "../pages/public/ErrorPage";
 import TestPage from "../pages/TestPage";
-import BookingPage from "../pages/public/TourBookingPage";
+import TourBookingPage from "../pages/public/TourBookingPage";
+import TourGuideBookingPage from "../pages/public/TourGuideBookingPage";
 
 export const router = createBrowserRouter([
   {
@@ -93,7 +94,7 @@ export const router = createBrowserRouter([
         path: "tours/:tourId/booking",
         element: (
           <Suspense fallback={<></>}>
-            <BookingPage />
+            <TourBookingPage />
           </Suspense>
         ),
       },
@@ -101,7 +102,7 @@ export const router = createBrowserRouter([
         path: "guides/:tourGuideId/booking",
         element: (
           <Suspense fallback={<></>}>
-            <BookingPage />
+            <TourGuideBookingPage />
           </Suspense>
         ),
       },
