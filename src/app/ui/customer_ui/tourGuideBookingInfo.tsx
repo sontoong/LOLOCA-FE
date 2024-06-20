@@ -1,6 +1,6 @@
 import { Col, InputNumber, Row } from 'antd';
 
-import { Input, InputDate, InputSelectTag, InputTime } from '../../components/inputs';
+import { Input, InputDate, InputSelectTag} from '../../components/inputs';
 import { useParams } from 'react-router-dom';
 import { Form } from '../../components/form';
 import { useState } from 'react';
@@ -24,6 +24,7 @@ const TourGuideBookingInfo = ({ form } : { form : any}) => {
 
   const onFinish = (values : any) => {
     const submitValues = { ...values, tourGuideId: tourGuideId, customerId: userId, price: totalPrice};
+    setTotalPrice(1)
     console.log("Form Values: ", submitValues);    
   };
 

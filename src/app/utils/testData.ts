@@ -1,3 +1,4 @@
+import VietNamBanner from "../../assets/banner.png";
 
 export const cities = [
     { title: "Hanoi", description: "Hanoi is a seething metropolis that’s packed with traditional hutong houses and the grand edifices of Ho Chi Minh’s legacy." },
@@ -59,4 +60,69 @@ export const tourDetailData = {
         ]
       }
   };
+
+  export const tourData = [
+    {
+      id: 1,
+      title: "Hanoi",
+      description: "Hanoi is a seething metropolis that’s packed with traditional hutong houses and the grand edifices of Ho Chi Minh’s legacy.",
+      imageUrl: VietNamBanner,
+      tourId: "/hanoi",
+    },
+    {
+      id: 2,
+      title: "Ho Chi Minh City",
+      description: "Ho Chi Minh City is known for its French colonial landmarks and bustling markets.",
+      imageUrl: VietNamBanner,
+      tourId: "/ho-chi-minh-city",
+    },
+    {
+        id: 3,
+        title: "Hanoi",
+        description: "Hanoi is a seething metropolis that’s packed with traditional hutong houses and the grand edifices of Ho Chi Minh’s legacy.",
+        imageUrl: VietNamBanner,
+        tourId: "/hanoi",
+      },
+      {
+        id: 4,
+        title: "Ho Chi Minh City",
+        description: "Ho Chi Minh City is known for its French colonial landmarks and bustling markets.",
+        imageUrl: VietNamBanner,
+        tourId: "/ho-chi-minh-city",
+      },
+      {
+        id: 5,
+        title: "Hanoi",
+        description: "Hanoi is a seething metropolis that’s packed with traditional hutong houses and the grand edifices of Ho Chi Minh’s legacy.",
+        imageUrl: VietNamBanner,
+        tourId: "/hanoi",
+      },
+      {
+        id: 6,
+        title: "Ho Chi Minh City",
+        description: "Ho Chi Minh City is known for its French colonial landmarks and bustling markets.",
+        imageUrl: VietNamBanner,
+        tourId: "/ho-chi-minh-city",
+      },
+  ];
+
+  export const reviewsData = {
+    stars: 4.5, // Average rating
+    amount: 20, // Total number of reviews
+    ratings: [
+      {
+        name: "John Doe",
+        date: 1623469200, // Unix timestamp in seconds
+        star: 5,
+        description: "Amazing tour, highly recommended!"
+      },
+      {
+        name: "Jane Smith",
+        date: 1623469200, // Unix timestamp in seconds
+        star: 4,
+        description: "Great experience, learned a lot about Vietnamese culture."
+      },
+      // Add more ratings as needed
+    ]
+  }
 

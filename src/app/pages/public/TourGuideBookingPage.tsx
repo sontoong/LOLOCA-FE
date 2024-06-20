@@ -43,7 +43,7 @@ const TourGuideBookingPage = () => {
   ];
 
   const handleSubmit = (values: any) => {
-    // console.log("Form Values: ", values);
+    console.log("Form Values: ", values);
   };
 
   const initialValues = {
