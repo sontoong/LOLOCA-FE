@@ -51,6 +51,23 @@ const TourBookingInfoModal = ({ form } : { form : any}) => {
   //   { value: "Wellness", label: "Wellness" },
   // ];
 
+
+  const validateStartDate = (_: any, value: any) => {
+    const endDate = form.getFieldValue('endDate');
+    if (!value || !endDate || new Date(value) < new Date(endDate)) {
+      return Promise.resolve();
+    }
+    return Promise.reject(new Error('Start date must be before end date'));
+  };
+
+  const validateEndDate = (_: any, value: any) => {
+    const startDate = form.getFieldValue('startDate');
+    if (!value || !startDate || new Date(value) > new Date(startDate)) {
+      return Promise.resolve();
+    }
+    return Promise.reject(new Error('End date must be after start date'));
+  };
+
   return (
     <Form
       form={form}
@@ -77,7 +94,10 @@ const TourBookingInfoModal = ({ form } : { form : any}) => {
           <Form.Item
             name="startDate"
             label="Start"
-            rules={[{ required: true, message: "Please select start date" }]}
+            rules={[
+              { required: true, message: "Please select start date" },
+              { validator: validateStartDate }
+            ]}
           >
             <InputDate placeholder="Enter start date" />
           </Form.Item>
@@ -100,7 +120,10 @@ const TourBookingInfoModal = ({ form } : { form : any}) => {
           <Form.Item
             name="endDate"
             label="End"
-            rules={[{ required: true, message: "Please select end date" }]}
+            rules={[
+              { required: true, message: "Please select end date" },
+              { validator: validateEndDate }
+            ]}
           >
             <InputDate placeholder="Enter end date" />
           </Form.Item>
