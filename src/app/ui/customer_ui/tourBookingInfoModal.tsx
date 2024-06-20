@@ -20,6 +20,7 @@ const TourBookingInfoModal = ({ form } : { form : any}) => {
 
   const onFinish = (values : any) => {
     const submitValues = { ...values, tourId: tourId, customerId: userId, price: totalPrice};
+    setTotalPrice(1)
     console.log("Form Values: ", submitValues);    
   };
 

@@ -25,6 +25,7 @@ import ErrorPage from "../pages/public/ErrorPage";
 import TestPage from "../pages/TestPage";
 import TourBookingPage from "../pages/public/TourBookingPage";
 import TourGuideBookingPage from "../pages/public/TourGuideBookingPage";
+import TourGuideProfile from "../pages/public/TourGuideProfile";
 
 export const router = createBrowserRouter([
   {
@@ -103,6 +104,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<></>}>
             <TourGuideBookingPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "guides/:tourGuideId",
+        element: (
+          <Suspense fallback={<></>}>
+            <TourGuideProfile />
           </Suspense>
         ),
       },
