@@ -1,14 +1,14 @@
-import { Col, InputNumber, Row } from 'antd';
+import { Col, InputNumber, Row } from "antd";
 
-import { Input, InputDate, InputSelectTag} from '../../components/inputs';
-import { useParams } from 'react-router-dom';
-import { Form } from '../../components/form';
-import { useState } from 'react';
+import { Input, InputDate, InputSelectTag } from "../../components/inputs";
+import { useParams } from "react-router-dom";
+import { Form } from "../../components/form";
+import { useState } from "react";
 
-const TourGuideBookingInfo = ({ form } : { form : any}) => {
+const TourGuideBookingInfo = ({ form }: { form: any }) => {
   const { tourGuideId } = useParams();
   const userId = localStorage.getItem("userId") ?? "";
-  const [totalPrice, setTotalPrice] = useState<number | undefined>(0)
+  const [totalPrice, setTotalPrice] = useState<number | undefined>(0);
 
   const initialValues = {
     tourName: "",
@@ -22,13 +22,18 @@ const TourGuideBookingInfo = ({ form } : { form : any}) => {
     tourType: [],
   };
 
-  const onFinish = (values : any) => {
-    const submitValues = { ...values, tourGuideId: tourGuideId, customerId: userId, price: totalPrice};
-    setTotalPrice(1)
-    console.log("Form Values: ", submitValues);    
+  const onFinish = (values: any) => {
+    const submitValues = {
+      ...values,
+      tourGuideId: tourGuideId,
+      customerId: userId,
+      price: totalPrice,
+    };
+    setTotalPrice(1);
+    console.log("Form Values: ", submitValues);
   };
 
-  const onFinishFailed = (errorInfo : any) => {
+  const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
 
@@ -54,6 +59,22 @@ const TourGuideBookingInfo = ({ form } : { form : any}) => {
     { value: "Festival", label: "Festival" },
     { value: "Wellness", label: "Wellness" },
   ];
+
+  const validateStartDate = (_: any, value: any) => {
+    const endDate = form.getFieldValue("endDate");
+    if (!value || !endDate || new Date(value) < new Date(endDate)) {
+      return Promise.resolve();
+    }
+    return Promise.reject(new Error("Start date must be before end date"));
+  };
+
+  const validateEndDate = (_: any, value: any) => {
+    const startDate = form.getFieldValue("startDate");
+    if (!value || !startDate || new Date(value) > new Date(startDate)) {
+      return Promise.resolve();
+    }
+    return Promise.reject(new Error("End date must be after start date"));
+  };
 
   return (
     <Form
@@ -81,7 +102,10 @@ const TourGuideBookingInfo = ({ form } : { form : any}) => {
           <Form.Item
             name="startDate"
             label="Start"
-            rules={[{ required: true, message: "Please select start date" }]}
+            rules={[
+              { required: true, message: "Please select start date" },
+              { validator: validateStartDate },
+            ]}
           >
             <InputDate placeholder="Enter start date" />
           </Form.Item>
@@ -95,7 +119,9 @@ const TourGuideBookingInfo = ({ form } : { form : any}) => {
           <Form.Item
             name="numOfAdult"
             label="Adults"
-            rules={[{ required: true, message: "Please enter number of adults" }]}
+            rules={[
+              { required: true, message: "Please enter number of adults" },
+            ]}
           >
             <InputNumber placeholder="How many adults will there be?" />
           </Form.Item>
@@ -104,7 +130,10 @@ const TourGuideBookingInfo = ({ form } : { form : any}) => {
           <Form.Item
             name="endDate"
             label="End"
-            rules={[{ required: true, message: "Please select end date" }]}
+            rules={[
+              { required: true, message: "Please select end date" },
+              { validator: validateEndDate },
+            ]}
           >
             <InputDate placeholder="Enter end date" />
           </Form.Item>
@@ -118,7 +147,9 @@ const TourGuideBookingInfo = ({ form } : { form : any}) => {
           <Form.Item
             name="numOfChild"
             label="Child/Children (2-12y)"
-            rules={[{ required: true, message: "Please enter number of children" }]}
+            rules={[
+              { required: true, message: "Please enter number of children" },
+            ]}
           >
             <InputNumber placeholder="How many children will there be?" />
           </Form.Item>
