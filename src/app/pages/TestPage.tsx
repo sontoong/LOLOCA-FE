@@ -1,10 +1,9 @@
-import { Link } from 'react-router-dom';
+import CustomerProfile from './customer/CustomerProfile';
 
 const TestPage = () => {
   return (
     <div>
-      <Link to={'/tours/1/booking'}>Tour</Link>
-      <Link to={'/guides/1/booking'} style={{ marginLeft: '10px' }}>Guide</Link>
+      <CustomerProfile/>
     </div>
   );
 };

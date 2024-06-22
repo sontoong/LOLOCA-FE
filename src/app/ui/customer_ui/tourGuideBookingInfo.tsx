@@ -1,6 +1,6 @@
 import { Col, InputNumber, Row } from "antd";
 
-import { Input, InputDate, InputSelectTag } from "../../components/inputs";
+import { Input, InputDate, InputSelect } from "../../components/inputs";
 import { useParams } from "react-router-dom";
 import { Form } from "../../components/form";
 import { useState } from "react";
@@ -175,7 +175,7 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
           },
         ]}
       >
-        <InputSelectTag
+        <InputSelect.Tag
           placeholder="Choose types of holiday"
           options={tourTypes}
         />
