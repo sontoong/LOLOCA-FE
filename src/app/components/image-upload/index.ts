@@ -1,0 +1,1 @@
+export {default  as ProfileUpload} from './profile-upload'
