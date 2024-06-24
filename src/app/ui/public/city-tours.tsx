@@ -52,7 +52,7 @@ export default function CityTours() {
       return (
         <>
           <Row gutter={[16, 16]} style={{ margin: "2%" }}>
-            {renderTours.tours.map((tour, index) => (
+            {renderTours.tours?.map((tour, index) => (
               <Col span={6} key={index}>
                 <Card
                   className="h-[390px]"

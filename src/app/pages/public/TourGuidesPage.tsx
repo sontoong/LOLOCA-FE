@@ -59,7 +59,7 @@ export default function GuidesPage() {
       return (
         <>
           <Row gutter={[16, 16]} style={{ margin: "2%" }}>
-            {renderTourGuides.tourGuides.map((tourGuide, index) => (
+            {renderTourGuides.tourGuides?.map((tourGuide, index) => (
               <Col span={6} key={index}>
                 <Card
                   className="h-[390px]"

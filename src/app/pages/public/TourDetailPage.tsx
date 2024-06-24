@@ -7,22 +7,35 @@ import { Typography, Row, Col, Steps, Carousel } from "antd";
 import VietNamBanner from "../../../assets/banner.png";
 import { PrimaryButton } from "../../components/buttons";
 import { Divider } from "../../components/divider";
-import { tourDetailData } from "../../utils/testData";
 import { Table } from "../../components/table";
-import { formatUnixToLocal } from "../../utils/utils";
+import { formatDateToLocal } from "../../utils/utils";
 import { StarFilled } from "@ant-design/icons";
+import { Image } from "../../components/image";
+import { useFeedback } from "../../hooks/useFeedback";
+import { useTourGuide } from "../../hooks/useTourGuide";
 
 const { Title, Paragraph, Text } = Typography;
 
 const TourDetailPage = () => {
   const { tourId } = useParams<{ tourId: string }>();
   const { state: stateTour, handleGetTourById } = useTour();
+  const { state: stateFeedback, handleGetTourFeedback } = useFeedback();
+  const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
 
   useEffect(() => {
     if (tourId) {
       handleGetTourById({ tourId });
+      handleGetTourFeedback({ tourId });
     }
-  }, [tourId, handleGetTourById]);
+  }, [tourId, handleGetTourById, handleGetTourFeedback]);
+
+  useEffect(() => {
+    if (stateTour.currentTour?.tourGuideId) {
+      handleGetTourGuidebyId({
+        tourGuideId: stateTour.currentTour.tourGuideId,
+      });
+    }
+  }, [handleGetTourGuidebyId, stateTour.currentTour?.tourGuideId]);
 
   const tour = stateTour.currentTour;
 
@@ -34,11 +47,11 @@ const TourDetailPage = () => {
     return <NotFound />;
   }
 
-  const priceData = tourDetailData.price.map((item, index) => ({
+  const priceData = tour.tourPriceDTOs?.map((item, index) => ({
     key: index,
-    amount: `From ${item.from} to ${item.to}`,
-    adult: item.adult,
-    child: item.child,
+    amount: `From ${item.totalTouristFrom} to ${item.totalTouristTo}`,
+    adult: item.adultPrice,
+    child: item.childPrice,
   }));
 
   const columns = [
@@ -67,76 +80,44 @@ const TourDetailPage = () => {
       <Row align="middle">
         <Col>
           <Title level={3}>Tour Category</Title>
-          <Paragraph className="font-extrabold text-[1.2rem]">
+          <Paragraph className="text-[1.2rem] font-extrabold">
             Private Tour
           </Paragraph>
         </Col>
         <Col offset={1}>
           <Title level={3}>Tour Type</Title>
-          <Paragraph className="font-extrabold text-[1.2rem]">
+          <Paragraph className="text-[1.2rem] font-extrabold">
             Culture, History, Sightseeing
           </Paragraph>
         </Col>
         <Col offset={1}>
           <Title level={3}>Duration</Title>
-          <Paragraph className="font-extrabold text-[1.2rem]">
+          <Paragraph className="text-[1.2rem] font-extrabold">
             {tour.duration} hours
           </Paragraph>
         </Col>
         <Col offset={1}>
           <Title level={3}>Activity Level</Title>
-          <Paragraph className="font-extrabold text-[1.2rem]">Easy</Paragraph>
+          <Paragraph className="text-[1.2rem] font-extrabold">Easy</Paragraph>
         </Col>
         <Col offset={1}>
           <PrimaryButton text="Booking" className="px-[4rem]" />
         </Col>
       </Row>
-
-      {tour.tourImgViewList && tour.tourImgViewList.length > 0 ? (
-        <Carousel autoplay>
-          {tour.tourImgViewList.map((imgUrl, index) => (
-            <div key={index}>
-              <img
-                src={imgUrl}
-                alt={`Image ${index + 1}`}
-                style={{
-                  width: "100%",
-                  marginBottom: "20px",
-                  height: "auto",
-                  objectFit: "cover",
-                }}
-              />
-            </div>
-          ))}
-        </Carousel>
-      ) : (
-        <Carousel autoplay>
-          <div>
-            <img
-              src={VietNamBanner}
-              alt="Default Image 1"
-              style={{
-                width: "100%",
-                marginBottom: "20px",
-                height: "auto",
-                objectFit: "cover",
-              }}
+      <Carousel arrows autoplay draggable>
+        {tour.tourImgViewList?.length ? (
+          tour.tourImgViewList?.map((imgUrl, index) => (
+            <Image
+              key={index}
+              src={imgUrl}
+              alt={`Image ${index + 1}`}
+              preview={true}
             />
-          </div>
-          <div>
-            <img
-              src={VietNamBanner} 
-              alt="Default Image 2"
-              style={{
-                width: "100%",
-                marginBottom: "20px",
-                height: "auto",
-                objectFit: "cover",
-              }}
-            />
-          </div>
-        </Carousel>
-      )}
+          ))
+        ) : (
+          <Image src={VietNamBanner} preview={true} />
+        )}
+      </Carousel>
       <div className="flex justify-between">
         <Steps
           progressDot
@@ -153,7 +134,7 @@ const TourDetailPage = () => {
                   Description
                 </Title>
               ),
-              description: <Paragraph>{tourDetailData.description}</Paragraph>,
+              description: <Paragraph>{tour.description}</Paragraph>,
             },
             {
               title: (
@@ -166,12 +147,13 @@ const TourDetailPage = () => {
               ),
               description: (
                 <div>
-                  {tourDetailData.highlights.map((highlight, index) => (
+                  {tour.tourHighlightDTOs?.map((highlight, index) => (
                     <Paragraph
                       key={index}
-                      className="text-[1.2rem] flex items-center"
+                      className="flex items-center text-[1.2rem]"
                     >
-                      <span className="text-[2rem]">&#x2022;</span> {highlight}
+                      <span className="text-[2rem]">&#x2022;</span>{" "}
+                      {highlight.highlightDetail}
                     </Paragraph>
                   ))}
                 </div>
@@ -186,18 +168,16 @@ const TourDetailPage = () => {
                   Itinerary
                 </Title>
               ),
-              description: tourDetailData.itinerary.map((day, index) => (
+              description: tour.tourItineraryDTOs?.map((day, index) => (
                 <div key={index}>
-                  <Title level={3}>{day.day}</Title>
+                  <Title level={3}>{day.name}</Title>
                   <Divider colorSplit="black" />
-                  {day.activities.map((activity, activityIndex) => (
-                    <Paragraph
-                      key={activityIndex}
-                      className="text-[1.2rem] flex items-center"
-                    >
-                      <span className="text-[2rem]">&#x2022;</span> {activity}
-                    </Paragraph>
-                  ))}
+                  {/* {day.activities.map((activity, activityIndex) => ( */}
+                  <Paragraph className="flex items-center text-[1.2rem]">
+                    <span className="text-[2rem]">&#x2022;</span>{" "}
+                    {day.description}
+                  </Paragraph>
+                  {/* ))} */}
                 </div>
               )),
             },
@@ -210,12 +190,12 @@ const TourDetailPage = () => {
                   What's Included
                 </Title>
               ),
-              description: tourDetailData.whatsIncluded.map((item, index) => (
+              description: tour.tourIncludeDTOs?.map((item, index) => (
                 <Paragraph
                   key={index}
-                  className="text-[1.2rem] flex items-center"
+                  className="flex items-center text-[1.2rem]"
                 >
-                  - {item}
+                  - {item.includeDetail}
                 </Paragraph>
               )),
             },
@@ -228,12 +208,12 @@ const TourDetailPage = () => {
                   What's Excluded
                 </Title>
               ),
-              description: tourDetailData.whatsExcluded.map((item, index) => (
+              description: tour.tourExcludeDTOs?.map((item, index) => (
                 <Paragraph
                   key={index}
-                  className="text-[1.2rem] flex items-center"
+                  className="flex items-center text-[1.2rem]"
                 >
-                  - {item}
+                  - {item.excludeDetail}
                 </Paragraph>
               )),
             },
@@ -257,20 +237,24 @@ const TourDetailPage = () => {
           ]}
         />
         <div className="w-[35%]">
-          <div>
-            <Title style={{ color: "#004AAD", fontWeight: "bolder" }}>
-              Tour Guide
-            </Title>
-            <Link to="/">
-              <img
-                src={VietNamBanner}
-                className="rounded-full object-cover w-[10rem] h-[10rem]"
-              />
-              <Title style={{ fontWeight: "bolder" }} className="underline">
-                Mark Zucc
+          {stateTourGuide.currentTourguide ? (
+            <div>
+              <Title style={{ color: "#004AAD", fontWeight: "bolder" }}>
+                Tour Guide
               </Title>
-            </Link>
-          </div>
+              <Link to="/">
+                <Image
+                  src={stateTourGuide.currentTourguide.avatar}
+                  className="h-[10rem] w-[10rem] rounded-full object-cover"
+                />
+                <Title style={{ fontWeight: "bolder" }} className="underline">
+                  {stateTourGuide.currentTourguide.firstName}
+                </Title>
+              </Link>
+            </div>
+          ) : (
+            <></>
+          )}
           <Divider colorSplit="black" />
           <div>
             <Title
@@ -282,36 +266,42 @@ const TourDetailPage = () => {
             >
               Recent Reviews
             </Title>
+
+            {/* fix data below */}
             <Text>
-              {tourDetailData.reviews.stars} <StarFilled /> (
-              {tourDetailData.reviews.amount} reviews)
+              {stateFeedback.currentFeedbackList.averageStar} <StarFilled /> (
+              {stateFeedback.currentFeedbackList.totalFeedbacks} reviews)
             </Text>
-            {tourDetailData.reviews.ratings.map((rating, index) => (
-              <div key={index} className="my-[3rem]">
-                <Row>
-                  <Col>
-                    <img
-                      src={VietNamBanner}
-                      className="rounded-full object-cover w-[3rem] h-[3rem]"
-                    />
-                  </Col>
-                  <Col className="ml-[0.5rem]">
-                    <Paragraph
-                      style={{ fontWeight: "bold", marginBottom: "0" }}
-                    >
-                      {rating.name}
-                    </Paragraph>
-                    <Paragraph>{formatUnixToLocal(rating.date)}</Paragraph>
-                  </Col>
-                  <Col offset={1}>
-                    <Paragraph>
-                      <StarFilled /> {rating.star}
-                    </Paragraph>
-                  </Col>
-                </Row>
-                <Paragraph>{rating.description}</Paragraph>
-              </div>
-            ))}
+            {stateFeedback.currentFeedbackList.feedbacks?.map(
+              (rating, index) => (
+                <div key={index} className="my-[3rem]">
+                  <Row>
+                    <Col>
+                      <img
+                        src={VietNamBanner}
+                        className="h-[3rem] w-[3rem] rounded-full object-cover"
+                      />
+                    </Col>
+                    <Col className="ml-[0.5rem]">
+                      <Paragraph
+                        style={{ fontWeight: "bold", marginBottom: "0" }}
+                      >
+                        {rating.customerId}
+                      </Paragraph>
+                      <Paragraph>
+                        {formatDateToLocal(rating.timeFeedback)}
+                      </Paragraph>
+                    </Col>
+                    <Col offset={1}>
+                      <Paragraph>
+                        <StarFilled /> {rating.numOfStars}
+                      </Paragraph>
+                    </Col>
+                  </Row>
+                  <Paragraph>{rating.content}</Paragraph>
+                </div>
+              ),
+            )}
           </div>
         </div>
       </div>

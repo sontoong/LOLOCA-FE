@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import agent from "../../utils/agent";
 import { AxiosError } from "axios";
-import { User } from "../../models/user";
+import { Customer, TourGuide, User } from "../../models/user";
 import { jwtDecode } from "jwt-decode";
 
 const token = localStorage.getItem("access_token");
@@ -11,13 +11,13 @@ if (token) {
 }
 
 export type TAuth = {
-  currentUser: User;
+  currentUser: User & (Customer | TourGuide);
   isFetching: boolean;
   showOTPModal: { open: boolean; email: string };
 };
 
 const initialState: TAuth = {
-  currentUser: initUser as User,
+  currentUser: initUser as User & (Customer | TourGuide),
   isFetching: false,
   showOTPModal: { open: false, email: "" },
 };
@@ -27,7 +27,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCurrentUser: (state, action: PayloadAction<TAuth["currentUser"]>) => {
-      state.currentUser = action.payload;
+      state.currentUser = { ...state.currentUser, ...action.payload };
     },
     setShowOTPModal: (state, action: PayloadAction<TAuth["showOTPModal"]>) => {
       state.showOTPModal = action.payload;
@@ -43,7 +43,7 @@ const authSlice = createSlice({
           action.type.startsWith("auth/") && action.type.endsWith("/pending"),
         (state) => {
           state.isFetching = true;
-        }
+        },
       )
       .addMatcher(
         (action) =>
@@ -52,7 +52,7 @@ const authSlice = createSlice({
             action.type.endsWith("/rejected")),
         (state) => {
           state.isFetching = false;
-        }
+        },
       );
   },
 });
@@ -75,7 +75,7 @@ export const login = createAsyncThunk<any, LoginParams>(
         return rejectWithValue(error.response.data);
       }
     }
-  }
+  },
 );
 
 export const loginVerify = createAsyncThunk<any, VerifyParams>(
@@ -94,7 +94,7 @@ export const loginVerify = createAsyncThunk<any, VerifyParams>(
         return rejectWithValue(error.response.data);
       }
     }
-  }
+  },
 );
 
 export const register = createAsyncThunk<any, RegisterParams>(
@@ -113,7 +113,7 @@ export const register = createAsyncThunk<any, RegisterParams>(
         return rejectWithValue(error.response.data);
       }
     }
-  }
+  },
 );
 
 export const registerVerify = createAsyncThunk<any, VerifyParams>(
@@ -132,7 +132,7 @@ export const registerVerify = createAsyncThunk<any, VerifyParams>(
         return rejectWithValue(error.response.data);
       }
     }
-  }
+  },
 );
 
 export const { setCurrentUser, setShowOTPModal, resetOTPModal } =

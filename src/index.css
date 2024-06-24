@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    @apply leading-normal;
+  }
   body {
     @apply m-0;
   }

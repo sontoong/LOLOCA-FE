@@ -16,14 +16,8 @@ import {
   setShowOTPModal,
   VerifyParams,
 } from "../redux/slice/authSlice";
-import {
-  getCustomerById,
-  setCurrentUserCustomer,
-} from "../redux/slice/customerSlice";
-import {
-  getTourGuideById,
-  setCurrentUserTourGuide,
-} from "../redux/slice/tourguideSlice";
+import { getCustomerById } from "../redux/slice/customerSlice";
+import { getTourGuideById } from "../redux/slice/tourguideSlice";
 
 export function useAuth() {
   const { notification } = App.useApp();
@@ -168,10 +162,10 @@ export function useAuth() {
     switch (role) {
       case ROLE.customer: {
         const resultAction = await dispatch(
-          getCustomerById({ customerId: userId }),
+          getCustomerById({ customerId: parseInt(userId) }),
         );
         if (getCustomerById.fulfilled.match(resultAction)) {
-          dispatch(setCurrentUserCustomer(resultAction.payload));
+          dispatch(setCurrentUser(resultAction.payload));
         } else {
           notification.error({
             message: "Error",
@@ -185,10 +179,10 @@ export function useAuth() {
       }
       case ROLE.tourguide: {
         const resultAction = await dispatch(
-          getTourGuideById({ tourGuideId: userId }),
+          getTourGuideById({ tourGuideId: parseInt(userId) }),
         );
         if (getTourGuideById.fulfilled.match(resultAction)) {
-          dispatch(setCurrentUserTourGuide(resultAction.payload));
+          dispatch(setCurrentUser(resultAction.payload));
         } else {
           notification.error({
             message: "Error",

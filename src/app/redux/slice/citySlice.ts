@@ -10,16 +10,7 @@ type TCity = {
 };
 
 const initialState: TCity = {
-  currentCity: {
-    name: "",
-    cityBanner: "",
-    cityBannerUploadDate: "",
-    cityDescription: "",
-    cityId: 0,
-    cityThumbnail: "",
-    cityThumbnailUploadDate: "",
-    status: true,
-  },
+  currentCity: {} as City,
   cityList: [],
   isFetching: false,
 };
@@ -42,7 +33,7 @@ const citySlice = createSlice({
           action.type.startsWith("city/") && action.type.endsWith("/pending"),
         (state) => {
           state.isFetching = true;
-        }
+        },
       )
       .addMatcher(
         (action) =>
@@ -51,7 +42,7 @@ const citySlice = createSlice({
             action.type.endsWith("/rejected")),
         (state) => {
           state.isFetching = false;
-        }
+        },
       );
   },
 });
@@ -70,7 +61,7 @@ export const getCities = createAsyncThunk<any>(
         return rejectWithValue(error.response.data);
       }
     }
-  }
+  },
 );
 
 export const getCityById = createAsyncThunk<any, GetCityByIdParams>(
@@ -88,7 +79,7 @@ export const getCityById = createAsyncThunk<any, GetCityByIdParams>(
         return rejectWithValue(error.response.data);
       }
     }
-  }
+  },
 );
 
 export const { setCurrentCity, setCityList } = citySlice.actions;

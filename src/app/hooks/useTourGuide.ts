@@ -6,10 +6,10 @@ import {
   GetRandomTourGuideParams,
   getTourGuideById,
   GetTourGuideByIdParams,
-  setCurrentUserTourGuide,
   setCurrentTourGuideList,
   getRandomTourGuideInCity,
   GetRandomTourGuideInCityParams,
+  setCurrentTourGuide,
 } from "../redux/slice/tourguideSlice";
 import { useCallback } from "react";
 
@@ -22,7 +22,7 @@ export function useTourGuide() {
     async (value: GetTourGuideByIdParams) => {
       const resultAction = await dispatch(getTourGuideById(value));
       if (getTourGuideById.fulfilled.match(resultAction)) {
-        dispatch(setCurrentUserTourGuide(resultAction.payload));
+        dispatch(setCurrentTourGuide(resultAction.payload));
       } else {
         if (resultAction.payload) {
           notification.error({

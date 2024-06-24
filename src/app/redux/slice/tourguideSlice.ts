@@ -5,13 +5,13 @@ import { AxiosError } from "axios";
 import { TourGuideList } from "../../models/tourGuide";
 
 type TTourGuide = {
-  currentUser: TourGuide;
+  currentTourguide: TourGuide;
   currentTourGuideList: TourGuideList;
   isFetching: boolean;
 };
 
 const initialState: TTourGuide = {
-  currentUser: {} as TourGuide,
+  currentTourguide: {} as TourGuide,
   currentTourGuideList: { tourGuides: [], totalPage: 0 },
   isFetching: false,
 };
@@ -20,8 +20,8 @@ const tourguideSlice = createSlice({
   name: "tourguide",
   initialState,
   reducers: {
-    setCurrentUserTourGuide: (state, action: PayloadAction<TourGuide>) => {
-      state.currentUser = action.payload;
+    setCurrentTourGuide: (state, action: PayloadAction<TourGuide>) => {
+      state.currentTourguide = action.payload;
     },
     setCurrentTourGuideList: (state, action: PayloadAction<TourGuideList>) => {
       state.currentTourGuideList = action.payload;
@@ -110,13 +110,13 @@ export const getRandomTourGuideInCity = createAsyncThunk<
   }
 });
 
-export const { setCurrentUserTourGuide, setCurrentTourGuideList } =
+export const { setCurrentTourGuide, setCurrentTourGuideList } =
   tourguideSlice.actions;
 
 export default tourguideSlice.reducer;
 
 export type GetTourGuideByIdParams = {
-  tourGuideId: string;
+  tourGuideId: number;
 };
 
 export type GetRandomTourGuideParams = {

@@ -7,10 +7,7 @@ import logo from "../../../assets/logo.png";
 import { PrimaryButton } from "../../components/buttons";
 import { ROLE } from "../../../constants/role";
 import { useEffect } from "react";
-import { useCustomer } from "../../hooks/useCustomer";
-import { useTourGuide } from "../../hooks/useTourGuide";
 import { isEmptyObject } from "../../utils/utils";
-import { Customer, TourGuide } from "../../models/user";
 
 const { Header } = Layout;
 
@@ -18,24 +15,10 @@ export default function MyHeader() {
   const location = useLocation();
   const navigate = useNavigate();
   const { state, handleLogout, handleGetUserInfo } = useAuth();
-  const { currentUser: currentUserCustomer } = useCustomer().state;
-  const { currentUser: currentUserTourGuide } = useTourGuide().state;
 
   useEffect(() => {
     handleGetUserInfo();
   }, [handleGetUserInfo]);
-
-  let user = {} as Customer | TourGuide;
-  switch (state.currentUser.Role) {
-    case ROLE.customer:
-      user = currentUserCustomer;
-      break;
-    case ROLE.tourguide:
-      user = currentUserTourGuide;
-      break;
-    default:
-      break;
-  }
 
   const logOut = async () => {
     handleLogout();
@@ -152,7 +135,7 @@ export default function MyHeader() {
               className="fixed right-4 top-3 cursor-pointer"
               size={"large"}
               icon={<UserOutlined />}
-              src={user?.avatar}
+              src={state.currentUser?.avatar}
             />
           </Dropdown>
         )}

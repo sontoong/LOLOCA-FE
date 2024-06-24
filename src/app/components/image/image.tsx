@@ -2,8 +2,15 @@ import { Image, ImageProps } from "antd";
 import { defaultImage } from "../../../constants/images";
 
 function CustomImage(props: CustomImageProps) {
-  const { src, ...rest } = props;
-  return <Image src={src ?? "error"} fallback={defaultImage} {...rest} />;
+  const { src, preview = false, ...rest } = props;
+  return (
+    <Image
+      src={src ?? "error"}
+      fallback={defaultImage}
+      preview={preview}
+      {...rest}
+    />
+  );
 }
 
 export default CustomImage;

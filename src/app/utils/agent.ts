@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 
-import apiJWT from "./api";
+import apiJWT from "./jwtApi";
 import baseApi from "./baseApi";
 
 const responseBody = (response: AxiosResponse) => response.data;
@@ -27,7 +27,7 @@ const baseRequests = {
     baseApi.delete(url, { params }).then(responseBody),
 };
 
-//base APIs
+//apis
 const _authBase = "Authenticate";
 const Auth = {
   // auth
@@ -51,7 +51,6 @@ const Auth = {
     baseRequests.post(`${_authBase}/register/verify`, data),
 };
 
-//APIs
 const _bookingTour = "BookingTour";
 const BookingTour = {
   createBookingTour: (data: any) =>
@@ -97,7 +96,7 @@ const Customer = {
   updateAvatar: (data: any) =>
     requests.post(`${_customer}/update-avatar`, data),
   getAllCustomer: () => requests.get(`${_customer}`),
-  getCustomerById: (customerId: any) =>
+  getCustomerById: (customerId: number) =>
     requests.get(`${_customer}/${customerId}`),
   getPrivate: () => requests.get(`${_customer}/private`),
   changeStatusBookingTourGuide: (
@@ -123,9 +122,9 @@ const TourGuide = {
   updateInfo: (data: any) => requests.post(`${_tourGuide}/update-info`, data),
   changePassword: (data: any) =>
     requests.post(`${_tourGuide}/change-password`, data),
-  getTourGuideById: (tourGuideId: string) =>
+  getTourGuideById: (tourGuideId: number) =>
     requests.get(`${_tourGuide}/info/${tourGuideId}`),
-  getTourGuidePrivateById: (tourGuideId: string) =>
+  getTourGuidePrivateById: (tourGuideId: number) =>
     requests.get(`${_tourGuide}/private-info/${tourGuideId}`),
   getRandomTourGuide: (params: any) =>
     requests.get(`${_tourGuide}/get-random-tourguide`, params),
@@ -159,6 +158,26 @@ const Tour = {
     requests.get(`${_tour}/status/${status}`),
 };
 
+const _feedback = "Feedback";
+const Feedback = {
+  createFeedback: (data: any) => requests.post(`${_feedback}/upload`, data),
+  getFeedbackCustomer: (customerId: string) =>
+    requests.get(`${_feedback}/customer/${customerId}`),
+  getFeedbackTourguide: (tourGuideId: string) =>
+    requests.get(`${_feedback}/tourguide/${tourGuideId}`),
+  getAllFeedback: () => requests.get(`${_feedback}`),
+  getFeedbackById: (feedbackId: string) =>
+    requests.get(`${_feedback}/${feedbackId}`),
+  updateFeedbackById: (feedbackId: string, data: any) =>
+    requests.put(`${_feedback}/${feedbackId}/status`, data),
+  getFeedbackStats: (bookingId: string) =>
+    requests.get(`${_feedback}/${bookingId}/feedback-stats`),
+  getTourFeedback: (tourId: string) =>
+    requests.get(`${_feedback}/tour/${tourId}/feedbacks`),
+  getTourguideFeedback: (cityId: string) =>
+    requests.get(`${_feedback}/city/${cityId}/feedbacks`),
+};
+
 const agent = {
   Auth,
   BookingTour,
@@ -167,5 +186,6 @@ const agent = {
   Customer,
   Tour,
   TourGuide,
+  Feedback,
 };
 export default agent;
