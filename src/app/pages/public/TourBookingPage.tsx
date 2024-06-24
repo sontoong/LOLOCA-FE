@@ -15,6 +15,14 @@ const TourBookingPage = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [form] = Form.useForm();
   const [mainForm] = Form.useForm();
+
+  const guide = {
+    id: "LO161022",
+    name: "Mark Zucc",
+    gender: "Male",
+    languages: ["English", "Malay"],
+    image: VietNamBanner, 
+  };
   
 
   const next = () => {
@@ -38,7 +46,7 @@ const TourBookingPage = () => {
     },
     {
       title: "Step 3",
-      content: <GuideInfoModal />,
+      content: <GuideInfoModal guide={guide}/>,
     },
   ];
 

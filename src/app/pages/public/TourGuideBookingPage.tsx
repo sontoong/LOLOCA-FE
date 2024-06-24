@@ -16,6 +16,13 @@ const TourGuideBookingPage = () => {
   const [form] = Form.useForm();
   const [mainForm] = Form.useForm();
   
+  const guide = {
+    id: "LO161022",
+    name: "Mark Zucc",
+    gender: "Male",
+    languages: ["English", "Malay"],
+    image: VietNamBanner, 
+  };
 
   const next = () => {
     window.scrollTo(0, 0);
@@ -38,7 +45,7 @@ const TourGuideBookingPage = () => {
     },
     {
       title: "Step 3",
-      content: <GuideInfoModal />,
+      content: <GuideInfoModal guide={guide}/>,
     },
   ];
 

@@ -26,6 +26,10 @@ import TestPage from "../pages/TestPage";
 import TourBookingPage from "../pages/public/TourBookingPage";
 import TourGuideBookingPage from "../pages/public/TourGuideBookingPage";
 import TourGuideProfile from "../pages/public/TourGuideProfile";
+import CustomerProfile from "../pages/customer/CustomerProfile";
+import CustomerRequesList from "../pages/customer/CustomerRequesList";
+import PaymentPage from "../pages/customer/PaymentPage";
+import BookingSuccess from "../pages/customer/BookingSuccess";
 
 export const router = createBrowserRouter([
   {
@@ -129,6 +133,46 @@ export const router = createBrowserRouter([
           <Suspense fallback={<></>}>
             <PrivateRoute inverted={false} requiredRoles={[ROLE.customer]}>
               <TestPage />
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "customer/profile",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.customer]}>
+              <CustomerProfile />
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "customer/request",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.customer]}>
+              <CustomerRequesList />
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "customer/payment/:requestId",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.customer]}>
+              <PaymentPage />
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "customer/booking-successful/:requestId",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.customer]}>
+              <BookingSuccess />
             </PrivateRoute>
           </Suspense>
         ),

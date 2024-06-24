@@ -21,6 +21,8 @@ function PrimaryButton({ text, bgColor, ...rest }: CustomButtonProps) {
   );
 }
 
+
+
 function PrimaryButtonBoldText({ text, bgColor, ...rest }: CustomButtonProps) {
   const { token } = theme.useToken();
 
