@@ -153,7 +153,7 @@ const TourDetailPage = () => {
                   Description
                 </Title>
               ),
-              description: <Paragraph>{tourDetailData.description}</Paragraph>,
+              description: <Paragraph className="text-[1.2rem]">{tourDetailData.description}</Paragraph>,
             },
             {
               title: (

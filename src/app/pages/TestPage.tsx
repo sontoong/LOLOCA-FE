@@ -1,9 +1,9 @@
-import CustomerProfile from './customer/CustomerProfile';
+import BookingSuccess from "./customer/BookingSuccess";
 
 const TestPage = () => {
   return (
     <div>
-      <CustomerProfile/>
+      <BookingSuccess/>
     </div>
   );
 };
