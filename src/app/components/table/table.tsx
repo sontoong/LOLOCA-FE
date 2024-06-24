@@ -10,7 +10,7 @@ function CustomTable({
             components:{
                 Table:{
                   headerBg: "#004AAD",
-                  headerColor: "white",
+                  headerColor: "#FFDE59",
                   headerSplitColor: "#004AAD",
                 }
             }

@@ -1,8 +1,7 @@
 import { Typography } from "antd";
-import VietNamBanner from "../../../assets/banner.png";
 import { Link } from "react-router-dom";
 
-const GuideInfoModal = () => {
+const GuideInfoModal = ({ guide } : {guide : any}) => {
   const { Title, Paragraph } = Typography;
 
   return (
@@ -10,12 +9,12 @@ const GuideInfoModal = () => {
       <div className="flex justify-between">
         <div className="w-[50%]">
           <img
-            src={VietNamBanner}
+            src={guide.image}
             className="rounded-full object-cover w-[10rem] h-[10rem]"
-            alt="VietNamBanner"
+            alt={guide.name}
           />
           <Title level={2} style={{ fontWeight: "bolder", color: "#004AAD" }}>
-            Mark Zucc
+            {guide.name}
           </Title>
         </div>
         <div className="font-bold w-[50%]">
@@ -30,10 +29,10 @@ const GuideInfoModal = () => {
               <Paragraph>Languages:</Paragraph>
             </div>
             <div>
-              <Paragraph>LO161022</Paragraph>
-              <Paragraph>Mark Zucc</Paragraph>
-              <Paragraph>Male</Paragraph>
-              <Paragraph>English, Malay</Paragraph>
+              <Paragraph>{guide.id}</Paragraph>
+              <Paragraph>{guide.name}</Paragraph>
+              <Paragraph>{guide.gender}</Paragraph>
+              <Paragraph>{guide.languages.join(", ")}</Paragraph>
             </div>
           </div>
         </div>
