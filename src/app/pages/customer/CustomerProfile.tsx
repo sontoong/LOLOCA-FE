@@ -2,7 +2,7 @@ import { Col, Row, Typography } from "antd";
 import { Form } from "../../components/form";
 import { Input, InputDate, InputSelect } from "../../components/inputs";
 import { PrimaryButton } from "../../components/buttons";
-import { ProfileUpload } from "../../components/image-upload";
+import { ImageUpload } from "../../components/image-upload";
 import { useState } from "react";
 import { Image } from "../../components/image-upload/profile-upload";
 
@@ -45,7 +45,7 @@ const CustomerProfile = () => {
       <Title style={{ color: "#004AAD", fontWeight: "bolder" }}>
         Profile
       </Title>
-        <ProfileUpload setImages={setImages} value={images}/>
+        <ImageUpload setImages={setImages} value={images}/>
       <Form
         form={form}
         initialValues={initialValues}

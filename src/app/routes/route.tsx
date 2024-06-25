@@ -26,6 +26,7 @@ import TestPage from "../pages/TestPage";
 import TourBookingPage from "../pages/public/TourBookingPage";
 import TourGuideBookingPage from "../pages/public/TourGuideBookingPage";
 import TourGuideProfile from "../pages/public/TourGuideProfile";
+import GuideProfile from "../pages/tour-guide/TourGuideProfile";
 import CustomerProfile from "../pages/customer/CustomerProfile";
 import CustomerRequesList from "../pages/customer/CustomerRequesList";
 import PaymentPage from "../pages/customer/PaymentPage";
@@ -116,6 +117,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<></>}>
             <TourGuideProfile />
+          </Suspense>
+        ),
+      },
+      {
+        path: "guides/profile",
+        element: (
+          <Suspense fallback={<></>}>
+            <GuideProfile />
           </Suspense>
         ),
       },
