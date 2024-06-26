@@ -108,6 +108,28 @@ export const getTourById = createAsyncThunk<any, GetTourByIdParams>(
   },
 );
 
+export const getTourByTourGuide = createAsyncThunk<
+  any,
+  GetTourByTourGuideParams
+>("tour/getTourByTourGuide", async (data, { rejectWithValue }) => {
+  const { TourGuideId, page, pageSize } = data;
+  try {
+    const response = await agent.Tour.getTourByTourGuide({
+      TourGuideId,
+      page,
+      pageSize,
+    });
+    return response;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+});
+
 export const { setCurrentTour, setCurrentTourList } = tourSlice.actions;
 
 export default tourSlice.reducer;
@@ -125,4 +147,10 @@ export type GetTourCityParams = {
 
 export type GetTourByIdParams = {
   tourId: string;
+};
+
+export type GetTourByTourGuideParams = {
+  TourGuideId: number;
+  page: number;
+  pageSize: number;
 };

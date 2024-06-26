@@ -6,32 +6,50 @@ import CarouselCard from "../../ui/public/tourGuideTours";
 import { PrimaryButton } from "../../components/buttons";
 import { StarFilled } from "@ant-design/icons";
 import { formatUnixToLocal } from "../../utils/utils";
-import { reviewsData, tourData } from "../../utils/testData";
+import { useTourGuide } from "../../hooks/useTourGuide";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useTour } from "../../hooks/useTour";
+// import { useFeedback } from "../../hooks/useFeedback";
+import { reviewsData } from "../../utils/testData";
+import { genderGenerator } from "../../utils/generators/gender";
+import { Image } from "../../components/image";
+
+const { Title, Paragraph, Text } = Typography;
 
 const TourGuideProfile = () => {
-  const { Title, Paragraph, Text } = Typography;
+  const { tourGuideId } = useParams();
+  const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
+  const { state: stateTour, handleGetTourByTourGuide } = useTour();
+  // const {state: stateFeedback, handleGetTourGuideFeedback} = useFeedback()
+
+  useEffect(() => {
+    if (tourGuideId) {
+      handleGetTourGuidebyId({ tourGuideId: parseInt(tourGuideId) });
+      handleGetTourByTourGuide({
+        TourGuideId: parseInt(tourGuideId),
+        page: 1,
+        pageSize: 10,
+      });
+      // handleGetTourGuideFeedback({ cityId: stateTourGuide});
+    }
+  }, [handleGetTourGuidebyId, tourGuideId, handleGetTourByTourGuide]);
 
   return (
     <div>
       <Banner image={VietNamBanner} height="20rem" boxShadow={false} />
       <div className="flex justify-evenly">
         <Paragraph className="mt-[2rem] w-[40%] text-lg">
-          Hello! I'm [Your Name], a passionate freelance tour guide with [X]
-          years of experience in creating unforgettable travel experiences. I
-          specialize in personalized tours that cater to individual interests,
-          offering a unique perspective on local culture, history, and hidden
-          gems. Whether you're looking for adventure, relaxation, or cultural
-          immersion, I'm here to ensure your journey is memorable and enriching.
-          Let's explore together!
+          {stateTourGuide.currentTourguide.description}
         </Paragraph>
         <div className="mt-[-5rem] flex flex-col items-center">
-          <img
-            src={VietNamBanner}
+          <Image
+            src={stateTourGuide.currentTourguide.avatar}
             className="h-[15rem] w-[15rem] rounded-full object-cover"
             alt="VietNamBanner"
           />
           <Title level={1} style={{ fontWeight: "bolder", color: "#004AAD" }}>
-            Mark Zucc
+            {`${stateTourGuide.currentTourguide.firstName} ${stateTourGuide.currentTourguide.lastName}`}
           </Title>
         </div>
       </div>
@@ -40,20 +58,21 @@ const TourGuideProfile = () => {
           <Divider colorSplit="black" />
         </div>
       </div>
-      <div className="my-[3rem] flex items-center justify-end">
-        <PrimaryButton
-          text="Edit Profile"
-          className="ml-[1rem] mr-[5rem]"
-          size="large"
-        />
-      </div>
       <Title
         level={1}
         style={{ fontWeight: "bolder", color: "#004AAD", marginLeft: "5rem" }}
       >
         My Tours
       </Title>
-      <CarouselCard data={tourData} />
+      <CarouselCard tours={stateTour.currentTourList.tours} />
+      <div className="my-[3rem] flex items-center justify-end">
+        <Title level={4}>Can't find your suitable tour</Title>
+        <PrimaryButton
+          text="Booking"
+          className="ml-[1rem] mr-[5rem]"
+          size="large"
+        />
+      </div>
       <div className="flex justify-evenly">
         <div className="w-[30%] font-bold">
           <Title level={2} style={{ fontWeight: "bolder", color: "#004AAD" }}>
@@ -67,10 +86,12 @@ const TourGuideProfile = () => {
               <Paragraph>Languages:</Paragraph>
             </div>
             <div>
-              <Paragraph>LO161022</Paragraph>
-              <Paragraph>Mark Zucc</Paragraph>
-              <Paragraph>Male</Paragraph>
-              <Paragraph>English, Malay</Paragraph>
+              <Paragraph>{tourGuideId}</Paragraph>
+              <Paragraph>{`${stateTourGuide.currentTourguide.firstName} ${stateTourGuide.currentTourguide.lastName}`}</Paragraph>
+              <Paragraph>
+                {genderGenerator(stateTourGuide.currentTourguide.gender)}
+              </Paragraph>
+              <Paragraph>Vietnamese, English</Paragraph>
             </div>
           </div>
         </div>
@@ -84,6 +105,8 @@ const TourGuideProfile = () => {
           >
             Recent Reviews
           </Title>
+
+          {/* fix data */}
           <Text>
             {reviewsData.stars} <StarFilled /> ({reviewsData.amount} reviews)
           </Text>

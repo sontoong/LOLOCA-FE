@@ -16,5 +16,5 @@ function CustomImage(props: CustomImageProps) {
 export default CustomImage;
 
 type CustomImageProps = Omit<ImageProps, "src" | "fallback"> & {
-  src: ImageProps["src"] | null;
+  src?: ImageProps["src"] | null;
 };

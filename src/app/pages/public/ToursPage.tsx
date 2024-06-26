@@ -1,12 +1,10 @@
 import { DownOutlined } from "@ant-design/icons";
 import {
   Card,
-  Col,
   Dropdown,
   MenuProps,
   Pagination,
   PaginationProps,
-  Row,
   Space,
   Typography,
 } from "antd";
@@ -15,9 +13,10 @@ import { useNavigate } from "react-router-dom";
 import VietNamBanner from "../../../assets/banner.png";
 import Banner from "../../components/banner/banner";
 import { Image } from "../../components/image";
-import { Loader } from "../../components/loader/loader";
 import NotFound from "../../components/not-found/not-found";
 import { useTour } from "../../hooks/useTour";
+import { CardListGrid } from "../../components/grids";
+import { CardSkeleton } from "../../components/skeletons";
 
 const { Title, Paragraph } = Typography;
 
@@ -51,42 +50,49 @@ export default function ToursPage() {
 
   const renderContent = () => {
     if (stateTour.isFetching) {
-      return <Loader />;
+      return (
+        <div className="m-10">
+          <CardListGrid items={15} render={() => <CardSkeleton.Image />} />
+        </div>
+      );
     }
 
-    if (renderTours) {
+    if (renderTours.tours) {
       return (
-        <>
-          <Row gutter={[16, 16]} style={{ margin: "2%" }}>
-            {renderTours.tours?.map((tour, index) => (
-              <Col span={6} key={index}>
-                <Card
-                  className="h-[390px]"
-                  hoverable
-                  onClick={() => handleCardClick(tour.tourId)}
-                  cover={
-                    <Image
-                      alt={tour.name}
-                      src={tour.thumbnailTourImage}
-                      style={{
-                        width: "100%",
-                        height: "200px",
-                        objectFit: "cover",
-                      }}
-                      preview={false}
-                    />
-                  }
-                >
-                  <Title level={2} className="mt-0">
-                    {tour.name}
-                  </Title>
-                  <Paragraph ellipsis={{ rows: 3, expandable: false }}>
-                    {tour.description}
-                  </Paragraph>
-                </Card>
-              </Col>
-            ))}
-          </Row>
+        <div className="m-10">
+          <CardListGrid
+            items={renderTours.tours}
+            render={(tour) => {
+              if (tour) {
+                return (
+                  <Card
+                    className="h-[390px]"
+                    hoverable
+                    onClick={() => handleCardClick(tour.tourId)}
+                    cover={
+                      <Image
+                        alt={tour.name}
+                        src={tour.thumbnailTourImage}
+                        style={{
+                          width: "100%",
+                          height: "200px",
+                          objectFit: "cover",
+                        }}
+                        preview={false}
+                      />
+                    }
+                  >
+                    <Title level={2} className="mt-0">
+                      {tour.name}
+                    </Title>
+                    <Paragraph ellipsis={{ rows: 3, expandable: false }}>
+                      {tour.description}
+                    </Paragraph>
+                  </Card>
+                );
+              }
+            }}
+          />
           <div className="mb-[2%] mr-[5%] flex justify-end">
             <Pagination
               current={currentPage}
@@ -96,7 +102,7 @@ export default function ToursPage() {
               onShowSizeChange={onShowSizeChange}
             />
           </div>
-        </>
+        </div>
       );
     }
 

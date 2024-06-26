@@ -13,13 +13,13 @@ if (token) {
 export type TAuth = {
   currentUser: User & (Customer | TourGuide);
   isFetching: boolean;
-  showOTPModal: { open: boolean; email: string };
+  showOTPModal: { open: boolean; extraValues: object };
 };
 
 const initialState: TAuth = {
   currentUser: initUser as User & (Customer | TourGuide),
   isFetching: false,
-  showOTPModal: { open: false, email: "" },
+  showOTPModal: { open: false, extraValues: {} },
 };
 
 const authSlice = createSlice({
@@ -33,7 +33,7 @@ const authSlice = createSlice({
       state.showOTPModal = action.payload;
     },
     resetOTPModal: (state) => {
-      state.showOTPModal = { open: false, email: "" };
+      state.showOTPModal = { open: false, extraValues: {} };
     },
   },
   extraReducers: (builder) => {

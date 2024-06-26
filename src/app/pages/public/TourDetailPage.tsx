@@ -246,13 +246,13 @@ const TourDetailPage = () => {
               <Title style={{ color: "#004AAD", fontWeight: "bolder" }}>
                 Tour Guide
               </Title>
-              <Link to="/">
+              <Link to={`/guides/${stateTour.currentTour?.tourGuideId}`}>
                 <Image
                   src={stateTourGuide.currentTourguide.avatar}
                   className="h-[10rem] w-[10rem] rounded-full object-cover"
                 />
                 <Title style={{ fontWeight: "bolder" }} className="underline">
-                  {stateTourGuide.currentTourguide.firstName}
+                  {`${stateTourGuide.currentTourguide.firstName} ${stateTourGuide.currentTourguide.lastName}`}
                 </Title>
               </Link>
             </div>

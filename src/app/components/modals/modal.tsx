@@ -1,6 +1,6 @@
 import { Modal, ModalProps } from "antd";
 import { useAppDispatch } from "../../redux/hook";
-import { resetOTPModal, VerifyParams } from "../../redux/slice/authSlice";
+import { resetOTPModal } from "../../redux/slice/authSlice";
 import { Form } from "../form";
 import { Input } from "../inputs";
 
@@ -10,7 +10,7 @@ function CustomModal() {
 
 function OTP(props: OTPProps) {
   const dispatch = useAppDispatch();
-  const { children, email, open, confirmLoading, handleOk } = props;
+  const { children, extraValues, open, confirmLoading, handleOk } = props;
   const [form] = Form.useForm();
 
   const initialValues = {
@@ -18,7 +18,7 @@ function OTP(props: OTPProps) {
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
-    handleOk({ code: values.code, email });
+    handleOk({ code: values.code, ...extraValues });
   };
 
   const handleCancel = () => {
@@ -64,8 +64,8 @@ CustomModal.OTP = OTP;
 export default CustomModal;
 
 type OTPProps = ModalProps & {
-  email: string;
+  extraValues: object;
   open: boolean;
-  handleOk: (params: VerifyParams) => void;
+  handleOk: (params: any) => void;
   confirmLoading: boolean;
 };

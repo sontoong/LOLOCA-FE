@@ -1,31 +1,25 @@
-import { Card, Image, Typography } from "antd";
+import { Card, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
+import { TourList } from "../../models/tour";
+import { Image } from "../../components/image";
 
 const { Title, Paragraph } = Typography;
 
-type HorizontalCardProps = {
-  data: Array<{
-    id: number;
-    title: string;
-    description: string;
-    imageUrl: string;
-    tourId: string;
-  }>;
-};
+type HorizontalCardProps = { tours: TourList["tours"] };
 
-const HorizontalCard = ({ data }: HorizontalCardProps) => {
+const HorizontalCard = ({ tours }: HorizontalCardProps) => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex overflow-x-auto space-x-4 p-4 w-[92%] mx-auto">
-      {data.map((item) => (
+    <div className="mx-auto flex w-[92%] space-x-4 overflow-x-auto p-4">
+      {tours?.map((item) => (
         <Card
-          key={item.id}
+          key={item.tourId}
           className="h-96 w-80 flex-shrink-0"
           hoverable
           cover={
             <Image
-              src={item.imageUrl}
+              src={item.thumbnailTourImage}
               style={{
                 width: "100%",
                 height: "200px",
@@ -34,10 +28,10 @@ const HorizontalCard = ({ data }: HorizontalCardProps) => {
               preview={false}
             />
           }
-          onClick={() => navigate(`/tour/${item.tourId}`)}
+          onClick={() => navigate(`/tours/${item.tourId}`)}
         >
           <Title level={2} className="mt-0">
-            {item.title}
+            {item.name}
           </Title>
           <Paragraph ellipsis={{ rows: 3, expandable: false }}>
             {item.description}
