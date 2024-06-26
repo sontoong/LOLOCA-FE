@@ -16,7 +16,7 @@ export type Image = {
   file?: File
 }
 
-export default function CustomUpload(props: {
+export default function CustomUploadProfile(props: {
   value?: Image[];
   setImages: React.Dispatch<
     React.SetStateAction<Image[]>

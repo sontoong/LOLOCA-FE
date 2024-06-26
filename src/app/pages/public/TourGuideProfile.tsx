@@ -6,28 +6,32 @@ import CarouselCard from "../../components/card/card-horizontal";
 import { PrimaryButton } from "../../components/buttons";
 import { StarFilled } from "@ant-design/icons";
 import { formatUnixToLocal } from "../../utils/utils";
-import {tourGuideData, reviewsData, tourData } from "../../utils/testData";
+import { reviewsData, tourData } from "../../utils/testData";
 
 const TourGuideProfile = () => {
   const { Title, Paragraph, Text} = Typography;
-  const avatarImage = tourGuideData.avatar || VietNamBanner;
-  const bannerImage = tourGuideData.banner || VietNamBanner;
 
   return (
     <div>
-      <Banner image={bannerImage} height="20rem" boxShadow={false} />
+      <Banner image={VietNamBanner} height="20rem" boxShadow={false} />
       <div className="flex justify-evenly">
       <Paragraph className="w-[40%] mt-[2rem] text-lg">
-          {tourGuideData.bio}
+          Hello! I'm [Your Name], a passionate freelance tour guide with [X]
+          years of experience in creating unforgettable travel experiences. I
+          specialize in personalized tours that cater to individual interests,
+          offering a unique perspective on local culture, history, and hidden
+          gems. Whether you're looking for adventure, relaxation, or cultural
+          immersion, I'm here to ensure your journey is memorable and enriching.
+          Let's explore together!
         </Paragraph>
         <div className="mt-[-5rem] flex flex-col items-center">
           <img
-            src={avatarImage}
+            src={VietNamBanner}
             className="h-[15rem] w-[15rem] rounded-full object-cover"
-            alt="Avatar"
+            alt="VietNamBanner"
           />
           <Title level={1} style={{ fontWeight: "bolder", color: "#004AAD" }}>
-            {tourGuideData.fullName}
+            Mark Zucc
           </Title>
         </div>
       </div>
@@ -57,10 +61,10 @@ const TourGuideProfile = () => {
               <Paragraph>Languages:</Paragraph>
             </div>
             <div>
-              <Paragraph>{tourGuideData.id}</Paragraph>
-              <Paragraph>{tourGuideData.fullName}</Paragraph>
-              <Paragraph>{tourGuideData.gender}</Paragraph>
-              <Paragraph>{tourGuideData.languages}</Paragraph>
+              <Paragraph>LO161022</Paragraph>
+              <Paragraph>Mark Zucc</Paragraph>
+              <Paragraph>Male</Paragraph>
+              <Paragraph>English, Malay</Paragraph>
             </div>
           </div>
         </div>

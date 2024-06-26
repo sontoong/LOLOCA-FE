@@ -1,31 +1,12 @@
-import { ConfigProvider, Modal, ModalProps } from "antd";
+import { Modal, ModalProps } from "antd";
 import { useAppDispatch } from "../../redux/hook";
 import { resetOTPModal, VerifyParams } from "../../redux/slice/authSlice";
 import { Form } from "../form";
 import { Input } from "../inputs";
 
-function CustomModal({ children, ...rest} : CustomModalProp) {
-  return (
-    <>
-      <ConfigProvider
-        theme={{
-          components: {
-            Modal: {
-              titleColor: "#004AAD",
-            }
-          },
-        }}
-      >
-        <Modal {...rest}>
-          {children}
-        </Modal>
-      </ConfigProvider>
-    </>
-  );
+function CustomModal() {
+  return <div></div>;
 }
-
-type CustomModalProp = ModalProps
-
 
 function OTP(props: OTPProps) {
   const dispatch = useAppDispatch();
