@@ -8,7 +8,7 @@ const CustomCard = ({ cardTitle, ...rest }: CustomCardProps) => {
       theme={{
         components: {
           Card: {
-            headerBg: "#004AAD" ?? "white",
+            headerBg: "#004AAD",
           },
         },
       }}

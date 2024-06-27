@@ -1,6 +1,5 @@
-import { Col, InputNumber, Row } from "antd";
-
-import { Input, InputDate, InputSelect } from "../../components/inputs";
+import { Col, Row } from "antd";
+import { Input, InputDate, InputSelect, InputNumber} from "../../components/inputs";
 import { useParams } from "react-router-dom";
 import { Form } from "../../components/form";
 import { useState } from "react";
@@ -19,7 +18,7 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
     departureTime: "",
     numOfAdult: 0,
     numOfChild: 0,
-    tourType: [],
+    tourTypeDTOs: [],
   };
 
   const onFinish = (values: any) => {
@@ -28,6 +27,7 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
       tourGuideId: tourGuideId,
       customerId: userId,
       price: totalPrice,
+      tourTypeDTOs: values.tourTypeDTOs.map((typeDetail: string) => ({ typeDetail }))
     };
     setTotalPrice(1);
     console.log("Form Values: ", submitValues);
@@ -109,13 +109,6 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
           >
             <InputDate placeholder="Enter start date" />
           </Form.Item>
-          {/* <Form.Item
-            name="arrivalTime"
-            label="Arrival"
-            rules={[{ required: true, message: "Please enter arrival time" }]}
-          >
-            <InputTime placeholder="Enter arrival time" />
-          </Form.Item> */}
           <Form.Item
             name="numOfAdult"
             label="Adults"
@@ -123,7 +116,7 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
               { required: true, message: "Please enter number of adults" },
             ]}
           >
-            <InputNumber placeholder="How many adults will there be?" />
+            <InputNumber placeholder="How many adults will there be?"  unit="adult" pluralUnit="adults"/>
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -137,13 +130,6 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
           >
             <InputDate placeholder="Enter end date" />
           </Form.Item>
-          {/* <Form.Item
-            name="departureTime"
-            label="Departure"
-            rules={[{ required: true, message: "Please enter departure time" }]}
-          >
-            <InputTime placeholder="Enter departure time" />
-          </Form.Item> */}
           <Form.Item
             name="numOfChild"
             label="Child/Children (2-12y)"
@@ -151,7 +137,7 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
               { required: true, message: "Please enter number of children" },
             ]}
           >
-            <InputNumber placeholder="How many children will there be?" />
+            <InputNumber placeholder="How many children will there be?" unit="child" pluralUnit="children"/>
           </Form.Item>
         </Col>
       </Row>
@@ -167,7 +153,7 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
         <Input.TextArea placeholder="I want to..." />
       </Form.Item>
       <Form.Item
-        name="tourType"
+        name="tourTypeDTOs"
         label="Type of holiday I am looking for"
         rules={[
           {
@@ -180,6 +166,7 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
           options={tourTypes}
         />
       </Form.Item>
+      
     </Form>
   );
 };

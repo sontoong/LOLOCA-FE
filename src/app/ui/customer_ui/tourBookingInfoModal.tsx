@@ -1,71 +1,49 @@
-import { Col, InputNumber, Row } from 'antd';
-
-import { Input, InputDate} from '../../components/inputs';
+import { Col, Row } from 'antd';
+import { InputDate, Input, InputNumber } from '../../components/inputs';
 import { useParams } from 'react-router-dom';
 import { Form } from '../../components/form';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Dayjs } from 'dayjs';
 
-const TourBookingInfoModal = ({ form } : { form : any}) => {
+const TourBookingInfoModal = ({ form } : { form : any }) => {
   const { tourId } = useParams();
   const userId = localStorage.getItem("userId") ?? "";
-  const [totalPrice, setTotalPrice] = useState<number | undefined>(0)
+  const [totalPrice, setTotalPrice] = useState<number | undefined>(0);
+  const [duration] = useState<number>(7); // Example duration of 7 days
+  const [startDate, setStartDate] = useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<Dayjs | null>(null);
 
   const initialValues = {
     note: "",
-    startDate: "",
-    endDate: "",
+    startDate: null,
+    endDate: null,
     numOfAdult: 0,
     numOfChild: 0,
   };
 
-  const onFinish = (values : any) => {
-    const submitValues = { ...values, tourId: tourId, customerId: userId, price: totalPrice};
-    setTotalPrice(1)
-    console.log("Form Values: ", submitValues);    
+  useEffect(() => {
+    if (startDate && duration) {
+      const calculatedEndDate = startDate.add(duration, 'day');
+      setEndDate(calculatedEndDate);
+      form.setFieldsValue({ endDate: calculatedEndDate });
+    }
+  }, [startDate, duration, form]);
+
+  const onFinish = (values: any) => {
+    const submitValues = { ...values, tourId: tourId, customerId: userId, price: totalPrice };
+    setTotalPrice(1);
+    console.log("Form Values: ", submitValues);
   };
 
-  const onFinishFailed = (errorInfo : any) => {
+  const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
 
-  // const tourTypes = [
-  //   { value: "Funny", label: "Funny" },
-  //   { value: "Adventure", label: "Adventure" },
-  //   { value: "Luxury", label: "Luxury" },
-  //   { value: "Family", label: "Family" },
-  //   { value: "Wildlife", label: "Wildlife" },
-  //   { value: "Real Life", label: "Real Life" },
-  //   { value: "Cultural", label: "Cultural" },
-  //   { value: "Budget", label: "Budget" },
-  //   { value: "Romantic", label: "Romantic" },
-  //   { value: "Beach", label: "Beach" },
-  //   { value: "Survival", label: "Survival" },
-  //   { value: "Gourmet", label: "Gourmet" },
-  //   { value: "Eco-Friendly", label: "Eco-Friendly" },
-  //   { value: "Historical", label: "Historical" },
-  //   { value: "Mountain", label: "Mountain" },
-  //   { value: "Urban Exploration", label: "Urban Exploration" },
-  //   { value: "Rural Retreat", label: "Rural Retreat" },
-  //   { value: "Spiritual", label: "Spiritual" },
-  //   { value: "Festival", label: "Festival" },
-  //   { value: "Wellness", label: "Wellness" },
-  // ];
-
-
-  const validateStartDate = (_: any, value: any) => {
-    const endDate = form.getFieldValue('endDate');
-    if (!value || !endDate || new Date(value) < new Date(endDate)) {
+  const validateStartDate = (_: any, value: Dayjs) => {
+    if (!value || !endDate || value.isBefore(endDate)) {
       return Promise.resolve();
     }
     return Promise.reject(new Error('Start date must be before end date'));
-  };
-
-  const validateEndDate = (_: any, value: any) => {
-    const startDate = form.getFieldValue('startDate');
-    if (!value || !startDate || new Date(value) > new Date(startDate)) {
-      return Promise.resolve();
-    }
-    return Promise.reject(new Error('End date must be after start date'));
   };
 
   return (
@@ -76,19 +54,6 @@ const TourBookingInfoModal = ({ form } : { form : any}) => {
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
     >
-      {/* <Form.Item
-        name="tourName"
-        label="Tour Request"
-        rules={[
-          {
-            type: "string",
-            required: true,
-            whitespace: true,
-          },
-        ]}
-      >
-        <Input placeholder="Type your tour request here" />
-      </Form.Item> */}
       <Row gutter={[16, 16]}>
         <Col span={12}>
           <Form.Item
@@ -99,21 +64,17 @@ const TourBookingInfoModal = ({ form } : { form : any}) => {
               { validator: validateStartDate }
             ]}
           >
-            <InputDate placeholder="Enter start date" />
+            <InputDate 
+              placeholder="Enter start date"
+              onChange={(date) => setStartDate(date)}
+            />
           </Form.Item>
-          {/* <Form.Item
-            name="arrivalTime"
-            label="Arrival"
-            rules={[{ required: true, message: "Please enter arrival time" }]}
-          >
-            <InputTime placeholder="Enter arrival time" />
-          </Form.Item> */}
           <Form.Item
             name="numOfAdult"
             label="Adults"
             rules={[{ required: true, message: "Please enter number of adults" }]}
           >
-            <InputNumber placeholder="How many adults will there be?" />
+            <InputNumber placeholder="How many adults will there be?" unit='adult' pluralUnit='adults'/>
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -121,25 +82,21 @@ const TourBookingInfoModal = ({ form } : { form : any}) => {
             name="endDate"
             label="End"
             rules={[
-              { required: true, message: "Please select end date" },
-              { validator: validateEndDate }
+              { required: true, message: "Please select end date" }
             ]}
           >
-            <InputDate placeholder="Enter end date" />
+            <InputDate 
+              placeholder="Enter end date"
+              value={endDate}
+              disabled
+            />
           </Form.Item>
-          {/* <Form.Item
-            name="departureTime"
-            label="Departure"
-            rules={[{ required: true, message: "Please enter departure time" }]}
-          >
-            <InputTime placeholder="Enter departure time" />
-          </Form.Item> */}
           <Form.Item
             name="numOfChild"
             label="Child/Children (2-12y)"
             rules={[{ required: true, message: "Please enter number of children" }]}
           >
-            <InputNumber placeholder="How many children will there be?" />
+            <InputNumber placeholder="How many children will there be?" unit='child' pluralUnit='children'/>
           </Form.Item>
         </Col>
       </Row>
@@ -154,20 +111,6 @@ const TourBookingInfoModal = ({ form } : { form : any}) => {
       >
         <Input.TextArea placeholder="I want to..." />
       </Form.Item>
-      {/* <Form.Item
-        name="tourType"
-        label="Type of holiday I am looking for"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-      >
-        <InputSelectTag
-          placeholder="Choose types of holiday"
-          options={tourTypes}
-        />
-      </Form.Item> */}
     </Form>
   );
 };
