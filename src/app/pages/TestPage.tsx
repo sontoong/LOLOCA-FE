@@ -2,8 +2,6 @@ import CardImageSkeleton from "../components/skeletons/card-skeleton";
 import { CardListGrid } from "../components/grids";
 
 const TestPage = () => {
-  const [form] = Form.useForm();
-
   return (
     <div className="mx-5">
       <h1>ABC</h1>
