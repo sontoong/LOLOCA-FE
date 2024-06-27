@@ -1,9 +1,17 @@
-import BookingSuccess from "./customer/BookingSuccess";
+import { Form } from "antd";
+import { Card } from "../components/card";
+import { PrimaryButton } from "../components/buttons";
+import CreateTourPrice from "../ui/guide_ui/createTourPrice";
 
 const TestPage = () => {
+  const [form] = Form.useForm();
+
   return (
     <div>
-      <BookingSuccess/>
+      <Card cardTitle="Cool" className="w-[50%] mx-auto">
+        <CreateTourPrice form={form}/>
+        <PrimaryButton text="Submit" onClick={() => form.submit()}/>
+      </Card>
     </div>
   );
 };
