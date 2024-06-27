@@ -1,28 +1,92 @@
 import { Banner } from "../../components/banner";
 import VietNamBanner from "../../../assets/banner.png";
-import { Col, Row, Typography } from "antd";
+import { Card, Col, Row, Typography } from "antd";
 import { Divider } from "../../components/divider";
-import CarouselCard from "../../ui/public/tourGuideTours";
 import { PrimaryButton } from "../../components/buttons";
 import { StarFilled } from "@ant-design/icons";
 import { formatUnixToLocal } from "../../utils/utils";
-import { reviewsData, tourData } from "../../utils/testData";
+import { useTourGuide } from "../../hooks/useTourGuide";
+import { useTour } from "../../hooks/useTour";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { CardListGrid } from "../../components/grids";
+import { CardSkeleton } from "../../components/skeletons";
+import { reviewsData } from "../../utils/testData";
+import { Image } from "../../components/image";
+
+const { Title, Paragraph, Text } = Typography;
 
 const TourGuideProfile = () => {
-  const { Title, Paragraph, Text } = Typography;
+  const { tourGuideId } = useParams();
+  const navigate = useNavigate();
+  const { state: stateTour, handleGetTourByTourGuide } = useTour();
+  const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
+
+  useEffect(() => {
+    if (tourGuideId) {
+      handleGetTourByTourGuide({
+        TourGuideId: parseInt(tourGuideId),
+        page: 1,
+        pageSize: 10,
+      });
+      handleGetTourGuidebyId({ tourGuideId: parseInt(tourGuideId) });
+    }
+  }, [handleGetTourByTourGuide, handleGetTourGuidebyId, tourGuideId]);
+
+  const renderTours = () => {
+    if (stateTour.isFetching) {
+      return (
+        <CardListGrid.Horizontal
+          items={6}
+          render={() => <CardSkeleton.Image />}
+        />
+      );
+    }
+
+    if (stateTour.currentTourList.tours) {
+      return (
+        <CardListGrid.Horizontal
+          items={stateTour.currentTourList.tours}
+          render={(item) => {
+            if (item) {
+              return (
+                <Card
+                  key={item.tourId}
+                  className="h-96 w-80 flex-shrink-0"
+                  hoverable
+                  cover={
+                    <Image
+                      src={item.thumbnailTourImage}
+                      style={{
+                        height: "200px",
+                        objectFit: "cover",
+                      }}
+                      preview={false}
+                    />
+                  }
+                  onClick={() => navigate(`/tours/${item.tourId}`)}
+                >
+                  <Title level={2} className="mt-0">
+                    {item.name}
+                  </Title>
+                  <Paragraph ellipsis={{ rows: 3, expandable: false }}>
+                    {item.description}
+                  </Paragraph>
+                </Card>
+              );
+            }
+          }}
+        />
+      );
+    }
+  };
 
   return (
     <div>
       <Banner image={VietNamBanner} height="20rem" boxShadow={false} />
       <div className="flex justify-evenly">
         <Paragraph className="mt-[2rem] w-[40%] text-lg">
-          Hello! I'm [Your Name], a passionate freelance tour guide with [X]
-          years of experience in creating unforgettable travel experiences. I
-          specialize in personalized tours that cater to individual interests,
-          offering a unique perspective on local culture, history, and hidden
-          gems. Whether you're looking for adventure, relaxation, or cultural
-          immersion, I'm here to ensure your journey is memorable and enriching.
-          Let's explore together!
+          {stateTourGuide.currentTourguide.description}
         </Paragraph>
         <div className="mt-[-5rem] flex flex-col items-center">
           <img
@@ -53,7 +117,7 @@ const TourGuideProfile = () => {
       >
         My Tours
       </Title>
-      <CarouselCard data={tourData} />
+      {renderTours()}
       <div className="flex justify-evenly">
         <div className="w-[30%] font-bold">
           <Title level={2} style={{ fontWeight: "bolder", color: "#004AAD" }}>

@@ -79,7 +79,7 @@ apiJWT.interceptors.response.use(
     // ) {
     //   router.navigate("/forbidden");
     // }
-    return Promise.reject(error.response ?? error);
+    return Promise.reject(error);
   },
 );
 

@@ -1,23 +1,25 @@
 import { Banner } from "../../components/banner";
 import VietNamBanner from "../../../assets/banner.png";
-import { Col, Row, Typography } from "antd";
+import { Card, Col, Row, Typography } from "antd";
 import { Divider } from "../../components/divider";
-import CarouselCard from "../../ui/public/tourGuideTours";
 import { PrimaryButton } from "../../components/buttons";
 import { StarFilled } from "@ant-design/icons";
 import { formatUnixToLocal } from "../../utils/utils";
 import { useTourGuide } from "../../hooks/useTourGuide";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useTour } from "../../hooks/useTour";
 // import { useFeedback } from "../../hooks/useFeedback";
 import { reviewsData } from "../../utils/testData";
 import { genderGenerator } from "../../utils/generators/gender";
 import { Image } from "../../components/image";
+import { CardListGrid } from "../../components/grids";
+import { CardSkeleton } from "../../components/skeletons";
 
 const { Title, Paragraph, Text } = Typography;
 
 const TourGuideProfile = () => {
+  const navigate = useNavigate();
   const { tourGuideId } = useParams();
   const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
   const { state: stateTour, handleGetTourByTourGuide } = useTour();
@@ -34,6 +36,58 @@ const TourGuideProfile = () => {
       // handleGetTourGuideFeedback({ cityId: stateTourGuide});
     }
   }, [handleGetTourGuidebyId, tourGuideId, handleGetTourByTourGuide]);
+
+  const renderTours = () => {
+    if (stateTour.isFetching) {
+      return (
+        <div className="mx-20">
+          <CardListGrid.Horizontal
+            items={6}
+            render={() => <CardSkeleton.Image />}
+          />
+        </div>
+      );
+    }
+
+    if (stateTour.currentTourList.tours) {
+      return (
+        <div className="mx-20">
+          <CardListGrid.Horizontal
+            items={stateTour.currentTourList.tours}
+            render={(item) => {
+              if (item) {
+                return (
+                  <Card
+                    key={item.tourId}
+                    className="h-96 w-80 flex-shrink-0"
+                    hoverable
+                    cover={
+                      <Image
+                        src={item.thumbnailTourImage}
+                        style={{
+                          height: "200px",
+                          objectFit: "cover",
+                        }}
+                        preview={false}
+                      />
+                    }
+                    onClick={() => navigate(`/tours/${item.tourId}`)}
+                  >
+                    <Title level={2} className="mt-0">
+                      {item.name}
+                    </Title>
+                    <Paragraph ellipsis={{ rows: 3, expandable: false }}>
+                      {item.description}
+                    </Paragraph>
+                  </Card>
+                );
+              }
+            }}
+          />
+        </div>
+      );
+    }
+  };
 
   return (
     <div>
@@ -64,7 +118,7 @@ const TourGuideProfile = () => {
       >
         My Tours
       </Title>
-      <CarouselCard tours={stateTour.currentTourList.tours} />
+      {renderTours()}
       <div className="my-[3rem] flex items-center justify-end">
         <Title level={4}>Can't find your suitable tour</Title>
         <PrimaryButton

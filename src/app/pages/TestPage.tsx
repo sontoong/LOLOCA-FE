@@ -4,8 +4,9 @@ import { CardListGrid } from "../components/grids";
 const TestPage = () => {
   return (
     <div className="mx-5">
-      <CardListGrid
-        items={Array.from({ length: 6 }).map(() => ({}))}
+      <h1>ABC</h1>
+      <CardListGrid.Horizontal
+        items={10}
         render={() => <CardImageSkeleton.Image />}
       />
     </div>
