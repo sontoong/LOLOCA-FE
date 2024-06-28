@@ -11,4 +11,4 @@ export type Feedback = {
   feedBackImgViewList: string[];
 };
 
-export type FeedbackList = Feedback[] | null;
+export type FeedbackList = Feedback[];

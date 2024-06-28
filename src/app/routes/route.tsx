@@ -25,8 +25,7 @@ import ErrorPage from "../pages/public/ErrorPage";
 import TestPage from "../pages/TestPage";
 import TourBookingPage from "../pages/public/TourBookingPage";
 import TourGuideBookingPage from "../pages/public/TourGuideBookingPage";
-import TourGuideProfile from "../pages/public/TourGuideProfile";
-import GuideProfile from "../pages/tour-guide/TourGuideProfile";
+import TourGuideProfile from "../pages/public/TourGuideProfilePage";
 import CustomerProfile from "../pages/customer/CustomerProfile";
 import CustomerRequesList from "../pages/customer/CustomerRequesList";
 import PaymentPage from "../pages/customer/PaymentPage";
@@ -82,22 +81,6 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "guides",
-        element: (
-          <Suspense fallback={<></>}>
-            <GuidesPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: "test",
-        element: (
-          <Suspense fallback={<></>}>
-            <TestPage />
-          </Suspense>
-        ),
-      },
-      {
         path: "tours/:tourId/booking",
         element: (
           <Suspense fallback={<></>}>
@@ -106,10 +89,10 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "guides/:tourGuideId/booking",
+        path: "guides",
         element: (
           <Suspense fallback={<></>}>
-            <TourGuideBookingPage />
+            <GuidesPage />
           </Suspense>
         ),
       },
@@ -122,40 +105,10 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "guides/profile",
+        path: "guides/:tourGuideId/booking",
         element: (
           <Suspense fallback={<></>}>
-            <PrivateRoute inverted={false} requiredRoles={[ROLE.tourguide]}>
-              <GuideProfile />
-            </PrivateRoute>
-          </Suspense>
-        ),
-      },
-      {
-        path: "guides/tour/create",
-        element: (
-          <Suspense fallback={<></>}>
-            <PrivateRoute inverted={false} requiredRoles={[ROLE.tourguide]}>
-              <CreateTourPage />
-            </PrivateRoute>
-          </Suspense>
-        ),
-      },
-      {
-        path: "error",
-        element: (
-          <Suspense fallback={<></>}>
-            <ErrorPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: "template",
-        element: (
-          <Suspense fallback={<></>}>
-            <PrivateRoute inverted={false} requiredRoles={[ROLE.customer]}>
-              <TestPage />
-            </PrivateRoute>
+            <TourGuideBookingPage />
           </Suspense>
         ),
       },
@@ -196,6 +149,22 @@ export const router = createBrowserRouter([
             <PrivateRoute inverted={false} requiredRoles={[ROLE.customer]}>
               <BookingSuccess />
             </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "error",
+        element: (
+          <Suspense fallback={<></>}>
+            <ErrorPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "test",
+        element: (
+          <Suspense fallback={<></>}>
+            <TestPage />
           </Suspense>
         ),
       },

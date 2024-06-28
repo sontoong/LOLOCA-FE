@@ -21,9 +21,8 @@ const TourBookingPage = () => {
     name: "Mark Zucc",
     gender: "Male",
     languages: ["English", "Malay"],
-    image: VietNamBanner, 
+    image: VietNamBanner,
   };
-  
 
   const next = () => {
     window.scrollTo(0, 0);
@@ -46,7 +45,7 @@ const TourBookingPage = () => {
     },
     {
       title: "Step 3",
-      content: <GuideInfoModal guide={guide}/>,
+      content: <GuideInfoModal guide={guide} />,
     },
   ];
 
@@ -70,18 +69,22 @@ const TourBookingPage = () => {
       }}
       className="h-full py-[2rem]"
     >
-      <Card cardTitle="Create your tour" className="w-[50%] mx-auto">
-      <Steps current={currentStep} className="my-[5%]">
-              {steps.map((step, index) => (
-                <Step key={index} title={step.title} />
-              ))}
-            </Steps>
+      <Card
+        cardTitle="Create your tour"
+        className="mx-auto w-[50%]"
+        bordered={false}
+      >
+        <Steps current={currentStep} className="my-[5%]">
+          {steps.map((step, index) => (
+            <Step key={index} title={step.title} />
+          ))}
+        </Steps>
         <Form.Provider
           onFormFinish={(name, { values, forms }) => {
             const { mainForm } = forms;
             if (name === "BookingForm") {
               mainForm.setFieldsValue({ ...values });
-              next()
+              next();
             }
           }}
         >
@@ -98,7 +101,7 @@ const TourBookingPage = () => {
             <Form.Item name="numOfAdult" hidden />
             <Form.Item name="numOfChild" hidden />
             <div>
-              <div className="flex justify-end mt-4">
+              <div className="mt-4 flex justify-end">
                 {currentStep > 0 && (
                   <PrimaryButton
                     text="Previous"
@@ -106,7 +109,7 @@ const TourBookingPage = () => {
                     onClick={() => prev()}
                   />
                 )}
-                {currentStep < steps.length - 1 && currentStep!= 1 && (
+                {currentStep < steps.length - 1 && currentStep != 1 && (
                   <PrimaryButton text="Next" onClick={() => next()} />
                 )}
                 {currentStep == 1 && currentStep < steps.length - 1 && (

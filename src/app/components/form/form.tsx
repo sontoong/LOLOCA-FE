@@ -24,8 +24,9 @@ function DefaultForm(props: DefaultFormProps) {
   );
 }
 
+DefaultForm.useWatch = Form.useWatch;
 DefaultForm.Item = Form.Item;
 DefaultForm.useForm = Form.useForm;
-DefaultForm.Provider = Form.Provider
+DefaultForm.Provider = Form.Provider;
 
 export default DefaultForm;

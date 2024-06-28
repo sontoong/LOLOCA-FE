@@ -6,77 +6,85 @@ import { PrimaryButton } from "../../components/buttons";
 import { StarFilled } from "@ant-design/icons";
 import { formatUnixToLocal } from "../../utils/utils";
 import { useTourGuide } from "../../hooks/useTourGuide";
-import { useTour } from "../../hooks/useTour";
-import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useTour } from "../../hooks/useTour";
+// import { useFeedback } from "../../hooks/useFeedback";
+import { reviewsData } from "../../utils/testData";
+import { genderGenerator } from "../../utils/generators/gender";
+import { Image } from "../../components/image";
 import { CardListGrid } from "../../components/grids";
 import { CardSkeleton } from "../../components/skeletons";
-import { reviewsData } from "../../utils/testData";
-import { Image } from "../../components/image";
 
 const { Title, Paragraph, Text } = Typography;
 
 const TourGuideProfile = () => {
-  const { tourGuideId } = useParams();
   const navigate = useNavigate();
-  const { state: stateTour, handleGetTourByTourGuide } = useTour();
+  const { tourGuideId } = useParams();
   const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
+  const { state: stateTour, handleGetTourByTourGuide } = useTour();
+  // const {state: stateFeedback, handleGetTourGuideFeedback} = useFeedback()
 
   useEffect(() => {
     if (tourGuideId) {
+      handleGetTourGuidebyId({ tourGuideId: parseInt(tourGuideId) });
       handleGetTourByTourGuide({
         TourGuideId: parseInt(tourGuideId),
         page: 1,
         pageSize: 10,
       });
-      handleGetTourGuidebyId({ tourGuideId: parseInt(tourGuideId) });
+      // handleGetTourGuideFeedback({ cityId: stateTourGuide});
     }
-  }, [handleGetTourByTourGuide, handleGetTourGuidebyId, tourGuideId]);
+  }, [handleGetTourGuidebyId, tourGuideId, handleGetTourByTourGuide]);
 
   const renderTours = () => {
     if (stateTour.isFetching) {
       return (
-        <CardListGrid.Horizontal
-          items={6}
-          render={() => <CardSkeleton.Image />}
-        />
+        <div className="mx-20">
+          <CardListGrid.Horizontal
+            items={6}
+            render={() => <CardSkeleton.Image />}
+          />
+        </div>
       );
     }
 
     if (stateTour.currentTourList.tours) {
       return (
-        <CardListGrid.Horizontal
-          items={stateTour.currentTourList.tours}
-          render={(item) => {
-            if (item) {
-              return (
-                <Card
-                  key={item.tourId}
-                  className="h-96 w-80 flex-shrink-0"
-                  hoverable
-                  cover={
-                    <Image
-                      src={item.thumbnailTourImage}
-                      style={{
-                        height: "200px",
-                        objectFit: "cover",
-                      }}
-                      preview={false}
-                    />
-                  }
-                  onClick={() => navigate(`/tours/${item.tourId}`)}
-                >
-                  <Title level={2} className="mt-0">
-                    {item.name}
-                  </Title>
-                  <Paragraph ellipsis={{ rows: 3, expandable: false }}>
-                    {item.description}
-                  </Paragraph>
-                </Card>
-              );
-            }
-          }}
-        />
+        <div className="mx-20">
+          <CardListGrid.Horizontal
+            items={stateTour.currentTourList.tours}
+            render={(item) => {
+              if (item) {
+                return (
+                  <Card
+                    key={item.tourId}
+                    className="h-96 w-80 flex-shrink-0"
+                    hoverable
+                    cover={
+                      <Image
+                        src={item.thumbnailTourImage}
+                        style={{
+                          height: "200px",
+                          objectFit: "cover",
+                        }}
+                        preview={false}
+                      />
+                    }
+                    onClick={() => navigate(`/tours/${item.tourId}`)}
+                  >
+                    <Title level={2} className="mt-0">
+                      {item.name}
+                    </Title>
+                    <Paragraph ellipsis={{ rows: 3, expandable: false }}>
+                      {item.description}
+                    </Paragraph>
+                  </Card>
+                );
+              }
+            }}
+          />
+        </div>
       );
     }
   };
@@ -89,13 +97,13 @@ const TourGuideProfile = () => {
           {stateTourGuide.currentTourguide.description}
         </Paragraph>
         <div className="mt-[-5rem] flex flex-col items-center">
-          <img
-            src={VietNamBanner}
+          <Image
+            src={stateTourGuide.currentTourguide.avatar}
             className="h-[15rem] w-[15rem] rounded-full object-cover"
             alt="VietNamBanner"
           />
           <Title level={1} style={{ fontWeight: "bolder", color: "#004AAD" }}>
-            Mark Zucc
+            {`${stateTourGuide.currentTourguide.firstName} ${stateTourGuide.currentTourguide.lastName}`}
           </Title>
         </div>
       </div>
@@ -104,13 +112,6 @@ const TourGuideProfile = () => {
           <Divider colorSplit="black" />
         </div>
       </div>
-      <div className="my-[3rem] flex items-center justify-end">
-        <PrimaryButton
-          text="Edit Profile"
-          className="ml-[1rem] mr-[5rem]"
-          size="large"
-        />
-      </div>
       <Title
         level={1}
         style={{ fontWeight: "bolder", color: "#004AAD", marginLeft: "5rem" }}
@@ -118,6 +119,14 @@ const TourGuideProfile = () => {
         My Tours
       </Title>
       {renderTours()}
+      <div className="my-[3rem] flex items-center justify-end">
+        <Title level={4}>Can't find your suitable tour</Title>
+        <PrimaryButton
+          text="Booking"
+          className="ml-[1rem] mr-[5rem]"
+          size="large"
+        />
+      </div>
       <div className="flex justify-evenly">
         <div className="w-[30%] font-bold">
           <Title level={2} style={{ fontWeight: "bolder", color: "#004AAD" }}>
@@ -131,10 +140,12 @@ const TourGuideProfile = () => {
               <Paragraph>Languages:</Paragraph>
             </div>
             <div>
-              <Paragraph>LO161022</Paragraph>
-              <Paragraph>Mark Zucc</Paragraph>
-              <Paragraph>Male</Paragraph>
-              <Paragraph>English, Malay</Paragraph>
+              <Paragraph>{tourGuideId}</Paragraph>
+              <Paragraph>{`${stateTourGuide.currentTourguide.firstName} ${stateTourGuide.currentTourguide.lastName}`}</Paragraph>
+              <Paragraph>
+                {genderGenerator(stateTourGuide.currentTourguide.gender)}
+              </Paragraph>
+              <Paragraph>Vietnamese, English</Paragraph>
             </div>
           </div>
         </div>
@@ -148,6 +159,8 @@ const TourGuideProfile = () => {
           >
             Recent Reviews
           </Title>
+
+          {/* fix data */}
           <Text>
             {reviewsData.stars} <StarFilled /> ({reviewsData.amount} reviews)
           </Text>

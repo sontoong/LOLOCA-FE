@@ -4,6 +4,8 @@ import {
   getTourByCity,
   getTourById,
   GetTourByIdParams,
+  getTourByTourGuide,
+  GetTourByTourGuideParams,
   GetTourCityParams,
   getTourRandom,
   GetTourRandomParams,
@@ -89,10 +91,35 @@ export function useTour() {
     [dispatch, notification],
   );
 
+  const handleGetTourByTourGuide = useCallback(
+    async (value: GetTourByTourGuideParams) => {
+      const resultAction = await dispatch(getTourByTourGuide(value));
+      if (getTourByTourGuide.fulfilled.match(resultAction)) {
+        dispatch(setCurrentTourList(resultAction.payload));
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
   return {
     state,
     handleGetTourById,
     handleGetTourRandom,
     handleGetTourByCityId,
+    handleGetTourByTourGuide,
   };
 }

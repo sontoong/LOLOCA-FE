@@ -18,7 +18,9 @@ export default function RegisterPage() {
   const navigate = useNavigate();
   const { state, handleRegister, handleRegisterVerify } = useAuth();
   const [policyAccept, setPolicyAccept] = useState(false);
+
   const [form] = Form.useForm();
+  const emailValue = Form.useWatch("email", form);
 
   const initialValues: RegisterParams = {
     email: "",
@@ -47,7 +49,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center">
+    <div className="flex h-screen items-center justify-center">
       <Space size={10}>
         <div className="m-[50px]">
           <Image width={600} src={bannerRegister} preview={false} />
@@ -167,16 +169,16 @@ export default function RegisterPage() {
         </Space>
       </Space>
       <Modal.OTP
-        email={state.showOTPModal.email}
+        extraValues={{ email: emailValue }}
         open={state.showOTPModal.open}
         handleOk={handleOk}
         confirmLoading={state.isFetching}
       >
         <Paragraph>
           An OTP has been sent to your email{" "}
-          <Text className="text-blue-500">{state.showOTPModal.email}</Text>.
-          Please check your inbox (and spam folder if not found) for the OTP to
-          proceed with the verification process.
+          <Text className="text-blue-500">{emailValue}</Text>. Please check your
+          inbox (and spam folder if not found) for the OTP to proceed with the
+          verification process.
         </Paragraph>
       </Modal.OTP>
     </div>

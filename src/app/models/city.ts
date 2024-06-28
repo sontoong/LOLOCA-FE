@@ -9,4 +9,4 @@ export type City = {
   status: boolean;
 };
 
-export type CityList = City[] | null;
+export type CityList = City[];

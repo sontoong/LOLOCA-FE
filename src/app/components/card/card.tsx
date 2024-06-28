@@ -21,8 +21,8 @@ const CustomCard = ({ cardTitle, ...rest }: CustomCardProps) => {
               margin: 0,
               textTransform: "uppercase",
               color: "#FFDE59",
-              textAlign:"center",
-              fontWeight:"bold"
+              textAlign: "center",
+              fontWeight: "bold",
             }}
           >
             {cardTitle}

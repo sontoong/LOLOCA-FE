@@ -97,7 +97,7 @@ export function useAuth() {
         dispatch(
           setShowOTPModal({
             open: true,
-            email: value.email,
+            extraValues: { email: value.email },
           }),
         );
       } else {

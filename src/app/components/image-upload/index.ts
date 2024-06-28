@@ -1,1 +1,1 @@
-export {default  as ImageUpload} from './profile-upload'
+export {default  as ProfileUpload} from './profile-upload'
