@@ -19,18 +19,20 @@ import ToursPage from "../pages/public/ToursPage";
 import TourDetailPage from "../pages/public/TourDetailPage";
 import GuidesPage from "../pages/public/TourGuidesPage";
 import NotFoundPage from "../pages/public/404Page";
+import TourBookingPage from "../pages/public/TourBookingPage";
+import TourGuideBookingPage from "../pages/public/TourGuideBookingPage";
+import TourGuideProfilePage from "../pages/public/TourGuideProfilePage";
+
 
 //other page
 import ErrorPage from "../pages/public/ErrorPage";
 import TestPage from "../pages/TestPage";
-import TourBookingPage from "../pages/public/TourBookingPage";
-import TourGuideBookingPage from "../pages/public/TourGuideBookingPage";
-import TourGuideProfile from "../pages/public/TourGuideProfilePage";
 import CustomerProfile from "../pages/customer/CustomerProfile";
 import CustomerRequesList from "../pages/customer/CustomerRequesList";
 import PaymentPage from "../pages/customer/PaymentPage";
 import BookingSuccess from "../pages/customer/BookingSuccess";
 import CreateTourPage from "../pages/tour-guide/CreateTourPage";
+import TourGuideProfile from "../pages/tour-guide/TourGuideProfile";
 
 export const router = createBrowserRouter([
   {
@@ -100,7 +102,7 @@ export const router = createBrowserRouter([
         path: "guides/:tourGuideId",
         element: (
           <Suspense fallback={<></>}>
-            <TourGuideProfile />
+            <TourGuideProfilePage />
           </Suspense>
         ),
       },
@@ -109,6 +111,26 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<></>}>
             <TourGuideBookingPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "guides/profile",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.tourguide]}>
+              <TourGuideProfile />
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "guides/tour/create",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.tourguide]}>
+              <CreateTourPage />
+            </PrivateRoute>
           </Suspense>
         ),
       },
