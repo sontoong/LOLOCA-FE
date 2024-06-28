@@ -31,6 +31,7 @@ import CustomerProfile from "../pages/customer/CustomerProfile";
 import CustomerRequesList from "../pages/customer/CustomerRequesList";
 import PaymentPage from "../pages/customer/PaymentPage";
 import BookingSuccess from "../pages/customer/BookingSuccess";
+import CreateTourPage from "../pages/tour-guide/CreateTourPage";
 
 export const router = createBrowserRouter([
   {
@@ -124,9 +125,19 @@ export const router = createBrowserRouter([
         path: "guides/profile",
         element: (
           <Suspense fallback={<></>}>
-            {/* <PrivateRoute inverted={false} requiredRoles={[ROLE.tourguide]}> */}
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.tourguide]}>
               <GuideProfile />
-            {/* </PrivateRoute> */}
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "guides/tour/create",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.tourguide]}>
+              <CreateTourPage />
+            </PrivateRoute>
           </Suspense>
         ),
       },
