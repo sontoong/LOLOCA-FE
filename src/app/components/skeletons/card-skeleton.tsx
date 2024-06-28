@@ -27,6 +27,6 @@ function CardImageSkeleton() {
   );
 }
 
-CardSkeleton.Image = CardImageSkeleton;
+CardSkeleton.ImageVertical = CardImageSkeleton;
 
 export default CardSkeleton;

@@ -2,8 +2,8 @@ export type Feedback = {
   feedbackId: number;
   customerId: number;
   tourGuideId: number;
-  bookingTourRequestsId: number | null;
-  bookingTourGuideRequestId: number | null;
+  bookingTourRequestsId?: number;
+  bookingTourGuideRequestId?: number;
   numOfStars: number;
   content: string;
   timeFeedback: string;

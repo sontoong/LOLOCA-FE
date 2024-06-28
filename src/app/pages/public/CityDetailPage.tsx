@@ -3,10 +3,10 @@ import { Dropdown, MenuProps, Space, TabsProps } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Loader } from "../../components/loader/loader";
 import { useCity } from "../../hooks/useCity";
-import CityTours from "../../ui/public/city-tours";
-import CityGuides from "../../ui/public/city-tour-guides";
+import CityTours from "../../ui/public/city-detail/city-tours";
+import CityGuides from "../../ui/public/city-detail/city-tour-guides";
+import { Skeleton } from "../../components/skeletons";
 
 export default function ToursPage() {
   const { cityId } = useParams();
@@ -25,30 +25,30 @@ export default function ToursPage() {
 
   const renderBanner = () => {
     if (stateCity.isFetching) {
-      return <Loader />;
+      return <Skeleton.Image height={300} />;
     }
 
     if (stateCity.currentCity) {
       return (
-        <div>
-          <Banner
-            image={stateCity.currentCity?.cityBanner}
-            title={stateCity.currentCity?.name}
-            description={stateCity.currentCity?.cityDescription}
-            tabPane={{ onTabPaneChange, tabPaneItems, activeKey: currentTab }}
-          />
-        </div>
+        <Banner
+          image={stateCity.currentCity?.cityBanner}
+          title={stateCity.currentCity?.name}
+          description={stateCity.currentCity?.cityDescription}
+          tabPane={{ onTabPaneChange, tabPaneItems, activeKey: currentTab }}
+        />
       );
     }
   };
 
   const renderContent = () => {
     switch (currentTab) {
-      case "tours":
+      case "tours": {
         return <CityTours />;
+      }
 
-      case "tourguide":
+      case "tourguide": {
         return <CityGuides />;
+      }
 
       default:
         break;

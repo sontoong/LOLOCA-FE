@@ -4,8 +4,8 @@ export type Tour = {
   tourGuideId: number;
   name: string;
   description: string;
-  category: string | null;
-  activity: string | null;
+  category?: string;
+  activity?: string;
   duration: number;
   status: number;
   tourImgViewList: string[];
@@ -41,7 +41,7 @@ export type TourList = {
     name: string;
     description: string;
     duration: number;
-    price: number | null;
+    price?: number;
     cityName: string;
     tourGuideName: string;
     thumbnailTourImage: string;

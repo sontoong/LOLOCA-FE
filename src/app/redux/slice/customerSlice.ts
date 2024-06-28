@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Customer } from "../../models/user";
 import agent from "../../utils/agent";
 import { AxiosError } from "axios";
+import { Customer } from "../../models/customer";
 
 type TCustomer = {
   currentCustomer: Customer;
@@ -27,8 +27,8 @@ const customerSlice = createSlice({
         (action) =>
           action.type.startsWith("customer/") &&
           action.type.endsWith("/pending"),
-        (state) => {
-          state.isFetching = true;
+        () => {
+          return { ...initialState, isFetching: true };
         },
       )
       .addMatcher(

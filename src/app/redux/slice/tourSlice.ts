@@ -34,8 +34,8 @@ const tourSlice = createSlice({
       .addMatcher(
         (action) =>
           action.type.startsWith("tour/") && action.type.endsWith("/pending"),
-        (state) => {
-          state.isFetching = true;
+        () => {
+          return { ...initialState, isFetching: true };
         },
       )
       .addMatcher(

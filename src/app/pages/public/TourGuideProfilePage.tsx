@@ -14,7 +14,8 @@ import { reviewsData } from "../../utils/testData";
 import { genderGenerator } from "../../utils/generators/gender";
 import { Image } from "../../components/image";
 import { CardListGrid } from "../../components/grids";
-import { CardSkeleton } from "../../components/skeletons";
+import { CardSkeleton, Skeleton } from "../../components/skeletons";
+import { Avatar } from "../../components/avatar";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -43,7 +44,7 @@ const TourGuideProfile = () => {
         <div className="mx-20">
           <CardListGrid.Horizontal
             items={6}
-            render={() => <CardSkeleton.Image />}
+            render={() => <CardSkeleton.ImageVertical />}
           />
         </div>
       );
@@ -89,24 +90,50 @@ const TourGuideProfile = () => {
     }
   };
 
+  const renderGeneralInfo = () => {
+    if (stateTourGuide.isFetching) {
+      return (
+        <>
+          <Skeleton.Image height={300} />
+          <div className="flex justify-evenly">
+            <div className="mt-[2rem] w-[40%] text-lg">
+              <Skeleton.Paragraph paragraph={{ rows: 3 }} />
+            </div>
+            <div className="mt-[-5rem] flex flex-col items-center">
+              <Skeleton.Avatar size={240} />
+              <Skeleton.Paragraph title={true} paragraph={false} />
+            </div>
+          </div>
+        </>
+      );
+    }
+
+    if (stateTourGuide.currentTourguide) {
+      return (
+        <>
+          <Banner image={VietNamBanner} height="20rem" boxShadow={false} />
+          <div className="flex justify-evenly">
+            <Paragraph className="mt-[2rem] w-[40%] text-lg">
+              {stateTourGuide.currentTourguide.description}
+            </Paragraph>
+            <div className="mt-[-5rem] flex flex-col items-center">
+              <Avatar size={240} src={stateTourGuide.currentTourguide.avatar} />
+              <Title
+                level={1}
+                style={{ fontWeight: "bolder", color: "#004AAD" }}
+              >
+                {`${stateTourGuide.currentTourguide.firstName} ${stateTourGuide.currentTourguide.lastName}`}
+              </Title>
+            </div>
+          </div>
+        </>
+      );
+    }
+  };
+
   return (
     <div>
-      <Banner image={VietNamBanner} height="20rem" boxShadow={false} />
-      <div className="flex justify-evenly">
-        <Paragraph className="mt-[2rem] w-[40%] text-lg">
-          {stateTourGuide.currentTourguide.description}
-        </Paragraph>
-        <div className="mt-[-5rem] flex flex-col items-center">
-          <Image
-            src={stateTourGuide.currentTourguide.avatar}
-            className="h-[15rem] w-[15rem] rounded-full object-cover"
-            alt="VietNamBanner"
-          />
-          <Title level={1} style={{ fontWeight: "bolder", color: "#004AAD" }}>
-            {`${stateTourGuide.currentTourguide.firstName} ${stateTourGuide.currentTourguide.lastName}`}
-          </Title>
-        </div>
-      </div>
+      {renderGeneralInfo()}
       <div className="flex justify-center">
         <div className="w-[80%]">
           <Divider colorSplit="black" />
@@ -132,22 +159,26 @@ const TourGuideProfile = () => {
           <Title level={2} style={{ fontWeight: "bolder", color: "#004AAD" }}>
             Information
           </Title>
-          <div className="flex justify-between">
-            <div>
-              <Paragraph>ID:</Paragraph>
-              <Paragraph>Fullname:</Paragraph>
-              <Paragraph>Gender:</Paragraph>
-              <Paragraph>Languages:</Paragraph>
+          {stateTourGuide.isFetching ? (
+            <Skeleton.Paragraph paragraph={{ rows: 4 }} />
+          ) : (
+            <div className="flex justify-between">
+              <div>
+                <Paragraph>ID:</Paragraph>
+                <Paragraph>Fullname:</Paragraph>
+                <Paragraph>Gender:</Paragraph>
+                <Paragraph>Languages:</Paragraph>
+              </div>
+              <div>
+                <Paragraph>{tourGuideId}</Paragraph>
+                <Paragraph>{`${stateTourGuide.currentTourguide.firstName} ${stateTourGuide.currentTourguide.lastName}`}</Paragraph>
+                <Paragraph>
+                  {genderGenerator(stateTourGuide.currentTourguide.gender)}
+                </Paragraph>
+                <Paragraph>Vietnamese, English</Paragraph>
+              </div>
             </div>
-            <div>
-              <Paragraph>{tourGuideId}</Paragraph>
-              <Paragraph>{`${stateTourGuide.currentTourguide.firstName} ${stateTourGuide.currentTourguide.lastName}`}</Paragraph>
-              <Paragraph>
-                {genderGenerator(stateTourGuide.currentTourguide.gender)}
-              </Paragraph>
-              <Paragraph>Vietnamese, English</Paragraph>
-            </div>
-          </div>
+          )}
         </div>
         <div>
           <Title
@@ -161,33 +192,50 @@ const TourGuideProfile = () => {
           </Title>
 
           {/* fix data */}
-          <Text>
-            {reviewsData.stars} <StarFilled /> ({reviewsData.amount} reviews)
-          </Text>
-          {reviewsData.ratings.map((rating, index) => (
-            <div key={index} className="my-[3rem]">
-              <Row>
-                <Col>
-                  <img
-                    src={VietNamBanner}
-                    className="h-[3rem] w-[3rem] rounded-full object-cover"
-                  />
-                </Col>
-                <Col className="ml-[0.5rem]">
-                  <Paragraph style={{ fontWeight: "bold", marginBottom: "0" }}>
-                    {rating.name}
-                  </Paragraph>
-                  <Paragraph>{formatUnixToLocal(rating.date)}</Paragraph>
-                </Col>
-                <Col offset={1}>
-                  <Paragraph>
-                    <StarFilled /> {rating.star}
-                  </Paragraph>
-                </Col>
-              </Row>
-              <Paragraph>{rating.description}</Paragraph>
-            </div>
-          ))}
+          {stateTourGuide.isFetching ? (
+            <>
+              {Array(2)
+                .fill({})
+                .map((_, index) => (
+                  <div key={index} className="my-[3rem]">
+                    <Skeleton avatar paragraph />
+                  </div>
+                ))}
+            </>
+          ) : (
+            <>
+              <Text>
+                {reviewsData.stars} <StarFilled /> ({reviewsData.amount}
+                reviews)
+              </Text>
+              {reviewsData.ratings.map((rating, index) => (
+                <div key={index} className="my-[3rem]">
+                  <Row>
+                    <Col>
+                      <img
+                        src={VietNamBanner}
+                        className="h-[3rem] w-[3rem] rounded-full object-cover"
+                      />
+                    </Col>
+                    <Col className="ml-[0.5rem]">
+                      <Paragraph
+                        style={{ fontWeight: "bold", marginBottom: "0" }}
+                      >
+                        {rating.name}
+                      </Paragraph>
+                      <Paragraph>{formatUnixToLocal(rating.date)}</Paragraph>
+                    </Col>
+                    <Col offset={1}>
+                      <Paragraph>
+                        <StarFilled /> {rating.star}
+                      </Paragraph>
+                    </Col>
+                  </Row>
+                  <Paragraph>{rating.description}</Paragraph>
+                </div>
+              ))}
+            </>
+          )}
         </div>
       </div>
     </div>
