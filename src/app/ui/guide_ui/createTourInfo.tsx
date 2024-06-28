@@ -6,7 +6,7 @@ const CreateTourInfo = ({ form }: { form: any }) => {
   const initialValues = {
     name: "",
     category: null,
-    duration: 0,
+    duration: null,
     tourTypeDTOs: [],
     activity: null,
   };
