@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import agent from "../../utils/agent";
 import { AxiosError } from "axios";
-import { Customer, TourGuide, User } from "../../models/user";
+import { User } from "../../models/user";
 import { jwtDecode } from "jwt-decode";
+import { Customer } from "../../models/customer";
+import { TourGuide } from "../../models/tourGuide";
 
 const token = localStorage.getItem("access_token");
 let initUser = {};
@@ -41,8 +43,8 @@ const authSlice = createSlice({
       .addMatcher(
         (action) =>
           action.type.startsWith("auth/") && action.type.endsWith("/pending"),
-        (state) => {
-          state.isFetching = true;
+        () => {
+          return { ...initialState, isFetching: true };
         },
       )
       .addMatcher(

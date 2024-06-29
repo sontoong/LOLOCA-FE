@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TourGuide } from "../../models/user";
 import agent from "../../utils/agent";
 import { AxiosError } from "axios";
-import { TourGuideList } from "../../models/tourGuide";
+import { TourGuide, TourGuideList } from "../../models/tourGuide";
 
 type TTourGuide = {
   currentTourguide: TourGuide;
@@ -33,8 +32,8 @@ const tourguideSlice = createSlice({
         (action) =>
           action.type.startsWith("tourguide/") &&
           action.type.endsWith("/pending"),
-        (state) => {
-          state.isFetching = true;
+        () => {
+          return { ...initialState, isFetching: true };
         },
       )
       .addMatcher(

@@ -13,6 +13,7 @@ import { StarFilled } from "@ant-design/icons";
 import { Image } from "../../components/image";
 import { useFeedback } from "../../hooks/useFeedback";
 import { useTourGuide } from "../../hooks/useTourGuide";
+import { Avatar } from "../../components/avatar";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -247,9 +248,13 @@ const TourDetailPage = () => {
                 Tour Guide
               </Title>
               <Link to={`/guides/${stateTour.currentTour?.tourGuideId}`}>
-                <Image
+                {/* <Image
                   src={stateTourGuide.currentTourguide.avatar}
                   className="h-[10rem] w-[10rem] rounded-full object-cover"
+                /> */}
+                <Avatar
+                  size={160}
+                  src={stateTourGuide.currentTourguide.avatar}
                 />
                 <Title style={{ fontWeight: "bolder" }} className="underline">
                   {`${stateTourGuide.currentTourguide.firstName} ${stateTourGuide.currentTourguide.lastName}`}

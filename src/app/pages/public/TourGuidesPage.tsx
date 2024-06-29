@@ -53,7 +53,10 @@ export default function GuidesPage() {
     if (stateTourGuide.isFetching) {
       return (
         <div className="m-10">
-          <CardListGrid items={15} render={() => <CardSkeleton.Image />} />
+          <CardListGrid
+            items={15}
+            render={() => <CardSkeleton.ImageVertical />}
+          />
         </div>
       );
     }

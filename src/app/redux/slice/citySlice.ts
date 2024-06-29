@@ -31,8 +31,8 @@ const citySlice = createSlice({
       .addMatcher(
         (action) =>
           action.type.startsWith("city/") && action.type.endsWith("/pending"),
-        (state) => {
-          state.isFetching = true;
+        () => {
+          return { ...initialState, isFetching: true };
         },
       )
       .addMatcher(

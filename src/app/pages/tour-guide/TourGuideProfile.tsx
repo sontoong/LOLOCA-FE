@@ -38,7 +38,7 @@ const TourGuideProfile = () => {
       return (
         <CardListGrid.Horizontal
           items={6}
-          render={() => <CardSkeleton.Image />}
+          render={() => <CardSkeleton.ImageVertical />}
         />
       );
     }

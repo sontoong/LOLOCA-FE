@@ -26,7 +26,10 @@ export default function CitiesPage() {
     if (state.isFetching) {
       return (
         <div className="m-10">
-          <CardListGrid items={15} render={() => <CardSkeleton.Image />} />
+          <CardListGrid
+            items={15}
+            render={() => <CardSkeleton.ImageVertical />}
+          />
         </div>
       );
     }

@@ -40,8 +40,8 @@ const feedbackSlice = createSlice({
         (action) =>
           action.type.startsWith("feedback/") &&
           action.type.endsWith("/pending"),
-        (state) => {
-          state.isFetching = true;
+        () => {
+          return { ...initialState, isFetching: true };
         },
       )
       .addMatcher(

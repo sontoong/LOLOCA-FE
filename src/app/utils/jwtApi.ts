@@ -64,7 +64,6 @@ apiJWT.interceptors.response.use(
   },
   (error) => {
     NProgress.done();
-    console.log(error);
     // const token = localStorage.getItem("access_token");
     if (error.response && error.response?.status === 401) {
       localStorage.clear();
