@@ -134,7 +134,7 @@ const CreateTourInfo = ({ form }: { form: any }) => {
             name="duration"
             label="Duration"
             rules={[
-              { required: true, message: "Please enter duration of tour" },
+              { required: true,  min: 1 },
             ]}
           >
             <InputNumber placeholder="Enter a duration" unit="day" pluralUnit="days"/>
@@ -145,7 +145,7 @@ const CreateTourInfo = ({ form }: { form: any }) => {
             name="activity"
             label="Acttvity Level"
             rules={[
-              { required: true, message: "Please choose a activity level" },
+              { required: true },
             ]}
           >
             <InputSelect
