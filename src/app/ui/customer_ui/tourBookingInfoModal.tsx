@@ -72,7 +72,7 @@ const TourBookingInfoModal = ({ form } : { form : any }) => {
           <Form.Item
             name="numOfAdult"
             label="Adults"
-            rules={[{ required: true }]}
+            rules={[{ required: true, min: 1 }]}
           >
             <InputNumber placeholder="How many adults will there be?" unit='adult' pluralUnit='adults'/>
           </Form.Item>
@@ -94,7 +94,7 @@ const TourBookingInfoModal = ({ form } : { form : any }) => {
           <Form.Item
             name="numOfChild"
             label="Child/Children (2-12y)"
-            rules={[{ required: true }]}
+            rules={[{ required: true, min: 1 }]}
           >
             <InputNumber placeholder="How many children will there be?" unit='child' pluralUnit='children'/>
           </Form.Item>
