@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTour } from "../../hooks/useTour";
 import { Loader } from "../../components/loader/loader";
 import NotFound from "../../components/not-found/not-found";
@@ -18,6 +18,7 @@ import { Avatar } from "../../components/avatar";
 const { Title, Paragraph, Text } = Typography;
 
 const TourDetailPage = () => {
+  const navigate = useNavigate();
   const { tourId } = useParams<{ tourId: string }>();
   const { state: stateTour, handleGetTourById } = useTour();
   const { state: stateFeedback, handleGetTourFeedback } = useFeedback();
@@ -73,6 +74,10 @@ const TourDetailPage = () => {
     },
   ];
 
+  const onBooking = () => {
+    navigate(`booking`);
+  };
+
   return (
     <div className="p-[2rem]">
       <Title level={1} style={{ fontWeight: "bolder" }}>
@@ -102,7 +107,11 @@ const TourDetailPage = () => {
           <Paragraph className="text-[1.2rem] font-extrabold">Easy</Paragraph>
         </Col>
         <Col offset={1}>
-          <PrimaryButton text="Booking" className="px-[4rem]" />
+          <PrimaryButton
+            text="Booking"
+            className="px-[4rem]"
+            onClick={onBooking}
+          />
         </Col>
       </Row>
       <Carousel arrows autoplay draggable>

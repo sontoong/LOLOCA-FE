@@ -11,6 +11,7 @@ const baseURL = Envs.apiLocal;
 
 const apiJWT = axios.create({
   baseURL,
+  timeout: 10000,
   // withCredentials: true,
 });
 
