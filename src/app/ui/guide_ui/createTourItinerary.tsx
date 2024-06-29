@@ -58,7 +58,7 @@ const CreateTourItinerary = ({ form }: { form: any }) => {
           <Form.Item
             name={["tourItineraryDTOs", index, "name"]}
             label="Itinerary"
-            rules={[{ required: true }]}
+            rules={[{ required: true, message: "Please enter itinerary name" }]}
           >
             <Input
               placeholder="Enter itinerary name"
@@ -77,6 +77,7 @@ const CreateTourItinerary = ({ form }: { form: any }) => {
               {
                 required: true,
                 whitespace: true,
+                message: "Please enter itinerary description",
               },
             ]}
           >

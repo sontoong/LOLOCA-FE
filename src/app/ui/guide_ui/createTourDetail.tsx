@@ -69,6 +69,7 @@ const CreateTourDetail = ({ form }: { form: any }) => {
                     rules={[
                       {
                         required: true,
+                        message: "Please enter a highlight",
                       },
                     ]}
                   >
@@ -113,6 +114,7 @@ const CreateTourDetail = ({ form }: { form: any }) => {
                     rules={[
                       {
                         required: true,
+                        message: "Please enter an inclusion",
                       },
                     ]}
                   >
@@ -157,6 +159,7 @@ const CreateTourDetail = ({ form }: { form: any }) => {
                     rules={[
                       {
                         required: true,
+                        message: "Please enter an exclusion",
                       },
                     ]}
                   >

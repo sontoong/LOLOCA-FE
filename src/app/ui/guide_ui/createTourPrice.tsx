@@ -78,7 +78,7 @@ const CreateTourPrice = ({ form }: { form: any }) => {
       render: (_, record, index) => (
         <Form.Item
           name={["tourPriceDTOs", index, "totalTouristFrom"]}
-          rules={[{ required: true }]}
+          rules={[{ required: true, message: "Please input a value!" }]}
         >
           <InputNumber
             min={1}
@@ -96,12 +96,12 @@ const CreateTourPrice = ({ form }: { form: any }) => {
         <Form.Item
           name={["tourPriceDTOs", index, "totalTouristTo"]}
           rules={[
-            { required: true },
+            { required: true, message: "Please input a value!" },
             {
               validator: (_, value) => {
                 const fromValue = form.getFieldValue(["tourPriceDTOs", index, "totalTouristFrom"]);
                 if (value <= fromValue) {
-                  return Promise.reject(new Error("Phải nhỏ hơn"));
+                  return Promise.reject(new Error("'To' is too low"));
                 }
                 return Promise.resolve();
               },
@@ -123,10 +123,10 @@ const CreateTourPrice = ({ form }: { form: any }) => {
       render: (_, record, index) => (
         <Form.Item
           name={["tourPriceDTOs", index, "adultPrice"]}
-          rules={[{ required: true, min: 1000 }]}
+          rules={[{ required: true, message: "Please input a value!" }]}
         >
           <InputNumber
-            min={1000}
+            min={0}
             value={record.adultPrice}
             onChange={(value) => handleFieldChange(value, "adultPrice", index)}
           />
@@ -140,7 +140,7 @@ const CreateTourPrice = ({ form }: { form: any }) => {
       render: (_, record, index) => (
         <Form.Item
           name={["tourPriceDTOs", index, "childPrice"]}
-          rules={[{ required: true, min: 1000}]}
+          rules={[{ required: true, message: "Please input a value!" }]}
         >
           <InputNumber
             min={0}
