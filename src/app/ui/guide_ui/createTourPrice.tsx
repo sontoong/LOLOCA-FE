@@ -140,7 +140,7 @@ const CreateTourPrice = ({ form }: { form: any }) => {
       render: (_, record, index) => (
         <Form.Item
           name={["tourPriceDTOs", index, "childPrice"]}
-          rules={[{ required: true}]}
+          rules={[{ required: true, min: 1000}]}
         >
           <InputNumber
             min={0}
