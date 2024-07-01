@@ -26,39 +26,24 @@ const CreateTourPage = () => {
     setCurrentStep(currentStep - 1);
   };
 
-  const steps = [
-    {
-      title: "Step 1",
-      content: <CreateTourInfo form={form} />,
-    },
-    {
-      title: "Step 2",
-      content: <CreateTourDetail form={form} />,
-    },
-    {
-      title: "Step 3",
-      content: <CreateTourItinerary form={form} />,
-    },
-    {
-      title: "Step 4",
-      content: <CreateTourPrice form={form} />,
-    },
-  ];
-
-  const handleSubmit = (values: any) => {
-    console.log("Form Values: ", values);
-  };
-
   const initialValues = {
     name: "",
-    category: null,
+    category: "",
     duration: 0,
-    tourTypeDTOs: [],
-    activity: null,
+    tourTypeDTOs: [
+      {typeDetail: ""},
+    ],
+    activity: "",
     note: "",
-    tourHighlightDTOs: [{ highlightDetail: "" }],
-    tourIncludeDTOs: [{ includeDetail: "" }],
-    tourExcludeDTOs: [{ excludeDetail: "" }],
+    tourHighlightDTOs: [
+      { highlightDetail: "" },
+    ],
+    tourIncludeDTOs: [
+      { includeDetail: "" },
+    ],
+    tourExcludeDTOs: [
+      { excludeDetail: "" },
+    ],
     tourItineraryDTOs: [
       {
         name: "",
@@ -73,6 +58,29 @@ const CreateTourPage = () => {
         childPrice: 0,
       },
     ],
+  };
+
+  const steps = [
+    {
+      title: "Step 1",
+      content: <CreateTourInfo form={form} initialValues={initialValues}/>,
+    },
+    {
+      title: "Step 2",
+      content: <CreateTourDetail form={form} initialValues={initialValues} />,
+    },
+    {
+      title: "Step 3",
+      content: <CreateTourItinerary form={form} initialValues={initialValues} />,
+    },
+    {
+      title: "Step 4",
+      content: <CreateTourPrice form={form} initialValues={initialValues} />,
+    },
+  ];
+
+  const handleSubmit = (values: any) => {
+    console.log("Form Values: ", values);
   };
 
   return (
@@ -156,5 +164,6 @@ const CreateTourPage = () => {
     </div>
   );
 };
+
 
 export default CreateTourPage;

@@ -3,14 +3,8 @@ import { MinusCircleFilled, PlusCircleFilled } from "@ant-design/icons";
 import { Input } from "../../components/inputs";
 import { Divider } from "../../components/divider";
 
-const CreateTourDetail = ({ form }: { form: any }) => {
+const CreateTourDetail = ({ form, initialValues }: { form: any, initialValues: any }) => {
   const { Title } = Typography;
-  const initialValues = {
-    note: "",
-    tourHighlightDTOs: [{ highlightDetail: "" }],
-    tourIncludeDTOs: [{ includeDetail: "" }],
-    tourExcludeDTOs: [{ excludeDetail: "" }],
-  };
 
   const onFinish = (values: any) => {
     const submitValues = {
@@ -191,5 +185,6 @@ const CreateTourDetail = ({ form }: { form: any }) => {
     </Form>
   );
 };
+
 
 export default CreateTourDetail;

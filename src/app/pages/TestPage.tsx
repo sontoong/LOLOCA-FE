@@ -1,10 +1,9 @@
-import { Skeleton } from "antd";
+import RequestListPage from "./tour-guide/RequestListPage";
 
 const TestPage = () => {
   return (
     <div className="mx-5">
-      <h1>ABC</h1>
-      <Skeleton.Avatar active={true} size={200} shape={"circle"} />
+      <RequestListPage/>
     </div>
   );
 };

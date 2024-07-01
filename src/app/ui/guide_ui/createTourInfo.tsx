@@ -2,14 +2,7 @@ import { Col, Row } from "antd";
 import { Form } from "../../components/form";
 import { Input, InputNumber, InputSelect } from "../../components/inputs";
 
-const CreateTourInfo = ({ form }: { form: any }) => {
-  const initialValues = {
-    name: "",
-    category: null,
-    duration: null,
-    tourTypeDTOs: [],
-    activity: null,
-  };
+const CreateTourInfo = ({ form, initialValues }: { form: any, initialValues: any }) => {
 
   const onFinish = (values: any) => {
     const submitValues = {
@@ -29,7 +22,7 @@ const CreateTourInfo = ({ form }: { form: any }) => {
     {value: "1", label: "Low"},
     {value: "2", label: "Medium"},
     {value: "3", label: "High"},
-  ]
+  ];
 
   const tourCategories = [
     { value: "funny", label: "Funny" },
@@ -137,7 +130,7 @@ const CreateTourInfo = ({ form }: { form: any }) => {
               { required: true, message: "Please enter duration of tour" },
             ]}
           >
-            <InputNumber placeholder="Enter a duration" unit="day" pluralUnit="days"/>
+            <InputNumber placeholder="Enter a duration" defaultValue={initialValues.duration || 0} unit="day" pluralUnit="days"/>
           </Form.Item>
         </Col>
         <Col offset={4} span={10}>
