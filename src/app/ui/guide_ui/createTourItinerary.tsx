@@ -5,13 +5,8 @@ import { Divider } from "../../components/divider";
 
 const { Title } = Typography;
 
-const CreateTourItinerary = ({ form }: { form: any }) => {
-  const [itineraryItems, setItineraryItems] = useState([
-    {
-      name: "",
-      description: "",
-    },
-  ]);
+const CreateTourItinerary = ({ form, initialValues }: { form: any, initialValues: any }) => {
+  const [itineraryItems, setItineraryItems] = useState(initialValues.tourItineraryDTOs);
 
   const onFinish = (values: any) => {
     console.log("Form Values: ", values);
@@ -44,7 +39,7 @@ const CreateTourItinerary = ({ form }: { form: any }) => {
     >
       <Title style={{ color: "#004AAD" }}>Itinerary</Title>
 
-      {itineraryItems.map((item, index) => (
+      {itineraryItems.map((item : any, index : any) => (
         <div key={index}>
           {index > 0 && <Divider colorSplit="black" />}
           <div className="flex justify-end mb-[1rem]">
@@ -56,9 +51,9 @@ const CreateTourItinerary = ({ form }: { form: any }) => {
             )}
           </div>
           <Form.Item
-            name={["tourItineraryDTOs", index, "name"]}
+            name={['tourItineraryDTOs', index, 'name']}
             label="Itinerary"
-            rules={[{ required: true, message: "Please enter itinerary name" }]}
+            rules={[{ required: true, message: 'Please enter itinerary name' }]}
           >
             <Input
               placeholder="Enter itinerary name"
@@ -71,13 +66,13 @@ const CreateTourItinerary = ({ form }: { form: any }) => {
             />
           </Form.Item>
           <Form.Item
-            name={["tourItineraryDTOs", index, "description"]}
+            name={['tourItineraryDTOs', index, 'description']}
             label="Description"
             rules={[
               {
                 required: true,
                 whitespace: true,
-                message: "Please enter itinerary description",
+                message: 'Please enter itinerary description',
               },
             ]}
           >
@@ -101,5 +96,6 @@ const CreateTourItinerary = ({ form }: { form: any }) => {
     </Form>
   );
 };
+
 
 export default CreateTourItinerary;

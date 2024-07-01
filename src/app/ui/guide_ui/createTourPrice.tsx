@@ -11,24 +11,13 @@ interface TourPrice {
   childPrice: number;
 }
 
-const CreateTourPrice = ({ form }: { form: any }) => {
-  const [initialData, setInitialData] = useState<TourPrice[]>([]);
-  const [nextKey, setNextKey] = useState<number>(0);
+const CreateTourPrice = ({ form, initialValues }: { form: any, initialValues: any }) => {
+  const [initialData, setInitialData] = useState<TourPrice[]>(initialValues.tourPriceDTOs);
+  const [nextKey, setNextKey] = useState<number>(1);
 
   useEffect(() => {
-    const initialValues: TourPrice[] = [
-      {
-        key: getKey(nextKey),
-        totalTouristFrom: 0,
-        totalTouristTo: 0,
-        adultPrice: 0,
-        childPrice: 0,
-      },
-    ];
-    setInitialData(initialValues);
-    form.setFieldsValue({ tourPriceDTOs: initialValues });
-    setNextKey(nextKey + 1);
-  }, [form]); // eslint-disable-line react-hooks/exhaustive-deps
+    form.setFieldsValue({ tourPriceDTOs: initialData });
+  }, [form, initialData]);
 
   const onFinish = (values: any) => {
     const tourPrices = values.tourPriceDTOs.map((item: TourPrice) => ({
@@ -56,7 +45,6 @@ const CreateTourPrice = ({ form }: { form: any }) => {
     };
     const updatedData = [...initialData, newData];
     setInitialData(updatedData);
-    form.setFieldsValue({ tourPriceDTOs: updatedData });
     setNextKey(newKey + 1);
   };
 
@@ -64,7 +52,6 @@ const CreateTourPrice = ({ form }: { form: any }) => {
     if (initialData.length > 1) {
       const updatedData = initialData.filter((item) => item.key !== record.key);
       setInitialData(updatedData);
-      form.setFieldsValue({ tourPriceDTOs: updatedData });
     }
   };
 
@@ -77,13 +64,13 @@ const CreateTourPrice = ({ form }: { form: any }) => {
       key: "totalTouristFrom",
       render: (_, record, index) => (
         <Form.Item
-          name={["tourPriceDTOs", index, "totalTouristFrom"]}
-          rules={[{ required: true, message: "Please input a value!" }]}
+          name={['tourPriceDTOs', index, 'totalTouristFrom']}
+          rules={[{ required: true, message: 'Please input a value!' }]}
         >
           <InputNumber
             min={1}
             value={record.totalTouristFrom}
-            onChange={(value) => handleFieldChange(value, "totalTouristFrom", index)}
+            onChange={(value) => handleFieldChange(value, 'totalTouristFrom', index)}
           />
         </Form.Item>
       ),
@@ -94,12 +81,12 @@ const CreateTourPrice = ({ form }: { form: any }) => {
       key: "totalTouristTo",
       render: (_, record, index) => (
         <Form.Item
-          name={["tourPriceDTOs", index, "totalTouristTo"]}
+          name={['tourPriceDTOs', index, 'totalTouristTo']}
           rules={[
-            { required: true, message: "Please input a value!" },
+            { required: true, message: 'Please input a value!' },
             {
               validator: (_, value) => {
-                const fromValue = form.getFieldValue(["tourPriceDTOs", index, "totalTouristFrom"]);
+                const fromValue = form.getFieldValue(['tourPriceDTOs', index, 'totalTouristFrom']);
                 if (value <= fromValue) {
                   return Promise.reject(new Error("'To' is too low"));
                 }
@@ -111,7 +98,7 @@ const CreateTourPrice = ({ form }: { form: any }) => {
           <InputNumber
             min={1}
             value={record.totalTouristTo}
-            onChange={(value) => handleFieldChange(value, "totalTouristTo", index)}
+            onChange={(value) => handleFieldChange(value, 'totalTouristTo', index)}
           />
         </Form.Item>
       ),
@@ -122,13 +109,13 @@ const CreateTourPrice = ({ form }: { form: any }) => {
       key: "adultPrice",
       render: (_, record, index) => (
         <Form.Item
-          name={["tourPriceDTOs", index, "adultPrice"]}
-          rules={[{ required: true, message: "Please input a value!" }]}
+          name={['tourPriceDTOs', index, 'adultPrice']}
+          rules={[{ required: true, message: 'Please input a value!' }]}
         >
           <InputNumber
             min={0}
             value={record.adultPrice}
-            onChange={(value) => handleFieldChange(value, "adultPrice", index)}
+            onChange={(value) => handleFieldChange(value, 'adultPrice', index)}
           />
         </Form.Item>
       ),
@@ -139,13 +126,13 @@ const CreateTourPrice = ({ form }: { form: any }) => {
       key: "childPrice",
       render: (_, record, index) => (
         <Form.Item
-          name={["tourPriceDTOs", index, "childPrice"]}
-          rules={[{ required: true, message: "Please input a value!" }]}
+          name={['tourPriceDTOs', index, 'childPrice']}
+          rules={[{ required: true, message: 'Please input a value!' }]}
         >
           <InputNumber
             min={0}
             value={record.childPrice}
-            onChange={(value) => handleFieldChange(value, "childPrice", index)}
+            onChange={(value) => handleFieldChange(value, 'childPrice', index)}
           />
         </Form.Item>
       ),
@@ -156,17 +143,17 @@ const CreateTourPrice = ({ form }: { form: any }) => {
         <>
           {initialData.length > 1 && index !== initialData.length - 1 ? (
             <MinusCircleFilled
-              style={{ color: "red", fontSize: "2.5rem", cursor: "pointer" }}
+              style={{ color: 'red', fontSize: '2.5rem', cursor: 'pointer' }}
               onClick={() => handleDeleteRow(record)}
             />
           ) : null}
           {index === initialData.length - 1 ? (
             <PlusCircleFilled
               style={{
-                color: "#004AAD",
-                fontSize: "2.5rem",
+                color: '#004AAD',
+                fontSize: '2.5rem',
                 marginLeft: 10,
-                cursor: "pointer",
+                cursor: 'pointer',
               }}
               onClick={handleAddRow}
             />
@@ -183,7 +170,6 @@ const CreateTourPrice = ({ form }: { form: any }) => {
       [fieldName]: value,
     };
     setInitialData(updatedData);
-    form.setFieldsValue({ tourPriceDTOs: updatedData });
   };
 
   useEffect(() => {
@@ -209,3 +195,4 @@ const CreateTourPrice = ({ form }: { form: any }) => {
 };
 
 export default CreateTourPrice;
+
