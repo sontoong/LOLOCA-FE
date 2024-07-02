@@ -1,15 +1,19 @@
 import { Col, Row } from "antd";
 import { InputDate, Input, InputNumber } from "../../components/inputs";
-import { useParams } from "react-router-dom";
 import { Form } from "../../components/form";
 import { useState, useEffect } from "react";
 import { Dayjs } from "dayjs";
+import { Tour } from "../../models/tour";
 
-const TourBookingInfoModal = ({ form }: { form: any }) => {
-  const { tourId } = useParams();
+type TTourBookingInfoModalProps = {
+  form: any;
+  tour: Tour;
+};
+
+const TourBookingInfoModal = ({ form, tour }: TTourBookingInfoModalProps) => {
   const userId = localStorage.getItem("userId") ?? "";
   const [totalPrice, setTotalPrice] = useState<number | undefined>(0);
-  const [duration] = useState<number>(7); // Example duration of 7 days
+
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
 
@@ -22,17 +26,17 @@ const TourBookingInfoModal = ({ form }: { form: any }) => {
   };
 
   useEffect(() => {
-    if (startDate && duration) {
-      const calculatedEndDate = startDate.add(duration, "day");
+    if (startDate && tour?.duration) {
+      const calculatedEndDate = startDate.add(tour.duration, "day");
       setEndDate(calculatedEndDate);
       form.setFieldsValue({ endDate: calculatedEndDate });
     }
-  }, [startDate, duration, form]);
+  }, [startDate, tour?.duration, form]);
 
   const onFinish = (values: any) => {
     const submitValues = {
       ...values,
-      tourId: tourId,
+      tourId: tour?.tourId,
       customerId: userId,
       price: totalPrice,
     };
@@ -77,10 +81,7 @@ const TourBookingInfoModal = ({ form }: { form: any }) => {
           <Form.Item
             name="numOfAdult"
             label="Adults"
-            rules={[
-              { required: true, message: "Please enter number of adults" },
-              { min: 1 },
-            ]}
+            rules={[{ type: "number", required: true, min: 1 }]}
           >
             <InputNumber
               placeholder="How many adults will there be?"
@@ -95,15 +96,12 @@ const TourBookingInfoModal = ({ form }: { form: any }) => {
             label="End"
             rules={[{ required: true, message: "Please select end date" }]}
           >
-            <InputDate placeholder="Enter end date" value={endDate} disabled />
+            <InputDate placeholder="" value={endDate} disabled />
           </Form.Item>
           <Form.Item
             name="numOfChild"
             label="Child/Children (2-12y)"
-            rules={[
-              { required: true, message: "Please enter number of children" },
-              { min: 1 },
-            ]}
+            rules={[{ type: "number", required: true }]}
           >
             <InputNumber
               placeholder="How many children will there be?"
@@ -118,11 +116,13 @@ const TourBookingInfoModal = ({ form }: { form: any }) => {
         label="Your Requirement"
         rules={[
           {
+            type: "string",
             required: true,
+            whitespace: true,
           },
         ]}
       >
-        <Input.TextArea placeholder="I want to..." />
+        <Input.TextArea placeholder="I want to..." showCount maxLength={100} />
       </Form.Item>
     </Form>
   );

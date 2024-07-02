@@ -1,12 +1,12 @@
-import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import { BookOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Dropdown, Layout, Menu, MenuProps, Modal, Spin } from "antd";
 import { ItemType } from "antd/es/menu/interface";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
-import logo from "../../../assets/logo.png";
-import { PrimaryButton } from "../../components/buttons";
-import { ROLE } from "../../../constants/role";
 import { useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import logo from "../../../assets/logo.png";
+import { ROLE } from "../../../constants/role";
+import { PrimaryButton } from "../../components/buttons";
+import { useAuth } from "../../hooks/useAuth";
 import { isEmptyObject } from "../../utils/utils";
 
 const { Header } = Layout;
@@ -52,9 +52,14 @@ export default function MyHeader() {
       case ROLE.customer:
         return [
           generateItemProfile(
-            <Link to={`/fd/account`}>Thông tin cá nhân</Link>,
-            "/account",
+            "Thông tin cá nhân",
+            "/customer/profile",
             <UserOutlined />,
+          ),
+          generateItemProfile(
+            "Danh sách chờ",
+            "/customer/request",
+            <BookOutlined />,
           ),
           {
             type: "divider",
@@ -126,7 +131,16 @@ export default function MyHeader() {
           />
         ) : (
           <Dropdown
-            menu={{ items: getProfileDropdown() }}
+            menu={{
+              items: getProfileDropdown(),
+              selectedKeys: location.pathname
+                .split("/")
+                .slice(1)
+                .map(
+                  (_, index, arr) => `/${arr.slice(0, index + 1).join("/")}`,
+                ),
+              onClick: onClick,
+            }}
             placement="bottomRight"
             trigger={["click"]}
             arrow

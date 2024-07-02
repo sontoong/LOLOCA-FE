@@ -41,7 +41,8 @@ apiJWT.interceptors.request.use(async (config) => {
         if (error instanceof AxiosError) {
           if (error.response?.status === 400) {
             localStorage.clear();
-            router.navigate("/login");
+            window.location.href = "/login";
+            // router.navigate("/login");
             throw error;
           }
         } else {

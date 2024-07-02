@@ -5,6 +5,7 @@ import tourguideReducer from "./slice/tourguideSlice";
 import tourReducer from "./slice/tourSlice";
 import cityReducer from "./slice/citySlice";
 import feedbackReducer from "./slice/feedbackSlice";
+import bookingTourReducer from "./slice/bookingTourSlice";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   tour: tourReducer,
   city: cityReducer,
   feedback: feedbackReducer,
+  bookingTour: bookingTourReducer,
 });
 
 export default rootReducer;

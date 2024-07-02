@@ -44,7 +44,7 @@ const PrivateRoute = ({
     return <ErrorPage />;
   }
 
-  return isAuth ? children : <Navigate to="/login" />;
+  return isAuth ? children : <ErrorPage />;
 };
 
 export default PrivateRoute;

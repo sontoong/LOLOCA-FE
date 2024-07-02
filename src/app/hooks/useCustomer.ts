@@ -5,6 +5,10 @@ import {
   getCustomerById,
   GetCustomerByIdParams,
   setCurrentCustomer,
+  updateCustomerAvatar,
+  UpdateCustomerAvatarParams,
+  updateCustomerInformation,
+  UpdateCustomerInformationParams,
 } from "../redux/slice/customerSlice";
 import { useCallback } from "react";
 
@@ -37,8 +41,66 @@ export function useCustomer() {
     [dispatch, notification],
   );
 
+  const handleUpdateCustomerInformation = useCallback(
+    async (value: UpdateCustomerInformationParams) => {
+      const resultAction = await dispatch(updateCustomerInformation(value));
+      if (updateCustomerInformation.fulfilled.match(resultAction)) {
+        notification.success({
+          message: "Success",
+          description: "Update thông tin thành công",
+          placement: "topRight",
+        });
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
+  const handleUpdateCustomerAvatar = useCallback(
+    async (value: UpdateCustomerAvatarParams) => {
+      const resultAction = await dispatch(updateCustomerAvatar(value));
+      if (updateCustomerAvatar.fulfilled.match(resultAction)) {
+        notification.success({
+          message: "Success",
+          description: "Update avatar thành công",
+          placement: "topRight",
+        });
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
   return {
     state,
     handleGetCustomerbyId,
+    handleUpdateCustomerInformation,
+    handleUpdateCustomerAvatar,
   };
 }

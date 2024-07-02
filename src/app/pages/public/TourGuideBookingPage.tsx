@@ -1,13 +1,13 @@
-import { useState } from "react";
 import { Steps } from "antd";
+import { useState } from "react";
 
-import { PrimaryButton } from "../../components/buttons";
-import { Form } from "../../components/form";
-import { Card } from "../../components/card";
 import VietNamBanner from "../../../assets/banner.png";
+import { PrimaryButton } from "../../components/buttons";
+import { Card } from "../../components/card";
+import { Form } from "../../components/form";
+import GuideInfoModal from "../../ui/customer_ui/guideInfoModal";
 import InstructionModal from "../../ui/customer_ui/instructionModal";
 import TourGuideBookingInfo from "../../ui/customer_ui/tourGuideBookingInfo";
-import GuideInfoModal from "../../ui/customer_ui/guideInfoModal";
 
 const { Step } = Steps;
 
@@ -15,13 +15,13 @@ const TourGuideBookingPage = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [form] = Form.useForm();
   const [mainForm] = Form.useForm();
-  
+
   const guide = {
     id: "LO161022",
     name: "Mark Zucc",
     gender: "Male",
     languages: ["English", "Malay"],
-    image: VietNamBanner, 
+    image: VietNamBanner,
   };
 
   const next = () => {
@@ -36,16 +36,16 @@ const TourGuideBookingPage = () => {
 
   const steps = [
     {
-      title: "Step 1",
+      title: "Tour Guide Information",
       content: <InstructionModal />,
     },
     {
-      title: "Step 2",
+      title: "Booking Information",
       content: <TourGuideBookingInfo form={form} />,
     },
     {
-      title: "Step 3",
-      content: <GuideInfoModal guide={guide}/>,
+      title: "Payment Information",
+      content: <GuideInfoModal guide={guide} />,
     },
   ];
 
@@ -73,18 +73,18 @@ const TourGuideBookingPage = () => {
       }}
       className="h-full py-[2rem]"
     >
-      <Card cardTitle="Create your tour" className="w-[50%] mx-auto">
-      <Steps current={currentStep} className="my-[5%]">
-              {steps.map((step, index) => (
-                <Step key={index} title={step.title} />
-              ))}
-            </Steps>
+      <Card cardTitle="Create your tour" className="mx-auto w-[50%]">
+        <Steps current={currentStep} className="my-[5%]">
+          {steps.map((step, index) => (
+            <Step key={index} title={step.title} />
+          ))}
+        </Steps>
         <Form.Provider
           onFormFinish={(name, { values, forms }) => {
             const { mainForm } = forms;
             if (name === "BookingForm") {
               mainForm.setFieldsValue({ ...values });
-              next()
+              next();
             }
           }}
         >
@@ -106,7 +106,7 @@ const TourGuideBookingPage = () => {
             <Form.Item name="tourType" hidden />
 
             <div>
-              <div className="flex justify-end mt-4">
+              <div className="mt-4 flex justify-end">
                 {currentStep > 0 && (
                   <PrimaryButton
                     text="Previous"
@@ -114,7 +114,7 @@ const TourGuideBookingPage = () => {
                     onClick={() => prev()}
                   />
                 )}
-                {currentStep < steps.length - 1 && currentStep!= 1 && (
+                {currentStep < steps.length - 1 && currentStep != 1 && (
                   <PrimaryButton text="Next" onClick={() => next()} />
                 )}
                 {currentStep == 1 && currentStep < steps.length - 1 && (

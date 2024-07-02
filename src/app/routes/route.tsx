@@ -23,7 +23,6 @@ import TourBookingPage from "../pages/public/TourBookingPage";
 import TourGuideBookingPage from "../pages/public/TourGuideBookingPage";
 import TourGuideProfilePage from "../pages/public/TourGuideProfilePage";
 
-
 //other page
 import ErrorPage from "../pages/public/ErrorPage";
 import TestPage from "../pages/TestPage";
@@ -187,7 +186,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "customer/booking-successful/:requestId",
+        path: "customer/booking-successful",
         element: (
           <Suspense fallback={<></>}>
             <PrivateRoute inverted={false} requiredRoles={[ROLE.customer]}>

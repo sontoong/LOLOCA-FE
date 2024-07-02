@@ -140,6 +140,10 @@ export const registerVerify = createAsyncThunk<any, VerifyParams>(
 export const { setCurrentUser, setShowOTPModal, resetOTPModal } =
   authSlice.actions;
 
+export const isLoggedIn = () => {
+  return !!localStorage.getItem("access_token");
+};
+
 export default authSlice.reducer;
 
 export type LoginParams = {

@@ -14,11 +14,14 @@ import { Image } from "../../components/image";
 import { useFeedback } from "../../hooks/useFeedback";
 import { useTourGuide } from "../../hooks/useTourGuide";
 import { Avatar } from "../../components/avatar";
+import { useProtectedAction } from "../../hooks/useProtectedAction";
+import { isLoggedIn } from "../../redux/slice/authSlice";
 
 const { Title, Paragraph, Text } = Typography;
 
 const TourDetailPage = () => {
   const navigate = useNavigate();
+  const { executeOrRedirect } = useProtectedAction();
   const { tourId } = useParams<{ tourId: string }>();
   const { state: stateTour, handleGetTourById } = useTour();
   const { state: stateFeedback, handleGetTourFeedback } = useFeedback();
@@ -75,7 +78,11 @@ const TourDetailPage = () => {
   ];
 
   const onBooking = () => {
-    navigate(`booking`);
+    executeOrRedirect({
+      action: () => navigate("booking"),
+      fallbackUrl: "/login",
+      testValue: isLoggedIn(),
+    });
   };
 
   return (

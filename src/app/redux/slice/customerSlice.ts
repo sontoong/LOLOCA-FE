@@ -61,10 +61,79 @@ export const getCustomerById = createAsyncThunk<any, GetCustomerByIdParams>(
   },
 );
 
+export const updateCustomerInformation = createAsyncThunk<
+  any,
+  UpdateCustomerInformationParams
+>("customer/updateCustomerInformation", async (data, { rejectWithValue }) => {
+  const {
+    customerId,
+    addressCustomer,
+    dateOfBirth,
+    firstName,
+    gender,
+    lastName,
+    phoneNumber,
+  } = data;
+  try {
+    const response = await agent.Customer.updateInfo(customerId, {
+      addressCustomer,
+      dateOfBirth,
+      firstName,
+      gender,
+      lastName,
+      phoneNumber,
+    });
+    return response;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+});
+
+export const updateCustomerAvatar = createAsyncThunk<
+  any,
+  UpdateCustomerAvatarParams
+>("customer/updateCustomerAvatar", async (data, { rejectWithValue }) => {
+  const { CustomerId, files } = data;
+  try {
+    const response = await agent.Customer.updateAvatar({
+      CustomerId,
+      files,
+    });
+    return response;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+});
+
 export const { setCurrentCustomer } = customerSlice.actions;
 
 export default customerSlice.reducer;
 
 export type GetCustomerByIdParams = {
   customerId: number;
+};
+
+export type UpdateCustomerInformationParams = {
+  customerId: string;
+  firstName: string;
+  lastName: string;
+  gender: number;
+  dateOfBirth: string;
+  phoneNumber: string;
+  addressCustomer: string;
+};
+
+export type UpdateCustomerAvatarParams = {
+  files: File[];
+  CustomerId: number;
 };

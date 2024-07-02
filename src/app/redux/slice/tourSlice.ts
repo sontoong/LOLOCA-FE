@@ -68,8 +68,8 @@ export const getTourRandom = createAsyncThunk<any, GetTourRandomParams>(
   },
 );
 
-export const getTourByCity = createAsyncThunk<any, GetTourCityParams>(
-  "tour/getTourCity",
+export const getTourByCity = createAsyncThunk<any, GetTourByCityParams>(
+  "tour/getTourByCity",
   async (data, { rejectWithValue }) => {
     const { cityId, page, pageSize } = data;
     try {
@@ -139,7 +139,7 @@ export type GetTourRandomParams = {
   pageSize: number;
 };
 
-export type GetTourCityParams = {
+export type GetTourByCityParams = {
   cityId: number;
   page: number;
   pageSize: number;

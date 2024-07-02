@@ -90,7 +90,8 @@ const Cities = {
 
 const _customer = "Customer";
 const Customer = {
-  updateInfo: (data: any) => requests.post(`${_customer}/update-info`, data),
+  updateInfo: (customerId: string, data: any) =>
+    requests.post(`${_customer}/update-info/${customerId}`, data),
   changePassword: (data: any) =>
     requests.post(`${_customer}/change-password`, data),
   updateAvatar: (data: any) =>

@@ -28,7 +28,7 @@ function CustomInputPassword(props: TCustomInput) {
 }
 
 function CustomInputTextArea(props: CustomTextArea) {
-  return <Input.TextArea {...props} />;
+  return <Input.TextArea {...props} style={{ height: 120, resize: "none" }} />;
 }
 
 CustomInput.Password = CustomInputPassword;
@@ -42,6 +42,4 @@ type TCustomInput = Omit<InputProps, "style"> & {
   colorTextPlaceholder?: string;
 };
 
-type CustomTextArea = Omit<TextAreaProps, "style">
-
-
+type CustomTextArea = Omit<TextAreaProps, "style">;

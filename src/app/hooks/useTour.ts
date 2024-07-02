@@ -6,7 +6,7 @@ import {
   GetTourByIdParams,
   getTourByTourGuide,
   GetTourByTourGuideParams,
-  GetTourCityParams,
+  GetTourByCityParams,
   getTourRandom,
   GetTourRandomParams,
   setCurrentTour,
@@ -44,7 +44,7 @@ export function useTour() {
   );
 
   const handleGetTourByCityId = useCallback(
-    async (value: GetTourCityParams) => {
+    async (value: GetTourByCityParams) => {
       const resultAction = await dispatch(getTourByCity(value));
       if (getTourByCity.fulfilled.match(resultAction)) {
         dispatch(setCurrentTourList(resultAction.payload));

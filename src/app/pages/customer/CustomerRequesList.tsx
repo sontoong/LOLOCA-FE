@@ -163,6 +163,7 @@ const CustomerRequesList = () => {
         <Table
           columns={bookingTourColumns}
           dataSource={tourData}
+          rowClassName={"hover:cursor-pointer"}
           onRow={(record) => {
             return {
               onClick: () => handleRowClick(record),
@@ -173,6 +174,7 @@ const CustomerRequesList = () => {
         <Table
           columns={bookingTourGuideColumns}
           dataSource={tourGuideData}
+          rowClassName={"hover:cursor-pointer"}
           onRow={(record) => {
             return {
               onClick: () => handleRowClick(record),

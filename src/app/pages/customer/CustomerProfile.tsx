@@ -5,25 +5,43 @@ import { PrimaryButton } from "../../components/buttons";
 import { ProfileUpload } from "../../components/image-upload";
 import { useState } from "react";
 import { Image } from "../../components/image-upload/profile-upload";
-
-
+import { useAuth } from "../../hooks/useAuth";
+import { Customer } from "../../models/customer";
+import dayjs from "dayjs";
+import { useCustomer } from "../../hooks/useCustomer";
 
 const CustomerProfile = () => {
+  const { handleUpdateCustomerInformation, handleUpdateCustomerAvatar } =
+    useCustomer();
+  const { state: stateAuth } = useAuth();
   const [form] = Form.useForm();
   const { Title } = Typography;
   const [images, setImages] = useState<Image[]>([]);
 
+  const userId = localStorage.getItem("userId") ?? "";
+
+  const currentUser = stateAuth.currentUser as Customer;
+
   const initialValues = {
-    addressCustomer: "",
-    firstName: "",
-    lastName: "",
-    gender: 0,
-    dateOfBirth: "",
-    phoneNumber: "",
+    addressCustomer: currentUser.addressCustomer ?? "",
+    firstName: currentUser.firstName,
+    lastName: currentUser.lastName,
+    gender: currentUser.gender,
+    dateOfBirth: dayjs(currentUser.dateOfBirth),
+    phoneNumber: currentUser.phoneNumber ?? "",
   };
 
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
+  const onFinish = (values: typeof initialValues) => {
+    const dateOfBirthString = values.dateOfBirth.toISOString();
+    handleUpdateCustomerInformation({
+      ...values,
+      customerId: localStorage.getItem("userId") ?? "",
+      dateOfBirth: dateOfBirthString,
+    });
+    handleUpdateCustomerAvatar({
+      CustomerId: parseInt(userId),
+      files: images.flatMap((image) => (image.file ? [image.file] : [])),
+    });
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -36,16 +54,14 @@ const CustomerProfile = () => {
     { label: "Other", value: 3 },
   ];
 
-  const genderSelectOptions = genderOptions.map(option =>
-    option.value === 0 ? { ...option, label: "None" } : option
+  const genderSelectOptions = genderOptions.map((option) =>
+    option.value === 0 ? { ...option, label: "None" } : option,
   );
 
   return (
     <div className="mx-auto my-[5rem] w-[60%]">
-      <Title style={{ color: "#004AAD", fontWeight: "bolder" }}>
-        Profile
-      </Title>
-        <ProfileUpload setImages={setImages} value={images}/>
+      <Title style={{ color: "#004AAD", fontWeight: "bolder" }}>Profile</Title>
+      <ProfileUpload setImages={setImages} value={images} />
       <Form
         form={form}
         initialValues={initialValues}

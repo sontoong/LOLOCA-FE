@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Steps } from "antd";
 
 import { PrimaryButton } from "../../components/buttons";
@@ -8,13 +8,31 @@ import VietNamBanner from "../../../assets/banner.png";
 import InstructionModal from "../../ui/customer_ui/instructionModal";
 import TourBookingInfoModal from "../../ui/customer_ui/tourBookingInfoModal";
 import GuideInfoModal from "../../ui/customer_ui/guideInfoModal";
+import { useParams } from "react-router-dom";
+import { useTour } from "../../hooks/useTour";
+import { useProtectedAction } from "../../hooks/useProtectedAction";
+import { isLoggedIn } from "../../redux/slice/authSlice";
+import { useBookingTour } from "../../hooks/useBookingTour";
 
 const { Step } = Steps;
 
 const TourBookingPage = () => {
+  const { tourId } = useParams();
+  const { state: stateTour, handleGetTourById } = useTour();
+  const {
+    // state: statebookingTour,
+    handleCreateBookingTour,
+  } = useBookingTour();
+  const { executeOrRedirect } = useProtectedAction();
   const [currentStep, setCurrentStep] = useState(0);
   const [form] = Form.useForm();
   const [mainForm] = Form.useForm();
+
+  useEffect(() => {
+    if (tourId) {
+      handleGetTourById({ tourId: tourId });
+    }
+  }, [tourId, handleGetTourById]);
 
   const guide = {
     id: "LO161022",
@@ -41,7 +59,9 @@ const TourBookingPage = () => {
     },
     {
       title: "Step 2",
-      content: <TourBookingInfoModal form={form} />,
+      content: (
+        <TourBookingInfoModal form={form} tour={stateTour.currentTour} />
+      ),
     },
     {
       title: "Step 3",
@@ -51,6 +71,11 @@ const TourBookingPage = () => {
 
   const handleSubmit = (values: any) => {
     console.log("Form Values: ", values);
+    executeOrRedirect({
+      action: () => handleCreateBookingTour(values),
+      fallbackUrl: "/login",
+      testValue: isLoggedIn(),
+    });
   };
 
   const initialValues = {
