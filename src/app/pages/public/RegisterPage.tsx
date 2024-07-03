@@ -11,12 +11,14 @@ import { Input } from "../../components/inputs";
 import { Modal } from "../../components/modals";
 import { useAuth } from "../../hooks/useAuth";
 import { RegisterParams, VerifyParams } from "../../redux/slice/authSlice";
+import { useUI } from "../../hooks/useUI";
 
 const { Text, Paragraph } = Typography;
 
 export default function RegisterPage() {
   const navigate = useNavigate();
-  const { state, handleRegister, handleRegisterVerify } = useAuth();
+  const { state: stateAuth, handleRegister, handleRegisterVerify } = useAuth();
+  const { state: stateUI } = useUI();
   const [policyAccept, setPolicyAccept] = useState(false);
 
   const [form] = Form.useForm();
@@ -160,7 +162,7 @@ export default function RegisterPage() {
               text="Create"
               disabled={!policyAccept}
               onClick={() => form.submit()}
-              loading={state.isFetching}
+              loading={stateAuth.isFetching}
             />
           </div>
           <div>
@@ -170,9 +172,9 @@ export default function RegisterPage() {
       </Space>
       <Modal.OTP
         extraValues={{ email: emailValue }}
-        open={state.showOTPModal.open}
+        open={stateUI.OTPModal.open}
         handleOk={handleOk}
-        confirmLoading={state.isFetching}
+        confirmLoading={stateUI.isLoading}
       >
         <Paragraph>
           An OTP has been sent to your email{" "}

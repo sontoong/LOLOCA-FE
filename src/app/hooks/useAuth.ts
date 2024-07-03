@@ -7,17 +7,17 @@ import { useAppDispatch, useAppSelector } from "../redux/hook";
 import {
   login,
   LoginParams,
+  loginVerify,
   // loginVerify,
   register,
   RegisterParams,
   registerVerify,
-  resetOTPModal,
   setCurrentUser,
-  setShowOTPModal,
   VerifyParams,
 } from "../redux/slice/authSlice";
 import { getCustomerById } from "../redux/slice/customerSlice";
 import { getTourGuideById } from "../redux/slice/tourguideSlice";
+import { resetOTPModal, setShowOTPModal } from "../redux/slice/uiSlice";
 
 export function useAuth() {
   const { notification } = App.useApp();
@@ -73,35 +73,35 @@ export function useAuth() {
     [dispatch, notification],
   );
 
-  // const handleLoginVerify = useCallback(async (
-  //   value: VerifyParams,
-  //   navigate: NavigateFunction
-  // ) => {
-  //   const resultAction = await dispatch(loginVerify(value));
-  //   if (loginVerify.fulfilled.match(resultAction)) {
-  //     dispatch(resetOTPModal());
-  //     const { accessToken, refreshToken } = resultAction.payload;
-  //     localStorage.setItem("access_token", accessToken);
-  //     localStorage.setItem("refresh_token", refreshToken);
-  //     const decode = jwtDecode(accessToken) as any;
-  //     localStorage.setItem("userId", decode.CustomerId ?? decode.TourGuideId);
-  //     navigate("/");
-  //   } else {
-  //     if (resultAction.payload) {
-  //       notification.error({
-  //         message: "Error",
-  //         description: `${resultAction.payload}`,
-  //         placement: "topRight",
-  //       });
-  //     } else {
-  //       notification.error({
-  //         message: "Error",
-  //         description: resultAction.error.message,
-  //         placement: "topRight",
-  //       });
-  //     }
-  //   }
-  // }, [dispatch, notification]);
+  const handleLoginVerify = useCallback(
+    async (value: VerifyParams, navigate: NavigateFunction) => {
+      const resultAction = await dispatch(loginVerify(value));
+      if (loginVerify.fulfilled.match(resultAction)) {
+        dispatch(resetOTPModal());
+        const { accessToken, refreshToken } = resultAction.payload;
+        localStorage.setItem("access_token", accessToken);
+        localStorage.setItem("refresh_token", refreshToken);
+        const decode = jwtDecode(accessToken) as any;
+        localStorage.setItem("userId", decode.CustomerId ?? decode.TourGuideId);
+        navigate("/");
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
 
   const handleRegister = useCallback(
     async (value: RegisterParams) => {
@@ -217,7 +217,7 @@ export function useAuth() {
     handleLogin,
     handleRegister,
     handleLogout,
-    // handleLoginVerify,
+    handleLoginVerify,
     handleRegisterVerify,
     handleGetUserInfo,
   };

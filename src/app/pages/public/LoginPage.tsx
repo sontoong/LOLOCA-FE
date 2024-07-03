@@ -10,12 +10,14 @@ import { Input } from "../../components/inputs";
 import { useAuth } from "../../hooks/useAuth";
 import { LoginParams, VerifyParams } from "../../redux/slice/authSlice";
 import { Modal } from "../../components/modals";
+import { useUI } from "../../hooks/useUI";
 
 const { Text, Paragraph } = Typography;
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { state, handleLogin, handleRegisterVerify } = useAuth();
+  const { state: stateAuth, handleLogin, handleRegisterVerify } = useAuth();
+  const { state: stateUI } = useUI();
 
   const [form] = Form.useForm();
   const emailValue = Form.useWatch("email", form);
@@ -91,7 +93,7 @@ export default function LoginPage() {
         <div className="flex justify-end">
           <PrimaryButton.BoldText
             text="Log In"
-            loading={state.isFetching}
+            loading={stateAuth.isFetching}
             onClick={() => form.submit()}
           />
         </div>
@@ -101,9 +103,9 @@ export default function LoginPage() {
       </Space>
       <Modal.OTP
         extraValues={{ email: emailValue }}
-        open={state.showOTPModal.open}
+        open={stateUI.OTPModal.open}
         handleOk={handleOk}
-        confirmLoading={state.isFetching}
+        confirmLoading={stateUI.isLoading}
       >
         <Paragraph>
           An OTP has been sent to your email{" "}

@@ -1,8 +1,8 @@
 import { Modal, ModalProps } from "antd";
 import { useAppDispatch } from "../../redux/hook";
-import { resetOTPModal } from "../../redux/slice/authSlice";
 import { Form } from "../form";
 import { Input } from "../inputs";
+import { resetOTPModal } from "../../redux/slice/uiSlice";
 
 function CustomModal() {
   return <div></div>;
@@ -34,6 +34,7 @@ function OTP(props: OTPProps) {
       onCancel={handleCancel}
       maskClosable={false}
       destroyOnClose={true}
+      afterClose={() => form.resetFields()}
     >
       {children}
       <Form

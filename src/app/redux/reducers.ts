@@ -8,6 +8,7 @@ import cityReducer from "./slice/citySlice";
 import feedbackReducer from "./slice/feedbackSlice";
 import bookingTourReducer from "./slice/bookingTourSlice";
 import orderReducer from "./slice/orderSlice";
+import uiReducer from "./slice/uiSlice";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   feedback: feedbackReducer,
   bookingTour: bookingTourReducer,
   order: orderReducer,
+  ui: uiReducer,
 });
 
 export default rootReducer;

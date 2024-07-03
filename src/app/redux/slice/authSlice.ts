@@ -17,13 +17,11 @@ if (token && token !== "undefined") {
 export type TAuth = {
   currentUser: User & (Customer | TourGuide);
   isFetching: boolean;
-  showOTPModal: { open: boolean; extraValues: object };
 };
 
 const initialState: TAuth = {
   currentUser: initUser as User & (Customer | TourGuide),
   isFetching: false,
-  showOTPModal: { open: false, extraValues: {} },
 };
 
 const authSlice = createSlice({
@@ -33,22 +31,19 @@ const authSlice = createSlice({
     setCurrentUser: (state, action: PayloadAction<TAuth["currentUser"]>) => {
       state.currentUser = { ...state.currentUser, ...action.payload };
     },
-    setShowOTPModal: (state, action: PayloadAction<TAuth["showOTPModal"]>) => {
-      state.showOTPModal = action.payload;
-    },
-    resetOTPModal: (state) => {
-      state.showOTPModal = { open: false, extraValues: {} };
-    },
   },
   extraReducers: (builder) => {
     builder
       .addMatcher(
         (action) =>
-          action.type.startsWith("auth/") && action.type.endsWith("/pending"),
-        (state) => {
+          action.type.startsWith("auth/") &&
+          action.type.endsWith("/pending") &&
+          !["auth/loginVerify/pending", "auth/registerVerify/pending"].includes(
+            action.type,
+          ),
+        () => {
           return {
             ...initialState,
-            showOTPModal: state.showOTPModal,
             isFetching: true,
           };
         },
@@ -143,8 +138,7 @@ export const registerVerify = createAsyncThunk<any, VerifyParams>(
   },
 );
 
-export const { setCurrentUser, setShowOTPModal, resetOTPModal } =
-  authSlice.actions;
+export const { setCurrentUser } = authSlice.actions;
 
 export const isLoggedIn = () => {
   return !!localStorage.getItem("access_token");

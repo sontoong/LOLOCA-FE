@@ -3,7 +3,7 @@ import { Form } from "../../components/form";
 import { Input, InputDate, InputSelect } from "../../components/inputs";
 import { PrimaryButton } from "../../components/buttons";
 import { ProfileUpload } from "../../components/image-upload";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Image } from "../../components/image-upload/profile-upload";
 import { useAuth } from "../../hooks/useAuth";
 import { Customer } from "../../models/customer";
@@ -19,20 +19,33 @@ const CustomerProfile = () => {
   const [images, setImages] = useState<Image[]>([]);
 
   const userId = localStorage.getItem("userId") ?? "";
-
   const currentUser = stateAuth.currentUser as Customer;
 
+  useEffect(() => {
+    form.setFieldsValue({
+      addressCustomer: currentUser.addressCustomer,
+      firstName: currentUser.firstName,
+      lastName: currentUser.lastName,
+      gender: currentUser.gender,
+      dateOfBirth: dayjs(currentUser.dateOfBirth),
+      phoneNumber: currentUser.phoneNumber,
+    });
+  }, [currentUser, form]);
+
   const initialValues = {
-    addressCustomer: currentUser.addressCustomer ?? "",
-    firstName: currentUser.firstName,
-    lastName: currentUser.lastName,
-    gender: currentUser.gender,
-    dateOfBirth: dayjs(currentUser.dateOfBirth),
-    phoneNumber: currentUser.phoneNumber ?? "",
+    addressCustomer: "",
+    firstName: "",
+    lastName: "",
+    gender: null as unknown as number,
+    dateOfBirth: dayjs(),
+    phoneNumber: "",
   };
 
   const onFinish = (values: typeof initialValues) => {
-    const dateOfBirthString = values.dateOfBirth.toISOString();
+    const tzOffset = new Date().getTimezoneOffset();
+    const dt = dayjs(values.dateOfBirth).utcOffset(tzOffset, true);
+    const dateOfBirthString = dt.toISOString();
+
     handleUpdateCustomerInformation({
       ...values,
       customerId: localStorage.getItem("userId") ?? "",
@@ -53,10 +66,6 @@ const CustomerProfile = () => {
     { label: "Female", value: 2 },
     { label: "Other", value: 3 },
   ];
-
-  const genderSelectOptions = genderOptions.map((option) =>
-    option.value === 0 ? { ...option, label: "None" } : option,
-  );
 
   return (
     <div className="mx-auto my-[5rem] w-[60%]">
@@ -131,7 +140,7 @@ const CustomerProfile = () => {
         >
           <InputSelect
             placeholder="Select your gender"
-            options={genderSelectOptions}
+            options={genderOptions}
           />
         </Form.Item>
         <div className="flex justify-end">
