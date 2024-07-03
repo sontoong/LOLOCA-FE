@@ -1,18 +1,25 @@
 import { useState } from "react";
 import { Banner } from "../../components/banner";
 import LolocaBanner from "../../../assets/loloca-banner.png";
-import { Col, CollapseProps, Image, Row, Space, Typography } from "antd";
+import { Col, CollapseProps, Row, Space, Typography } from "antd";
 import { Divider } from "../../components/divider";
 import { Input } from "../../components/inputs";
 import { PrimaryButton } from "../../components/buttons";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Collapse } from "../../components/collapse";
+import TourPaymentDetail from "../../ui/customer_ui/tourPaymentDetail";
+import TourGuidePaymentDetail from "../../ui/customer_ui/tourGuidePaymentDetail";
 
 const PaymentPage = () => {
   const { Title, Paragraph } = Typography;
   const [currentStep, setCurrentStep] = useState(1);
   const navigate = useNavigate();
   const { requestId } = useParams();
+
+  const location = useLocation();
+
+  const queryParams = new URLSearchParams(location.search);
+  const type = queryParams.get("type");
 
   const tourDetails = {
     title: "Full-Day Private Tour Of Hanoi City's Highlights",
@@ -22,6 +29,12 @@ const PaymentPage = () => {
                   Ho Chi Minh Mausoleum. Experience tranquillity at the Temple of
                   Literature, the Ngoc Son Temple at Hoan Kiem lake, and a
                   delicious local lunch in the city`,
+    image: LolocaBanner,
+  };
+
+  const tourGuideDetails = {
+    name: "Nguyen Van A",
+    description: `I'm very cool`,
     image: LolocaBanner,
   };
 
@@ -86,25 +99,8 @@ const PaymentPage = () => {
         <div className="w-[60%]">
           {currentStep === 1 && (
             <div>
-              <div>
-                <Title level={3} style={{ fontWeight: "bolder" }}>
-                  Payment Detail
-                </Title>
-                <Divider colorSplit="black" />
-                <div className="flex items-center">
-                  <Image
-                    src={tourDetails.image}
-                    width="15rem"
-                    style={{ objectFit: "cover", aspectRatio: 1 / 1 }}
-                  />
-                  <div className="ml-[2rem]">
-                    <Title level={5} style={{ fontWeight: "bolder" }}>
-                      {tourDetails.title}
-                    </Title>
-                    <Paragraph>{tourDetails.description}</Paragraph>
-                  </div>
-                </div>
-              </div>
+              {type === "tour" && <TourPaymentDetail tourDetails={tourDetails} />}
+              {type === "tour-guide" && <TourGuidePaymentDetail tourDetails={tourGuideDetails} />}
               <div>
                 <Title level={3} style={{ fontWeight: "bolder" }}>
                   Personal Information
