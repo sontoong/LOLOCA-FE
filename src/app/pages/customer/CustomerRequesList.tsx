@@ -4,13 +4,14 @@ import { Table } from "../../components/table";
 import { PrimaryButton } from "../../components/buttons";
 import OutlineButton from "../../components/buttons/outline-button";
 import { useNavigate } from "react-router-dom";
+import DropDownRequest from "../../ui/customer_ui/dropDownRequest";
 
-const CustomerRequesList = () => {
+const CustomerRequestList = () => {
   const [currentTable, setCurrentTable] = useState("tour");
   const navigate = useNavigate();
 
-  const handleRowClick = (record: any) => {
-    navigate(`/customer/payment/${record.key}`);
+  const handlePaymentNavigation = (record: any) => {
+    navigate(`/customer/payment/${record.key}?type=${currentTable}`);
   };
 
   const bookingTourColumns: TableProps["columns"] = [
@@ -38,6 +39,13 @@ const CustomerRequesList = () => {
       title: "Status",
       dataIndex: "status",
       key: "status",
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (_, record) => (
+        <DropDownRequest tableType={currentTable} record={record} handlePaymentNavigation={handlePaymentNavigation} />
+      ),
     },
   ];
 
@@ -71,6 +79,13 @@ const CustomerRequesList = () => {
       title: "Status",
       dataIndex: "status",
       key: "status",
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (_, record) => (
+        <DropDownRequest tableType={currentTable} record={record} handlePaymentNavigation={handlePaymentNavigation} />
+      ),
     },
   ];
 
@@ -147,15 +162,15 @@ const CustomerRequesList = () => {
             className="mr-[1rem]"
           />
         )}
-        {currentTable === "tourGuide" ? (
+        {currentTable === "tour-guide" ? (
           <OutlineButton.BoldText
             text="Show Tour Guide Table"
-            onClick={() => setCurrentTable("tourGuide")}
+            onClick={() => setCurrentTable("tour-guide")}
           />
         ) : (
           <PrimaryButton
             text="Show Tour Guide Table"
-            onClick={() => setCurrentTable("tourGuide")}
+            onClick={() => setCurrentTable("tour-guide")}
           />
         )}
       </div>
@@ -164,26 +179,16 @@ const CustomerRequesList = () => {
           columns={bookingTourColumns}
           dataSource={tourData}
           rowClassName={"hover:cursor-pointer"}
-          onRow={(record) => {
-            return {
-              onClick: () => handleRowClick(record),
-            };
-          }}
         />
       ) : (
         <Table
           columns={bookingTourGuideColumns}
           dataSource={tourGuideData}
           rowClassName={"hover:cursor-pointer"}
-          onRow={(record) => {
-            return {
-              onClick: () => handleRowClick(record),
-            };
-          }}
         />
       )}
     </div>
   );
 };
 
-export default CustomerRequesList;
+export default CustomerRequestList;
