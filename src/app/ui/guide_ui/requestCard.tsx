@@ -1,10 +1,44 @@
-import { Avatar, Card, Popover, Space, Tag, Typography } from "antd";
+import { Avatar, Card, Popover, Space, Tag, Typography, Modal } from "antd";
 import VietNamBanner from "../../../assets/banner.png";
 import { PrimaryButton } from "../../components/buttons";
 import OutlineButton from "../../components/buttons/outline-button";
 
 const RequestCard = ({ request, activeButton }: { request: any; activeButton: string }) => {
   const { Title, Paragraph } = Typography;
+  const { confirm } = Modal;
+
+  const showConfirm = (action: string) => {
+    confirm({
+      title: `Are you sure you want to ${action}?`,
+      onOk() {
+        console.log(`${action} confirmed`);
+        // Handle action logic here
+      },
+      onCancel() {
+        console.log(`${action} canceled`);
+      },
+    });
+  };
+
+  const renderButtons = () => {
+    if (activeButton === "RequestForMe" || activeButton === "RequestForTour") {
+      return (
+        <>
+          <PrimaryButton text="Accept" onClick={() => showConfirm("accept")} />
+          <OutlineButton text="Reject" onClick={() => showConfirm("reject")} />
+        </>
+      );
+    }
+    if (activeButton === "RequestAccepted" || activeButton === "TourAccepted") {
+      return (
+        <>
+          <PrimaryButton text="Finish" onClick={() => showConfirm("finish")} />
+          <OutlineButton text="Cancel" onClick={() => showConfirm("cancel")} />
+        </>
+      );
+    }
+  };
+
   const popoverContent = (
     <div>
       <p>Name: {request.name}</p>
@@ -12,28 +46,9 @@ const RequestCard = ({ request, activeButton }: { request: any; activeButton: st
     </div>
   );
 
-  const renderButtons = () => {
-    if (activeButton === "RequestForMe" || activeButton === "RequestForTour") {
-      return (
-        <>
-          <PrimaryButton text="Accept" />
-          <OutlineButton text="Reject" />
-        </>
-      );
-    }
-    if (activeButton === "RequestAccepted" || activeButton === "TourAccepted") {
-      return (
-        <>
-          <PrimaryButton text="Finish" />
-          <OutlineButton text="Cancel" />
-        </>
-      );
-    }
-  };
-
   return (
     <div>
-      <Card className="w-[100%]">
+      <Card className="w-[100%]" hoverable>
         <Space align="start" style={{ display: "flex", justifyContent: "space-between" }}>
           <Space align="start" size={"large"}>
             <Space className="mt-[1rem]">
@@ -62,7 +77,9 @@ const RequestCard = ({ request, activeButton }: { request: any; activeButton: st
                 <Title level={3} style={{ fontWeight: "bolder", color: "#004AAD", margin: 0 }}>
                   Amount:
                 </Title>
-                <Tag color="processing">{request.amount}</Tag>
+                <Tag color="processing">
+                  {request.amount.adults} adults, {request.amount.children} children
+                </Tag>
               </Space>
             </Space>
           </Space>
