@@ -35,12 +35,25 @@ export function useAuth() {
         //   })
         // );
         const { accessToken, refreshToken } = resultAction.payload;
-        localStorage.setItem("access_token", accessToken);
-        localStorage.setItem("refresh_token", refreshToken);
-        const decode = jwtDecode(accessToken) as any;
-        localStorage.setItem("userId", decode.CustomerId ?? decode.TourGuideId);
-        dispatch(setCurrentUser(decode));
-        navigate("/");
+        if (accessToken && refreshToken) {
+          localStorage.setItem("access_token", accessToken);
+          localStorage.setItem("refresh_token", refreshToken);
+          const decode = jwtDecode(accessToken) as any;
+          localStorage.setItem(
+            "userId",
+            decode.CustomerId ?? decode.TourGuideId,
+          );
+          dispatch(setCurrentUser(decode));
+          navigate("/");
+        } else {
+          console.log(resultAction.payload);
+          dispatch(
+            setShowOTPModal({
+              open: true,
+              extraValues: { email: value.email },
+            }),
+          );
+        }
       } else {
         if (resultAction.payload) {
           notification.error({

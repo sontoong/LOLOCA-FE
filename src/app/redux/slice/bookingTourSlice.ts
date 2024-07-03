@@ -3,13 +3,11 @@ import agent from "../../utils/agent";
 import { AxiosError } from "axios";
 
 type TBookingTour = {
-  currentBookingTour: any;
   currentBookingTourList: any;
   isFetching: boolean;
 };
 
 const initialState: TBookingTour = {
-  currentBookingTour: {} as any,
   currentBookingTourList: { tours: [], totalPage: 0 },
   isFetching: false,
 };
@@ -18,12 +16,6 @@ const bookingTourSlice = createSlice({
   name: "bookingTour",
   initialState,
   reducers: {
-    setCurrentBookingTour: (
-      state,
-      action: PayloadAction<TBookingTour["currentBookingTour"]>,
-    ) => {
-      state.currentBookingTour = action.payload;
-    },
     setCurrentTourList: (
       state,
       action: PayloadAction<TBookingTour["currentBookingTourList"]>,
@@ -112,8 +104,7 @@ export const getBookingTourByCustomerId = createAsyncThunk<
   },
 );
 
-export const { setCurrentTourList, setCurrentBookingTour } =
-  bookingTourSlice.actions;
+export const { setCurrentTourList } = bookingTourSlice.actions;
 
 export default bookingTourSlice.reducer;
 

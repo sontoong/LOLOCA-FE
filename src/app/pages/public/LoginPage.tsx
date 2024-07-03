@@ -1,4 +1,4 @@
-import { Space, Tooltip } from "antd";
+import { Space, Tooltip, Typography } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 
 import { InfoCircleOutlined, UserOutlined } from "@ant-design/icons";
@@ -8,12 +8,17 @@ import { Form } from "../../components/form";
 import { Image } from "../../components/image";
 import { Input } from "../../components/inputs";
 import { useAuth } from "../../hooks/useAuth";
-import { LoginParams } from "../../redux/slice/authSlice";
+import { LoginParams, VerifyParams } from "../../redux/slice/authSlice";
+import { Modal } from "../../components/modals";
+
+const { Text, Paragraph } = Typography;
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { state, handleLogin } = useAuth();
+  const { state, handleLogin, handleRegisterVerify } = useAuth();
+
   const [form] = Form.useForm();
+  const emailValue = Form.useWatch("email", form);
 
   const initialValues: LoginParams = {
     email: "",
@@ -24,9 +29,9 @@ export default function LoginPage() {
     handleLogin(values, navigate);
   };
 
-  // const handleOk = (values: VerifyParams) => {
-  //   handleLoginVerify(values, navigate);
-  // };
+  const handleOk = (values: VerifyParams) => {
+    handleRegisterVerify(values, navigate);
+  };
 
   return (
     <div className="flex h-screen items-center justify-center">
@@ -94,19 +99,19 @@ export default function LoginPage() {
           Don't have an account? <Link to="/register">Sign Up</Link>
         </div>
       </Space>
-      {/* <Modal.OTP
-        email={state.showOTPModal.email}
+      <Modal.OTP
+        extraValues={{ email: emailValue }}
         open={state.showOTPModal.open}
         handleOk={handleOk}
         confirmLoading={state.isFetching}
       >
         <Paragraph>
           An OTP has been sent to your email{" "}
-          <Text className="text-blue-500">{state.showOTPModal.email}</Text>.
-          Please check your inbox (and spam folder if not found) for the OTP to
-          proceed with the verification process.
+          <Text className="text-blue-500">{emailValue}</Text>. Please check your
+          inbox (and spam folder if not found) for the OTP to proceed with the
+          verification process.
         </Paragraph>
-      </Modal.OTP> */}
+      </Modal.OTP>
     </div>
   );
 }

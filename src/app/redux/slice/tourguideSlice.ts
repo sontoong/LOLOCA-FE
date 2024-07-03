@@ -16,7 +16,7 @@ const initialState: TTourGuide = {
 };
 
 const tourguideSlice = createSlice({
-  name: "tourguide",
+  name: "tourGuide",
   initialState,
   reducers: {
     setCurrentTourGuide: (state, action: PayloadAction<TourGuide>) => {
@@ -49,7 +49,7 @@ const tourguideSlice = createSlice({
 });
 
 export const getTourGuideById = createAsyncThunk<any, GetTourGuideByIdParams>(
-  "tourguide/getTourGuideById",
+  "tourGuide/getTourGuideById",
   async (data, { rejectWithValue }) => {
     const { tourGuideId } = data;
     try {
@@ -69,7 +69,7 @@ export const getTourGuideById = createAsyncThunk<any, GetTourGuideByIdParams>(
 export const getRandomTourGuide = createAsyncThunk<
   any,
   GetRandomTourGuideParams
->("tourguide/getRandomTourGuide", async (data, { rejectWithValue }) => {
+>("tourGuide/getRandomTourGuide", async (data, { rejectWithValue }) => {
   const { page, pageSize } = data;
   try {
     const response = await agent.TourGuide.getRandomTourGuide({
@@ -90,7 +90,7 @@ export const getRandomTourGuide = createAsyncThunk<
 export const getRandomTourGuideInCity = createAsyncThunk<
   any,
   GetRandomTourGuideInCityParams
->("tourguide/getRandomTourGuideInCity", async (data, { rejectWithValue }) => {
+>("tourGuide/getRandomTourGuideInCity", async (data, { rejectWithValue }) => {
   const { page, pageSize, CityId } = data;
   try {
     const response = await agent.TourGuide.getRandomTourGuideInCity({

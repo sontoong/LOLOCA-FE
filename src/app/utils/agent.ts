@@ -80,9 +80,9 @@ const BookingTourGuideRequest = {
 
 const _cities = "Cities";
 const Cities = {
-  getCities: () => requests.get(`${_cities}`),
+  getCities: () => baseRequests.get(`${_cities}`),
   addNewCity: (data: any) => requests.post(`${_cities}`, data),
-  getCityById: (id: string) => requests.get(`${_cities}/${id}`),
+  getCityById: (id: string) => baseRequests.get(`${_cities}/${id}`),
   updateCityById: (id: string, data: any) =>
     requests.put(`${_cities}/${id}`, data),
   deleteCityById: (id: string) => requests.del(`${_cities}/${id}`),
@@ -96,7 +96,7 @@ const Customer = {
     requests.post(`${_customer}/change-password`, data),
   updateAvatar: (data: any) =>
     requests.post(`${_customer}/update-avatar`, data),
-  getAllCustomer: () => requests.get(`${_customer}`),
+  getAllCustomer: () => baseRequests.get(`${_customer}`),
   getCustomerById: (customerId: number) =>
     requests.get(`${_customer}/${customerId}`),
   getPrivate: () => requests.get(`${_customer}/private`),
@@ -124,14 +124,14 @@ const TourGuide = {
   changePassword: (data: any) =>
     requests.post(`${_tourGuide}/change-password`, data),
   getTourGuideById: (tourGuideId: number) =>
-    requests.get(`${_tourGuide}/info/${tourGuideId}`),
+    baseRequests.get(`${_tourGuide}/info/${tourGuideId}`),
   getTourGuidePrivateById: (tourGuideId: number) =>
     requests.get(`${_tourGuide}/private-info/${tourGuideId}`),
   getRandomTourGuide: (params: any) =>
-    requests.get(`${_tourGuide}/get-random-tourguide`, params),
+    baseRequests.get(`${_tourGuide}/get-random-tourguide`, params),
   getAllTourGuides: () => requests.get(`${_tourGuide}/get-all-tourguides`),
   getRandomTourGuideInCity: (params: any) =>
-    requests.get(`${_tourGuide}/get-random-tourguide-in-city`, params),
+    baseRequests.get(`${_tourGuide}/get-random-tourguide-in-city`, params),
   acceptBookingTourGuideRequest: (data: any) =>
     requests.post(`${_tourGuide}/accept-booking-tourguide-request`, data),
   rejectBookingTourGuideRequest: (data: any) =>
@@ -150,11 +150,11 @@ const Tour = {
   acceptTourChangeStatus: (tourId: string, data: any) =>
     requests.put(`${_tour}/${tourId}`, data),
   deleteTour: (tourId: string) => requests.del(`${_tour}/${tourId}`),
-  getTourById: (tourId: string) => requests.get(`${_tour}/${tourId}`),
-  getRandomTours: (params: any) => requests.get(`${_tour}/random`, params),
-  getTourByCity: (params: any) => requests.get(`${_tour}/city`, params),
+  getTourById: (tourId: string) => baseRequests.get(`${_tour}/${tourId}`),
+  getRandomTours: (params: any) => baseRequests.get(`${_tour}/random`, params),
+  getTourByCity: (params: any) => baseRequests.get(`${_tour}/city`, params),
   getTourByTourGuide: (params: any) =>
-    requests.get(`${_tour}/tour-guide`, params),
+    baseRequests.get(`${_tour}/tour-guide`, params),
   getTourByStatus: (status: string) =>
     requests.get(`${_tour}/status/${status}`),
 };
@@ -179,6 +179,17 @@ const Feedback = {
     requests.get(`${_feedback}/city/${cityId}/feedbacks`),
 };
 
+const _order = "Order";
+const Order = {
+  getAllOrder: () => requests.get(`${_order}/get-all-order`),
+  getOrderDetail: (orderId: string) => requests.get(`${_order}/${orderId}`),
+  createOrderTourGuide: (data: any) =>
+    requests.post(`${_order}/tourGuide`, data),
+  createOrderTour: (data: any) => requests.post(`${_order}/tour`, data),
+  updateOrderStatus: (orderId: string, status: string, data: any) =>
+    requests.put(`${_order}/${orderId}/${status}`, data),
+};
+
 const agent = {
   Auth,
   BookingTour,
@@ -188,5 +199,6 @@ const agent = {
   Tour,
   TourGuide,
   Feedback,
+  Order,
 };
 export default agent;

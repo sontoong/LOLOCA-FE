@@ -8,8 +8,10 @@ import { TourGuide } from "../../models/tourGuide";
 
 const token = localStorage.getItem("access_token");
 let initUser = {};
-if (token) {
+if (token && token !== "undefined") {
   initUser = jwtDecode(token);
+} else {
+  localStorage.clear();
 }
 
 export type TAuth = {
@@ -43,8 +45,12 @@ const authSlice = createSlice({
       .addMatcher(
         (action) =>
           action.type.startsWith("auth/") && action.type.endsWith("/pending"),
-        () => {
-          return { ...initialState, isFetching: true };
+        (state) => {
+          return {
+            ...initialState,
+            showOTPModal: state.showOTPModal,
+            isFetching: true,
+          };
         },
       )
       .addMatcher(
