@@ -1,21 +1,20 @@
-import { Col, Row } from "antd";
+import { Col, Row, Typography } from "antd";
 import { InputDate, Input, InputNumber } from "../../components/inputs";
 import { Form } from "../../components/form";
 import { useState, useEffect } from "react";
 import { Dayjs } from "dayjs";
 import { Tour } from "../../models/tour";
+import { FormInstance } from "antd/lib";
+import { formatCurrency } from "../../utils/utils";
 
-type TTourBookingInfoModalProps = {
-  form: any;
-  tour: Tour;
-};
+const { Title } = Typography;
 
 const TourBookingInfoModal = ({ form, tour }: TTourBookingInfoModalProps) => {
-  const userId = localStorage.getItem("userId") ?? "";
-  const [totalPrice, setTotalPrice] = useState<number | undefined>(0);
-
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
+
+  const numOfAdult = Form.useWatch("numOfAdult", form);
+  const numOfChild = Form.useWatch("numOfChild", form);
 
   const initialValues = {
     note: "",
@@ -23,6 +22,7 @@ const TourBookingInfoModal = ({ form, tour }: TTourBookingInfoModalProps) => {
     endDate: null,
     numOfAdult: 0,
     numOfChild: 0,
+    totalPrice: 0,
   };
 
   useEffect(() => {
@@ -33,15 +33,15 @@ const TourBookingInfoModal = ({ form, tour }: TTourBookingInfoModalProps) => {
     }
   }, [startDate, tour?.duration, form]);
 
-  const onFinish = (values: any) => {
-    const submitValues = {
-      ...values,
-      tourId: tour?.tourId,
-      customerId: userId,
-      price: totalPrice,
-    };
-    setTotalPrice(1);
-    console.log("Form Values: ", submitValues);
+  useEffect(() => {
+    form.setFieldValue(
+      "totalPrice",
+      calculateTotalPrice(tour.tourPriceDTOs, numOfAdult, numOfChild),
+    );
+  }, [form, numOfAdult, numOfChild, tour.tourPriceDTOs]);
+
+  const onFinish = (values: typeof initialValues) => {
+    console.log("Form Values: ", values);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -63,6 +63,7 @@ const TourBookingInfoModal = ({ form, tour }: TTourBookingInfoModalProps) => {
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
     >
+      <Form.Item name="totalPrice" hidden />
       <Row gutter={[16, 16]}>
         <Col span={12}>
           <Form.Item
@@ -124,8 +125,58 @@ const TourBookingInfoModal = ({ form, tour }: TTourBookingInfoModalProps) => {
       >
         <Input.TextArea placeholder="I want to..." showCount maxLength={100} />
       </Form.Item>
+      <Title level={4}>
+        Tổng:{" "}
+        {formatCurrency(
+          calculateTotalPrice(tour.tourPriceDTOs, numOfAdult, numOfChild) *
+            1000,
+        )}
+      </Title>
     </Form>
   );
 };
 
 export default TourBookingInfoModal;
+
+function calculateTotalPrice(
+  prices: Tour["tourPriceDTOs"],
+  adults: number,
+  children: number,
+) {
+  let adultPrice = 0;
+  let childPrice = 0;
+
+  for (const priceDTO of prices) {
+    if (
+      adults >= priceDTO.totalTouristFrom &&
+      adults <= priceDTO.totalTouristTo
+    ) {
+      adultPrice = priceDTO.adultPrice;
+    }
+    if (
+      children >= priceDTO.totalTouristFrom &&
+      children <= priceDTO.totalTouristTo
+    ) {
+      childPrice = priceDTO.childPrice;
+    }
+  }
+
+  //exceeds the highest price range
+  if (adults > prices[prices.length - 1].totalTouristTo) {
+    adultPrice = prices[prices.length - 1].adultPrice;
+  }
+
+  if (children > prices[prices.length - 1].totalTouristTo) {
+    childPrice = prices[prices.length - 1].childPrice;
+  }
+
+  const totalAdultPrice = adults * adultPrice;
+  const totalChildPrice = children * childPrice;
+
+  return totalAdultPrice + totalChildPrice;
+}
+
+type TTourBookingInfoModalProps = {
+  form: FormInstance;
+  tour: Tour;
+};

@@ -46,7 +46,6 @@ export function useAuth() {
           dispatch(setCurrentUser(decode));
           navigate("/");
         } else {
-          console.log(resultAction.payload);
           dispatch(
             setShowOTPModal({
               open: true,

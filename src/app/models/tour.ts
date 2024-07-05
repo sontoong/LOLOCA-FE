@@ -31,7 +31,7 @@ export type Tour = {
     adultPrice: number;
     childPrice: number;
   }[];
-} | null;
+};
 
 export type TourList = {
   tours: {

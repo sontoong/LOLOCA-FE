@@ -264,10 +264,6 @@ const TourDetailPage = () => {
                 Tour Guide
               </Title>
               <Link to={`/guides/${stateTour.currentTour?.tourGuideId}`}>
-                {/* <Image
-                  src={stateTourGuide.currentTourguide.avatar}
-                  className="h-[10rem] w-[10rem] rounded-full object-cover"
-                /> */}
                 <Avatar
                   size={160}
                   src={stateTourGuide.currentTourguide.avatar}

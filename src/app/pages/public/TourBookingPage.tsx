@@ -13,16 +13,15 @@ import { useTour } from "../../hooks/useTour";
 import { useProtectedAction } from "../../hooks/useProtectedAction";
 import { isLoggedIn } from "../../redux/slice/authSlice";
 import { useBookingTour } from "../../hooks/useBookingTour";
+import { dateToLocalISOString } from "../../utils/utils";
+import dayjs from "dayjs";
 
 const { Step } = Steps;
 
 const TourBookingPage = () => {
   const { tourId } = useParams();
   const { state: stateTour, handleGetTourById } = useTour();
-  const {
-    // state: statebookingTour,
-    handleCreateBookingTour,
-  } = useBookingTour();
+  const { handleCreateBookingTour } = useBookingTour();
   const { executeOrRedirect } = useProtectedAction();
   const [currentStep, setCurrentStep] = useState(0);
   const [form] = Form.useForm();
@@ -69,21 +68,32 @@ const TourBookingPage = () => {
     },
   ];
 
-  const handleSubmit = (values: any) => {
-    console.log("Form Values: ", values);
+  const initialValues = {
+    note: "",
+    startDate: dayjs(),
+    endDate: dayjs(),
+    numOfAdult: 0,
+    numOfChild: 0,
+    totalPrice: 0,
+  };
+
+  const handleSubmit = (values: typeof initialValues) => {
+    const startDateString = dateToLocalISOString(values.startDate);
+    const endDateString = dateToLocalISOString(values.endDate);
+    const userId = localStorage.getItem("userId");
+
     executeOrRedirect({
-      action: () => handleCreateBookingTour(values),
+      action: () =>
+        handleCreateBookingTour({
+          ...values,
+          startDate: startDateString,
+          endDate: endDateString,
+          customerId: parseInt(userId ?? ""),
+          tourId: parseInt(tourId ?? ""),
+        }),
       fallbackUrl: "/login",
       testValue: isLoggedIn(),
     });
-  };
-
-  const initialValues = {
-    note: "",
-    startDate: "",
-    endDate: "",
-    numOfAdult: 0,
-    numOfChild: 0,
   };
 
   return (
@@ -125,6 +135,7 @@ const TourBookingPage = () => {
             <Form.Item name="endDate" hidden />
             <Form.Item name="numOfAdult" hidden />
             <Form.Item name="numOfChild" hidden />
+            <Form.Item name="totalPrice" hidden />
             <div>
               <div className="mt-4 flex justify-end">
                 {currentStep > 0 && (
