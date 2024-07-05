@@ -10,7 +10,7 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 //change to vietnamese
 dayjs.locale("vi");
-//set default timezone as utc
+//add plugins
 dayjs.extend(utc);
 dayjs.extend(timezone);
 

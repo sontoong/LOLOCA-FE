@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import { App, Modal, Upload } from "antd";
+import { Modal, Upload } from "antd";
 import type { GetProp, UploadFile, UploadProps } from "antd";
 import { RequiredFields } from "../../utils/helpers";
 
@@ -10,9 +10,8 @@ export function UploadImg(
   props: RequiredFields<
     Omit<UploadProps, "beforeUpload" | "onPreview" | "accept">,
     "listType" | "maxCount"
-  >,
+  > & { uploadConditions?: (file: FileType) => boolean },
 ) {
-  const { message } = App.useApp();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
@@ -26,13 +25,8 @@ export function UploadImg(
     });
 
   const beforeUpload = (file: FileType) => {
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-    if (!isJpgOrPng) {
-      message.error("You can only upload JPG/PNG file!");
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error("Image must smaller than 2MB!");
+    if (props.uploadConditions && !props.uploadConditions(file)) {
+      return Upload.LIST_IGNORE;
     }
     return false;
   };

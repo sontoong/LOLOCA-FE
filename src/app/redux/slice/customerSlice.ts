@@ -99,11 +99,13 @@ export const updateCustomerAvatar = createAsyncThunk<
   UpdateCustomerAvatarParams
 >("customer/updateCustomerAvatar", async (data, { rejectWithValue }) => {
   const { CustomerId, files } = data;
+  const formData = new FormData();
+  formData.append("CustomerId", CustomerId.toString());
+  files.forEach((file) => {
+    formData.append("files", file as File);
+  });
   try {
-    const response = await agent.Customer.updateAvatar({
-      CustomerId,
-      files,
-    });
+    const response = await agent.Customer.updateAvatar(formData);
     return response;
   } catch (error) {
     if (error instanceof AxiosError) {

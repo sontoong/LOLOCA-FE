@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export const formatCurrency = (amount: number) => {
   return amount.toLocaleString("vi-VN", {
     style: "currency",
@@ -12,7 +14,7 @@ export const formatUnixToLocal = (
     month: "numeric",
     year: "numeric",
   },
-  locale: string = "vi-VN"
+  locale: string = "vi-VN",
 ) => {
   const milliseconds = unixTimestamp;
   const date = new Date(milliseconds);
@@ -20,23 +22,23 @@ export const formatUnixToLocal = (
   return formatter.format(date);
 };
 
-export const formatDate = (isoString : string) => {
+export const formatDate = (isoString: string) => {
   const date = new Date(isoString);
-  
+
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
-  const milliseconds = String(date.getMilliseconds()).padStart(3, '0');
-  
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
+  const milliseconds = String(date.getMilliseconds()).padStart(3, "0");
+
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
 };
 
 export const formatDateToLocal = (
   dateStr: string,
-  locale: string = "vi-VN"
+  locale: string = "vi-VN",
 ) => {
   const date = new Date(dateStr);
   const options: Intl.DateTimeFormatOptions = {
@@ -50,7 +52,7 @@ export const formatDateToLocal = (
 
 export const formatToTimeDifference = (
   timeDifference: number,
-  locale: string = "vi-VN"
+  locale: string = "vi-VN",
 ) => {
   const options: Intl.RelativeTimeFormatOptions = {
     numeric: "auto",
@@ -70,7 +72,7 @@ export const formatToTimeDifference = (
 
 export const calculateDateToNow = (
   time: string | number,
-  locale: string = "vi-VN"
+  locale: string = "vi-VN",
 ) => {
   if (typeof time === "string") {
     time = Date.parse(time);
@@ -81,6 +83,48 @@ export const calculateDateToNow = (
   const timeDifference = today - time;
   return formatToTimeDifference(timeDifference, locale);
 };
+
+export const dateToLocalISOString = (date: dayjs.Dayjs) => {
+  const tzOffset = new Date().getTimezoneOffset();
+  const dt = dayjs(date).utcOffset(tzOffset, true);
+  return dt.toISOString();
+};
+
+export const base64ToBlob = (base64: string, filename: string): File | null => {
+  try {
+    // Check for data URI prefix and remove if present
+    const base64Data = base64.startsWith("data:image")
+      ? base64.split(",")[1]
+      : base64;
+
+    // Decode base64
+    const bstr = atob(base64Data);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    // Determine MIME type from base64 string
+    const mime = base64.match(/:(.*?);/)?.[1] || "image/jpeg";
+
+    // Create a File object
+    return new File([u8arr], filename, { type: mime });
+  } catch (error) {
+    console.error("Error converting base64 to File:", error);
+    return null;
+  }
+};
+
+export function ensureBase64Avatar(avatarString?: string) {
+  const base64Prefix = "data:image/jpeg;base64,";
+
+  if (!avatarString?.startsWith(base64Prefix)) {
+    return base64Prefix + avatarString;
+  }
+
+  return avatarString;
+}
 
 export const generatePagination = (currentPage: number, totalPages: number) => {
   // If the total number of pages is 7 or less,

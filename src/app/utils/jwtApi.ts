@@ -3,7 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
-import { router } from "../routes/route";
+// import { router } from "../routes/route";
 import agent from "./agent";
 import { Envs } from "./env";
 
@@ -62,8 +62,8 @@ apiJWT.interceptors.response.use(
     NProgress.done();
     if (error.response && [401].includes(error.response.status)) {
       localStorage.clear();
-      // window.location.href = "/login";
-      router.navigate("/login");
+      window.location.href = "/login";
+      // router.navigate("/login");
     }
     return Promise.reject(error);
   },

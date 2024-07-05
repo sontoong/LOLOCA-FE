@@ -7,7 +7,7 @@ import logo from "../../../assets/logo.png";
 import { ROLE } from "../../../constants/role";
 import { PrimaryButton } from "../../components/buttons";
 import { useAuth } from "../../hooks/useAuth";
-import { isEmptyObject } from "../../utils/utils";
+import { ensureBase64Avatar, isEmptyObject } from "../../utils/utils";
 
 const { Header } = Layout;
 
@@ -149,7 +149,7 @@ export default function MyHeader() {
               className="fixed right-4 top-3 cursor-pointer"
               size={"large"}
               icon={<UserOutlined />}
-              src={state.currentUser?.avatar}
+              src={ensureBase64Avatar(state.currentUser?.avatar)}
             />
           </Dropdown>
         )}
