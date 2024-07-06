@@ -22,6 +22,7 @@ import NotFoundPage from "../pages/public/404Page";
 import TourBookingPage from "../pages/public/TourBookingPage";
 import TourGuideBookingPage from "../pages/public/TourGuideBookingPage";
 import TourGuideProfilePage from "../pages/public/TourGuideProfilePage";
+import TourGuideRegister from "../pages/public/TourGuideRegister";
 
 //other page
 import ErrorPage from "../pages/public/ErrorPage";
@@ -237,6 +238,16 @@ export const router = createBrowserRouter([
       <Suspense fallback={<></>}>
         <PrivateRoute inverted={true}>
           <RegisterPage />
+        </PrivateRoute>
+      </Suspense>
+    ),
+  },
+  {
+    path: "/register/tourguide",
+    element: (
+      <Suspense fallback={<></>}>
+        <PrivateRoute inverted={true}>
+          <TourGuideRegister />
         </PrivateRoute>
       </Suspense>
     ),

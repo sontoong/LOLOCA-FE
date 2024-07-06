@@ -13,6 +13,8 @@ import {
   RegisterParams,
   registerVerify,
   setCurrentUser,
+  tourGuideRegister,
+  TourGuideRegisterParams,
   VerifyParams,
 } from "../redux/slice/authSlice";
 import { getCustomerById } from "../redux/slice/customerSlice";
@@ -82,6 +84,7 @@ export function useAuth() {
         localStorage.setItem("refresh_token", refreshToken);
         const decode = jwtDecode(accessToken) as any;
         localStorage.setItem("userId", decode.CustomerId ?? decode.TourGuideId);
+        dispatch(setCurrentUser(decode))
         navigate("/");
       } else {
         if (resultAction.payload) {
@@ -106,6 +109,35 @@ export function useAuth() {
     async (value: RegisterParams) => {
       const resultAction = await dispatch(register(value));
       if (register.fulfilled.match(resultAction)) {
+        dispatch(
+          setShowOTPModal({
+            open: true,
+            extraValues: { email: value.email },
+          }),
+        );
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
+  const handleTourGuideRegister = useCallback(
+    async (value: TourGuideRegisterParams) => {
+      const resultAction = await dispatch(tourGuideRegister(value));
+      if (tourGuideRegister.fulfilled.match(resultAction)) {
         dispatch(
           setShowOTPModal({
             open: true,
@@ -211,6 +243,49 @@ export function useAuth() {
     }
   }, [dispatch, state.currentUser.Role, notification]);
 
+  const handleOTPLoginSubmit = useCallback(
+    async (value: VerifyParams, navigate: NavigateFunction) => {
+      const resultAction = await dispatch(loginVerify(value));
+      if (loginVerify.fulfilled.match(resultAction)) {
+        dispatch(resetOTPModal());
+        const { accessToken, refreshToken } = resultAction.payload;
+        localStorage.setItem("access_token", accessToken);
+        localStorage.setItem("refresh_token", refreshToken);
+        const decode = jwtDecode(accessToken) as any;
+        localStorage.setItem("userId", decode.CustomerId ?? decode.TourGuideId);
+        dispatch(setCurrentUser(decode))
+        navigate("/");
+      } else if(loginVerify.rejected.match(resultAction)) {
+        const resultAction = await dispatch(registerVerify(value));
+        if (registerVerify.fulfilled.match(resultAction)) {
+          dispatch(resetOTPModal());
+          const { accessToken, refreshToken } = resultAction.payload;
+          localStorage.setItem("access_token", accessToken);
+          localStorage.setItem("refresh_token", refreshToken);
+          const decode = jwtDecode(accessToken) as any;
+          localStorage.setItem("userId", decode.CustomerId ?? decode.TourGuideId);
+          dispatch(setCurrentUser(decode));
+          navigate("/");
+        } else {
+          if (resultAction.payload) {
+            notification.error({
+              message: "Error",
+              description: `${resultAction.payload}`,
+              placement: "topRight",
+            });
+          } else {
+            notification.error({
+              message: "Error",
+              description: resultAction.error.message,
+              placement: "topRight",
+            });
+          }
+        }
+      } 
+    },
+    [dispatch, notification],
+  );
+
   return {
     state,
     handleLogin,
@@ -219,5 +294,7 @@ export function useAuth() {
     handleLoginVerify,
     handleRegisterVerify,
     handleGetUserInfo,
+    handleTourGuideRegister,
+    handleOTPLoginSubmit
   };
 }

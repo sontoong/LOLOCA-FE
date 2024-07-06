@@ -9,6 +9,7 @@ export function CustomSelect(props: CustomSelectProps) {
 }
 
 CustomSelect.Tag = CustomSelectTag
+CustomSelect.Option = Select.Option;
 export default CustomSelect;
 
 type CustomSelectProps = Omit<SelectProps, "style">

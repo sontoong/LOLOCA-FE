@@ -16,7 +16,7 @@ const { Text, Paragraph } = Typography;
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { state: stateAuth, handleLogin, handleRegisterVerify } = useAuth();
+  const { state: stateAuth, handleLogin, handleOTPLoginSubmit } = useAuth();
   const { state: stateUI } = useUI();
 
   const [form] = Form.useForm();
@@ -32,7 +32,7 @@ export default function LoginPage() {
   };
 
   const handleOk = (values: VerifyParams) => {
-    handleRegisterVerify(values, navigate);
+    handleOTPLoginSubmit(values, navigate);
   };
 
   return (
@@ -98,7 +98,11 @@ export default function LoginPage() {
           />
         </div>
         <div>
-          Don't have an account? <Link to="/register">Sign Up</Link>
+          Don't have an account? <Link to="/register">Sign Up</Link> <br/>
+          Want to become a tour guide? <Link to="/register/tourguide">Sign Up as Tour Guide</Link>
+        </div>
+        <div>
+          
         </div>
       </Space>
       <Modal.OTP

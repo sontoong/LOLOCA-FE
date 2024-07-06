@@ -119,6 +119,25 @@ export const register = createAsyncThunk<any, RegisterParams>(
   },
 );
 
+export const tourGuideRegister = createAsyncThunk<any, TourGuideRegisterParams>(
+  "auth/register/tourguide",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await agent.Auth.registerTourGuide({
+        ...data,
+      });
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+    }
+  },
+);
+
 export const registerVerify = createAsyncThunk<any, VerifyParams>(
   "auth/registerVerify",
   async (data, { rejectWithValue }) => {
@@ -158,6 +177,18 @@ export type RegisterParams = {
   password: string;
   phoneNumber: string;
   gender: number;
+  dateOfBirth: string;
+};
+
+export type TourGuideRegisterParams = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  phoneNumber: string;
+  gender: number | null;
+  cityId: number | null;
+  address: string;
   dateOfBirth: string;
 };
 
