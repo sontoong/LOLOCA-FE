@@ -84,7 +84,7 @@ export function useAuth() {
         localStorage.setItem("refresh_token", refreshToken);
         const decode = jwtDecode(accessToken) as any;
         localStorage.setItem("userId", decode.CustomerId ?? decode.TourGuideId);
-        dispatch(setCurrentUser(decode))
+        dispatch(setCurrentUser(decode));
         navigate("/");
       } else {
         if (resultAction.payload) {
@@ -223,7 +223,7 @@ export function useAuth() {
       }
       case ROLE.tourguide: {
         const resultAction = await dispatch(
-          getTourGuideById({ tourGuideId: parseInt(userId) }),
+          getTourGuideById({ tourGuideId: userId }),
         );
         if (getTourGuideById.fulfilled.match(resultAction)) {
           dispatch(setCurrentUser(resultAction.payload));
@@ -253,9 +253,9 @@ export function useAuth() {
         localStorage.setItem("refresh_token", refreshToken);
         const decode = jwtDecode(accessToken) as any;
         localStorage.setItem("userId", decode.CustomerId ?? decode.TourGuideId);
-        dispatch(setCurrentUser(decode))
+        dispatch(setCurrentUser(decode));
         navigate("/");
-      } else if(loginVerify.rejected.match(resultAction)) {
+      } else if (loginVerify.rejected.match(resultAction)) {
         const resultAction = await dispatch(registerVerify(value));
         if (registerVerify.fulfilled.match(resultAction)) {
           dispatch(resetOTPModal());
@@ -263,7 +263,10 @@ export function useAuth() {
           localStorage.setItem("access_token", accessToken);
           localStorage.setItem("refresh_token", refreshToken);
           const decode = jwtDecode(accessToken) as any;
-          localStorage.setItem("userId", decode.CustomerId ?? decode.TourGuideId);
+          localStorage.setItem(
+            "userId",
+            decode.CustomerId ?? decode.TourGuideId,
+          );
           dispatch(setCurrentUser(decode));
           navigate("/");
         } else {
@@ -281,7 +284,7 @@ export function useAuth() {
             });
           }
         }
-      } 
+      }
     },
     [dispatch, notification],
   );
@@ -295,6 +298,6 @@ export function useAuth() {
     handleRegisterVerify,
     handleGetUserInfo,
     handleTourGuideRegister,
-    handleOTPLoginSubmit
+    handleOTPLoginSubmit,
   };
 }

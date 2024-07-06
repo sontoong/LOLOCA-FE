@@ -15,12 +15,14 @@ import { isLoggedIn } from "../../redux/slice/authSlice";
 import { useBookingTour } from "../../hooks/useBookingTour";
 import { dateToLocalISOString } from "../../utils/utils";
 import dayjs from "dayjs";
+import { useTourGuide } from "../../hooks/useTourGuide";
 
 const { Step } = Steps;
 
 const TourBookingPage = () => {
   const { tourId } = useParams();
   const { state: stateTour, handleGetTourById } = useTour();
+  const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
   const { handleCreateBookingTour } = useBookingTour();
   const { executeOrRedirect } = useProtectedAction();
   const [currentStep, setCurrentStep] = useState(0);
@@ -33,13 +35,13 @@ const TourBookingPage = () => {
     }
   }, [tourId, handleGetTourById]);
 
-  const guide = {
-    id: "LO161022",
-    name: "Mark Zucc",
-    gender: "Male",
-    languages: ["English", "Malay"],
-    image: VietNamBanner,
-  };
+  useEffect(() => {
+    if (stateTour.currentTour.tourGuideId) {
+      handleGetTourGuidebyId({
+        tourGuideId: stateTour.currentTour.tourGuideId,
+      });
+    }
+  }, [handleGetTourGuidebyId, stateTour.currentTour.tourGuideId]);
 
   const next = () => {
     window.scrollTo(0, 0);
@@ -64,7 +66,7 @@ const TourBookingPage = () => {
     },
     {
       title: "Step 3",
-      content: <GuideInfoModal guide={guide} />,
+      content: <GuideInfoModal guide={stateTourGuide.currentTourguide} />,
     },
   ];
 

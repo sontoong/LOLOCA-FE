@@ -1,7 +1,7 @@
 export type Tour = {
   tourId: number;
   cityId: number;
-  tourGuideId: number;
+  tourGuideId: string;
   name: string;
   description: string;
   category?: string;

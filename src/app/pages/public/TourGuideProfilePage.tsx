@@ -28,7 +28,7 @@ const TourGuideProfile = () => {
 
   useEffect(() => {
     if (tourGuideId) {
-      handleGetTourGuidebyId({ tourGuideId: parseInt(tourGuideId) });
+      handleGetTourGuidebyId({ tourGuideId: tourGuideId });
       handleGetTourByTourGuide({
         TourGuideId: parseInt(tourGuideId),
         page: 1,
