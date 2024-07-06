@@ -115,7 +115,7 @@ export const { setCurrentTourGuide, setCurrentTourGuideList } =
 export default tourguideSlice.reducer;
 
 export type GetTourGuideByIdParams = {
-  tourGuideId: number;
+  tourGuideId: string;
 };
 
 export type GetRandomTourGuideParams = {

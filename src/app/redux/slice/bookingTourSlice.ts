@@ -1,14 +1,17 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import agent from "../../utils/agent";
 import { AxiosError } from "axios";
+import { BookingTourRequest } from "../../models/bookingTour";
 
 type TBookingTour = {
-  currentBookingTourList: any;
+  currentBookingTour: BookingTourRequest;
+  currentBookingTourList: BookingTourRequest[];
   isFetching: boolean;
 };
 
 const initialState: TBookingTour = {
-  currentBookingTourList: { tours: [], totalPage: 0 },
+  currentBookingTour: {} as BookingTourRequest,
+  currentBookingTourList: [],
   isFetching: false,
 };
 
@@ -16,7 +19,13 @@ const bookingTourSlice = createSlice({
   name: "bookingTour",
   initialState,
   reducers: {
-    setCurrentTourList: (
+    setCurrentBookingTour: (
+      state,
+      action: PayloadAction<TBookingTour["currentBookingTour"]>,
+    ) => {
+      state.currentBookingTour = action.payload;
+    },
+    setCurrentBookingTourList: (
       state,
       action: PayloadAction<TBookingTour["currentBookingTourList"]>,
     ) => {
@@ -89,9 +98,8 @@ export const getBookingTourByCustomerId = createAsyncThunk<
   async (data, { rejectWithValue }) => {
     const { customerId } = data;
     try {
-      const response = await agent.BookingTour.getBookingTourByCustomerId({
-        customerId,
-      });
+      const response =
+        await agent.BookingTour.getBookingTourByCustomerId(customerId);
       return response;
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -104,7 +112,30 @@ export const getBookingTourByCustomerId = createAsyncThunk<
   },
 );
 
-export const { setCurrentTourList } = bookingTourSlice.actions;
+export const getBookingTourByTourGuideId = createAsyncThunk<
+  any,
+  GetBookingTourByTourGuideIdParams
+>(
+  "bookingTour/getBookingTourByTourGuideId",
+  async (data, { rejectWithValue }) => {
+    const { tourGuideId } = data;
+    try {
+      const response =
+        await agent.BookingTour.getBookingTourByTourGuideId(tourGuideId);
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+    }
+  },
+);
+
+export const { setCurrentBookingTour, setCurrentBookingTourList } =
+  bookingTourSlice.actions;
 
 export default bookingTourSlice.reducer;
 
@@ -120,5 +151,9 @@ export type CreateBookingTourParams = {
 };
 
 export type GetBookingTourByCustomerIdParams = {
-  customerId: number;
+  customerId: string;
+};
+
+export type GetBookingTourByTourGuideIdParams = {
+  tourGuideId: string;
 };

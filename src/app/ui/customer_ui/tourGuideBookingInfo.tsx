@@ -1,12 +1,14 @@
 import { Col, Row } from "antd";
-import { Input, InputDate, InputSelect, InputNumber} from "../../components/inputs";
-import { useParams } from "react-router-dom";
+import {
+  Input,
+  InputDate,
+  InputSelect,
+  InputNumber,
+} from "../../components/inputs";
 import { Form } from "../../components/form";
 import { useState } from "react";
 
 const TourGuideBookingInfo = ({ form }: { form: any }) => {
-  const { tourGuideId } = useParams();
-  const userId = localStorage.getItem("userId") ?? "";
   const [totalPrice, setTotalPrice] = useState<number | undefined>(0);
 
   const initialValues = {
@@ -14,8 +16,6 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
     note: "",
     startDate: "",
     endDate: "",
-    arrivalTime: "",
-    departureTime: "",
     numOfAdult: 0,
     numOfChild: 0,
     tourTypeDTOs: [],
@@ -24,10 +24,10 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
   const onFinish = (values: any) => {
     const submitValues = {
       ...values,
-      tourGuideId: tourGuideId,
-      customerId: userId,
       price: totalPrice,
-      tourTypeDTOs: values.tourTypeDTOs.map((typeDetail: string) => ({ typeDetail }))
+      tourTypeDTOs: values.tourTypeDTOs.map((typeDetail: string) => ({
+        typeDetail,
+      })),
     };
     setTotalPrice(1);
     console.log("Form Values: ", submitValues);
@@ -113,10 +113,18 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
             name="numOfAdult"
             label="Adults"
             rules={[
-              { required: true, message: "Please enter number of adults" },
+              {
+                type: "number",
+                required: true,
+                min: 1,
+              },
             ]}
           >
-            <InputNumber placeholder="How many adults will there be?"  unit="adult" pluralUnit="adults"/>
+            <InputNumber
+              placeholder="How many adults will there be?"
+              unit="adult"
+              pluralUnit="adults"
+            />
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -124,7 +132,10 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
             name="endDate"
             label="End"
             rules={[
-              { required: true, message: "Please select end date" },
+              {
+                required: true,
+                message: "Please select end date",
+              },
               { validator: validateEndDate },
             ]}
           >
@@ -137,7 +148,11 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
               { required: true, message: "Please enter number of children" },
             ]}
           >
-            <InputNumber placeholder="How many children will there be?" unit="child" pluralUnit="children"/>
+            <InputNumber
+              placeholder="How many children will there be?"
+              unit="child"
+              pluralUnit="children"
+            />
           </Form.Item>
         </Col>
       </Row>
@@ -166,7 +181,6 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
           options={tourTypes}
         />
       </Form.Item>
-      
     </Form>
   );
 };

@@ -1,15 +1,16 @@
 import { Select, SelectProps } from "antd";
 
 export function CustomSelectTag(props: CustomSelectProps) {
-    return <Select style={{ height: "42px", minHeight: "42px" }} mode="multiple" allowClear {...props} />;
+  return <Select mode="multiple" allowClear {...props} />;
 }
 
 export function CustomSelect(props: CustomSelectProps) {
-  return <Select style={{ height: "42px", minHeight: "42px" }} allowClear {...props} />;
+  return <Select allowClear {...props} />;
 }
 
-CustomSelect.Tag = CustomSelectTag
+CustomSelect.Tag = CustomSelectTag;
 CustomSelect.Option = Select.Option;
+
 export default CustomSelect;
 
-type CustomSelectProps = Omit<SelectProps, "style">
+type CustomSelectProps = Omit<SelectProps, "style">;

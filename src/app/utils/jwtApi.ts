@@ -41,7 +41,8 @@ apiJWT.interceptors.request.use(async (config) => {
             throw error;
           }
         } else {
-          console.log(error);
+          localStorage.clear();
+          window.location.href = "/login";
         }
       }
     } else {

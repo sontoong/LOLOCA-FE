@@ -52,11 +52,11 @@ const CustomerProfile = () => {
     firstName: "",
     lastName: "",
     gender: null as unknown as number,
-    dateOfBirth: dayjs(""),
+    dateOfBirth: "",
     phoneNumber: "",
   };
 
-  const onFinish = async (values: typeof initialValues) => {
+  const onFinish = async (values: any) => {
     const dateOfBirthString = dateToLocalISOString(values.dateOfBirth);
 
     await handleUpdateCustomerAvatar({

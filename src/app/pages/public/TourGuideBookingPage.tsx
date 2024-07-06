@@ -1,5 +1,5 @@
 import { Steps } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import VietNamBanner from "../../../assets/banner.png";
 import { PrimaryButton } from "../../components/buttons";
@@ -8,21 +8,25 @@ import { Form } from "../../components/form";
 import GuideInfoModal from "../../ui/customer_ui/guideInfoModal";
 import InstructionModal from "../../ui/customer_ui/instructionModal";
 import TourGuideBookingInfo from "../../ui/customer_ui/tourGuideBookingInfo";
+import { useTourGuide } from "../../hooks/useTourGuide";
+import { useParams } from "react-router-dom";
+import { useBookingTourGuide } from "../../hooks/useBookingTourGuide";
 
 const { Step } = Steps;
 
 const TourGuideBookingPage = () => {
+  const { tourGuideId } = useParams();
+  const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
+  const { handleCreateBookingTourGuide } = useBookingTourGuide();
   const [currentStep, setCurrentStep] = useState(0);
   const [form] = Form.useForm();
   const [mainForm] = Form.useForm();
 
-  const guide = {
-    id: "LO161022",
-    name: "Mark Zucc",
-    gender: "Male",
-    languages: ["English", "Malay"],
-    image: VietNamBanner,
-  };
+  useEffect(() => {
+    if (tourGuideId) {
+      handleGetTourGuidebyId({ tourGuideId: tourGuideId });
+    }
+  }, [handleGetTourGuidebyId, tourGuideId]);
 
   const next = () => {
     window.scrollTo(0, 0);
@@ -36,7 +40,7 @@ const TourGuideBookingPage = () => {
 
   const steps = [
     {
-      title: "Tour Guide Information",
+      title: "Instructions",
       content: <InstructionModal />,
     },
     {
@@ -44,25 +48,33 @@ const TourGuideBookingPage = () => {
       content: <TourGuideBookingInfo form={form} />,
     },
     {
-      title: "Payment Information",
-      content: <GuideInfoModal guide={guide} />,
+      title: "Tour Guide Information",
+      content: (
+        <GuideInfoModal
+          guide={{ ...stateTourGuide.currentTourguide, id: tourGuideId }}
+        />
+      ),
     },
   ];
 
-  const handleSubmit = (values: any) => {
-    console.log("Form Values: ", values);
-  };
-
   const initialValues = {
-    tourName: "",
+    // tourName: "",
     note: "",
     startDate: "",
     endDate: "",
-    arrivalTime: "",
-    departureTime: "",
     numOfAdult: 0,
     numOfChild: 0,
-    tourType: [],
+    // tourType: [],
+  };
+
+  const handleSubmit = (values: typeof initialValues) => {
+    console.log(values);
+    console.log("Form Values: ", values);
+    handleCreateBookingTourGuide({
+      ...values,
+      customerId: localStorage.getItem("userId") ?? "",
+      tourGuideId: tourGuideId ?? "",
+    });
   };
 
   return (
@@ -73,7 +85,11 @@ const TourGuideBookingPage = () => {
       }}
       className="h-full py-[2rem]"
     >
-      <Card cardTitle="Create your tour" className="mx-auto w-[50%]">
+      <Card
+        cardTitle="Create your tour"
+        className="mx-auto w-[50%]"
+        bordered={false}
+      >
         <Steps current={currentStep} className="my-[5%]">
           {steps.map((step, index) => (
             <Step key={index} title={step.title} />
@@ -95,15 +111,15 @@ const TourGuideBookingPage = () => {
             form={mainForm}
             onFinish={handleSubmit}
           >
-            <Form.Item name="tourName" hidden />
+            {/* <Form.Item name="tourName" hidden /> */}
             <Form.Item name="note" hidden />
             <Form.Item name="startDate" hidden />
             <Form.Item name="endDate" hidden />
-            <Form.Item name="arrivalTime" hidden />
-            <Form.Item name="departureTime" hidden />
-            <Form.Item name="adults" hidden />
-            <Form.Item name="children" hidden />
-            <Form.Item name="tourType" hidden />
+            {/* <Form.Item name="arrivalTime" hidden /> */}
+            {/* <Form.Item name="departureTime" hidden /> */}
+            <Form.Item name="numOfAdult" hidden />
+            <Form.Item name="numOfChild" hidden />
+            {/* <Form.Item name="tourType" hidden /> */}
 
             <div>
               <div className="mt-4 flex justify-end">

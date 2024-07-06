@@ -58,9 +58,9 @@ const BookingTour = {
   getAllBookingTour: () =>
     requests.get(`${_bookingTour}/get-all-booking-tour-reuqest`),
   getBookingTourById: (id: string) => requests.get(`${_bookingTour}/${id}`),
-  getBookingTourByCustomerId: (customerId: any) =>
+  getBookingTourByCustomerId: (customerId: string) =>
     requests.get(`${_bookingTour}/customer/${customerId}`),
-  getBookingTourByTourGuideId: (tourGuideId: any) =>
+  getBookingTourByTourGuideId: (tourGuideId: string) =>
     requests.get(`${_bookingTour}/tourguide/${tourGuideId}`),
 };
 
@@ -72,9 +72,9 @@ const BookingTourGuideRequest = {
     requests.get(`${_bookingTourGuideRequest}/get-all-bookingtourguide`),
   getBookingTourGuideById: (id: string) =>
     requests.get(`${_bookingTourGuideRequest}/${id}`),
-  getBookingTourGuideByCustomerId: (customerId: any) =>
+  getBookingTourGuideByCustomerId: (customerId: string) =>
     requests.get(`${_bookingTourGuideRequest}/customer/${customerId}`),
-  getBookingTourGuideByTourGuideId: (tourGuideId: any) =>
+  getBookingTourGuideByTourGuideId: (tourGuideId: string) =>
     requests.get(`${_bookingTourGuideRequest}/tourguide/${tourGuideId}`),
 };
 
@@ -123,7 +123,7 @@ const TourGuide = {
   updateInfo: (data: any) => requests.post(`${_tourGuide}/update-info`, data),
   changePassword: (data: any) =>
     requests.post(`${_tourGuide}/change-password`, data),
-  getTourGuideById: (tourGuideId: number) =>
+  getTourGuideById: (tourGuideId: string) =>
     baseRequests.get(`${_tourGuide}/info/${tourGuideId}`),
   getTourGuidePrivateById: (tourGuideId: number) =>
     requests.get(`${_tourGuide}/private-info/${tourGuideId}`),

@@ -1,14 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TableProps } from "antd";
 import { Table } from "../../components/table";
 import { PrimaryButton } from "../../components/buttons";
 import OutlineButton from "../../components/buttons/outline-button";
 import { useNavigate } from "react-router-dom";
 import DropDownRequest from "../../ui/customer_ui/dropDownRequest";
+import { useBookingTour } from "../../hooks/useBookingTour";
+import { useBookingTourGuide } from "../../hooks/useBookingTourGuide";
 
 const CustomerRequestList = () => {
-  const [currentTable, setCurrentTable] = useState("tour");
   const navigate = useNavigate();
+  const { state: stateBookingTour, handleGetBookingTourByCustomerId } =
+    useBookingTour();
+  const {
+    state: stateBookingTourGuide,
+    handleGetBookingTourGuideByCustomerId,
+  } = useBookingTourGuide();
+  const [currentTable, setCurrentTable] = useState("tour");
+
+  const userId = localStorage.getItem("userId") ?? "";
+  useEffect(() => {
+    handleGetBookingTourByCustomerId({ customerId: userId });
+    handleGetBookingTourGuideByCustomerId({ customerId: userId });
+  }, [
+    handleGetBookingTourByCustomerId,
+    handleGetBookingTourGuideByCustomerId,
+    userId,
+  ]);
 
   const handlePaymentNavigation = (record: any) => {
     navigate(`/customer/payment/${record.key}?type=${currentTable}`);
@@ -44,7 +62,11 @@ const CustomerRequestList = () => {
       title: "Actions",
       key: "actions",
       render: (_, record) => (
-        <DropDownRequest tableType={currentTable} record={record} handlePaymentNavigation={handlePaymentNavigation} />
+        <DropDownRequest
+          tableType={currentTable}
+          record={record}
+          handlePaymentNavigation={handlePaymentNavigation}
+        />
       ),
     },
   ];
@@ -84,67 +106,17 @@ const CustomerRequestList = () => {
       title: "Actions",
       key: "actions",
       render: (_, record) => (
-        <DropDownRequest tableType={currentTable} record={record} handlePaymentNavigation={handlePaymentNavigation} />
+        <DropDownRequest
+          tableType={currentTable}
+          record={record}
+          handlePaymentNavigation={handlePaymentNavigation}
+        />
       ),
     },
   ];
 
-  const tourData = [
-    {
-      key: "1",
-      tour: "Tour A",
-      start_date: "2024-07-01",
-      end_date: "2024-07-07",
-      total: "$1000",
-      status: "Confirmed",
-    },
-    {
-      key: "2",
-      tour: "Tour B",
-      start_date: "2024-07-10",
-      end_date: "2024-07-15",
-      total: "$1500",
-      status: "Pending",
-    },
-    {
-      key: "3",
-      tour: "Tour C",
-      start_date: "2024-08-01",
-      end_date: "2024-08-05",
-      total: "$2000",
-      status: "Cancelled",
-    },
-  ];
-
-  const tourGuideData = [
-    {
-      key: "1",
-      tour_guide: "Guide A",
-      tour: "Tour A",
-      start_date: "2024-07-01",
-      end_date: "2024-07-07",
-      total: "$1000",
-      status: "Confirmed",
-    },
-    {
-      key: "2",
-      tour_guide: "Guide B",
-      tour: "Tour B",
-      start_date: "2024-07-10",
-      end_date: "2024-07-15",
-      total: "$1500",
-      status: "Pending",
-    },
-    {
-      key: "3",
-      tour_guide: "Guide C",
-      tour: "Tour C",
-      start_date: "2024-08-01",
-      end_date: "2024-08-05",
-      total: "$2000",
-      status: "Cancelled",
-    },
-  ];
+  const tourData = stateBookingTour.currentBookingTourList;
+  const tourGuideData = stateBookingTourGuide.currentBookingTourGuideList;
 
   return (
     <div className="mx-[4rem] my-[2rem]">
@@ -175,17 +147,9 @@ const CustomerRequestList = () => {
         )}
       </div>
       {currentTable === "tour" ? (
-        <Table
-          columns={bookingTourColumns}
-          dataSource={tourData}
-          rowClassName={"hover:cursor-pointer"}
-        />
+        <Table columns={bookingTourColumns} dataSource={tourData} />
       ) : (
-        <Table
-          columns={bookingTourGuideColumns}
-          dataSource={tourGuideData}
-          rowClassName={"hover:cursor-pointer"}
-        />
+        <Table columns={bookingTourGuideColumns} dataSource={tourGuideData} />
       )}
     </div>
   );

@@ -38,6 +38,10 @@ const TourGuideProfile = () => {
     }
   }, [handleGetTourGuidebyId, tourGuideId, handleGetTourByTourGuide]);
 
+  const handleBooking = () => {
+    navigate(`booking`);
+  };
+
   const renderTours = () => {
     if (stateTour.isFetching) {
       return (
@@ -152,6 +156,7 @@ const TourGuideProfile = () => {
           text="Booking"
           className="ml-[1rem] mr-[5rem]"
           size="large"
+          onClick={handleBooking}
         />
       </div>
       <div className="flex justify-evenly">

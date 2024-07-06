@@ -3,25 +3,25 @@ import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import {
-  createBookingTour,
-  CreateBookingTourParams,
-  getBookingTourByCustomerId,
-  GetBookingTourByCustomerIdParams,
-  getBookingTourByTourGuideId,
-  GetBookingTourByTourGuideIdParams,
-  setCurrentBookingTourList,
-} from "../redux/slice/bookingTourSlice";
+  createBookingTourGuide,
+  CreateBookingTourGuideParams,
+  getBookingTourGuideByCustomerId,
+  GetBookingTourGuideByCustomerIdParams,
+  getBookingTourGuideByTourGuideId,
+  GetBookingTourGuideByTourGuideIdParams,
+  setCurrentBookingTourGuideList,
+} from "../redux/slice/bookingTourGuideSlice";
 
-export function useBookingTour() {
+export function useBookingTourGuide() {
   const navigate = useNavigate();
   const { notification } = App.useApp();
-  const state = useAppSelector((state) => state.bookingTour);
+  const state = useAppSelector((state) => state.bookingTourGuide);
   const dispatch = useAppDispatch();
 
-  const handleCreateBookingTour = useCallback(
-    async (value: CreateBookingTourParams) => {
-      const resultAction = await dispatch(createBookingTour(value));
-      if (createBookingTour.fulfilled.match(resultAction)) {
+  const handleCreateBookingTourGuide = useCallback(
+    async (value: CreateBookingTourGuideParams) => {
+      const resultAction = await dispatch(createBookingTourGuide(value));
+      if (createBookingTourGuide.fulfilled.match(resultAction)) {
         navigate("customer/booking-successful");
       } else {
         if (resultAction.payload) {
@@ -42,11 +42,13 @@ export function useBookingTour() {
     [dispatch, notification, navigate],
   );
 
-  const handleGetBookingTourByCustomerId = useCallback(
-    async (value: GetBookingTourByCustomerIdParams) => {
-      const resultAction = await dispatch(getBookingTourByCustomerId(value));
-      if (getBookingTourByCustomerId.fulfilled.match(resultAction)) {
-        dispatch(setCurrentBookingTourList(resultAction.payload));
+  const handleGetBookingTourGuideByCustomerId = useCallback(
+    async (value: GetBookingTourGuideByCustomerIdParams) => {
+      const resultAction = await dispatch(
+        getBookingTourGuideByCustomerId(value),
+      );
+      if (getBookingTourGuideByCustomerId.fulfilled.match(resultAction)) {
+        dispatch(setCurrentBookingTourGuideList(resultAction.payload));
       } else {
         if (resultAction.payload) {
           notification.error({
@@ -66,11 +68,13 @@ export function useBookingTour() {
     [dispatch, notification],
   );
 
-  const handleGetBookingTourByTourGuideId = useCallback(
-    async (value: GetBookingTourByTourGuideIdParams) => {
-      const resultAction = await dispatch(getBookingTourByTourGuideId(value));
-      if (getBookingTourByTourGuideId.fulfilled.match(resultAction)) {
-        dispatch(setCurrentBookingTourList(resultAction.payload));
+  const handleGetBookingTourGuideByTourGuideId = useCallback(
+    async (value: GetBookingTourGuideByTourGuideIdParams) => {
+      const resultAction = await dispatch(
+        getBookingTourGuideByTourGuideId(value),
+      );
+      if (getBookingTourGuideByTourGuideId.fulfilled.match(resultAction)) {
+        dispatch(setCurrentBookingTourGuideList(resultAction.payload));
       } else {
         if (resultAction.payload) {
           notification.error({
@@ -92,8 +96,8 @@ export function useBookingTour() {
 
   return {
     state,
-    handleCreateBookingTour,
-    handleGetBookingTourByCustomerId,
-    handleGetBookingTourByTourGuideId,
+    handleCreateBookingTourGuide,
+    handleGetBookingTourGuideByCustomerId,
+    handleGetBookingTourGuideByTourGuideId,
   };
 }

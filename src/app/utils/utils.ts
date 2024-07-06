@@ -117,13 +117,16 @@ export const base64ToBlob = (base64: string, filename: string): File | null => {
 };
 
 export function ensureBase64Avatar(avatarString?: string) {
-  const base64Prefix = "data:image/jpeg;base64,";
+  if (avatarString) {
+    const base64Prefix = "data:image/jpeg;base64,";
 
-  if (!avatarString?.startsWith(base64Prefix)) {
-    return base64Prefix + avatarString;
+    if (!avatarString.startsWith(base64Prefix)) {
+      return base64Prefix + avatarString;
+    }
+
+    return avatarString;
   }
-
-  return avatarString;
+  return;
 }
 
 export const generatePagination = (currentPage: number, totalPages: number) => {
