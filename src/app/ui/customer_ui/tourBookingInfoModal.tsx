@@ -2,7 +2,7 @@ import { Col, Row, Typography } from "antd";
 import { InputDate, Input, InputNumber } from "../../components/inputs";
 import { Form } from "../../components/form";
 import { useState, useEffect } from "react";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { Tour } from "../../models/tour";
 import { FormInstance } from "antd/lib";
 import { formatCurrency } from "../../utils/utils";
@@ -76,6 +76,7 @@ const TourBookingInfoModal = ({ form, tour }: TTourBookingInfoModalProps) => {
           >
             <InputDate
               placeholder="Enter start date"
+              minDate={dayjs().add(1, "days")}
               onChange={(date) => setStartDate(date)}
             />
           </Form.Item>

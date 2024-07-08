@@ -7,9 +7,13 @@ import {
 } from "../../components/inputs";
 import { Form } from "../../components/form";
 import { useState } from "react";
+import dayjs from "dayjs";
 
 const TourGuideBookingInfo = ({ form }: { form: any }) => {
   const [totalPrice, setTotalPrice] = useState<number | undefined>(0);
+
+  const startDate: dayjs.Dayjs = Form.useWatch("startDate", form);
+  const endDate: dayjs.Dayjs = Form.useWatch("endDate", form);
 
   const initialValues = {
     tourName: "",
@@ -107,7 +111,11 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
               { validator: validateStartDate },
             ]}
           >
-            <InputDate placeholder="Enter start date" />
+            <InputDate
+              placeholder="Enter start date"
+              minDate={dayjs().add(2, "days")}
+              maxDate={endDate ? endDate.subtract(1, "days") : undefined}
+            />
           </Form.Item>
           <Form.Item
             name="numOfAdult"
@@ -139,7 +147,12 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
               { validator: validateEndDate },
             ]}
           >
-            <InputDate placeholder="Enter end date" />
+            <InputDate
+              placeholder="Enter end date"
+              minDate={
+                startDate ? startDate.add(1, "days") : dayjs().add(2, "days")
+              }
+            />
           </Form.Item>
           <Form.Item
             name="numOfChild"
