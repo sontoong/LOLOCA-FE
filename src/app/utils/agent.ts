@@ -120,7 +120,7 @@ const TourGuide = {
   updateAvatar: (data: any) =>
     requests.post(`${_tourGuide}/update-avatar`, data),
   updateCover: (data: any) => requests.post(`${_tourGuide}/update-cover`, data),
-  updateInfo: (data: any) => requests.post(`${_tourGuide}/update-info`, data),
+  updateInfo: (tourGuideId : string, data: any) => requests.post(`${_tourGuide}/update-info/${tourGuideId}`, data),
   changePassword: (data: any) =>
     requests.post(`${_tourGuide}/change-password`, data),
   getTourGuideById: (tourGuideId: string) =>

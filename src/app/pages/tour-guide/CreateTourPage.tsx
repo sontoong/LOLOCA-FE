@@ -8,6 +8,8 @@ import CreateTourInfo from "../../ui/guide_ui/createTourInfo";
 import CreateTourDetail from "../../ui/guide_ui/createTourDetail";
 import CreateTourItinerary from "../../ui/guide_ui/createTourItinerary";
 import CreateTourPrice from "../../ui/guide_ui/createTourPrice";
+import { useTour } from "../../hooks/useTour";
+import { CreateTourParams } from "../../redux/slice/tourSlice";
 
 const { Step } = Steps;
 
@@ -15,6 +17,7 @@ const CreateTourPage = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [form] = Form.useForm();
   const [mainForm] = Form.useForm();
+  const { handleUploadTour } = useTour();
 
   const next = () => {
     window.scrollTo(0, 0);
@@ -26,38 +29,25 @@ const CreateTourPage = () => {
     setCurrentStep(currentStep - 1);
   };
 
-  const initialValues = {
-    name: "",
-    category: "",
-    duration: 0,
-    tourTypeDTOs: [
-      {typeDetail: ""},
-    ],
-    activity: "",
-    note: "",
-    tourHighlightDTOs: [
-      { highlightDetail: "" },
-    ],
-    tourIncludeDTOs: [
-      { includeDetail: "" },
-    ],
-    tourExcludeDTOs: [
-      { excludeDetail: "" },
-    ],
-    tourItineraryDTOs: [
-      {
-        name: "",
-        description: "",
-      },
-    ],
-    tourPriceDTOs: [
-      {
-        totalTouristFrom: 0,
-        totalTouristTo: 0,
-        adultPrice: 0,
-        childPrice: 0,
-      },
-    ],
+  const initialValues : CreateTourParams = {
+    Name: "",
+    Category: "",
+    Duration: 0,
+    images: [],
+    TypeDetails: [],
+    Activity: "",
+    Description: "",
+    HighlightDetails: [],
+    IncludeDetails: [],
+    ExcludeDetails: [],
+    ItineraryNames: [],
+    ItineraryDescriptions: [],
+    AdultPrices: [],
+    ChildPrices: [],
+    TotalTouristFrom: [],
+    TotalTouristTo: [],
+    CityId: 0,
+    TourGuideId: 0,
   };
 
   const steps = [
@@ -79,8 +69,8 @@ const CreateTourPage = () => {
     },
   ];
 
-  const handleSubmit = (values: any) => {
-    console.log("Form Values: ", values);
+  const handleSubmit = (values: CreateTourParams) => {
+    handleUploadTour(values);
   };
 
   return (
@@ -136,6 +126,7 @@ const CreateTourPage = () => {
             <Form.Item name="tourExcludeDTOs" hidden />
             <Form.Item name="tourItineraryDTOs" hidden />
             <Form.Item name="tourPriceDTOs" hidden />
+            <Form.Item name="image" hidden/>
             <div>
               <div className="mt-4 flex justify-end">
                 {currentStep > 0 && (

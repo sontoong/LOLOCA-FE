@@ -11,6 +11,8 @@ import {
   GetTourRandomParams,
   setCurrentTour,
   setCurrentTourList,
+  uploadTour,
+  CreateTourParams
 } from "../redux/slice/tourSlice";
 import { useCallback } from "react";
 
@@ -115,11 +117,41 @@ export function useTour() {
     [dispatch, notification],
   );
 
+  const handleUploadTour = useCallback(
+    async (tourData: CreateTourParams) => {
+      const resultAction = await dispatch(uploadTour(tourData));
+      if (uploadTour.fulfilled.match(resultAction)) {
+        notification.success({
+          message: "Success",
+          description: "Tour uploaded successfully",
+          placement: "topRight",
+        });
+        dispatch(setCurrentTour(resultAction.payload));
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification]
+  );
+
   return {
     state,
     handleGetTourById,
     handleGetTourRandom,
     handleGetTourByCityId,
     handleGetTourByTourGuide,
+    handleUploadTour
   };
 }

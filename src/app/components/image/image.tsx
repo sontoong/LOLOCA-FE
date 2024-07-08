@@ -1,11 +1,12 @@
 import { Image, ImageProps } from "antd";
 import { defaultImage } from "../../../constants/images";
+import { ensureBase64Avatar } from "../../utils/utils";
 
 function CustomImage(props: CustomImageProps) {
   const { src, preview = false, ...rest } = props;
   return (
     <Image
-      src={src ?? "error"}
+      src={ensureBase64Avatar(src) ?? "error"}
       fallback={defaultImage}
       preview={preview}
       {...rest}
@@ -16,5 +17,5 @@ function CustomImage(props: CustomImageProps) {
 export default CustomImage;
 
 type CustomImageProps = Omit<ImageProps, "src" | "fallback"> & {
-  src?: ImageProps["src"] | null;
+  src?: ImageProps["src"];
 };

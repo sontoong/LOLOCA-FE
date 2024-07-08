@@ -14,6 +14,9 @@ export type TourGuide = {
   avatarUploadedTime?: string;
   cover?: string;
   coverUploadedTime?: string;
+  phoneNumber?: string;
+  address?: string;
+  status: number;
 };
 
 export type TourGuideList = {

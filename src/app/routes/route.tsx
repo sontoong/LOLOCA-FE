@@ -35,6 +35,7 @@ import CreateTourPage from "../pages/tour-guide/CreateTourPage";
 import TourGuideProfile from "../pages/tour-guide/TourGuideProfile";
 import GuideTourPage from "../pages/tour-guide/GuideTourPage";
 import RequestListPage from "../pages/tour-guide/RequestListPage";
+import TourGuideTourDetailPage from "../pages/tour-guide/TourGuideTourDetailPage";
 
 export const router = createBrowserRouter([
   {
@@ -105,6 +106,22 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<></>}>
             <TourGuideProfilePage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "guides/tour/edit/:tourId",
+        element: (
+          <Suspense fallback={<></>}>
+            <CreateTourPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "guides/tour/:tourId",
+        element: (
+          <Suspense fallback={<></>}>
+            <TourGuideTourDetailPage />
           </Suspense>
         ),
       },

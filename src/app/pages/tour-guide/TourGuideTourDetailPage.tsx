@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTour } from "../../hooks/useTour";
 import { Loader } from "../../components/loader/loader";
 import NotFound from "../../components/not-found/not-found";
-import { Typography, Row, Col, Steps, Carousel } from "antd";
+import { Typography, Row, Col, Steps, Carousel, Modal } from "antd";
 import VietNamBanner from "../../../assets/banner.png";
 import { PrimaryButton } from "../../components/buttons";
 import { Divider } from "../../components/divider";
@@ -14,14 +14,11 @@ import { Image } from "../../components/image";
 import { useFeedback } from "../../hooks/useFeedback";
 import { useTourGuide } from "../../hooks/useTourGuide";
 import { Avatar } from "../../components/avatar";
-import { useProtectedAction } from "../../hooks/useProtectedAction";
-import { isLoggedIn } from "../../redux/slice/authSlice";
 
 const { Title, Paragraph, Text } = Typography;
 
-const TourDetailPage = () => {
+const TourGuideTourDetailPage = () => {
   const navigate = useNavigate();
-  const { executeOrRedirect } = useProtectedAction();
   const { tourId } = useParams<{ tourId: string }>();
   const { state: stateTour, handleGetTourById } = useTour();
   const { state: stateFeedback, handleGetTourFeedback } = useFeedback();
@@ -59,6 +56,20 @@ const TourDetailPage = () => {
     child: item.childPrice,
   }));
 
+  const handleDeleteTour = () => {
+    Modal.confirm({
+      title: 'Confirm Delete',
+      content: 'Are you sure you want to delete this tour?',
+      onOk() {
+        console.log('OK');
+        // Handle delete logic here
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  };
+
   const columns = [
     {
       title: "Amount",
@@ -76,14 +87,6 @@ const TourDetailPage = () => {
       key: "child",
     },
   ];
-
-  const onBooking = () => {
-    executeOrRedirect({
-      action: () => navigate("booking"),
-      fallbackUrl: "/login",
-      testValue: isLoggedIn(),
-    });
-  };
 
   return (
     <div className="p-[2rem]">
@@ -119,11 +122,18 @@ const TourDetailPage = () => {
           <Paragraph className="text-[1.2rem] font-extrabold">Easy</Paragraph>
         </Col>
         <Col offset={1}>
-          <PrimaryButton
-            text="Booking"
-            className="px-[4rem]"
-            onClick={onBooking}
-          />
+          <div className="flex justify-evenly">
+            <PrimaryButton
+              text="Edit Tour"
+              className="px-[4rem]"
+              onClick={() => navigate(`/guides/tour/edit/${tourId}`)}
+            />
+            <PrimaryButton
+              text="Delete Tour"
+              className="px-[4rem]"
+              onClick={() => handleDeleteTour()}
+            />
+          </div>
         </Col>
       </Row>
       <Carousel arrows autoplay draggable>
@@ -335,4 +345,4 @@ const TourDetailPage = () => {
   );
 };
 
-export default TourDetailPage;
+export default TourGuideTourDetailPage;

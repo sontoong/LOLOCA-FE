@@ -7,19 +7,7 @@ const CreateTourDetail = ({ form, initialValues }: { form: any, initialValues: a
   const { Title } = Typography;
 
   const onFinish = (values: any) => {
-    const submitValues = {
-      ...values,
-      tourHighlightDTOs: values.tourHighlightDTOs.map((item: any) => ({
-        highlightDetail: item.highlightDetail,
-      })),
-      tourIncludeDTOs: values.tourIncludeDTOs.map((item: any) => ({
-        includeDetail: item.includeDetail,
-      })),
-      tourExcludeDTOs: values.tourExcludeDTOs.map((item: any) => ({
-        excludeDetail: item.excludeDetail,
-      })),
-    };
-    console.log("Form Values: ", submitValues);
+    console.log("Form Values: ", values);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -51,7 +39,7 @@ const CreateTourDetail = ({ form, initialValues }: { form: any, initialValues: a
       <Title level={3} style={{ color: "#004AAD" }}>
         Highlight
       </Title>
-      <Form.List name="tourHighlightDTOs">
+      <Form.List name="HighlightDetails">
         {(fields, { add, remove }) => (
           <>
             {fields.map(({ key, name, ...restField }, index) => (
@@ -59,7 +47,7 @@ const CreateTourDetail = ({ form, initialValues }: { form: any, initialValues: a
                 <Col flex="auto">
                   <Form.Item
                     {...restField}
-                    name={[name, "highlightDetail"]}
+                    name={[name]}
                     rules={[
                       {
                         required: true,
@@ -96,7 +84,7 @@ const CreateTourDetail = ({ form, initialValues }: { form: any, initialValues: a
       <Title level={3} style={{ color: "#004AAD" }}>
         Include
       </Title>
-      <Form.List name="tourIncludeDTOs">
+      <Form.List name="IncludeDetails">
         {(fields, { add, remove }) => (
           <>
             {fields.map(({ key, name, ...restField }, index) => (
@@ -104,7 +92,7 @@ const CreateTourDetail = ({ form, initialValues }: { form: any, initialValues: a
                 <Col flex="auto">
                   <Form.Item
                     {...restField}
-                    name={[name, "includeDetail"]}
+                    name={[name]}
                     rules={[
                       {
                         required: true,
@@ -141,7 +129,7 @@ const CreateTourDetail = ({ form, initialValues }: { form: any, initialValues: a
       <Title level={3} style={{ color: "#004AAD" }}>
         Exclude
       </Title>
-      <Form.List name="tourExcludeDTOs">
+      <Form.List name="ExcludeDetails">
         {(fields, { add, remove }) => (
           <>
             {fields.map(({ key, name, ...restField }, index) => (
@@ -149,7 +137,7 @@ const CreateTourDetail = ({ form, initialValues }: { form: any, initialValues: a
                 <Col flex="auto">
                   <Form.Item
                     {...restField}
-                    name={[name, "excludeDetail"]}
+                    name={[name]}
                     rules={[
                       {
                         required: true,

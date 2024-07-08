@@ -1,5 +1,6 @@
 import { EllipsisOutlined } from "@ant-design/icons";
-import { Dropdown, Menu, Modal } from "antd";
+import { Dropdown, Modal } from "antd";
+import { MenuProps } from "antd/lib";
 
 const DropDownRequest = ({
   record,
@@ -75,23 +76,25 @@ const DropDownRequest = ({
     handlePaymentNavigation(record);
   };
 
-  const menu = (
-    <Menu>
-      <Menu.Item key="1" onClick={handleViewDetail}>
-        View detail
-      </Menu.Item>
-      <Menu.Item
-        key="2"
-        onClick={handleProceedToPayment}
-        disabled={record.status !== 1}
-      >
-        Proceed to Payment
-      </Menu.Item>
-    </Menu>
-  );
+  const items: MenuProps['items'] = [
+    {
+      key: "1",
+      label: "View detail",
+      onClick: handleViewDetail,
+    },
+    {
+      key: "2",
+      label: "Proceed to Payment",
+      onClick: handleProceedToPayment,
+      disabled: record.status !== 1,
+    },
+  ];
+
+
+
 
   return (
-    <Dropdown overlay={menu} trigger={["click"]}>
+    <Dropdown menu={{ items }} trigger={["click"]}>
       <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
         <EllipsisOutlined />
       </a>

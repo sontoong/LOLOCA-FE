@@ -2,7 +2,7 @@ import { Col, Row, Typography, UploadFile } from "antd";
 import { Form } from "../../components/form";
 import { Input, InputDate, InputSelect } from "../../components/inputs";
 import { PrimaryButton } from "../../components/buttons";
-import { ProfileUpload } from "../../components/image-upload";
+import { ImageUpload } from "../../components/image-upload";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { Customer } from "../../models/customer";
@@ -93,7 +93,7 @@ const CustomerProfile = () => {
   return (
     <div className="mx-auto my-[5rem] w-[60%]">
       <Title style={{ color: "#004AAD", fontWeight: "bolder" }}>Profile</Title>
-      <ProfileUpload images={images} setImages={setImages} />
+      <ImageUpload images={images} setImages={setImages} />
       <Form
         form={form}
         initialValues={initialValues}
