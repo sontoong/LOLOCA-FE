@@ -30,36 +30,24 @@ const CreateTourPage = () => {
   };
 
   const initialValues : CreateTourParams = {
-    name: "",
-    category: "",
-    duration: 0,
-    image: [],
-    tourTypeDTOs: [],
-    activity: "",
-    note: "",
-    tourHighlightDTOs: [
-      { highlightDetail: "" },
-    ],
-    tourIncludeDTOs: [
-      { includeDetail: "" },
-    ],
-    tourExcludeDTOs: [
-      { excludeDetail: "" },
-    ],
-    tourItineraryDTOs: [
-      {
-        name: "",
-        description: "",
-      },
-    ],
-    tourPriceDTOs: [
-      {
-        totalTouristFrom: 0,
-        totalTouristTo: 0,
-        adultPrice: 0,
-        childPrice: 0,
-      },
-    ],
+    Name: "",
+    Category: "",
+    Duration: 0,
+    images: [],
+    TypeDetails: [],
+    Activity: "",
+    Description: "",
+    HighlightDetails: [],
+    IncludeDetails: [],
+    ExcludeDetails: [],
+    ItineraryNames: [],
+    ItineraryDescriptions: [],
+    AdultPrices: [],
+    ChildPrices: [],
+    TotalTouristFrom: [],
+    TotalTouristTo: [],
+    CityId: 0,
+    TourGuideId: 0,
   };
 
   const steps = [

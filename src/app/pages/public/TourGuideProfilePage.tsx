@@ -30,7 +30,7 @@ const TourGuideProfile = () => {
     if (tourGuideId) {
       handleGetTourGuidebyId({ tourGuideId: tourGuideId });
       handleGetTourByTourGuide({
-        TourGuideId: parseInt(tourGuideId),
+        TourGuideId: tourGuideId,
         page: 1,
         pageSize: 10,
       });

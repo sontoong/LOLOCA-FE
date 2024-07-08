@@ -177,13 +177,13 @@ export const uploadTour = createAsyncThunk<any, CreateTourParams>(
     );
     TypeDetails.forEach((type) => formData.append("TypeDetails[]", type));
     TotalTouristFrom.forEach((total) =>
-      formData.append("TotalTouristFrom[]", total),
+      formData.append("TotalTouristFrom[]", total.toString()),
     );
     TotalTouristTo.forEach((total) =>
-      formData.append("TotalTouristTo[]", total),
+      formData.append("TotalTouristTo[]", total.toString()),
     );
-    AdultPrices.forEach((price) => formData.append("AdultPrices[]", price));
-    ChildPrices.forEach((price) => formData.append("ChildPrices[]", price));
+    AdultPrices.forEach((price) => formData.append("AdultPrices[]", price.toString()));
+    ChildPrices.forEach((price) => formData.append("ChildPrices[]", price.toString()));
 
     images.forEach((file) => {
       formData.append("images", file as File);
@@ -225,10 +225,10 @@ export type CreateTourParams = {
   ItineraryNames: string[];
   ItineraryDescriptions: string[];
   TypeDetails: string[];
-  TotalTouristFrom: string[];
-  TotalTouristTo: string[];
-  AdultPrices: string[];
-  ChildPrices: string[];
+  TotalTouristFrom: number[];
+  TotalTouristTo: number[];
+  AdultPrices: number[];
+  ChildPrices: number[];
   images: File[];
 };
 
