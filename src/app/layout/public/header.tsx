@@ -2,7 +2,7 @@ import { BookOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Dropdown, Layout, Menu, MenuProps, Modal, Spin } from "antd";
 import { ItemType } from "antd/es/menu/interface";
 import { useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../../../assets/logo.png";
 import { ROLE } from "../../../constants/role";
 import { PrimaryButton } from "../../components/buttons";
@@ -34,9 +34,12 @@ export default function MyHeader() {
         ];
       case ROLE.tourguide:
         return [
-          generateItem("Quản Lý Project", "abc", "", [
-            generateItem("abc", "abc"),
+          generateItem("Tours", "/guides/tour", "", [
+            generateItem("Create Tour", "/guides/tour/create"),
+            generateItem("My Tour", "/guides/tour"),
           ]),
+          generateItem("Request", "/guides/request-list"),
+
         ];
       default:
         return [
@@ -73,8 +76,8 @@ export default function MyHeader() {
       case ROLE.tourguide:
         return [
           generateItemProfile(
-            <Link to={`/ed/account`}>Thông tin cá nhân</Link>,
-            "/account",
+            "Thông tin cá nhân",
+            "guides/profile",
             <UserOutlined />,
           ),
           generateItemProfile(

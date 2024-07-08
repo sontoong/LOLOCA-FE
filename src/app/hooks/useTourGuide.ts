@@ -10,12 +10,18 @@ import {
   getRandomTourGuideInCity,
   GetRandomTourGuideInCityParams,
   setCurrentTourGuide,
+  UpdateTourGuideInfoParams,
+  updateTourGuideInfo,
+  updateTourGuideAvatar,
+  updateTourGuideCover,
+  UpdateTourGuideImageParams,
 } from "../redux/slice/tourguideSlice";
 import { useCallback } from "react";
 
+
 export function useTourGuide() {
   const { notification } = App.useApp();
-  const state = useAppSelector((state) => state.tourguide);
+  const state = useAppSelector((state) => state.tourGuide);
   const dispatch = useAppDispatch();
 
   const handleGetTourGuidebyId = useCallback(
@@ -90,10 +96,102 @@ export function useTourGuide() {
     [dispatch, notification],
   );
 
+  const handleUpdateTourGuideInfo = useCallback(
+    async (value: UpdateTourGuideInfoParams) => {
+      const resultAction = await dispatch(updateTourGuideInfo(value));
+      if (updateTourGuideInfo.fulfilled.match(resultAction)) {
+        notification.success({
+          message: "Success",
+          description: "Tour guide information updated successfully",
+          placement: "topRight",
+        });
+        dispatch(setCurrentTourGuide(resultAction.payload));
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
+  const handleUpdateTourGuideAvatar = useCallback(
+    async (formData: UpdateTourGuideImageParams) => {
+      const resultAction = await dispatch(updateTourGuideAvatar(formData));
+      if (updateTourGuideAvatar.fulfilled.match(resultAction)) {
+        notification.success({
+          message: "Success",
+          description: "Avatar updated successfully",
+          placement: "topRight",
+        });
+        dispatch(setCurrentTourGuide(resultAction.payload));
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification]
+  );
+
+  const handleUpdateTourguideCover = useCallback(
+    async (formData: UpdateTourGuideImageParams) => {
+      const resultAction = await dispatch(updateTourGuideCover(formData));
+      if (updateTourGuideCover.fulfilled.match(resultAction)) {
+        notification.success({
+          message: "Success",
+          description: "Cover updated successfully",
+          placement: "topRight",
+        });
+        dispatch(setCurrentTourGuide(resultAction.payload));
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification]
+  );
+
+
+
   return {
     state,
     handleGetTourGuidebyId,
     handleGetRandomTourGuides,
     handleGetRandomTourGuidesInCity,
+    handleUpdateTourGuideInfo,
+    handleUpdateTourGuideAvatar,
+    handleUpdateTourguideCover,
   };
 }

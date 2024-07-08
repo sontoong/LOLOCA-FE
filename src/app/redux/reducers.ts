@@ -14,7 +14,7 @@ import bookingTourGuideReducer from "./slice/bookingTourGuideSlice";
 const rootReducer = combineReducers({
   auth: authReducer,
   customer: customerReducer,
-  tourguide: tourguideReducer,
+  tourGuide: tourguideReducer,
   tour: tourReducer,
   city: cityReducer,
   feedback: feedbackReducer,

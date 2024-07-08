@@ -2,40 +2,43 @@ import { Banner } from "../../components/banner";
 import VietNamBanner from "../../../assets/banner.png";
 import { Card, Col, Row, Typography } from "antd";
 import { Divider } from "../../components/divider";
-import { PrimaryButton } from "../../components/buttons";
+// import { PrimaryButton } from "../../components/buttons";
 import { StarFilled } from "@ant-design/icons";
 import { formatUnixToLocal } from "../../utils/utils";
-import { useTourGuide } from "../../hooks/useTourGuide";
 import { useTour } from "../../hooks/useTour";
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { CardListGrid } from "../../components/grids";
 import { CardSkeleton, Skeleton } from "../../components/skeletons";
 import { reviewsData } from "../../utils/testData";
 import { Image } from "../../components/image";
 import { Avatar } from "../../components/avatar";
 import { genderGenerator } from "../../utils/generators/gender";
+import { PrimaryButton } from "../../components/buttons";
+import ProfileEditModal from "../../ui/guide_ui/profileEditModal";
+import { useAuth } from "../../hooks/useAuth";
+import { TourGuide } from "../../models/tourGuide";
 
 const { Title, Paragraph, Text } = Typography;
 
 const TourGuideProfile = () => {
   const navigate = useNavigate();
-  const { tourGuideId } = useParams();
-  const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
+  const tourGuideId = localStorage.getItem("userId") ?? "";
+  const { state: stateUser } = useAuth();
   const { state: stateTour, handleGetTourByTourGuide } = useTour();
   // const {state: stateFeedback, handleGetTourGuideFeedback} = useFeedback()
+  const currentUser = stateUser.currentUser as TourGuide
 
   useEffect(() => {
     if (tourGuideId) {
-      handleGetTourGuidebyId({ tourGuideId: tourGuideId });
       handleGetTourByTourGuide({
-        TourGuideId: parseInt(tourGuideId),
+        TourGuideId: tourGuideId,
         page: 1,
         pageSize: 10,
       });
       // handleGetTourGuideFeedback({ cityId: stateTourGuide});
     }
-  }, [handleGetTourGuidebyId, tourGuideId, handleGetTourByTourGuide]);
+  }, [tourGuideId, handleGetTourByTourGuide]);
 
   const renderTours = () => {
     if (stateTour.isFetching) {
@@ -90,7 +93,7 @@ const TourGuideProfile = () => {
   };
 
   const renderGeneralInfo = () => {
-    if (stateTourGuide.isFetching) {
+    if (stateUser.isFetching) {
       return (
         <>
           <Skeleton.Image height={300} />
@@ -107,21 +110,21 @@ const TourGuideProfile = () => {
       );
     }
 
-    if (stateTourGuide.currentTourguide) {
+    if (currentUser) {
       return (
         <>
-          <Banner image={VietNamBanner} height="20rem" boxShadow={false} />
+          <Banner image={currentUser.cover} height="20rem" boxShadow={false} />
           <div className="flex justify-evenly">
             <Paragraph className="mt-[2rem] w-[40%] text-lg">
-              {stateTourGuide.currentTourguide.description}
+              {currentUser.description}
             </Paragraph>
             <div className="mt-[-5rem] flex flex-col items-center">
-              <Avatar size={240} src={stateTourGuide.currentTourguide.avatar} />
+              <Avatar size={240} src={currentUser.avatar} />
               <Title
                 level={1}
                 style={{ fontWeight: "bolder", color: "#004AAD" }}
               >
-                {`${stateTourGuide.currentTourguide.firstName} ${stateTourGuide.currentTourguide.lastName}`}
+                {`${currentUser.firstName} ${currentUser.lastName}`}
               </Title>
             </div>
           </div>
@@ -138,6 +141,10 @@ const TourGuideProfile = () => {
           <Divider colorSplit="black" />
         </div>
       </div>
+      <div className="flex justify-end mr-[5rem]">
+        <ProfileEditModal tourGuideData={currentUser} tourGuideId={tourGuideId}/>
+        <PrimaryButton text="Create Tour" onClick={() => navigate('/guides/tour/create')}/>
+      </div>
       <Title
         level={1}
         style={{ fontWeight: "bolder", color: "#004AAD", marginLeft: "5rem" }}
@@ -145,20 +152,12 @@ const TourGuideProfile = () => {
         My Tours
       </Title>
       {renderTours()}
-      <div className="my-[3rem] flex items-center justify-end">
-        <Title level={4}>Can't find your suitable tour</Title>
-        <PrimaryButton
-          text="Booking"
-          className="ml-[1rem] mr-[5rem]"
-          size="large"
-        />
-      </div>
       <div className="flex justify-evenly">
         <div className="w-[30%] font-bold">
           <Title level={2} style={{ fontWeight: "bolder", color: "#004AAD" }}>
             Information
           </Title>
-          {stateTourGuide.isFetching ? (
+          {stateUser.isFetching ? (
             <Skeleton.Paragraph paragraph={{ rows: 4 }} />
           ) : (
             <div className="flex justify-between">
@@ -170,9 +169,9 @@ const TourGuideProfile = () => {
               </div>
               <div>
                 <Paragraph>{tourGuideId}</Paragraph>
-                <Paragraph>{`${stateTourGuide.currentTourguide.firstName} ${stateTourGuide.currentTourguide.lastName}`}</Paragraph>
+                <Paragraph>{`${currentUser.firstName} ${currentUser.lastName}`}</Paragraph>
                 <Paragraph>
-                  {genderGenerator(stateTourGuide.currentTourguide.gender)}
+                  {genderGenerator(currentUser.gender)}
                 </Paragraph>
                 <Paragraph>Vietnamese, English</Paragraph>
               </div>
@@ -191,7 +190,7 @@ const TourGuideProfile = () => {
           </Title>
 
           {/* fix data */}
-          {stateTourGuide.isFetching ? (
+          {stateUser.isFetching ? (
             <>
               {Array(2)
                 .fill({})

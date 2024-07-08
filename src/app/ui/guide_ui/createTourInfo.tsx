@@ -1,15 +1,30 @@
-import { Col, Row } from "antd";
+import { Col, Row, Typography } from "antd";
 import { Form } from "../../components/form";
 import { Input, InputNumber, InputSelect } from "../../components/inputs";
+import { ImageUpload } from "../../components/image-upload";
+import { useState } from "react";
+import { UploadFile } from "antd/lib";
+import { base64ToBlob } from "../../utils/utils";
+import { CreateTourParams } from "../../redux/slice/tourSlice";
 
-const CreateTourInfo = ({ form, initialValues }: { form: any, initialValues: any }) => {
+const CreateTourInfo = ({ form, initialValues }: { form: any, initialValues: CreateTourParams }) => {
+  const [tourImages, setTourImages] = useState<UploadFile[]>([]);
+  const {Paragraph} = Typography
+  const onFinish = (values: CreateTourParams) => {
+  console.log("Tour Images:",tourImages)
 
-  const onFinish = (values: any) => {
     const submitValues = {
       ...values,
-      tourTypeDTOs: values.tourTypeDTOs.map((typeDetail: string) => ({
-        typeDetail,
-      })),
+      images: tourImages.flatMap((image) => {
+        if (image.originFileObj) {
+          return [image.originFileObj];
+        } else if (image.url) {
+          const blob = base64ToBlob(image.url, image.name);
+          return blob ? [blob] : [];
+        } else {
+          return [];
+        }
+      }),
     };
     console.log("Form Values: ", submitValues);
   };
@@ -19,9 +34,9 @@ const CreateTourInfo = ({ form, initialValues }: { form: any, initialValues: any
   };
 
   const tourActivityLevel = [
-    {value: "1", label: "Low"},
-    {value: "2", label: "Medium"},
-    {value: "3", label: "High"},
+    {value: "Low", label: "Low"},
+    {value: "Medium", label: "Medium"},
+    {value: "High", label: "High"},
   ];
 
   const tourCategories = [
@@ -79,8 +94,8 @@ const CreateTourInfo = ({ form, initialValues }: { form: any, initialValues: any
       onFinishFailed={onFinishFailed}
     >
       <Form.Item
-        name="name"
-        label="Tour Request"
+        name="Name"
+        label="Tour Name"
         rules={[
           {
             type: "string",
@@ -91,8 +106,22 @@ const CreateTourInfo = ({ form, initialValues }: { form: any, initialValues: any
       >
         <Input placeholder="Enter tour name here" />
       </Form.Item>
+      {/* <Form.Item
+        name="image"
+        label="Tour Image"
+        rules={[
+          {
+            type: "string",
+            required: true,
+            whitespace: true,
+          },
+        ]}
+      > */}
+      <Paragraph><span className="text-red-500 text-[1.2rem]">* </span>Images</Paragraph>
+      <ImageUpload setImages={setTourImages} images={tourImages} maxCount={10}/>
+      {/* </Form.Item> */}
       <Form.Item
-        name="category"
+        name="Category"
         label="Category"
         rules={[
           {
@@ -107,7 +136,7 @@ const CreateTourInfo = ({ form, initialValues }: { form: any, initialValues: any
         />
       </Form.Item>
       <Form.Item
-        name="tourTypeDTOs"
+        name="TypeDetails"
         label="Tour Type"
         rules={[
           {
@@ -124,18 +153,18 @@ const CreateTourInfo = ({ form, initialValues }: { form: any, initialValues: any
       <Row>
         <Col span={10}>
           <Form.Item
-            name="duration"
+            name="Duration"
             label="Duration"
             rules={[
               { required: true, message: "Please enter duration of tour" },
             ]}
           >
-            <InputNumber placeholder="Enter a duration" defaultValue={initialValues.duration || 0} unit="day" pluralUnit="days"/>
+            <InputNumber placeholder="Enter a duration" defaultValue={initialValues.Duration || 0} unit="day" pluralUnit="days"/>
           </Form.Item>
         </Col>
         <Col offset={4} span={10}>
           <Form.Item
-            name="activity"
+            name="Activity"
             label="Acttvity Level"
             rules={[
               { required: true, message: "Please choose a activity level" },

@@ -3,12 +3,13 @@ import { UploadImg } from "../inputs/upload-img";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
-export default function CustomUploadProfile(props: {
+export default function CustomUploadImage(props: {
   images: UploadFile[];
   setImages: React.Dispatch<React.SetStateAction<UploadFile[]>>;
+  maxCount?: UploadProps['maxCount'] ;
 }) {
   const { message } = App.useApp();
-  const { images, setImages } = props;
+  const { images, setImages, maxCount = 1 } = props;
 
   const onChange: UploadProps["onChange"] = ({ fileList }) => {
     setImages(fileList);
@@ -29,7 +30,7 @@ export default function CustomUploadProfile(props: {
   return (
     <UploadImg
       listType="picture-card"
-      maxCount={1}
+      maxCount={maxCount}
       fileList={images}
       onChange={onChange}
       uploadConditions={uploadConditions}
