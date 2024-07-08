@@ -7,6 +7,10 @@ import { useNavigate } from "react-router-dom";
 import DropDownRequest from "../../ui/customer_ui/dropDownRequest";
 import { useBookingTour } from "../../hooks/useBookingTour";
 import { useBookingTourGuide } from "../../hooks/useBookingTourGuide";
+import { BookingTourRequest } from "../../models/bookingTour";
+import { BookingTourGuideRequest } from "../../models/bookingTourGuide";
+import { bookingStatusGenerator } from "../../utils/generators/bookingStatus";
+import { formatCurrency } from "../../utils/utils";
 
 const CustomerRequestList = () => {
   const navigate = useNavigate();
@@ -32,31 +36,38 @@ const CustomerRequestList = () => {
     navigate(`/customer/payment/${record.key}?type=${currentTable}`);
   };
 
-  const bookingTourColumns: TableProps["columns"] = [
+  const bookingTourColumns: TableProps<BookingTourRequest>["columns"] = [
     {
-      title: "Tour",
-      dataIndex: "tour",
-      key: "tour",
+      title: "Tour name",
+      dataIndex: "tourName",
+      key: "tourName",
     },
     {
       title: "Start Date",
-      dataIndex: "start_date",
-      key: "start_date",
+      dataIndex: "startDate",
+      key: "startDate",
     },
     {
       title: "End Date",
-      dataIndex: "end_date",
-      key: "end_date",
+      dataIndex: "endDate",
+      key: "endDate",
+    },
+    {
+      title: "Request date",
+      dataIndex: "requestDate",
+      key: "requestDate",
     },
     {
       title: "Total",
-      dataIndex: "total",
-      key: "total",
+      dataIndex: "totalPrice",
+      key: "totalPrice",
+      render: (total) => formatCurrency(total * 1000),
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      render: (status) => bookingStatusGenerator(status),
     },
     {
       title: "Actions",
@@ -71,49 +82,52 @@ const CustomerRequestList = () => {
     },
   ];
 
-  const bookingTourGuideColumns: TableProps["columns"] = [
-    {
-      title: "Tour Guide",
-      dataIndex: "tour_guide",
-      key: "tour_guide",
-    },
-    {
-      title: "Tour",
-      dataIndex: "tour",
-      key: "tour",
-    },
-    {
-      title: "Start Date",
-      dataIndex: "start_date",
-      key: "start_date",
-    },
-    {
-      title: "End Date",
-      dataIndex: "end_date",
-      key: "end_date",
-    },
-    {
-      title: "Total",
-      dataIndex: "total",
-      key: "total",
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-    },
-    {
-      title: "Actions",
-      key: "actions",
-      render: (_, record) => (
-        <DropDownRequest
-          tableType={currentTable}
-          record={record}
-          handlePaymentNavigation={handlePaymentNavigation}
-        />
-      ),
-    },
-  ];
+  const bookingTourGuideColumns: TableProps<BookingTourGuideRequest>["columns"] =
+    [
+      {
+        title: "Tour Guide",
+        dataIndex: "tourGuideName",
+        key: "tourGuideName",
+      },
+      {
+        title: "Start Date",
+        dataIndex: "startDate",
+        key: "startDate",
+      },
+      {
+        title: "End Date",
+        dataIndex: "endDate",
+        key: "endDate",
+      },
+      {
+        title: "End Date",
+        dataIndex: "requestDate",
+        key: "requestDate",
+      },
+      {
+        title: "Total",
+        dataIndex: "totalPrice",
+        key: "totalPrice",
+        render: (total) => formatCurrency(total * 1000),
+      },
+      {
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
+        render: (status) => bookingStatusGenerator(status),
+      },
+      {
+        title: "Actions",
+        key: "actions",
+        render: (_, record) => (
+          <DropDownRequest
+            tableType={currentTable}
+            record={record}
+            handlePaymentNavigation={handlePaymentNavigation}
+          />
+        ),
+      },
+    ];
 
   const tourData = stateBookingTour.currentBookingTourList;
   const tourGuideData = stateBookingTourGuide.currentBookingTourGuideList;

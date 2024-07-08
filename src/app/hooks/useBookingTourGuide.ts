@@ -22,7 +22,7 @@ export function useBookingTourGuide() {
     async (value: CreateBookingTourGuideParams) => {
       const resultAction = await dispatch(createBookingTourGuide(value));
       if (createBookingTourGuide.fulfilled.match(resultAction)) {
-        navigate("customer/booking-successful");
+        navigate("/customer/booking-successful");
       } else {
         if (resultAction.payload) {
           notification.error({
