@@ -99,14 +99,14 @@ const TourDetailPage = () => {
         </Col>
         <Col offset={1}>
           <Title level={3}>Tour Type</Title>
-          {tour.tourTypeDTOs.map((typeDTO: any, index: number) => (
-          <React.Fragment key={index}>
-            <Paragraph className="text-[1.2rem] font-extrabold">
-              {typeDTO.typeDetail}
-            </Paragraph>
-            {index !== tour.tourTypeDTOs.length - 1 && <span>, </span>}
-          </React.Fragment>
-        ))}
+          {tour.tourTypeDTOs?.map((typeDTO: any, index: number) => (
+            <React.Fragment key={index}>
+              <Paragraph className="text-[1.2rem] font-extrabold">
+                {typeDTO.typeDetail}
+              </Paragraph>
+              {index !== tour.tourTypeDTOs.length - 1 && <span>, </span>}
+            </React.Fragment>
+          ))}
         </Col>
         <Col offset={1}>
           <Title level={3}>Duration</Title>

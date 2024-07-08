@@ -1,6 +1,7 @@
 import { EllipsisOutlined } from "@ant-design/icons";
 import { Dropdown, Modal } from "antd";
 import { MenuProps } from "antd/lib";
+import { formatDateToLocal } from "../../utils/utils";
 
 const DropDownRequest = ({
   record,
@@ -18,10 +19,13 @@ const DropDownRequest = ({
         content: (
           <div>
             <p>
-              <strong>Start Date:</strong> {record.startDate}
+              <strong>Tour Name:</strong> {record.tourName}
             </p>
             <p>
-              <strong>End Date:</strong> {record.endDate}
+              <strong>Start Date:</strong> {formatDateToLocal(record.startDate)}
+            </p>
+            <p>
+              <strong>End Date:</strong> {formatDateToLocal(record.endDate)}
             </p>
             <p>
               <strong>Note:</strong> {record.note}
@@ -45,10 +49,10 @@ const DropDownRequest = ({
               <strong>Tour Guide Name:</strong> {record.tourGuideName}
             </p>
             <p>
-              <strong>Start Date:</strong> {record.startDate}
+              <strong>Start Date:</strong> {formatDateToLocal(record.startDate)}
             </p>
             <p>
-              <strong>End Date:</strong> {record.endDate}
+              <strong>End Date:</strong> {formatDateToLocal(record.endDate)}
             </p>
             <p>
               <strong>Note:</strong> {record.note}
@@ -76,7 +80,7 @@ const DropDownRequest = ({
     handlePaymentNavigation(record);
   };
 
-  const items: MenuProps['items'] = [
+  const items: MenuProps["items"] = [
     {
       key: "1",
       label: "View detail",
@@ -89,9 +93,6 @@ const DropDownRequest = ({
       disabled: record.status !== 1,
     },
   ];
-
-
-
 
   return (
     <Dropdown menu={{ items }} trigger={["click"]}>

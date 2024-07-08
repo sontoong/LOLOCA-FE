@@ -182,12 +182,17 @@ export const uploadTour = createAsyncThunk<any, CreateTourParams>(
     TotalTouristTo.forEach((total) =>
       formData.append("TotalTouristTo[]", total.toString()),
     );
-    AdultPrices.forEach((price) => formData.append("AdultPrices[]", price.toString()));
-    ChildPrices.forEach((price) => formData.append("ChildPrices[]", price.toString()));
+    AdultPrices.forEach((price) =>
+      formData.append("AdultPrices[]", price.toString()),
+    );
+    ChildPrices.forEach((price) =>
+      formData.append("ChildPrices[]", price.toString()),
+    );
 
     images.forEach((file) => {
       formData.append("images", file as File);
     });
+
     try {
       const response = await agent.Tour.uploadTour(formData);
       return response;

@@ -10,7 +10,7 @@ import { useBookingTourGuide } from "../../hooks/useBookingTourGuide";
 import { BookingTourRequest } from "../../models/bookingTour";
 import { BookingTourGuideRequest } from "../../models/bookingTourGuide";
 import { bookingStatusGenerator } from "../../utils/generators/bookingStatus";
-import { formatCurrency } from "../../utils/utils";
+import { formatCurrency, formatDateToLocal } from "../../utils/utils";
 
 const CustomerRequestList = () => {
   const navigate = useNavigate();
@@ -46,16 +46,19 @@ const CustomerRequestList = () => {
       title: "Start Date",
       dataIndex: "startDate",
       key: "startDate",
+      render: (date) => formatDateToLocal(date),
     },
     {
       title: "End Date",
       dataIndex: "endDate",
       key: "endDate",
+      render: (date) => formatDateToLocal(date),
     },
     {
-      title: "Request date",
+      title: "Request Date",
       dataIndex: "requestDate",
       key: "requestDate",
+      render: (date) => formatDateToLocal(date),
     },
     {
       title: "Total",
@@ -93,16 +96,19 @@ const CustomerRequestList = () => {
         title: "Start Date",
         dataIndex: "startDate",
         key: "startDate",
+        render: (date) => formatDateToLocal(date),
       },
       {
         title: "End Date",
         dataIndex: "endDate",
         key: "endDate",
+        render: (date) => formatDateToLocal(date),
       },
       {
-        title: "End Date",
+        title: "Request Date",
         dataIndex: "requestDate",
         key: "requestDate",
+        render: (date) => formatDateToLocal(date),
       },
       {
         title: "Total",

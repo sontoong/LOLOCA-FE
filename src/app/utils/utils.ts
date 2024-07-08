@@ -119,7 +119,20 @@ export const base64ToBlob = (base64: string, filename: string): File | null => {
 export function ensureBase64Avatar(avatarString?: string) {
   if (avatarString) {
     const base64Prefix = "data:image/jpeg;base64,";
+    const urlPattern = /^(http|https):\/\//;
+    const filePattern = /\.(jpeg|jpg|png|gif)$/i;
 
+    // Check if the string is a URL
+    if (urlPattern.test(avatarString)) {
+      return avatarString;
+    }
+
+    // Check if the string is a file path
+    if (filePattern.test(avatarString)) {
+      return avatarString;
+    }
+
+    // Check if the string is already a base64-encoded image
     if (!avatarString.startsWith(base64Prefix)) {
       return base64Prefix + avatarString;
     }

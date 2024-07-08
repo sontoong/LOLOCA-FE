@@ -120,7 +120,7 @@ export const register = createAsyncThunk<any, RegisterParams>(
 );
 
 export const tourGuideRegister = createAsyncThunk<any, TourGuideRegisterParams>(
-  "auth/register/tourguide",
+  "auth/registerTourGuide",
   async (data, { rejectWithValue }) => {
     try {
       const response = await agent.Auth.registerTourGuide({

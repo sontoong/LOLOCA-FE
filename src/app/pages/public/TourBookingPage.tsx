@@ -43,6 +43,15 @@ const TourBookingPage = () => {
     }
   }, [handleGetTourGuidebyId, stateTour.currentTour.tourGuideId]);
 
+  const initialValues = {
+    note: "",
+    startDate: dayjs().add(1, "days"),
+    endDate: dayjs(),
+    numOfAdult: 0,
+    numOfChild: 0,
+    totalPrice: 0,
+  };
+
   const next = () => {
     window.scrollTo(0, 0);
     setCurrentStep(currentStep + 1);
@@ -61,7 +70,12 @@ const TourBookingPage = () => {
     {
       title: "Step 2",
       content: (
-        <TourBookingInfoModal form={form} tour={stateTour.currentTour} />
+        <TourBookingInfoModal
+          form={form}
+          tour={stateTour.currentTour}
+          initialValues={initialValues}
+          loading={stateTour.isFetching}
+        />
       ),
     },
     {
@@ -69,15 +83,6 @@ const TourBookingPage = () => {
       content: <GuideInfoModal guide={stateTourGuide.currentTourguide} />,
     },
   ];
-
-  const initialValues = {
-    note: "",
-    startDate: dayjs(),
-    endDate: dayjs(),
-    numOfAdult: 0,
-    numOfChild: 0,
-    totalPrice: 0,
-  };
 
   const handleSubmit = (values: typeof initialValues) => {
     const startDateString = dateToLocalISOString(values.startDate);
@@ -159,6 +164,7 @@ const TourBookingPage = () => {
                     onClick={() => {
                       mainForm.submit();
                     }}
+                    loading={stateTour.isFetching}
                   />
                 )}
               </div>

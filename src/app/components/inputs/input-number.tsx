@@ -25,13 +25,13 @@ function CustomInputNumber({ unit, pluralUnit, ...props }: TCustomInputNumber) {
 
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
-      <InputNumber 
-        size="large" 
-        min={0} 
-        changeOnWheel 
-        {...props} 
-        value={value} 
-        onChange={handleChange} 
+      <InputNumber
+        size="large"
+        min={0}
+        changeOnWheel
+        {...props}
+        value={value}
+        onChange={handleChange}
       />
       {unit && <span style={{ marginLeft: 8 }}>{getDisplayUnit()}</span>}
     </div>

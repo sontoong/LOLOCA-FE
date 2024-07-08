@@ -1,43 +1,41 @@
-import { Col, Row, Typography } from "antd";
-import { InputDate, Input, InputNumber } from "../../components/inputs";
+import { Col, InputNumber, Row, Typography } from "antd";
+import { InputDate, Input } from "../../components/inputs";
 import { Form } from "../../components/form";
-import { useState, useEffect } from "react";
-import dayjs, { Dayjs } from "dayjs";
+import { useEffect } from "react";
+import dayjs from "dayjs";
 import { Tour } from "../../models/tour";
 import { FormInstance } from "antd/lib";
 import { formatCurrency } from "../../utils/utils";
+import { Skeleton } from "../../components/skeletons";
 
 const { Title } = Typography;
 
-const TourBookingInfoModal = ({ form, tour }: TTourBookingInfoModalProps) => {
-  const [startDate, setStartDate] = useState<Dayjs | null>(null);
-  const [endDate, setEndDate] = useState<Dayjs | null>(null);
-
+const TourBookingInfoModal = ({
+  form,
+  tour,
+  initialValues,
+  loading,
+}: TTourBookingInfoModalProps) => {
+  const startDate: dayjs.Dayjs =
+    Form.useWatch("startDate", form) ?? initialValues.startDate;
   const numOfAdult = Form.useWatch("numOfAdult", form);
   const numOfChild = Form.useWatch("numOfChild", form);
 
-  const initialValues = {
-    note: "",
-    startDate: null,
-    endDate: null,
-    numOfAdult: 0,
-    numOfChild: 0,
-    totalPrice: 0,
-  };
-
   useEffect(() => {
-    if (startDate && tour?.duration) {
-      const calculatedEndDate = startDate.add(tour.duration, "day");
-      setEndDate(calculatedEndDate);
+    if (startDate && tour.duration) {
+      const calculatedEndDate = startDate.add(tour.duration, "days");
       form.setFieldsValue({ endDate: calculatedEndDate });
     }
-  }, [startDate, tour?.duration, form]);
+  }, [startDate, tour.duration, form]);
 
   useEffect(() => {
-    form.setFieldValue(
-      "totalPrice",
-      calculateTotalPrice(tour.tourPriceDTOs, numOfAdult, numOfChild),
-    );
+    form.setFieldsValue({
+      totalPrice: calculateTotalPrice(
+        tour.tourPriceDTOs,
+        numOfAdult,
+        numOfChild,
+      ),
+    });
   }, [form, numOfAdult, numOfChild, tour.tourPriceDTOs]);
 
   const onFinish = (values: typeof initialValues) => {
@@ -48,92 +46,96 @@ const TourBookingInfoModal = ({ form, tour }: TTourBookingInfoModalProps) => {
     console.log("Failed:", errorInfo);
   };
 
-  const validateStartDate = (_: any, value: Dayjs) => {
-    if (!value || !endDate || value.isBefore(endDate)) {
-      return Promise.resolve();
-    }
-    return Promise.reject(new Error("Start date must be before end date"));
-  };
-
   return (
-    <Form
-      form={form}
-      initialValues={initialValues}
-      name="BookingForm"
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-    >
-      <Form.Item name="totalPrice" hidden />
-      <Row gutter={[16, 16]}>
-        <Col span={12}>
+    <>
+      {!loading ? (
+        <Form
+          form={form}
+          initialValues={initialValues}
+          name="BookingForm"
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+        >
+          <Form.Item name="totalPrice" hidden />
+          <Row gutter={[16, 16]}>
+            <Col span={12}>
+              <Form.Item
+                name="startDate"
+                label="Start"
+                rules={[
+                  { required: true, message: "Please select start date" },
+                ]}
+              >
+                <InputDate
+                  placeholder="Enter start date"
+                  minDate={dayjs().add(1, "days")}
+                />
+              </Form.Item>
+              <Form.Item
+                name="numOfAdult"
+                label="Adults"
+                rules={[{ type: "number", required: true, min: 1 }]}
+              >
+                <InputNumber
+                  placeholder="How many adults will there be?"
+                  // unit="adult"
+                  // pluralUnit="adults"
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="endDate"
+                label="End"
+                rules={[{ required: true, message: "Please select end date" }]}
+              >
+                <InputDate
+                  placeholder=""
+                  value={startDate.add(tour.duration, "days")}
+                  disabled
+                />
+              </Form.Item>
+              <Form.Item
+                name="numOfChild"
+                label="Child/Children (2-12y)"
+                rules={[{ type: "number", required: true }]}
+              >
+                <InputNumber
+                  placeholder="How many children will there be?"
+                  // unit="child"
+                  // pluralUnit="children"
+                />
+              </Form.Item>
+            </Col>
+          </Row>
           <Form.Item
-            name="startDate"
-            label="Start"
+            name="note"
+            label="Your Requirement"
             rules={[
-              { required: true, message: "Please select start date" },
-              { validator: validateStartDate },
+              {
+                type: "string",
+                whitespace: true,
+              },
             ]}
           >
-            <InputDate
-              placeholder="Enter start date"
-              minDate={dayjs().add(1, "days")}
-              onChange={(date) => setStartDate(date)}
+            <Input.TextArea
+              placeholder="I want to..."
+              showCount
+              maxLength={100}
             />
           </Form.Item>
-          <Form.Item
-            name="numOfAdult"
-            label="Adults"
-            rules={[{ type: "number", required: true, min: 1 }]}
-          >
-            <InputNumber
-              placeholder="How many adults will there be?"
-              unit="adult"
-              pluralUnit="adults"
-            />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item
-            name="endDate"
-            label="End"
-            rules={[{ required: true, message: "Please select end date" }]}
-          >
-            <InputDate placeholder="" value={endDate} disabled />
-          </Form.Item>
-          <Form.Item
-            name="numOfChild"
-            label="Child/Children (2-12y)"
-            rules={[{ type: "number", required: true }]}
-          >
-            <InputNumber
-              placeholder="How many children will there be?"
-              unit="child"
-              pluralUnit="children"
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Form.Item
-        name="note"
-        label="Your Requirement"
-        rules={[
-          {
-            type: "string",
-            required: true,
-            whitespace: true,
-          },
-        ]}
-      >
-        <Input.TextArea placeholder="I want to..." showCount maxLength={100} />
-      </Form.Item>
-      <Title level={4}>
-        Tổng:{" "}
-        {formatCurrency(
-          calculateTotalPrice(tour.tourPriceDTOs, numOfAdult, numOfChild) *
-            1000,
-        )}
-      </Title>
-    </Form>
+          <Title level={4}>
+            Tổng:{" "}
+            {formatCurrency(
+              calculateTotalPrice(tour.tourPriceDTOs, numOfAdult, numOfChild) *
+                1000,
+            )}
+          </Title>
+        </Form>
+      ) : (
+        <Skeleton />
+      )}
+    </>
   );
 };
 
@@ -180,4 +182,6 @@ function calculateTotalPrice(
 type TTourBookingInfoModalProps = {
   form: FormInstance;
   tour: Tour;
+  initialValues: any;
+  loading: boolean;
 };
