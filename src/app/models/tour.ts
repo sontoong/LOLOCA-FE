@@ -8,24 +8,24 @@ export type Tour = {
   activity?: string;
   duration: number;
   status: number;
-  tourImgViewList: string[];
-  tourExcludeDTOs: {
+  tourImgViewList?: string[];
+  tourExcludeDTOs?: {
     excludeDetail: string;
   }[];
-  tourHighlightDTOs: {
+  tourHighlightDTOs?: {
     highlightDetail: string;
   }[];
-  tourIncludeDTOs: {
+  tourIncludeDTOs?: {
     includeDetail: string;
   }[];
-  tourItineraryDTOs: {
+  tourItineraryDTOs?: {
     name: string;
     description: string;
   }[];
-  tourTypeDTOs: {
+  tourTypeDTOs?: {
     typeDetail: string;
   }[];
-  tourPriceDTOs: {
+  tourPriceDTOs?: {
     totalTouristFrom: number;
     totalTouristTo: number;
     adultPrice: number;

@@ -1,32 +1,32 @@
-import { Divider } from '../../components/divider';
-import { Image, Typography } from 'antd';
+import { Divider } from "../../components/divider";
+import { Typography } from "antd";
+import { TourGuide } from "../../models/tourGuide";
+import { Image } from "../../components/image";
 
-type tourDetailModel = {
-  image: string;
-  name: string;
-  description: string;
-};
-
-const TourGuidePaymentDetail = ({ tourDetails }: { tourDetails: tourDetailModel }) => {
+const TourGuidePaymentDetail = ({
+  tourGuideDetails,
+}: {
+  tourGuideDetails: TourGuide;
+}) => {
   const { Title, Paragraph } = Typography;
 
   return (
     <div>
-      <Title level={3} style={{ fontWeight: 'bolder' }}>
+      <Title level={3} style={{ fontWeight: "bolder" }}>
         Payment Detail
       </Title>
       <Divider colorSplit="black" />
       <div className="flex items-center">
         <Image
-          src={tourDetails.image}
-          
-          style={{ objectFit: 'cover', width:"6rem", aspectRatio: 1 / 1 }}
+          src={tourGuideDetails.avatar}
+          style={{ objectFit: "cover", width: "6rem", aspectRatio: 1 / 1 }}
         />
         <div className="ml-[2rem]">
-          <Title level={5} style={{ fontWeight: 'bolder' }}>
-            Request for {tourDetails.name}
+          <Title level={5} style={{ fontWeight: "bolder" }}>
+            Request for{" "}
+            {`${tourGuideDetails.firstName} ${tourGuideDetails.lastName}`}
           </Title>
-          <Paragraph>{tourDetails.description}</Paragraph>
+          <Paragraph>{tourGuideDetails.description}</Paragraph>
         </div>
       </div>
     </div>

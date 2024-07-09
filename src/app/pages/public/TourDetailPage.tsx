@@ -104,7 +104,10 @@ const TourDetailPage = () => {
               <Paragraph className="text-[1.2rem] font-extrabold">
                 {typeDTO.typeDetail}
               </Paragraph>
-              {index !== tour.tourTypeDTOs.length - 1 && <span>, </span>}
+              {index !==
+                (tour.tourTypeDTOs ? tour.tourTypeDTOs.length - 1 : 0) && (
+                <span>, </span>
+              )}
             </React.Fragment>
           ))}
         </Col>

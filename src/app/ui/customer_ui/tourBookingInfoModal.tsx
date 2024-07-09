@@ -149,6 +149,8 @@ function calculateTotalPrice(
   let adultPrice = 0;
   let childPrice = 0;
 
+  if (!prices) return 0;
+
   for (const priceDTO of prices) {
     if (
       adults >= priceDTO.totalTouristFrom &&

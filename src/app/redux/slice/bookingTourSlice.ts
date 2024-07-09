@@ -134,6 +134,24 @@ export const getBookingTourByTourGuideId = createAsyncThunk<
   },
 );
 
+export const getBookingTourById = createAsyncThunk<
+  any,
+  GetBookingTourByIdParams
+>("bookingTour/getBookingTourById", async (data, { rejectWithValue }) => {
+  const { id } = data;
+  try {
+    const response = await agent.BookingTour.getBookingTourById(id);
+    return response;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+});
+
 export const { setCurrentBookingTour, setCurrentBookingTourList } =
   bookingTourSlice.actions;
 
@@ -156,4 +174,8 @@ export type GetBookingTourByCustomerIdParams = {
 
 export type GetBookingTourByTourGuideIdParams = {
   tourGuideId: string;
+};
+
+export type GetBookingTourByIdParams = {
+  id: string;
 };

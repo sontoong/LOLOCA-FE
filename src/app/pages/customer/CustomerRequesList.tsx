@@ -3,7 +3,6 @@ import { TableProps } from "antd";
 import { Table } from "../../components/table";
 import { PrimaryButton } from "../../components/buttons";
 import OutlineButton from "../../components/buttons/outline-button";
-import { useNavigate } from "react-router-dom";
 import DropDownRequest from "../../ui/customer_ui/dropDownRequest";
 import { useBookingTour } from "../../hooks/useBookingTour";
 import { useBookingTourGuide } from "../../hooks/useBookingTourGuide";
@@ -11,9 +10,10 @@ import { BookingTourRequest } from "../../models/bookingTour";
 import { BookingTourGuideRequest } from "../../models/bookingTourGuide";
 import { bookingStatusGenerator } from "../../utils/generators/bookingStatus";
 import { formatCurrency, formatDateToLocal } from "../../utils/utils";
+import { useOrder } from "../../hooks/useOrder";
 
 const CustomerRequestList = () => {
-  const navigate = useNavigate();
+  const { handleNavigateToPayment } = useOrder();
   const { state: stateBookingTour, handleGetBookingTourByCustomerId } =
     useBookingTour();
   const {
@@ -23,6 +23,7 @@ const CustomerRequestList = () => {
   const [currentTable, setCurrentTable] = useState("tour");
 
   const userId = localStorage.getItem("userId") ?? "";
+
   useEffect(() => {
     handleGetBookingTourByCustomerId({ customerId: userId });
     handleGetBookingTourGuideByCustomerId({ customerId: userId });
@@ -33,7 +34,11 @@ const CustomerRequestList = () => {
   ]);
 
   const handlePaymentNavigation = (record: any) => {
-    navigate(`/customer/payment/${record.key}?type=${currentTable}`);
+    const requestId =
+      record.bookingTourRequestId ?? record.bookingTourGuideRequestId;
+    const type = record.bookingTourRequestId ? "tour" : "tourGuide";
+
+    handleNavigateToPayment({ id: requestId, type: type });
   };
 
   const bookingTourColumns: TableProps<BookingTourRequest>["columns"] = [
@@ -135,9 +140,6 @@ const CustomerRequestList = () => {
       },
     ];
 
-  const tourData = stateBookingTour.currentBookingTourList;
-  const tourGuideData = stateBookingTourGuide.currentBookingTourGuideList;
-
   return (
     <div className="mx-[4rem] my-[2rem]">
       <div className="mb-[2rem]">
@@ -167,9 +169,19 @@ const CustomerRequestList = () => {
         )}
       </div>
       {currentTable === "tour" ? (
-        <Table columns={bookingTourColumns} dataSource={tourData} />
+        <Table
+          columns={bookingTourColumns}
+          dataSource={stateBookingTour.currentBookingTourList}
+          rowKey={(record) => record.bookingTourRequestId}
+          loading={stateBookingTour.isFetching}
+        />
       ) : (
-        <Table columns={bookingTourGuideColumns} dataSource={tourGuideData} />
+        <Table
+          columns={bookingTourGuideColumns}
+          dataSource={stateBookingTourGuide.currentBookingTourGuideList}
+          rowKey={(record) => record.bookingTourGuideRequestId}
+          loading={stateBookingTourGuide.isFetching}
+        />
       )}
     </div>
   );

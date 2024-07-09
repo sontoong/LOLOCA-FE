@@ -1,56 +1,80 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Banner } from "../../components/banner";
 import LolocaBanner from "../../../assets/loloca-banner.png";
 import { Col, CollapseProps, Row, Space, Typography } from "antd";
 import { Divider } from "../../components/divider";
 import { Input } from "../../components/inputs";
 import { PrimaryButton } from "../../components/buttons";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Collapse } from "../../components/collapse";
 import TourPaymentDetail from "../../ui/customer_ui/tourPaymentDetail";
 import TourGuidePaymentDetail from "../../ui/customer_ui/tourGuidePaymentDetail";
+import { useOrder } from "../../hooks/useOrder";
+import { useBookingTourGuide } from "../../hooks/useBookingTourGuide";
+import { useBookingTour } from "../../hooks/useBookingTour";
+import { useTour } from "../../hooks/useTour";
+import { useTourGuide } from "../../hooks/useTourGuide";
+import { useAuth } from "../../hooks/useAuth";
+import { Skeleton } from "../../components/skeletons";
+import { formatCurrency, formatDateToLocal } from "../../utils/utils";
+import { useNavigate } from "react-router-dom";
 
 const PaymentPage = () => {
+  const navigate = useNavigate();
+  const { state: stateOrder } = useOrder();
+  const { state: stateTour, handleGetTourById } = useTour();
+  const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
+  const { state: stateBookingTour, handleGetBookingTourById } =
+    useBookingTour();
+  const { state: stateBookingTourGuide, handleGetBookingTourGuideById } =
+    useBookingTourGuide();
+  const { state: stateAuth } = useAuth();
   const { Title, Paragraph } = Typography;
   const [currentStep, setCurrentStep] = useState(1);
-  const navigate = useNavigate();
-  const { requestId } = useParams();
 
-  const location = useLocation();
+  useEffect(() => {
+    if (!stateOrder.requestTour.id) {
+      navigate("/customer/request");
+    }
+  }, [navigate, stateOrder.requestTour.id]);
 
-  const queryParams = new URLSearchParams(location.search);
-  const type = queryParams.get("type");
+  useEffect(() => {
+    switch (stateOrder.requestTour.type) {
+      case "tour":
+        handleGetBookingTourById({ id: stateOrder.requestTour.id });
+        break;
 
-  const tourDetails = {
-    title: "Full-Day Private Tour Of Hanoi City's Highlights",
-    description: `Explore the Old Quarter, French Quarter, and New Quarter of
-                  Hanoi in one day with your Vietnamese guide. See the impressive
-                  tower of the Tran Quoc pagoda, a local lacquer workshop, and the
-                  Ho Chi Minh Mausoleum. Experience tranquillity at the Temple of
-                  Literature, the Ngoc Son Temple at Hoan Kiem lake, and a
-                  delicious local lunch in the city`,
-    image: LolocaBanner,
-  };
+      case "tourGuide":
+        handleGetBookingTourGuideById({ id: stateOrder.requestTour.id });
+        break;
 
-  const tourGuideDetails = {
-    name: "Nguyen Van A",
-    description: `I'm very cool`,
-    image: LolocaBanner,
-  };
+      default:
+        break;
+    }
+  }, [
+    handleGetBookingTourById,
+    handleGetBookingTourGuideById,
+    stateOrder.requestTour.id,
+    stateOrder.requestTour.type,
+  ]);
 
-  const personalInfo = {
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    phone: "123-456-7890",
-  };
-
-  const bookingDetails = {
-    date: "15/03/2023",
-    numAdults: 2,
-    numChildren: 3,
-    total: "$200",
-  };
+  useEffect(() => {
+    if (stateBookingTour.currentBookingTour.tourId) {
+      handleGetTourById({
+        tourId: stateBookingTour.currentBookingTour.tourId.toString(),
+      });
+    }
+    if (stateBookingTourGuide.currentBookingTourGuide.tourGuideId) {
+      handleGetTourGuidebyId({
+        tourGuideId:
+          stateBookingTourGuide.currentBookingTourGuide.tourGuideId.toString(),
+      });
+    }
+  }, [
+    handleGetTourById,
+    handleGetTourGuidebyId,
+    stateBookingTour.currentBookingTour.tourId,
+    stateBookingTourGuide.currentBookingTourGuide.tourGuideId,
+  ]);
 
   const handleNext = () => {
     setCurrentStep(2);
@@ -62,7 +86,6 @@ const PaymentPage = () => {
 
   const handleBooking = () => {
     // Navigate to the booking confirmation page or handle booking logic here
-    navigate(`/customer/booking-successful/${requestId}`);
   };
 
   const items: CollapseProps["items"] = [
@@ -92,6 +115,147 @@ const PaymentPage = () => {
     },
   ];
 
+  const renderBookingInfo = () => {
+    switch (stateOrder.requestTour.type) {
+      case "tour":
+        if (stateBookingTour.isFetching) {
+          return <Skeleton />;
+        }
+        return (
+          <>
+            <Title level={5} style={{ fontWeight: "bolder" }}>
+              {stateTour.currentTour.name}
+            </Title>
+            <Divider colorSplit="black" />
+            <div>
+              <div>
+                <Row className="flex justify-between">
+                  <Col className="font-light">
+                    <Paragraph>Date:</Paragraph>
+                    <Paragraph>Unit:</Paragraph>
+                  </Col>
+                  <Col className="text-right">
+                    <Paragraph>
+                      {formatDateToLocal(
+                        stateBookingTour.currentBookingTour.requestDate,
+                      )}
+                    </Paragraph>
+                    <Paragraph>
+                      {stateBookingTour.currentBookingTour.numOfChild} x{" "}
+                      {stateBookingTour.currentBookingTour.numOfChild > 1
+                        ? "Children"
+                        : "Child"}
+                      , {stateBookingTour.currentBookingTour.numOfAdult} x{" "}
+                      {stateBookingTour.currentBookingTour.numOfAdult > 1
+                        ? "Adults"
+                        : "Adult"}
+                    </Paragraph>
+                  </Col>
+                </Row>
+                <Divider colorSplit="black" />
+                <Row className="flex justify-between">
+                  <Col className="font-light">Total:</Col>
+                  <Col className="font-bold">
+                    {formatCurrency(
+                      stateBookingTour.currentBookingTour.totalPrice,
+                    )}
+                  </Col>
+                </Row>
+              </div>
+              <div className="mb-[2rem] mt-[2rem] flex justify-end">
+                {currentStep === 1 && (
+                  <PrimaryButton text="Next" onClick={handleNext} />
+                )}
+                {currentStep === 2 && (
+                  <>
+                    <PrimaryButton
+                      text="Back"
+                      onClick={handleBack}
+                      className="mr-[1rem]"
+                    />
+                    <PrimaryButton text="Booking" onClick={handleBooking} />
+                  </>
+                )}
+              </div>
+            </div>
+          </>
+        );
+
+      case "tourGuide":
+        if (stateBookingTourGuide.isFetching) {
+          return <Skeleton />;
+        }
+        return (
+          <div className="ml-[2rem] w-[20%]">
+            <Title level={5} style={{ fontWeight: "bolder" }}>
+              {stateTourGuide.currentTourguide.firstName}
+            </Title>
+            <Divider colorSplit="black" />
+            <div>
+              <div>
+                <Row className="flex justify-between">
+                  <Col className="font-light">
+                    <Paragraph>Date:</Paragraph>
+                    <Paragraph>Unit:</Paragraph>
+                  </Col>
+                  <Col className="text-right">
+                    <Paragraph>
+                      {formatDateToLocal(
+                        stateBookingTourGuide.currentBookingTourGuide
+                          .requestDate,
+                      )}
+                    </Paragraph>
+                    <Paragraph>
+                      {stateBookingTourGuide.currentBookingTourGuide.numOfChild}{" "}
+                      x{" "}
+                      {stateBookingTourGuide.currentBookingTourGuide
+                        .numOfChild > 1
+                        ? "Children"
+                        : "Child"}
+                      ,{" "}
+                      {stateBookingTourGuide.currentBookingTourGuide.numOfAdult}{" "}
+                      x{" "}
+                      {stateBookingTourGuide.currentBookingTourGuide
+                        .numOfAdult > 1
+                        ? "Adults"
+                        : "Adult"}
+                    </Paragraph>
+                  </Col>
+                </Row>
+                <Divider colorSplit="black" />
+                <Row className="flex justify-between">
+                  <Col className="font-light">Total:</Col>
+                  <Col className="font-bold">
+                    {formatCurrency(
+                      stateBookingTour.currentBookingTour.totalPrice,
+                    )}
+                  </Col>
+                </Row>
+              </div>
+              <div className="mb-[2rem] mt-[2rem] flex justify-end">
+                {currentStep === 1 && (
+                  <PrimaryButton text="Next" onClick={handleNext} />
+                )}
+                {currentStep === 2 && (
+                  <>
+                    <PrimaryButton
+                      text="Back"
+                      onClick={handleBack}
+                      className="mr-[1rem]"
+                    />
+                    <PrimaryButton text="Booking" onClick={handleBooking} />
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+
+      default:
+        break;
+    }
+  };
+
   return (
     <>
       <Banner height="30rem" image={LolocaBanner} boxShadow={false} />
@@ -99,8 +263,14 @@ const PaymentPage = () => {
         <div className="w-[60%]">
           {currentStep === 1 && (
             <div>
-              {type === "tour" && <TourPaymentDetail tourDetails={tourDetails} />}
-              {type === "tour-guide" && <TourGuidePaymentDetail tourDetails={tourGuideDetails} />}
+              {stateOrder.requestTour.type === "tour" && (
+                <TourPaymentDetail tourDetails={stateTour.currentTour} />
+              )}
+              {stateOrder.requestTour.type === "tourGuide" && (
+                <TourGuidePaymentDetail
+                  tourGuideDetails={stateTourGuide.currentTourguide}
+                />
+              )}
               <div>
                 <Title level={3} style={{ fontWeight: "bolder" }}>
                   Personal Information
@@ -110,21 +280,21 @@ const PaymentPage = () => {
                   <Col span={12}>
                     <Paragraph className="text-[1.1rem]">
                       <span className="font-bold">First Name:</span>{" "}
-                      {personalInfo.firstName}
+                      {stateAuth.currentUser.firstName}
                     </Paragraph>
                     <Paragraph className="text-[1.1rem]">
                       <span className="font-bold">Email:</span>{" "}
-                      {personalInfo.email}
+                      {stateAuth.currentUser.Email}
                     </Paragraph>
                     <Paragraph className="text-[1.1rem]">
                       <span className="font-bold">Phone:</span>{" "}
-                      {personalInfo.phone}
+                      {stateAuth.currentUser.phoneNumber}
                     </Paragraph>
                   </Col>
                   <Col span={12}>
                     <Paragraph className="text-[1.1rem]">
                       <span className="font-bold">Last Name:</span>{" "}
-                      {personalInfo.lastName}
+                      {stateAuth.currentUser.lastName}
                     </Paragraph>
                   </Col>
                 </Row>
@@ -171,51 +341,7 @@ const PaymentPage = () => {
             </div>
           )}
         </div>
-        <div className="ml-[2rem] w-[20%]">
-          <Title level={5} style={{ fontWeight: "bolder" }}>
-            {tourDetails.title}
-          </Title>
-          <Divider colorSplit="black" />
-          <div>
-            <div>
-              <Row className="flex justify-between">
-                <Col className="font-light">
-                  <Paragraph>Date:</Paragraph>
-                  <Paragraph>Unit:</Paragraph>
-                </Col>
-                <Col className="text-right">
-                  <Paragraph>{bookingDetails.date}</Paragraph>
-                  <Paragraph>
-                    {bookingDetails.numChildren} x{" "}
-                    {bookingDetails.numChildren > 1 ? "Children" : "Child"},{" "}
-                    {bookingDetails.numAdults} x{" "}
-                    {bookingDetails.numAdults > 1 ? "Adults" : "Adult"}
-                  </Paragraph>
-                </Col>
-              </Row>
-              <Divider colorSplit="black" />
-              <Row className="flex justify-between">
-                <Col className="font-light">Total:</Col>
-                <Col className="font-bold">{bookingDetails.total}</Col>
-              </Row>
-            </div>
-            <div className="mb-[2rem] mt-[2rem] flex justify-end">
-              {currentStep === 1 && (
-                <PrimaryButton text="Next" onClick={handleNext} />
-              )}
-              {currentStep === 2 && (
-                <>
-                  <PrimaryButton
-                    text="Back"
-                    onClick={handleBack}
-                    className="mr-[1rem]"
-                  />
-                  <PrimaryButton text="Booking" onClick={handleBooking} />
-                </>
-              )}
-            </div>
-          </div>
-        </div>
+        <div className="ml-[2rem] w-[20%]">{renderBookingInfo()}</div>
       </div>
     </>
   );

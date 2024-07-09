@@ -140,6 +140,28 @@ export const getBookingTourGuideByTourGuideId = createAsyncThunk<
   },
 );
 
+export const getBookingTourGuideById = createAsyncThunk<
+  any,
+  GetBookingTourGuideByIdParams
+>(
+  "bookingTourGuide/getBookingTourGuideById",
+  async (data, { rejectWithValue }) => {
+    const { id } = data;
+    try {
+      const response =
+        await agent.BookingTourGuideRequest.getBookingTourGuideById(id);
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+    }
+  },
+);
+
 export const { setCurrentBookingTourGuide, setCurrentBookingTourGuideList } =
   bookingTourGuideSlice.actions;
 
@@ -161,4 +183,8 @@ export type GetBookingTourGuideByCustomerIdParams = {
 
 export type GetBookingTourGuideByTourGuideIdParams = {
   tourGuideId: string;
+};
+
+export type GetBookingTourGuideByIdParams = {
+  id: string;
 };

@@ -90,7 +90,7 @@ const DropDownRequest = ({
       key: "2",
       label: "Proceed to Payment",
       onClick: handleProceedToPayment,
-      disabled: record.status !== 1,
+      disabled: record.status !== 0,
     },
   ];
 

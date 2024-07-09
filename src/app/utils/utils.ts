@@ -1,7 +1,13 @@
 import dayjs from "dayjs";
 
 export const formatCurrency = (amount: number) => {
-  return amount.toLocaleString("vi-VN", {
+  if (amount === null || amount === undefined) {
+    return "";
+  }
+
+  const amountCheck = amount < 1000 ? amount * 1000 : amount;
+
+  return amountCheck.toLocaleString("vi-VN", {
     style: "currency",
     currency: "VND",
   });
@@ -40,6 +46,8 @@ export const formatDateToLocal = (
   dateStr: string,
   locale: string = "vi-VN",
 ) => {
+  if (dateStr === null || dateStr === undefined) return "";
+
   const date = new Date(dateStr);
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",

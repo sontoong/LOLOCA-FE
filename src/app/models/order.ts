@@ -9,3 +9,7 @@ export type Order = {
   status: number;
   createAt: string;
 };
+
+export type OrderList = Order[];
+
+export type RequestTour = { id: string; type: "tour" | "tourGuide" };

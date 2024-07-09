@@ -1,15 +1,17 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import agent from "../../utils/agent";
 import { AxiosError } from "axios";
-import { Order } from "../../models/order";
+import { OrderList, RequestTour } from "../../models/order";
 
 type TOrder = {
-  currentOrder: Order;
+  requestTour: RequestTour;
+  currentOrderList: OrderList;
   isFetching: boolean;
 };
 
 const initialState: TOrder = {
-  currentOrder: {} as Order,
+  requestTour: {} as TOrder["requestTour"],
+  currentOrderList: [],
   isFetching: false,
 };
 
@@ -17,8 +19,11 @@ const orderSlice = createSlice({
   name: "order",
   initialState,
   reducers: {
-    setCurrentOrder: (state, action: PayloadAction<Order>) => {
-      state.currentOrder = action.payload;
+    setRequestTour: (state, action: PayloadAction<TOrder["requestTour"]>) => {
+      state.requestTour = action.payload;
+    },
+    setCurrentOrderList: (state, action: PayloadAction<OrderList>) => {
+      state.currentOrderList = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -64,10 +69,10 @@ export const createOrderTour = createAsyncThunk<any, CreateOrderTourParams>(
   },
 );
 
-export const createOrderTourguide = createAsyncThunk<
+export const createOrderTourGuide = createAsyncThunk<
   any,
   CreateOrderTourGuideParams
->("order/createOrderTour", async (data, { rejectWithValue }) => {
+>("order/createOrderTourGuide", async (data, { rejectWithValue }) => {
   const { bookingTourGuideRequestId, paymentProvider, transactionCode } = data;
   try {
     const response = await agent.Order.createOrderTourGuide({
@@ -104,7 +109,7 @@ export const getOrderDetail = createAsyncThunk<any, GetOrderDetailParams>(
   },
 );
 
-export const { setCurrentOrder } = orderSlice.actions;
+export const { setCurrentOrderList, setRequestTour } = orderSlice.actions;
 
 export default orderSlice.reducer;
 

@@ -7,6 +7,8 @@ export type BookingTourRequest = {
   requestTimeOut: string; // ISO 8601 format date string
   startDate: string; // ISO 8601 format date string
   endDate: string; // ISO 8601 format date string
+  numOfAdult: number;
+  numOfChild: number;
   totalPrice: number;
   note: string;
   status: number;

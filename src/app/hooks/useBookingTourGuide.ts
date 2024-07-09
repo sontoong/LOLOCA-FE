@@ -7,8 +7,11 @@ import {
   CreateBookingTourGuideParams,
   getBookingTourGuideByCustomerId,
   GetBookingTourGuideByCustomerIdParams,
+  getBookingTourGuideById,
+  GetBookingTourGuideByIdParams,
   getBookingTourGuideByTourGuideId,
   GetBookingTourGuideByTourGuideIdParams,
+  setCurrentBookingTourGuide,
   setCurrentBookingTourGuideList,
 } from "../redux/slice/bookingTourGuideSlice";
 
@@ -94,10 +97,35 @@ export function useBookingTourGuide() {
     [dispatch, notification],
   );
 
+  const handleGetBookingTourGuideById = useCallback(
+    async (value: GetBookingTourGuideByIdParams) => {
+      const resultAction = await dispatch(getBookingTourGuideById(value));
+      if (getBookingTourGuideById.fulfilled.match(resultAction)) {
+        dispatch(setCurrentBookingTourGuide(resultAction.payload));
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
   return {
     state,
     handleCreateBookingTourGuide,
     handleGetBookingTourGuideByCustomerId,
     handleGetBookingTourGuideByTourGuideId,
+    handleGetBookingTourGuideById,
   };
 }

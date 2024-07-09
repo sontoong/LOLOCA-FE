@@ -1,29 +1,29 @@
-import { Divider } from '../../components/divider';
-import { Image, Typography } from 'antd';
+import { Divider } from "../../components/divider";
+import { Typography } from "antd";
+import { Tour } from "../../models/tour";
+import { Image } from "../../components/image";
 
-type tourDetailModel = {
-  image: string;
-  title: string;
-  description: string;
-};
-
-const TourPaymentDetail = ({ tourDetails }: { tourDetails: tourDetailModel }) => {
+const TourPaymentDetail = ({ tourDetails }: { tourDetails: Tour }) => {
   const { Title, Paragraph } = Typography;
 
   return (
     <div>
-      <Title level={3} style={{ fontWeight: 'bolder' }}>
+      <Title level={3} style={{ fontWeight: "bolder" }}>
         Payment Detail
       </Title>
       <Divider colorSplit="black" />
       <div className="flex items-center">
         <Image
-          src={tourDetails.image}
-          style={{ objectFit: 'cover', width:"6rem",  aspectRatio: 1 / 1 }}
+          src={
+            tourDetails.tourImgViewList
+              ? tourDetails.tourImgViewList[0]
+              : undefined
+          }
+          style={{ objectFit: "cover", width: "6rem", aspectRatio: 1 / 1 }}
         />
         <div className="ml-[2rem]">
-          <Title level={5} style={{ fontWeight: 'bolder' }}>
-            {tourDetails.title}
+          <Title level={5} style={{ fontWeight: "bolder" }}>
+            {tourDetails.name}
           </Title>
           <Paragraph>{tourDetails.description}</Paragraph>
         </div>

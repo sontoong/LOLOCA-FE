@@ -94,6 +94,46 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "customer/profile",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.customer]}>
+              <CustomerProfile />
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "customer/request",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.customer]}>
+              <CustomerRequesList />
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "customer/payment",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.customer]}>
+              <PaymentPage />
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "customer/booking-successful",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.customer]}>
+              <BookingSuccess />
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
         path: "guides",
         element: (
           <Suspense fallback={<></>}>
@@ -169,46 +209,6 @@ export const router = createBrowserRouter([
           <Suspense fallback={<></>}>
             <PrivateRoute inverted={false} requiredRoles={[ROLE.tourguide]}>
               <RequestListPage />
-            </PrivateRoute>
-          </Suspense>
-        ),
-      },
-      {
-        path: "customer/profile",
-        element: (
-          <Suspense fallback={<></>}>
-            <PrivateRoute inverted={false} requiredRoles={[ROLE.customer]}>
-              <CustomerProfile />
-            </PrivateRoute>
-          </Suspense>
-        ),
-      },
-      {
-        path: "customer/request",
-        element: (
-          <Suspense fallback={<></>}>
-            <PrivateRoute inverted={false} requiredRoles={[ROLE.customer]}>
-              <CustomerRequesList />
-            </PrivateRoute>
-          </Suspense>
-        ),
-      },
-      {
-        path: "customer/payment/:requestId",
-        element: (
-          <Suspense fallback={<></>}>
-            <PrivateRoute inverted={false} requiredRoles={[ROLE.customer]}>
-              <PaymentPage />
-            </PrivateRoute>
-          </Suspense>
-        ),
-      },
-      {
-        path: "customer/booking-successful",
-        element: (
-          <Suspense fallback={<></>}>
-            <PrivateRoute inverted={false} requiredRoles={[ROLE.customer]}>
-              <BookingSuccess />
             </PrivateRoute>
           </Suspense>
         ),
