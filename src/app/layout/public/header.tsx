@@ -34,12 +34,11 @@ export default function MyHeader() {
         ];
       case ROLE.tourguide:
         return [
-          generateItem("Tours", "/guides/tour", "", [
-            generateItem("Create Tour", "/guides/tour/create"),
-            generateItem("My Tour", "/guides/tour"),
+          generateItem("Tours", "/guide/tour", "", [
+            generateItem("Create Tour", "/guide/tour/create"),
+            generateItem("My Tour", "/guide/tours"),
           ]),
-          generateItem("Request", "/guides/request-list"),
-
+          generateItem("Request", "/guide/request-list"),
         ];
       default:
         return [
@@ -77,7 +76,7 @@ export default function MyHeader() {
         return [
           generateItemProfile(
             "Thông tin cá nhân",
-            "guides/profile",
+            "/guide/profile",
             <UserOutlined />,
           ),
           generateItemProfile(

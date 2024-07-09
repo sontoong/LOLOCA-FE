@@ -143,7 +143,7 @@ const TourGuideProfile = () => {
       </div>
       <div className="flex justify-end mr-[5rem]">
         <ProfileEditModal tourGuideData={currentUser} tourGuideId={tourGuideId}/>
-        <PrimaryButton text="Create Tour" onClick={() => navigate('/guides/tour/create')}/>
+        <PrimaryButton text="Create Tour" onClick={() => navigate('/guide/tour/create')}/>
       </div>
       <Title
         level={1}

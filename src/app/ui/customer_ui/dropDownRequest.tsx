@@ -12,9 +12,11 @@ const DropDownRequest = ({
   handlePaymentNavigation: any;
   tableType: string;
 }) => {
+  const [modal, contextHolder] = Modal.useModal();
+
   const handleViewDetail = () => {
     if (tableType === "tour") {
-      Modal.info({
+      modal.info({
         title: "Tour Booking Details",
         content: (
           <div>
@@ -41,7 +43,7 @@ const DropDownRequest = ({
         onOk() {},
       });
     } else if (tableType === "tour-guide") {
-      Modal.info({
+      modal.info({
         title: "Tour Guide Booking Details",
         content: (
           <div>
@@ -90,16 +92,19 @@ const DropDownRequest = ({
       key: "2",
       label: "Proceed to Payment",
       onClick: handleProceedToPayment,
-      disabled: record.status !== 0,
+      disabled: record.status !== 1,
     },
   ];
 
   return (
-    <Dropdown menu={{ items }} trigger={["click"]}>
-      <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-        <EllipsisOutlined />
-      </a>
-    </Dropdown>
+    <>
+      <Dropdown menu={{ items }} trigger={["click"]}>
+        <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
+          <EllipsisOutlined />
+        </a>
+      </Dropdown>
+      {contextHolder}
+    </>
   );
 };
 

@@ -94,46 +94,6 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "customer/profile",
-        element: (
-          <Suspense fallback={<></>}>
-            <PrivateRoute inverted={false} requiredRoles={[ROLE.customer]}>
-              <CustomerProfile />
-            </PrivateRoute>
-          </Suspense>
-        ),
-      },
-      {
-        path: "customer/request",
-        element: (
-          <Suspense fallback={<></>}>
-            <PrivateRoute inverted={false} requiredRoles={[ROLE.customer]}>
-              <CustomerRequesList />
-            </PrivateRoute>
-          </Suspense>
-        ),
-      },
-      {
-        path: "customer/payment",
-        element: (
-          <Suspense fallback={<></>}>
-            <PrivateRoute inverted={false} requiredRoles={[ROLE.customer]}>
-              <PaymentPage />
-            </PrivateRoute>
-          </Suspense>
-        ),
-      },
-      {
-        path: "customer/booking-successful",
-        element: (
-          <Suspense fallback={<></>}>
-            <PrivateRoute inverted={false} requiredRoles={[ROLE.customer]}>
-              <BookingSuccess />
-            </PrivateRoute>
-          </Suspense>
-        ),
-      },
-      {
         path: "guides",
         element: (
           <Suspense fallback={<></>}>
@@ -174,44 +134,88 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "guides/profile",
+        path: "customer",
         element: (
-          <Suspense fallback={<></>}>
-            <PrivateRoute inverted={false} requiredRoles={[ROLE.tourguide]}>
-              <TourGuideProfile />
-            </PrivateRoute>
-          </Suspense>
+          <PrivateRoute inverted={false} requiredRoles={[ROLE.customer]}>
+            <Outlet />
+          </PrivateRoute>
         ),
+        children: [
+          {
+            path: "profile",
+            element: (
+              <Suspense fallback={<></>}>
+                <CustomerProfile />
+              </Suspense>
+            ),
+          },
+          {
+            path: "request",
+            element: (
+              <Suspense fallback={<></>}>
+                <CustomerRequesList />
+              </Suspense>
+            ),
+          },
+          {
+            path: "payment",
+            element: (
+              <Suspense fallback={<></>}>
+                <PaymentPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "booking-successful",
+            element: (
+              <Suspense fallback={<></>}>
+                <BookingSuccess />
+              </Suspense>
+            ),
+          },
+        ],
       },
       {
-        path: "guides/tour/create",
+        path: "guide",
         element: (
-          <Suspense fallback={<></>}>
-            <PrivateRoute inverted={false} requiredRoles={[ROLE.tourguide]}>
-              <CreateTourPage />
-            </PrivateRoute>
-          </Suspense>
+          <PrivateRoute inverted={false} requiredRoles={[ROLE.tourguide]}>
+            <Outlet />
+          </PrivateRoute>
         ),
-      },
-      {
-        path: "guides/tour",
-        element: (
-          <Suspense fallback={<></>}>
-            <PrivateRoute inverted={false} requiredRoles={[ROLE.tourguide]}>
-              <GuideTourPage />
-            </PrivateRoute>
-          </Suspense>
-        ),
-      },
-      {
-        path: "guides/request-list",
-        element: (
-          <Suspense fallback={<></>}>
-            <PrivateRoute inverted={false} requiredRoles={[ROLE.tourguide]}>
-              <RequestListPage />
-            </PrivateRoute>
-          </Suspense>
-        ),
+        children: [
+          {
+            path: "profile",
+            element: (
+              <Suspense fallback={<></>}>
+                <TourGuideProfile />
+              </Suspense>
+            ),
+          },
+          {
+            path: "tour/create",
+            element: (
+              <Suspense fallback={<></>}>
+                <CreateTourPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "tours",
+            element: (
+              <Suspense fallback={<></>}>
+                <GuideTourPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "request-list",
+            element: (
+              <Suspense fallback={<></>}>
+                <RequestListPage />
+              </Suspense>
+            ),
+          },
+        ],
       },
       {
         path: "error",

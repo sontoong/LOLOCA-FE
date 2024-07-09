@@ -129,7 +129,7 @@ const TourGuideTourDetailPage = () => {
             <PrimaryButton
               text="Edit Tour"
               className="px-[4rem]"
-              onClick={() => navigate(`/guides/tour/edit/${tourId}`)}
+              onClick={() => navigate(`/guide/tour/edit/${tourId}`)}
             />
             <PrimaryButton
               text="Delete Tour"
@@ -281,7 +281,7 @@ const TourGuideTourDetailPage = () => {
               <Title style={{ color: "#004AAD", fontWeight: "bolder" }}>
                 Tour Guide
               </Title>
-              <Link to={`/guides/${stateTour.currentTour?.tourGuideId}`}>
+              <Link to={`/guide/${stateTour.currentTour?.tourGuideId}`}>
                 <Avatar
                   size={160}
                   src={stateTourGuide.currentTourguide.avatar}

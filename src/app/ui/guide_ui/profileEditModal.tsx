@@ -6,37 +6,47 @@ import { ImageUpload } from "../../components/image-upload";
 import { Form } from "../../components/form";
 import { Input } from "../../components/inputs";
 import { TourGuide } from "../../models/tourGuide";
-import { useTourGuide } from "../../hooks/useTourGuide"; 
+import { useTourGuide } from "../../hooks/useTourGuide";
 import { base64ToBlob, ensureBase64Avatar } from "../../utils/utils";
 import { v4 as uuidv4 } from "uuid";
 import { useAuth } from "../../hooks/useAuth";
 
-const ProfileEditModal = ({ tourGuideData, tourGuideId }: { tourGuideData: TourGuide, tourGuideId: string }) => {
+const ProfileEditModal = ({
+  tourGuideData,
+  tourGuideId,
+}: {
+  tourGuideData: TourGuide;
+  tourGuideId: string;
+}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { Title } = Typography;
   const [bannerImages, setBannerImages] = useState<UploadFile[]>([]);
   const [profileImages, setProfileImages] = useState<UploadFile[]>([]);
-  const {state} = useTourGuide()
-  const {handleGetUserInfo} = useAuth()
+  const { state } = useTourGuide();
+  const { handleGetUserInfo } = useAuth();
   const [form] = Form.useForm();
-  const { handleUpdateTourGuideInfo, handleUpdateTourGuideAvatar, handleUpdateTourguideCover} = useTourGuide(); 
+  const {
+    handleUpdateTourGuideInfo,
+    handleUpdateTourGuideAvatar,
+    handleUpdateTourguideCover,
+  } = useTourGuide();
 
   useEffect(() => {
-      if (tourGuideData.avatar) {
-        setProfileImages([
-          {
-            name: "Avatar",
-            uid: uuidv4(),
-            url: ensureBase64Avatar(tourGuideData.avatar),
-          },
-        ]);
-        setBannerImages([
-          {
-            name: "Cover",
-            uid: uuidv4(),
-            url: ensureBase64Avatar(tourGuideData.cover),
-          },
-        ]);
+    if (tourGuideData.avatar) {
+      setProfileImages([
+        {
+          name: "Avatar",
+          uid: uuidv4(),
+          url: ensureBase64Avatar(tourGuideData.avatar),
+        },
+      ]);
+      setBannerImages([
+        {
+          name: "Cover",
+          uid: uuidv4(),
+          url: ensureBase64Avatar(tourGuideData.cover),
+        },
+      ]);
     }
   }, [tourGuideData, form]);
 
@@ -45,6 +55,19 @@ const ProfileEditModal = ({ tourGuideData, tourGuideId }: { tourGuideData: TourG
   };
 
   const handleOk = async () => {
+    // Submit the form
+    form.submit();
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const initialValues = {
+    description: tourGuideData.description,
+  };
+
+  const onFinish = async (values: any) => {
     // Handle avatar upload
     await handleUpdateTourGuideAvatar({
       TourGuideId: parseInt(tourGuideId),
@@ -75,39 +98,23 @@ const ProfileEditModal = ({ tourGuideData, tourGuideId }: { tourGuideData: TourG
       }),
     });
 
-    // Submit the form
-    form.submit();
-
-
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
-  const initialValues = {
-    description: tourGuideData.description,
-  };
-
-  const onFinish = async (values: any) => {
     await handleUpdateTourGuideInfo({
-        tourGuideId: tourGuideId, 
-        description: values.description,
-        firstName: tourGuideData.firstName,
-        lastName: tourGuideData.lastName,
-        dateOfBirth: tourGuideData.dateOfBirth,
-        gender: tourGuideData.gender,
-        phoneNumber: tourGuideData.phoneNumber ?? "",
-        address: tourGuideData.address ?? "",
-        zaloLink: tourGuideData.zaloLink,
-        facebookLink: tourGuideData.facebookLink,
-        instagramLink: tourGuideData.instagramLink,
-        pricePerDay: tourGuideData.pricePerDay,
-        status: tourGuideData.status,
-    }); 
-    
-    await handleGetUserInfo()
+      tourGuideId: tourGuideId,
+      description: values.description,
+      firstName: tourGuideData.firstName,
+      lastName: tourGuideData.lastName,
+      dateOfBirth: tourGuideData.dateOfBirth,
+      gender: tourGuideData.gender,
+      phoneNumber: tourGuideData.phoneNumber ?? "",
+      address: tourGuideData.address ?? "",
+      zaloLink: tourGuideData.zaloLink,
+      facebookLink: tourGuideData.facebookLink,
+      instagramLink: tourGuideData.instagramLink,
+      pricePerDay: tourGuideData.pricePerDay,
+      status: tourGuideData.status,
+    });
 
+    await handleGetUserInfo();
   };
 
   const onFinishFailed = (errorInfo: any) => {

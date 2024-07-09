@@ -4,7 +4,7 @@ import { Form } from "../form";
 import { Input } from "../inputs";
 import { resetOTPModal } from "../../redux/slice/uiSlice";
 
-function CustomModal({ children, ...rest} : CustomModalProp) {
+function CustomModal({ children, ...rest }: CustomModalProp) {
   return (
     <>
       <ConfigProvider
@@ -12,11 +12,11 @@ function CustomModal({ children, ...rest} : CustomModalProp) {
           components: {
             Modal: {
               titleColor: "#004AAD",
-            }
+            },
           },
         }}
       >
-        <Modal {...rest}>
+        <Modal {...rest} destroyOnClose={true}>
           {children}
         </Modal>
       </ConfigProvider>
@@ -24,7 +24,7 @@ function CustomModal({ children, ...rest} : CustomModalProp) {
   );
 }
 
-type CustomModalProp = ModalProps
+type CustomModalProp = ModalProps;
 
 function OTP(props: OTPProps) {
   const dispatch = useAppDispatch();
