@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Steps } from "antd";
+import { useState, useEffect } from "react";
+import { Steps, UploadFile } from "antd";
 import { PrimaryButton } from "../../components/buttons";
 import { Form } from "../../components/form";
 import { Card } from "../../components/card";
@@ -18,6 +18,9 @@ const CreateTourPage = () => {
   const [form] = Form.useForm();
   const [mainForm] = Form.useForm();
   const { handleUploadTour } = useTour();
+  const [tourImages, setTourImages] = useState<UploadFile[]>([]);
+  const [duration, setDuration] = useState<number | undefined>(undefined);
+  const [itineraryCount, setItineraryCount] = useState<number>(1);
 
   const next = () => {
     window.scrollTo(0, 0);
@@ -29,31 +32,39 @@ const CreateTourPage = () => {
     setCurrentStep(currentStep - 1);
   };
 
-  const initialValues : CreateTourParams = {
+  const initialValues: CreateTourParams = {
     Name: "",
     Category: "",
-    Duration: 0,
+    Duration: duration || 0,
     images: [],
     TypeDetails: [],
     Activity: "",
     Description: "",
-    HighlightDetails: [],
-    IncludeDetails: [],
-    ExcludeDetails: [],
-    ItineraryNames: [],
-    ItineraryDescriptions: [],
-    AdultPrices: [],
-    ChildPrices: [],
-    TotalTouristFrom: [],
-    TotalTouristTo: [],
+    HighlightDetails: [""],
+    IncludeDetails: [""],
+    ExcludeDetails: [""],
+    ItineraryNames: Array.from({ length: itineraryCount }, () => ""),
+    ItineraryDescriptions: Array.from({ length: itineraryCount }, () => ""),
+    AdultPrices: [0],
+    ChildPrices: [0],
+    TotalTouristFrom: [0],
+    TotalTouristTo: [0],
     CityId: 0,
     TourGuideId: 0,
   };
 
+  useEffect(() => {
+    // Update itinerary names and descriptions in mainForm when itineraryCount changes
+    mainForm.setFieldsValue({
+      ItineraryNames: Array.from({ length: itineraryCount }, () => ""),
+      ItineraryDescriptions: Array.from({ length: itineraryCount }, () => ""),
+    });
+  }, [itineraryCount, mainForm]);
+
   const steps = [
     {
       title: "Step 1",
-      content: <CreateTourInfo form={form} initialValues={initialValues}/>,
+      content: <CreateTourInfo form={form} initialValues={initialValues} setTourImages={setTourImages} tourImages={tourImages} setDuration={setDuration} duration={duration}/>,
     },
     {
       title: "Step 2",
@@ -61,7 +72,7 @@ const CreateTourPage = () => {
     },
     {
       title: "Step 3",
-      content: <CreateTourItinerary form={form} initialValues={initialValues} />,
+      content: <CreateTourItinerary form={form} initialValues={initialValues} setItineraryCount={setItineraryCount} />,
     },
     {
       title: "Step 4",
@@ -69,8 +80,21 @@ const CreateTourPage = () => {
     },
   ];
 
-  const handleSubmit = (values: CreateTourParams) => {
-    handleUploadTour(values);
+  const handleSubmit = (values: any) => {
+    // Extracting values from the 'prices' array
+    const { price, ...restValues } = values;
+  
+    const formattedValues: any = {
+      ...restValues, // Copying all other values except 'prices'
+      AdultPrices: price?.map((item: any) => item.AdultPrices), // Extracting 'AdultPrices' from each 'prices' item
+      ChildPrices: price?.map((item: any) => item.ChildPrices), // Extracting 'ChildPrices' from each 'prices' item
+      TotalTouristFrom: price?.map((item: any) => item.TotalTouristFrom), // Extracting 'TotalTouristFrom' from each 'prices' item
+      TotalTouristTo: price?.map((item: any) => item.TotalTouristTo), // Extracting 'TotalTouristTo' from each 'prices' item
+    };
+  
+    console.log("Formatted Create Tour Values: ", formattedValues);
+  
+    handleUploadTour(formattedValues);
   };
 
   return (
@@ -91,7 +115,7 @@ const CreateTourPage = () => {
           onFormFinish={(name, { values, forms }) => {
             const { mainForm } = forms;
             if (name === "CreateTourInfoForm") {
-              mainForm.setFieldsValue({ ...values });
+              mainForm.setFieldsValue({ ...values, images: tourImages });
               next();
             }
             if (name === "CreateTourDetailForm") {
@@ -115,18 +139,25 @@ const CreateTourPage = () => {
             form={mainForm}
             onFinish={handleSubmit}
           >
-            <Form.Item name="name" hidden />
-            <Form.Item name="category" hidden />
-            <Form.Item name="duration" hidden />
-            <Form.Item name="tourTypeDTOs" hidden />
-            <Form.Item name="activity" hidden />
-            <Form.Item name="note" hidden />
-            <Form.Item name="tourHighlightDTOs" hidden />
-            <Form.Item name="tourIncludeDTOs" hidden />
-            <Form.Item name="tourExcludeDTOs" hidden />
-            <Form.Item name="tourItineraryDTOs" hidden />
-            <Form.Item name="tourPriceDTOs" hidden />
-            <Form.Item name="image" hidden/>
+            <Form.Item name="Name" hidden />
+            <Form.Item name="Category" hidden />
+            <Form.Item name="Duration" hidden />
+            <Form.Item name="images" hidden />
+            <Form.Item name="TypeDetails" hidden />
+            <Form.Item name="Activity" hidden />
+            <Form.Item name="Description" hidden />
+            <Form.Item name="HighlightDetails" hidden />
+            <Form.Item name="IncludeDetails" hidden />
+            <Form.Item name="ExcludeDetails" hidden />
+            <Form.Item name="ItineraryNames" hidden />
+            <Form.Item name="ItineraryDescriptions" hidden />
+            <Form.Item name="AdultPrices" hidden />
+            <Form.Item name="ChildPrices" hidden />
+            <Form.Item name="TotalTouristFrom" hidden />
+            <Form.Item name="TotalTouristTo" hidden />
+            <Form.Item name="CityId" hidden />
+            <Form.Item name="TourGuideId" hidden />
+            <Form.Item name="price" hidden/>
             <div>
               <div className="mt-4 flex justify-end">
                 {currentStep > 0 && (
@@ -155,6 +186,5 @@ const CreateTourPage = () => {
     </div>
   );
 };
-
 
 export default CreateTourPage;

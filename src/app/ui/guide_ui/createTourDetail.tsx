@@ -23,7 +23,7 @@ const CreateTourDetail = ({ form, initialValues }: { form: any, initialValues: a
       onFinishFailed={onFinishFailed}
     >
       <Form.Item
-        name="note"
+        name="Description"
         label="Description"
         rules={[
           {

@@ -1,198 +1,193 @@
-import { useEffect, useState } from "react";
-import { Form, InputNumber, Table } from "antd";
-import { TableProps } from "antd/es/table";
-import { MinusCircleFilled, PlusCircleFilled } from "@ant-design/icons";
+import { useMemo, useEffect } from "react";
+import { Form, InputNumber, Typography } from "antd";
+import { MinusCircleFilled, PlusOutlined } from "@ant-design/icons";
+import { PrimaryButton } from "../../components/buttons";
 
 interface TourPrice {
-  key: string;
-  totalTouristFrom: number;
-  totalTouristTo: number;
-  adultPrice: number;
-  childPrice: number;
+  TotalTouristFrom: number;
+  TotalTouristTo: number;
+  AdultPrices: number;
+  ChildPrices: number;
 }
 
-const CreateTourPrice = ({ form, initialValues }: { form: any, initialValues: any }) => {
-  const [initialData, setInitialData] = useState<TourPrice[]>(initialValues.tourPriceDTOs);
-  const [nextKey, setNextKey] = useState<number>(1);
+const { Title } = Typography;
+
+const CreateTourPrice = ({
+  form,
+  initialValues,
+}: {
+  form: any;
+  initialValues: any;
+}) => {
+  const initialAdultPrices = useMemo(
+    () => initialValues.AdultPrices || [0],
+    [initialValues.AdultPrices],
+  );
+  const initialChildPrices = useMemo(
+    () => initialValues.ChildPrices || [0],
+    [initialValues.ChildPrices],
+  );
+  const initialTotalTouristFrom = useMemo(
+    () => initialValues.TotalTouristFrom || [0],
+    [initialValues.TotalTouristFrom],
+  );
+  const initialTotalTouristTo = useMemo(
+    () => initialValues.TotalTouristTo || [0],
+    [initialValues.TotalTouristTo],
+  );
+
+  const initialData: TourPrice[] = [];
+  const maxLength = Math.max(
+    initialAdultPrices.length,
+    initialChildPrices.length,
+    initialTotalTouristFrom.length,
+    initialTotalTouristTo.length,
+  );
+  for (let i = 0; i < maxLength; i++) {
+    initialData.push({
+      TotalTouristFrom: initialTotalTouristFrom[i] || 0,
+      TotalTouristTo: initialTotalTouristTo[i] || 0,
+      AdultPrices: initialAdultPrices[i] || 0,
+      ChildPrices: initialChildPrices[i] || 0,
+    });
+  }
 
   useEffect(() => {
-    form.setFieldsValue({ tourPriceDTOs: initialData });
-  }, [form, initialData]);
+    form.setFieldsValue({
+      prices: initialData,
+    });
+  }, [initialData, form]);
 
   const onFinish = (values: any) => {
-    const tourPrices = values.tourPriceDTOs.map((item: TourPrice) => ({
-      totalTouristFrom: item.totalTouristFrom,
-      totalTouristTo: item.totalTouristTo,
-      adultPrice: item.adultPrice,
-      childPrice: item.childPrice,
-    }));
-    console.log("Tour Prices: ", tourPrices);
-    // Here you can send `tourPrices` to your backend or handle it as needed.
+    const formattedValues = {
+      AdultPrices: values.prices.map((item: any) => item.AdultPrices),
+      ChildPrices: values.prices.map((item: any) => item.ChildPrices),
+      TotalTouristFrom: values.prices.map((item: any) => item.TotalTouristFrom),
+      TotalTouristTo: values.prices.map((item: any) => item.TotalTouristTo),
+    };
+    console.log("Formatted Form Values: ", formattedValues);
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
 
-  const handleAddRow = () => {
-    const newKey = nextKey;
-    const newData: TourPrice = {
-      key: getKey(newKey),
-      totalTouristFrom: 0,
-      totalTouristTo: 0,
-      adultPrice: 0,
-      childPrice: 0,
-    };
-    const updatedData = [...initialData, newData];
-    setInitialData(updatedData);
-    setNextKey(newKey + 1);
-  };
-
-  const handleDeleteRow = (record: TourPrice) => {
-    if (initialData.length > 1) {
-      const updatedData = initialData.filter((item) => item.key !== record.key);
-      setInitialData(updatedData);
-    }
-  };
-
-  const getKey = (index: number) => `tourPrice${index}`;
-
-  const columns: TableProps<TourPrice>["columns"] = [
-    {
-      title: "From",
-      dataIndex: "totalTouristFrom",
-      key: "totalTouristFrom",
-      render: (_, record, index) => (
-        <Form.Item
-          name={['tourPriceDTOs', index, 'totalTouristFrom']}
-          rules={[{ required: true, message: 'Please input a value!' }]}
-        >
-          <InputNumber
-            min={1}
-            value={record.totalTouristFrom}
-            onChange={(value) => handleFieldChange(value, 'totalTouristFrom', index)}
-          />
-        </Form.Item>
-      ),
-    },
-    {
-      title: "To",
-      dataIndex: "totalTouristTo",
-      key: "totalTouristTo",
-      render: (_, record, index) => (
-        <Form.Item
-          name={['tourPriceDTOs', index, 'totalTouristTo']}
-          rules={[
-            { required: true, message: 'Please input a value!' },
-            {
-              validator: (_, value) => {
-                const fromValue = form.getFieldValue(['tourPriceDTOs', index, 'totalTouristFrom']);
-                if (value <= fromValue) {
-                  return Promise.reject(new Error("'To' is too low"));
-                }
-                return Promise.resolve();
-              },
-            },
+  return (
+    <>
+      <div style={{ display: "flex", marginBottom: 16 }}>
+        <div style={{ flex: 1 }}>
+          <Title level={5} style={{ marginBottom: 8 }}>
+            From
+          </Title>
+        </div>
+        <div style={{ flex: 1 }}>
+          <Title level={5} style={{ marginBottom: 8 }}>
+            To
+          </Title>
+        </div>
+        <div style={{ flex: 1 }}>
+          <Title level={5} style={{ marginBottom: 8 }}>
+            Adult Prices
+          </Title>
+        </div>
+        <div style={{ flex: 1 }}>
+          <Title level={5} style={{ marginBottom: 8 }}>
+            Child Prices
+          </Title>
+        </div>
+      </div>
+      <Form
+        form={form}
+        name="CreateTourPriceForm"
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+      >
+        <Form.List
+          name="price"
+          initialValue={[
+            { TotalTouristFrom: 0, TotalTouristTo: 0, AdultPrices: 0, ChildPrices: 0 },
           ]}
         >
-          <InputNumber
-            min={1}
-            value={record.totalTouristTo}
-            onChange={(value) => handleFieldChange(value, 'totalTouristTo', index)}
-          />
-        </Form.Item>
-      ),
-    },
-    {
-      title: "Adult",
-      dataIndex: "adultPrice",
-      key: "adultPrice",
-      render: (_, record, index) => (
-        <Form.Item
-          name={['tourPriceDTOs', index, 'adultPrice']}
-          rules={[{ required: true, message: 'Please input a value!' }]}
-        >
-          <InputNumber
-            min={0}
-            value={record.adultPrice}
-            onChange={(value) => handleFieldChange(value, 'adultPrice', index)}
-          />
-        </Form.Item>
-      ),
-    },
-    {
-      title: "Child",
-      dataIndex: "childPrice",
-      key: "childPrice",
-      render: (_, record, index) => (
-        <Form.Item
-          name={['tourPriceDTOs', index, 'childPrice']}
-          rules={[{ required: true, message: 'Please input a value!' }]}
-        >
-          <InputNumber
-            min={0}
-            value={record.childPrice}
-            onChange={(value) => handleFieldChange(value, 'childPrice', index)}
-          />
-        </Form.Item>
-      ),
-    },
-    {
-      title: "Actions",
-      render: (_, record, index) => (
-        <>
-          {initialData.length > 1 && index !== initialData.length - 1 ? (
-            <MinusCircleFilled
-              style={{ color: 'red', fontSize: '2.5rem', cursor: 'pointer' }}
-              onClick={() => handleDeleteRow(record)}
-            />
-          ) : null}
-          {index === initialData.length - 1 ? (
-            <PlusCircleFilled
-              style={{
-                color: '#004AAD',
-                fontSize: '2.5rem',
-                marginLeft: 10,
-                cursor: 'pointer',
-              }}
-              onClick={handleAddRow}
-            />
-          ) : null}
-        </>
-      ),
-    },
-  ];
-
-  const handleFieldChange = (value: any, fieldName: string, index: number) => {
-    const updatedData = [...initialData];
-    updatedData[index] = {
-      ...updatedData[index],
-      [fieldName]: value,
-    };
-    setInitialData(updatedData);
-  };
-
-  useEffect(() => {
-    console.log("Current number of rows:", initialData.length);
-    console.log("Current initialData:", initialData);
-  }, [initialData]);
-
-  return (
-    <Form
-      form={form}
-      name="CreateTourPriceForm"
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-    >
-      <Table
-        columns={columns}
-        dataSource={initialData}
-        pagination={false}
-        rowKey="key"
-      />
-    </Form>
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map((field, index) => (
+                <div
+                  key={field.key}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginBottom: 8,
+                  }}
+                >
+                  <Form.Item
+                    name={[field.name, "TotalTouristFrom"]}
+                    rules={[{ required: true }]}
+                    style={{ flex: 1, marginRight: 8 }}
+                  >
+                    <InputNumber placeholder="From" min={1} />
+                  </Form.Item>
+                  <Form.Item
+                    name={[field.name, "TotalTouristTo"]}
+                    rules={[
+                      { required: true },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          const fromValue = getFieldValue([
+                            "price",
+                            index,
+                            "TotalTouristFrom",
+                          ]);
+                          if (!value || fromValue === undefined || value > fromValue) {
+                            return Promise.resolve();
+                          }
+                          return Promise.reject(
+                            new Error("'To' value must be greater than 'From'"),
+                          );
+                        },
+                      }),
+                    ]}
+                    style={{ flex: 1, marginRight: 8 }}
+                  >
+                    <InputNumber placeholder="To" min={1} />
+                  </Form.Item>
+                  <Form.Item
+                    name={[field.name, "AdultPrices"]}
+                    rules={[{ required: true }]}
+                    style={{ flex: 1, marginRight: 8 }}
+                  >
+                    <InputNumber placeholder="Adult Prices" min={0} />
+                  </Form.Item>
+                  <Form.Item
+                    name={[field.name, "ChildPrices"]}
+                    rules={[{ required: true }]}
+                    style={{ flex: 1, marginRight: 8 }}
+                  >
+                    <InputNumber placeholder="Child Prices" min={0} />
+                  </Form.Item>
+                  {fields.length > 1 ? (
+                    <MinusCircleFilled
+                      style={{
+                        color: "red",
+                        fontSize: "2.5rem",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => remove(field.name)}
+                    />
+                  ) : null}
+                </div>
+              ))}
+              <PrimaryButton
+                onClick={() => add()}
+                icon={<PlusOutlined />}
+                style={{ width: "100%" }}
+                text="Add Price"
+              />
+            </>
+          )}
+        </Form.List>
+      </Form>
+    </>
   );
 };
 
 export default CreateTourPrice;
-
