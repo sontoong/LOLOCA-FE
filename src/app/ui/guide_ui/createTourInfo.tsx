@@ -2,16 +2,15 @@ import { Col, Row, Typography } from "antd";
 import { Form } from "../../components/form";
 import { Input, InputNumber, InputSelect } from "../../components/inputs";
 import { ImageUpload } from "../../components/image-upload";
-import { useState } from "react";
 import { UploadFile } from "antd/lib";
 import { base64ToBlob } from "../../utils/utils";
 import { CreateTourParams } from "../../redux/slice/tourSlice";
 
-const CreateTourInfo = ({ form, initialValues }: { form: any, initialValues: CreateTourParams }) => {
-  const [tourImages, setTourImages] = useState<UploadFile[]>([]);
-  const {Paragraph} = Typography
+const CreateTourInfo = ({ form, initialValues, setTourImages, tourImages, setDuration, duration }: { form: any, initialValues: CreateTourParams, setTourImages: any, tourImages: UploadFile[], setDuration: (value: number | undefined) => void, duration: number | undefined }) => {
+  const { Paragraph } = Typography;
+
   const onFinish = (values: CreateTourParams) => {
-  console.log("Tour Images:",tourImages)
+    console.log("Tour Images:", tourImages);
 
     const submitValues = {
       ...values,
@@ -27,6 +26,9 @@ const CreateTourInfo = ({ form, initialValues }: { form: any, initialValues: Cre
       }),
     };
     console.log("Form Values: ", submitValues);
+
+    // Set the duration value
+    setDuration(values.Duration);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -106,20 +108,8 @@ const CreateTourInfo = ({ form, initialValues }: { form: any, initialValues: Cre
       >
         <Input placeholder="Enter tour name here" />
       </Form.Item>
-      {/* <Form.Item
-        name="image"
-        label="Tour Image"
-        rules={[
-          {
-            type: "string",
-            required: true,
-            whitespace: true,
-          },
-        ]}
-      > */}
       <Paragraph><span className="text-red-500 text-[1.2rem]">* </span>Images</Paragraph>
-      <ImageUpload setImages={setTourImages} images={tourImages} maxCount={10}/>
-      {/* </Form.Item> */}
+      <ImageUpload setImages={setTourImages} images={tourImages} maxCount={10} />
       <Form.Item
         name="Category"
         label="Category"
@@ -159,15 +149,15 @@ const CreateTourInfo = ({ form, initialValues }: { form: any, initialValues: Cre
               { required: true, message: "Please enter duration of tour" },
             ]}
           >
-            <InputNumber placeholder="Enter a duration" defaultValue={initialValues.Duration || 0} unit="day" pluralUnit="days"/>
+            <InputNumber placeholder="Enter a duration" defaultValue={duration || 0} unit="day" pluralUnit="days" />
           </Form.Item>
         </Col>
         <Col offset={4} span={10}>
           <Form.Item
             name="Activity"
-            label="Acttvity Level"
+            label="Activity Level"
             rules={[
-              { required: true, message: "Please choose a activity level" },
+              { required: true, message: "Please choose an activity level" },
             ]}
           >
             <InputSelect
