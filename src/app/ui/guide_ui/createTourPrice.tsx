@@ -21,42 +21,45 @@ const CreateTourPrice = ({
 }) => {
   const initialAdultPrices = useMemo(
     () => initialValues.AdultPrices || [0],
-    [initialValues.AdultPrices],
+    [initialValues.AdultPrices]
   );
   const initialChildPrices = useMemo(
     () => initialValues.ChildPrices || [0],
-    [initialValues.ChildPrices],
+    [initialValues.ChildPrices]
   );
   const initialTotalTouristFrom = useMemo(
     () => initialValues.TotalTouristFrom || [0],
-    [initialValues.TotalTouristFrom],
+    [initialValues.TotalTouristFrom]
   );
   const initialTotalTouristTo = useMemo(
     () => initialValues.TotalTouristTo || [0],
-    [initialValues.TotalTouristTo],
+    [initialValues.TotalTouristTo]
   );
 
-  const initialData: TourPrice[] = [];
-  const maxLength = Math.max(
-    initialAdultPrices.length,
-    initialChildPrices.length,
-    initialTotalTouristFrom.length,
-    initialTotalTouristTo.length,
-  );
-  for (let i = 0; i < maxLength; i++) {
-    initialData.push({
-      TotalTouristFrom: initialTotalTouristFrom[i] || 0,
-      TotalTouristTo: initialTotalTouristTo[i] || 0,
-      AdultPrices: initialAdultPrices[i] || 0,
-      ChildPrices: initialChildPrices[i] || 0,
-    });
-  }
+  const initialData = useMemo(() => {
+    const maxLength = Math.max(
+      initialAdultPrices.length,
+      initialChildPrices.length,
+      initialTotalTouristFrom.length,
+      initialTotalTouristTo.length
+    );
+    const data: TourPrice[] = [];
+    for (let i = 0; i < maxLength; i++) {
+      data.push({
+        TotalTouristFrom: initialTotalTouristFrom[i] || 0,
+        TotalTouristTo: initialTotalTouristTo[i] || 0,
+        AdultPrices: initialAdultPrices[i] || 0,
+        ChildPrices: initialChildPrices[i] || 0,
+      });
+    }
+    return data;
+  }, [initialAdultPrices, initialChildPrices, initialTotalTouristFrom, initialTotalTouristTo]);
 
   useEffect(() => {
     form.setFieldsValue({
       prices: initialData,
     });
-  }, [initialData, form]);
+  }, [form, initialData]);
 
   const onFinish = (values: any) => {
     const formattedValues = {

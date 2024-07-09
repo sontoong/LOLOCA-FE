@@ -147,9 +147,9 @@ export const router = createBrowserRouter([
         path: "guides/tour/create",
         element: (
           <Suspense fallback={<></>}>
-            {/* <PrivateRoute inverted={false} requiredRoles={[ROLE.tourguide]}> */}
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.tourguide]}>
               <CreateTourPage />
-            {/* </PrivateRoute> */}
+            </PrivateRoute>
           </Suspense>
         ),
       },
