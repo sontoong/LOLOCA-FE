@@ -7,12 +7,14 @@ type TTourGuide = {
   currentTourguide: TourGuide;
   currentTourGuideList: TourGuideList;
   isFetching: boolean;
+  isSending: boolean;
 };
 
 const initialState: TTourGuide = {
   currentTourguide: {} as TourGuide,
   currentTourGuideList: { tourGuides: [], totalPage: 0 },
   isFetching: false,
+  isSending: false,
 };
 
 const tourGuideSlice = createSlice({
@@ -30,26 +32,34 @@ const tourGuideSlice = createSlice({
     builder
       .addMatcher(
         (action) =>
-          action.type.startsWith("tourGuide/") &&
+          action.type.startsWith("tourGuide/fetch/") &&
           action.type.endsWith("/pending"),
         () => {
           return { ...initialState, isFetching: true };
-        }
+        },
       )
       .addMatcher(
         (action) =>
-          action.type.startsWith("tourGuide/") &&
-          (action.type.endsWith("/fulfilled") ||
-            action.type.endsWith("/rejected")),
-        (state) => {
-          state.isFetching = false;
-        }
+          action.type.startsWith("tourGuide/send/") &&
+          action.type.endsWith("/pending"),
+        () => {
+          return { ...initialState, isSending: true };
+        },
       );
+    builder.addMatcher(
+      (action) =>
+        action.type.startsWith("tourGuide/") &&
+        (action.type.endsWith("/fulfilled") ||
+          action.type.endsWith("/rejected")),
+      (state) => {
+        state.isFetching = false;
+      },
+    );
   },
 });
 
 export const getTourGuideById = createAsyncThunk<any, GetTourGuideByIdParams>(
-  "tourGuide/getTourGuideById",
+  "tourGuide/fetch/getTourGuideById",
   async (data, { rejectWithValue }) => {
     const { tourGuideId } = data;
     try {
@@ -64,13 +74,13 @@ export const getTourGuideById = createAsyncThunk<any, GetTourGuideByIdParams>(
       }
       throw error;
     }
-  }
+  },
 );
 
 export const getRandomTourGuide = createAsyncThunk<
   any,
   GetRandomTourGuideParams
->("tourGuide/getRandomTourGuide", async (data, { rejectWithValue }) => {
+>("tourGuide/fetch/getRandomTourGuide", async (data, { rejectWithValue }) => {
   const { page, pageSize } = data;
   try {
     const response = await agent.TourGuide.getRandomTourGuide({
@@ -92,31 +102,34 @@ export const getRandomTourGuide = createAsyncThunk<
 export const getRandomTourGuideInCity = createAsyncThunk<
   any,
   GetRandomTourGuideInCityParams
->("tourGuide/getRandomTourGuideInCity", async (data, { rejectWithValue }) => {
-  const { page, pageSize, CityId } = data;
-  try {
-    const response = await agent.TourGuide.getRandomTourGuideInCity({
-      CityId,
-      page,
-      pageSize,
-    });
-    return response;
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      if (!error.response) {
-        throw error;
+>(
+  "tourGuide/fetch/getRandomTourGuideInCity",
+  async (data, { rejectWithValue }) => {
+    const { page, pageSize, CityId } = data;
+    try {
+      const response = await agent.TourGuide.getRandomTourGuideInCity({
+        CityId,
+        page,
+        pageSize,
+      });
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
       }
-      return rejectWithValue(error.response.data);
+      throw error;
     }
-    throw error;
-  }
-});
+  },
+);
 
 export const updateTourGuideInfo = createAsyncThunk<
   any,
   UpdateTourGuideInfoParams
->("tourGuide/updateTourGuideInfo", async (data, { rejectWithValue }) => {
-  const {tourGuideId, ...rest} = data
+>("tourGuide/send/updateTourGuideInfo", async (data, { rejectWithValue }) => {
+  const { tourGuideId, ...rest } = data;
   try {
     const response = await agent.TourGuide.updateInfo(tourGuideId, rest);
     return response;
@@ -134,7 +147,7 @@ export const updateTourGuideInfo = createAsyncThunk<
 export const updateTourGuideAvatar = createAsyncThunk<
   any,
   UpdateTourGuideImageParams
->("tourGuide/updateTourGuideAvatar", async (data, { rejectWithValue }) => {
+>("tourGuide/send/updateTourGuideAvatar", async (data, { rejectWithValue }) => {
   const { TourGuideId, files } = data;
   const formData = new FormData();
   formData.append("TourGuideId", TourGuideId.toString());
@@ -157,7 +170,7 @@ export const updateTourGuideAvatar = createAsyncThunk<
 export const updateTourGuideCover = createAsyncThunk<
   any,
   UpdateTourGuideImageParams
->("tourGuide/updateTourGuideCover", async (data, { rejectWithValue }) => {
+>("tourGuide/send/updateTourGuideCover", async (data, { rejectWithValue }) => {
   const { TourGuideId, files } = data;
   const formData = new FormData();
   formData.append("TourGuideId", TourGuideId.toString());
@@ -186,7 +199,6 @@ export type UpdateTourGuideImageParams = {
   files: File[];
   TourGuideId: number;
 };
-
 
 export type GetTourGuideByIdParams = {
   tourGuideId: string;

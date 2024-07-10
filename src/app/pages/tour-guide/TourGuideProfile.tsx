@@ -18,6 +18,7 @@ import { PrimaryButton } from "../../components/buttons";
 import ProfileEditModal from "../../ui/guide_ui/profileEditModal";
 import { useAuth } from "../../hooks/useAuth";
 import { TourGuide } from "../../models/tourGuide";
+import { useTourGuide } from "../../hooks/useTourGuide";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -25,9 +26,10 @@ const TourGuideProfile = () => {
   const navigate = useNavigate();
   const tourGuideId = localStorage.getItem("userId") ?? "";
   const { state: stateUser } = useAuth();
+  const { state: stateTourGuide } = useTourGuide();
   const { state: stateTour, handleGetTourByTourGuide } = useTour();
   // const {state: stateFeedback, handleGetTourGuideFeedback} = useFeedback()
-  const currentUser = stateUser.currentUser as TourGuide
+  const currentUser = stateUser.currentUser as TourGuide;
 
   useEffect(() => {
     if (tourGuideId) {
@@ -93,10 +95,10 @@ const TourGuideProfile = () => {
   };
 
   const renderGeneralInfo = () => {
-    if (stateUser.isFetching) {
+    if (stateTourGuide.isFetching) {
       return (
         <>
-          <Skeleton.Image height={300} />
+          <Skeleton.Image height={325} />
           <div className="flex justify-evenly">
             <div className="mt-[2rem] w-[40%] text-lg">
               <Skeleton.Paragraph paragraph={{ rows: 3 }} />
@@ -141,9 +143,15 @@ const TourGuideProfile = () => {
           <Divider colorSplit="black" />
         </div>
       </div>
-      <div className="flex justify-end mr-[5rem]">
-        <ProfileEditModal tourGuideData={currentUser} tourGuideId={tourGuideId}/>
-        <PrimaryButton text="Create Tour" onClick={() => navigate('/guide/tour/create')}/>
+      <div className="mr-[5rem] flex justify-end">
+        <ProfileEditModal
+          tourGuideData={currentUser}
+          tourGuideId={tourGuideId}
+        />
+        <PrimaryButton
+          text="Create Tour"
+          onClick={() => navigate("/guide/tour/create")}
+        />
       </div>
       <Title
         level={1}
@@ -170,9 +178,7 @@ const TourGuideProfile = () => {
               <div>
                 <Paragraph>{tourGuideId}</Paragraph>
                 <Paragraph>{`${currentUser.firstName} ${currentUser.lastName}`}</Paragraph>
-                <Paragraph>
-                  {genderGenerator(currentUser.gender)}
-                </Paragraph>
+                <Paragraph>{genderGenerator(currentUser.gender)}</Paragraph>
                 <Paragraph>Vietnamese, English</Paragraph>
               </div>
             </div>

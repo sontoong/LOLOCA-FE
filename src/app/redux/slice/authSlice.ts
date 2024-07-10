@@ -17,11 +17,13 @@ if (token && token !== "undefined") {
 export type TAuth = {
   currentUser: User & (Customer | TourGuide);
   isFetching: boolean;
+  isSending: boolean;
 };
 
 const initialState: TAuth = {
   currentUser: initUser as User & (Customer | TourGuide),
   isFetching: false,
+  isSending: false,
 };
 
 const authSlice = createSlice({
@@ -36,11 +38,8 @@ const authSlice = createSlice({
     builder
       .addMatcher(
         (action) =>
-          action.type.startsWith("auth/") &&
-          action.type.endsWith("/pending") &&
-          !["auth/loginVerify/pending", "auth/registerVerify/pending"].includes(
-            action.type,
-          ),
+          action.type.startsWith("auth/fetch/") &&
+          action.type.endsWith("/pending"),
         () => {
           return {
             ...initialState,
@@ -50,18 +49,30 @@ const authSlice = createSlice({
       )
       .addMatcher(
         (action) =>
-          action.type.startsWith("auth/") &&
-          (action.type.endsWith("/fulfilled") ||
-            action.type.endsWith("/rejected")),
-        (state) => {
-          state.isFetching = false;
+          action.type.startsWith("auth/send/") &&
+          action.type.endsWith("/pending") &&
+          ![
+            "auth/send/loginVerify/pending",
+            "auth/send/registerVerify/pending",
+          ].includes(action.type),
+        () => {
+          return { ...initialState, isSending: true };
         },
       );
+    builder.addMatcher(
+      (action) =>
+        action.type.startsWith("auth/") &&
+        (action.type.endsWith("/fulfilled") ||
+          action.type.endsWith("/rejected")),
+      (state) => {
+        state.isFetching = false;
+      },
+    );
   },
 });
 
 export const login = createAsyncThunk<any, LoginParams>(
-  "auth/login",
+  "auth/send/login",
   async (data, { rejectWithValue }) => {
     const { email, password } = data;
     try {
@@ -82,7 +93,7 @@ export const login = createAsyncThunk<any, LoginParams>(
 );
 
 export const loginVerify = createAsyncThunk<any, VerifyParams>(
-  "auth/loginVerify",
+  "auth/send/loginVerify",
   async (data, { rejectWithValue }) => {
     try {
       const response = await agent.Auth.authVerify({
@@ -101,7 +112,7 @@ export const loginVerify = createAsyncThunk<any, VerifyParams>(
 );
 
 export const register = createAsyncThunk<any, RegisterParams>(
-  "auth/register",
+  "auth/send/register",
   async (data, { rejectWithValue }) => {
     try {
       const response = await agent.Auth.registerCustomer({
@@ -120,7 +131,7 @@ export const register = createAsyncThunk<any, RegisterParams>(
 );
 
 export const tourGuideRegister = createAsyncThunk<any, TourGuideRegisterParams>(
-  "auth/registerTourGuide",
+  "auth/send/registerTourGuide",
   async (data, { rejectWithValue }) => {
     try {
       const response = await agent.Auth.registerTourGuide({
@@ -139,7 +150,7 @@ export const tourGuideRegister = createAsyncThunk<any, TourGuideRegisterParams>(
 );
 
 export const registerVerify = createAsyncThunk<any, VerifyParams>(
-  "auth/registerVerify",
+  "auth/send/registerVerify",
   async (data, { rejectWithValue }) => {
     try {
       const response = await agent.Auth.registerVerify({

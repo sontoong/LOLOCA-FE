@@ -7,12 +7,14 @@ type TBookingTourGuide = {
   currentBookingTourGuide: BookingTourGuideRequest;
   currentBookingTourGuideList: BookingTourGuideRequest[];
   isFetching: boolean;
+  isSending: boolean;
 };
 
 const initialState: TBookingTourGuide = {
   currentBookingTourGuide: {} as BookingTourGuideRequest,
   currentBookingTourGuideList: [],
   isFetching: false,
+  isSending: false,
 };
 
 const bookingTourGuideSlice = createSlice({
@@ -36,7 +38,7 @@ const bookingTourGuideSlice = createSlice({
     builder
       .addMatcher(
         (action) =>
-          action.type.startsWith("bookingTourGuide/") &&
+          action.type.startsWith("bookingTourGuide/fetch/") &&
           action.type.endsWith("/pending"),
         () => {
           return { ...initialState, isFetching: true };
@@ -44,13 +46,21 @@ const bookingTourGuideSlice = createSlice({
       )
       .addMatcher(
         (action) =>
-          action.type.startsWith("bookingTourGuide/") &&
-          (action.type.endsWith("/fulfilled") ||
-            action.type.endsWith("/rejected")),
-        (state) => {
-          state.isFetching = false;
+          action.type.startsWith("bookingTourGuide/send/") &&
+          action.type.endsWith("/pending"),
+        () => {
+          return { ...initialState, isSending: true };
         },
       );
+    builder.addMatcher(
+      (action) =>
+        action.type.startsWith("bookingTourGuide/") &&
+        (action.type.endsWith("/fulfilled") ||
+          action.type.endsWith("/rejected")),
+      (state) => {
+        state.isFetching = false;
+      },
+    );
   },
 });
 
@@ -58,7 +68,7 @@ export const createBookingTourGuide = createAsyncThunk<
   any,
   CreateBookingTourGuideParams
 >(
-  "bookingTourGuide/createBookingTourGuide",
+  "bookingTourGuide/send/createBookingTourGuide",
   async (data, { rejectWithValue }) => {
     const {
       customerId,
@@ -96,7 +106,7 @@ export const getBookingTourGuideByCustomerId = createAsyncThunk<
   any,
   GetBookingTourGuideByCustomerIdParams
 >(
-  "bookingTourGuide/getBookingTourGuideByCustomerId",
+  "bookingTourGuide/fetch/getBookingTourGuideByCustomerId",
   async (data, { rejectWithValue }) => {
     const { customerId } = data;
     try {
@@ -120,7 +130,7 @@ export const getBookingTourGuideByTourGuideId = createAsyncThunk<
   any,
   GetBookingTourGuideByTourGuideIdParams
 >(
-  "bookingTourGuide/getBookingTourGuideByTourGuideId",
+  "bookingTourGuide/fetch/getBookingTourGuideByTourGuideId",
   async (data, { rejectWithValue }) => {
     const { tourGuideId } = data;
     try {
@@ -144,7 +154,7 @@ export const getBookingTourGuideById = createAsyncThunk<
   any,
   GetBookingTourGuideByIdParams
 >(
-  "bookingTourGuide/getBookingTourGuideById",
+  "bookingTourGuide/fetch/getBookingTourGuideById",
   async (data, { rejectWithValue }) => {
     const { id } = data;
     try {

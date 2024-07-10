@@ -135,7 +135,7 @@ const ProfileEditModal = ({
         onOk={handleOk}
         onCancel={handleCancel}
         closeIcon={null}
-        confirmLoading={state.isFetching}
+        confirmLoading={state.isSending}
       >
         <Title level={3} style={{ color: "#004AAD", fontWeight: "bolder" }}>
           Profile

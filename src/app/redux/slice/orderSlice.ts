@@ -30,25 +30,34 @@ const orderSlice = createSlice({
     builder
       .addMatcher(
         (action) =>
-          action.type.startsWith("order/") && action.type.endsWith("/pending"),
+          action.type.startsWith("order/fetch/") &&
+          action.type.endsWith("/pending"),
         () => {
           return { ...initialState, isFetching: true };
         },
       )
       .addMatcher(
         (action) =>
-          action.type.startsWith("order/") &&
-          (action.type.endsWith("/fulfilled") ||
-            action.type.endsWith("/rejected")),
-        (state) => {
-          state.isFetching = false;
+          action.type.startsWith("order/send/") &&
+          action.type.endsWith("/pending"),
+        () => {
+          return { ...initialState, isSending: true };
         },
       );
+    builder.addMatcher(
+      (action) =>
+        action.type.startsWith("order/") &&
+        (action.type.endsWith("/fulfilled") ||
+          action.type.endsWith("/rejected")),
+      (state) => {
+        state.isFetching = false;
+      },
+    );
   },
 });
 
 export const createOrderTour = createAsyncThunk<any, CreateOrderTourParams>(
-  "order/createOrderTour",
+  "order/send/createOrderTour",
   async (data, { rejectWithValue }) => {
     const { bookingTourRequestsId, paymentProvider, transactionCode } = data;
     try {
@@ -72,7 +81,7 @@ export const createOrderTour = createAsyncThunk<any, CreateOrderTourParams>(
 export const createOrderTourGuide = createAsyncThunk<
   any,
   CreateOrderTourGuideParams
->("order/createOrderTourGuide", async (data, { rejectWithValue }) => {
+>("order/send/createOrderTourGuide", async (data, { rejectWithValue }) => {
   const { bookingTourGuideRequestId, paymentProvider, transactionCode } = data;
   try {
     const response = await agent.Order.createOrderTourGuide({
@@ -92,7 +101,7 @@ export const createOrderTourGuide = createAsyncThunk<
 });
 
 export const getOrderDetail = createAsyncThunk<any, GetOrderDetailParams>(
-  "order/createOrderTour",
+  "order/fetch/getOrderDetail",
   async (data, { rejectWithValue }) => {
     const { id } = data;
     try {

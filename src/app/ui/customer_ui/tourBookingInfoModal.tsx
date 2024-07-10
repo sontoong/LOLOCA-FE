@@ -80,6 +80,8 @@ const TourBookingInfoModal = ({
                   placeholder="How many adults will there be?"
                   // unit="adult"
                   // pluralUnit="adults"
+                  min={0}
+                  max={12}
                 />
               </Form.Item>
             </Col>
@@ -104,6 +106,8 @@ const TourBookingInfoModal = ({
                   placeholder="How many children will there be?"
                   // unit="child"
                   // pluralUnit="children"
+                  min={0}
+                  max={12}
                 />
               </Form.Item>
             </Col>

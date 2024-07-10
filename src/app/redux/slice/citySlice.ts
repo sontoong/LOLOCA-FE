@@ -7,12 +7,14 @@ type TCity = {
   currentCity: City;
   cityList: CityList;
   isFetching: boolean;
+  isSending: boolean;
 };
 
 const initialState: TCity = {
   currentCity: {} as City,
   cityList: [],
   isFetching: false,
+  isSending: false,
 };
 
 const citySlice = createSlice({
@@ -30,25 +32,34 @@ const citySlice = createSlice({
     builder
       .addMatcher(
         (action) =>
-          action.type.startsWith("city/") && action.type.endsWith("/pending"),
+          action.type.startsWith("city/fetch/") &&
+          action.type.endsWith("/pending"),
         () => {
           return { ...initialState, isFetching: true };
         },
       )
       .addMatcher(
         (action) =>
-          action.type.startsWith("city/") &&
-          (action.type.endsWith("/fulfilled") ||
-            action.type.endsWith("/rejected")),
-        (state) => {
-          state.isFetching = false;
+          action.type.startsWith("city/send/") &&
+          action.type.endsWith("/pending"),
+        () => {
+          return { ...initialState, isSending: true };
         },
       );
+    builder.addMatcher(
+      (action) =>
+        action.type.startsWith("city/") &&
+        (action.type.endsWith("/fulfilled") ||
+          action.type.endsWith("/rejected")),
+      (state) => {
+        state.isFetching = false;
+      },
+    );
   },
 });
 
 export const getCities = createAsyncThunk<any>(
-  "city/getAllCities",
+  "city/fetch/getAllCities",
   async (_, { rejectWithValue }) => {
     try {
       const response = await agent.Cities.getCities();
@@ -65,7 +76,7 @@ export const getCities = createAsyncThunk<any>(
 );
 
 export const getCityById = createAsyncThunk<any, GetCityByIdParams>(
-  "city/getCityById",
+  "city/fetch/getCityById",
   async (values, { rejectWithValue }) => {
     const { cityId } = values;
     try {

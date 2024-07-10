@@ -1,10 +1,5 @@
-import { Col, Row } from "antd";
-import {
-  Input,
-  InputDate,
-  InputSelect,
-  InputNumber,
-} from "../../components/inputs";
+import { Col, InputNumber, Row } from "antd";
+import { Input, InputDate, InputSelect } from "../../components/inputs";
 import { Form } from "../../components/form";
 import { useState } from "react";
 import dayjs from "dayjs";
@@ -130,8 +125,10 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
           >
             <InputNumber
               placeholder="How many adults will there be?"
-              unit="adult"
-              pluralUnit="adults"
+              // unit="adult"
+              // pluralUnit="adults"
+              min={0}
+              max={12}
             />
           </Form.Item>
         </Col>
@@ -163,8 +160,10 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
           >
             <InputNumber
               placeholder="How many children will there be?"
-              unit="child"
-              pluralUnit="children"
+              // unit="child"
+              // pluralUnit="children"
+              min={0}
+              max={12}
             />
           </Form.Item>
         </Col>

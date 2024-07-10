@@ -6,11 +6,13 @@ import { Customer } from "../../models/customer";
 type TCustomer = {
   currentCustomer: Customer;
   isFetching: boolean;
+  isSending: boolean;
 };
 
 const initialState: TCustomer = {
   currentCustomer: {} as Customer,
   isFetching: false,
+  isSending: false,
 };
 
 const customerSlice = createSlice({
@@ -25,7 +27,7 @@ const customerSlice = createSlice({
     builder
       .addMatcher(
         (action) =>
-          action.type.startsWith("customer/") &&
+          action.type.startsWith("customer/fetch/") &&
           action.type.endsWith("/pending"),
         () => {
           return { ...initialState, isFetching: true };
@@ -33,18 +35,26 @@ const customerSlice = createSlice({
       )
       .addMatcher(
         (action) =>
-          action.type.startsWith("customer/") &&
-          (action.type.endsWith("/fulfilled") ||
-            action.type.endsWith("/rejected")),
-        (state) => {
-          state.isFetching = false;
+          action.type.startsWith("customer/send/") &&
+          action.type.endsWith("/pending"),
+        () => {
+          return { ...initialState, isSending: true };
         },
       );
+    builder.addMatcher(
+      (action) =>
+        action.type.startsWith("customer/") &&
+        (action.type.endsWith("/fulfilled") ||
+          action.type.endsWith("/rejected")),
+      (state) => {
+        state.isFetching = false;
+      },
+    );
   },
 });
 
 export const getCustomerById = createAsyncThunk<any, GetCustomerByIdParams>(
-  "customer/getCustomerById",
+  "customer/fetch/getCustomerById",
   async (data, { rejectWithValue }) => {
     const { customerId } = data;
     try {
@@ -64,40 +74,43 @@ export const getCustomerById = createAsyncThunk<any, GetCustomerByIdParams>(
 export const updateCustomerInformation = createAsyncThunk<
   any,
   UpdateCustomerInformationParams
->("customer/updateCustomerInformation", async (data, { rejectWithValue }) => {
-  const {
-    customerId,
-    addressCustomer,
-    dateOfBirth,
-    firstName,
-    gender,
-    lastName,
-    phoneNumber,
-  } = data;
-  try {
-    const response = await agent.Customer.updateInfo(customerId, {
+>(
+  "customer/send/updateCustomerInformation",
+  async (data, { rejectWithValue }) => {
+    const {
+      customerId,
       addressCustomer,
       dateOfBirth,
       firstName,
       gender,
       lastName,
       phoneNumber,
-    });
-    return response;
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      if (!error.response) {
-        throw error;
+    } = data;
+    try {
+      const response = await agent.Customer.updateInfo(customerId, {
+        addressCustomer,
+        dateOfBirth,
+        firstName,
+        gender,
+        lastName,
+        phoneNumber,
+      });
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
       }
-      return rejectWithValue(error.response.data);
     }
-  }
-});
+  },
+);
 
 export const updateCustomerAvatar = createAsyncThunk<
   any,
   UpdateCustomerAvatarParams
->("customer/updateCustomerAvatar", async (data, { rejectWithValue }) => {
+>("customer/send/updateCustomerAvatar", async (data, { rejectWithValue }) => {
   const { CustomerId, files } = data;
   const formData = new FormData();
   formData.append("CustomerId", CustomerId.toString());

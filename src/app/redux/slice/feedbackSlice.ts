@@ -10,11 +10,13 @@ type TFeedback = {
     averageStar: number;
   };
   isFetching: boolean;
+  isSending: boolean;
 };
 
 const initialState: TFeedback = {
   currentFeedbackList: { feedbacks: [], averageStar: 0, totalFeedbacks: 0 },
   isFetching: false,
+  isSending: false,
 };
 
 const feedbackSlice = createSlice({
@@ -38,7 +40,7 @@ const feedbackSlice = createSlice({
     builder
       .addMatcher(
         (action) =>
-          action.type.startsWith("feedback/") &&
+          action.type.startsWith("feedback/fetch/") &&
           action.type.endsWith("/pending"),
         () => {
           return { ...initialState, isFetching: true };
@@ -46,18 +48,26 @@ const feedbackSlice = createSlice({
       )
       .addMatcher(
         (action) =>
-          action.type.startsWith("feedback/") &&
-          (action.type.endsWith("/fulfilled") ||
-            action.type.endsWith("/rejected")),
-        (state) => {
-          state.isFetching = false;
+          action.type.startsWith("feedback/send/") &&
+          action.type.endsWith("/pending"),
+        () => {
+          return { ...initialState, isSending: true };
         },
       );
+    builder.addMatcher(
+      (action) =>
+        action.type.startsWith("feedback/") &&
+        (action.type.endsWith("/fulfilled") ||
+          action.type.endsWith("/rejected")),
+      (state) => {
+        state.isFetching = false;
+      },
+    );
   },
 });
 
 export const getTourFeedback = createAsyncThunk<any, GetTourFeedback>(
-  "feedback/getTourFeedback",
+  "feedback/fetch/getTourFeedback",
   async (data, { rejectWithValue }) => {
     const { tourId } = data;
     try {
@@ -75,7 +85,7 @@ export const getTourFeedback = createAsyncThunk<any, GetTourFeedback>(
 );
 
 export const getTourGuideFeedback = createAsyncThunk<any, GetTourGuideFeedback>(
-  "feedback/getTourguideFeedback",
+  "feedback/fetch/getTourguideFeedback",
   async (data, { rejectWithValue }) => {
     const { cityId } = data;
     try {

@@ -7,12 +7,14 @@ type TTour = {
   currentTour: Tour;
   currentTourList: TourList;
   isFetching: boolean;
+  isSending: boolean;
 };
 
 const initialState: TTour = {
   currentTour: {} as Tour,
   currentTourList: { tours: [], totalPage: 0 },
   isFetching: false,
+  isSending: false,
 };
 
 const tourSlice = createSlice({
@@ -33,25 +35,34 @@ const tourSlice = createSlice({
     builder
       .addMatcher(
         (action) =>
-          action.type.startsWith("tour/") && action.type.endsWith("/pending"),
+          action.type.startsWith("tour/fetch/") &&
+          action.type.endsWith("/pending"),
         () => {
           return { ...initialState, isFetching: true };
         },
       )
       .addMatcher(
         (action) =>
-          action.type.startsWith("tour/") &&
-          (action.type.endsWith("/fulfilled") ||
-            action.type.endsWith("/rejected")),
-        (state) => {
-          state.isFetching = false;
+          action.type.startsWith("tour/send/") &&
+          action.type.endsWith("/pending"),
+        () => {
+          return { ...initialState, isSending: true };
         },
       );
+    builder.addMatcher(
+      (action) =>
+        action.type.startsWith("tour/") &&
+        (action.type.endsWith("/fulfilled") ||
+          action.type.endsWith("/rejected")),
+      (state) => {
+        state.isFetching = false;
+      },
+    );
   },
 });
 
 export const getTourRandom = createAsyncThunk<any, GetTourRandomParams>(
-  "tour/getTourRandom",
+  "tour/fetch/getTourRandom",
   async (data, { rejectWithValue }) => {
     const { page, pageSize } = data;
     try {
@@ -69,7 +80,7 @@ export const getTourRandom = createAsyncThunk<any, GetTourRandomParams>(
 );
 
 export const getTourByCity = createAsyncThunk<any, GetTourByCityParams>(
-  "tour/getTourByCity",
+  "tour/fetch/getTourByCity",
   async (data, { rejectWithValue }) => {
     const { cityId, page, pageSize } = data;
     try {
@@ -91,7 +102,7 @@ export const getTourByCity = createAsyncThunk<any, GetTourByCityParams>(
 );
 
 export const getTourById = createAsyncThunk<any, GetTourByIdParams>(
-  "tour/getTourById",
+  "tour/fetch/getTourById",
   async (data, { rejectWithValue }) => {
     const { tourId } = data;
     try {
@@ -111,7 +122,7 @@ export const getTourById = createAsyncThunk<any, GetTourByIdParams>(
 export const getTourByTourGuide = createAsyncThunk<
   any,
   GetTourByTourGuideParams
->("tour/getTourByTourGuide", async (data, { rejectWithValue }) => {
+>("tour/fetch/getTourByTourGuide", async (data, { rejectWithValue }) => {
   const { TourGuideId, page, pageSize } = data;
   try {
     const response = await agent.Tour.getTourByTourGuide({
@@ -131,7 +142,7 @@ export const getTourByTourGuide = createAsyncThunk<
 });
 
 export const uploadTour = createAsyncThunk<any, CreateTourParams>(
-  "tour/uploadTour",
+  "tour/send/uploadTour",
   async (data, { rejectWithValue }) => {
     const {
       images,
