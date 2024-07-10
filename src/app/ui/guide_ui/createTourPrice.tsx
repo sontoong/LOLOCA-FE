@@ -127,7 +127,7 @@ const CreateTourPrice = ({
                     rules={[{ required: true }]}
                     style={{ flex: 1, marginRight: 8 }}
                   >
-                    <InputNumber placeholder="From" min={1} />
+                    <InputNumber placeholder="From" min={0} />
                   </Form.Item>
                   <Form.Item
                     name={[field.name, "TotalTouristTo"]}
@@ -151,18 +151,42 @@ const CreateTourPrice = ({
                     ]}
                     style={{ flex: 1, marginRight: 8 }}
                   >
-                    <InputNumber placeholder="To" min={1} />
+                    <InputNumber placeholder="To" min={0} />
                   </Form.Item>
                   <Form.Item
                     name={[field.name, "AdultPrices"]}
-                    rules={[{ required: true }]}
+                    rules={[
+                      { required: true },
+                      {
+                        validator(_, value) {
+                          if (value === 0 || value >= 1000) {
+                            return Promise.resolve();
+                          }
+                          return Promise.reject(
+                            new Error("Price must be 0 or at least 1000")
+                          );
+                        },
+                      },
+                    ]}
                     style={{ flex: 1, marginRight: 8 }}
                   >
                     <InputNumber placeholder="Adult Prices" min={0} />
                   </Form.Item>
                   <Form.Item
                     name={[field.name, "ChildPrices"]}
-                    rules={[{ required: true }]}
+                    rules={[
+                      { required: true },
+                      {
+                        validator(_, value) {
+                          if (value === 0 || value >= 1000) {
+                            return Promise.resolve();
+                          }
+                          return Promise.reject(
+                            new Error("Price must be 0 or at least 1000")
+                          );
+                        },
+                      },
+                    ]}
                     style={{ flex: 1, marginRight: 8 }}
                   >
                     <InputNumber placeholder="Child Prices" min={0} />

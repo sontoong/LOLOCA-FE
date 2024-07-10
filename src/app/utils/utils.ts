@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-export const formatCurrency = (amount: number) => {
+export const formatCurrency = (amount: number | null) => {
   if (amount === null || amount === undefined) {
     return "";
   }
