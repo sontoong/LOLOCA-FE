@@ -31,7 +31,7 @@ const PrivateRoute = ({
         case ROLE.customer:
           return <Navigate to="/cities" />;
         case ROLE.tourguide:
-          return <Navigate to="/guides/profile" />;
+          return <Navigate to="/guide/profile" />;
         default:
           return <Navigate to="/" />;
       }

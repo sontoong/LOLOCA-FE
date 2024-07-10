@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import {
-  Navigate,
   Outlet,
   ScrollRestoration,
   createBrowserRouter,
@@ -51,7 +50,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Navigate to={"/cities"} />,
+        element: <PrivateRoute inverted={true} children />,
       },
       {
         path: "cities",
