@@ -7,12 +7,14 @@ type TBookingTour = {
   currentBookingTour: BookingTourRequest;
   currentBookingTourList: BookingTourRequest[];
   isFetching: boolean;
+  isSending: boolean;
 };
 
 const initialState: TBookingTour = {
   currentBookingTour: {} as BookingTourRequest,
   currentBookingTourList: [],
   isFetching: false,
+  isSending: false,
 };
 
 const bookingTourSlice = createSlice({
@@ -57,6 +59,7 @@ const bookingTourSlice = createSlice({
           action.type.endsWith("/rejected")),
       (state) => {
         state.isFetching = false;
+        state.isSending = false;
       },
     );
   },

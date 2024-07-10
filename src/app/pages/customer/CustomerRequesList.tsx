@@ -11,8 +11,10 @@ import { BookingTourGuideRequest } from "../../models/bookingTourGuide";
 import { bookingStatusGenerator } from "../../utils/generators/bookingStatus";
 import { formatCurrency, formatDateToLocal } from "../../utils/utils";
 import { useOrder } from "../../hooks/useOrder";
+import { useNavigate } from "react-router-dom";
 
 const CustomerRequestList = () => {
+  const navigate = useNavigate();
   const { handleNavigateToPayment } = useOrder();
   const { state: stateBookingTour, handleGetBookingTourByCustomerId } =
     useBookingTour();
@@ -38,7 +40,7 @@ const CustomerRequestList = () => {
       record.bookingTourRequestId ?? record.bookingTourGuideRequestId;
     const type = record.bookingTourRequestId ? "tour" : "tourGuide";
 
-    handleNavigateToPayment({ id: requestId, type: type });
+    handleNavigateToPayment({ id: requestId, type: type }, navigate);
   };
 
   const bookingTourColumns: TableProps<BookingTourRequest>["columns"] = [

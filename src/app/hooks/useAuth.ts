@@ -5,10 +5,15 @@ import { NavigateFunction } from "react-router-dom";
 import { ROLE } from "../../constants/role";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import {
+  forgetPassword,
+  forgetPasswordNewpassword,
+  ForgetPasswordNewPasswordParams,
+  ForgetPasswordParams,
+  forgetPasswordVerify,
+  ForgetPasswordVerifyParams,
   login,
   LoginParams,
   loginVerify,
-  // loginVerify,
   register,
   RegisterParams,
   registerVerify,
@@ -19,7 +24,11 @@ import {
 } from "../redux/slice/authSlice";
 import { getCustomerById } from "../redux/slice/customerSlice";
 import { getTourGuideById } from "../redux/slice/tourguideSlice";
-import { resetOTPModal, setShowOTPModal } from "../redux/slice/uiSlice";
+import {
+  resetOTPModal,
+  setForgotPasswordForm,
+  setShowOTPModal,
+} from "../redux/slice/uiSlice";
 
 export function useAuth() {
   const { notification } = App.useApp();
@@ -30,12 +39,6 @@ export function useAuth() {
     async (value: LoginParams, navigate: NavigateFunction) => {
       const resultAction = await dispatch(login(value));
       if (login.fulfilled.match(resultAction)) {
-        // dispatch(
-        //   setShowOTPModal({
-        //     open: true,
-        //     email: value.email,
-        //   })
-        // );
         const { accessToken, refreshToken } = resultAction.payload;
         if (accessToken && refreshToken) {
           localStorage.setItem("access_token", accessToken);
@@ -289,6 +292,97 @@ export function useAuth() {
     [dispatch, notification],
   );
 
+  const handleForgetPassword = useCallback(
+    async (value: ForgetPasswordParams) => {
+      const resultAction = await dispatch(forgetPassword(value));
+      if (forgetPassword.fulfilled.match(resultAction)) {
+        dispatch(
+          setShowOTPModal({
+            open: true,
+            extraValues: { email: value.email },
+          }),
+        );
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
+  const handleForgetPasswordVerify = useCallback(
+    async (value: ForgetPasswordVerifyParams) => {
+      const resultAction = await dispatch(forgetPasswordVerify(value));
+      if (forgetPasswordVerify.fulfilled.match(resultAction)) {
+        dispatch(resetOTPModal());
+        dispatch(
+          setForgotPasswordForm({
+            step: 2,
+            extraValues: { ...resultAction.payload },
+          }),
+        );
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
+  const handleForgetPasswordNewPassword = useCallback(
+    async (
+      value: ForgetPasswordNewPasswordParams,
+      navigate: NavigateFunction,
+    ) => {
+      const resultAction = await dispatch(forgetPasswordNewpassword(value));
+      if (forgetPasswordNewpassword.fulfilled.match(resultAction)) {
+        navigate("/login");
+        notification.success({
+          message: "Update Success",
+          description: `Please login again`,
+          placement: "topRight",
+        });
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
   return {
     state,
     handleLogin,
@@ -299,5 +393,8 @@ export function useAuth() {
     handleGetUserInfo,
     handleTourGuideRegister,
     handleOTPLoginSubmit,
+    handleForgetPassword,
+    handleForgetPasswordVerify,
+    handleForgetPasswordNewPassword,
   };
 }

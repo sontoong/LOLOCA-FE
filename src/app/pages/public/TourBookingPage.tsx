@@ -8,7 +8,7 @@ import VietNamBanner from "../../../assets/banner.png";
 import InstructionModal from "../../ui/customer_ui/instructionModal";
 import TourBookingInfoModal from "../../ui/customer_ui/tourBookingInfoModal";
 import GuideInfoModal from "../../ui/customer_ui/guideInfoModal";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTour } from "../../hooks/useTour";
 import { useProtectedAction } from "../../hooks/useProtectedAction";
 import { isLoggedIn } from "../../redux/slice/authSlice";
@@ -20,6 +20,7 @@ import { useTourGuide } from "../../hooks/useTourGuide";
 const { Step } = Steps;
 
 const TourBookingPage = () => {
+  const navigate = useNavigate();
   const { tourId } = useParams();
   const { state: stateTour, handleGetTourById } = useTour();
   const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
@@ -91,13 +92,16 @@ const TourBookingPage = () => {
 
     executeOrRedirect({
       action: () =>
-        handleCreateBookingTour({
-          ...values,
-          startDate: startDateString,
-          endDate: endDateString,
-          customerId: parseInt(userId ?? ""),
-          tourId: parseInt(tourId ?? ""),
-        }),
+        handleCreateBookingTour(
+          {
+            ...values,
+            startDate: startDateString,
+            endDate: endDateString,
+            customerId: parseInt(userId ?? ""),
+            tourId: parseInt(tourId ?? ""),
+          },
+          navigate,
+        ),
       fallbackUrl: "/login",
       testValue: isLoggedIn(),
     });

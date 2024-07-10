@@ -59,6 +59,7 @@ const bookingTourGuideSlice = createSlice({
           action.type.endsWith("/rejected")),
       (state) => {
         state.isFetching = false;
+        state.isSending = false;
       },
     );
   },

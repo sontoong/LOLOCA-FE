@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import {
+  Navigate,
   Outlet,
   ScrollRestoration,
   createBrowserRouter,
@@ -12,6 +13,7 @@ import PublicLayout from "../layout/public-layout";
 //public
 import LoginPage from "../pages/public/LoginPage";
 import RegisterPage from "../pages/public/RegisterPage";
+import ForgotPasswordPage from "../pages/public/ForgotPasswordPage";
 import CitiesPage from "../pages/public/CitiesPage";
 import CityDetailPage from "../pages/public/CityDetailPage";
 import ToursPage from "../pages/public/ToursPage";
@@ -50,7 +52,9 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <PrivateRoute inverted={true} children />,
+        element: (
+          <PrivateRoute inverted={true} children={<Navigate to="/cities" />} />
+        ),
       },
       {
         path: "cities",
@@ -258,6 +262,16 @@ export const router = createBrowserRouter([
       <Suspense fallback={<></>}>
         <PrivateRoute inverted={true}>
           <RegisterPage />
+        </PrivateRoute>
+      </Suspense>
+    ),
+  },
+  {
+    path: "/forgot-password",
+    element: (
+      <Suspense fallback={<></>}>
+        <PrivateRoute inverted={true}>
+          <ForgotPasswordPage />
         </PrivateRoute>
       </Suspense>
     ),

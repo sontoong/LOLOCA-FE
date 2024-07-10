@@ -8,17 +8,16 @@ import {
   setRequestTour,
 } from "../redux/slice/orderSlice";
 import { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import { RequestTour } from "../models/order";
+import { NavigateFunction } from "react-router-dom";
 
 export function useOrder() {
-  const navigate = useNavigate();
   const { notification } = App.useApp();
   const state = useAppSelector((state) => state.order);
   const dispatch = useAppDispatch();
 
   const handleCreateOrderTour = useCallback(
-    async (value: CreateOrderTourParams) => {
+    async (value: CreateOrderTourParams, navigate: NavigateFunction) => {
       const resultAction = await dispatch(createOrderTour(value));
       if (createOrderTour.fulfilled.match(resultAction)) {
         navigate("/customer/booking-successful");
@@ -38,11 +37,11 @@ export function useOrder() {
         }
       }
     },
-    [dispatch, navigate, notification],
+    [dispatch, notification],
   );
 
   const handleCreateOrderTourGuide = useCallback(
-    async (value: CreateOrderTourGuideParams) => {
+    async (value: CreateOrderTourGuideParams, navigate: NavigateFunction) => {
       const resultAction = await dispatch(createOrderTourGuide(value));
       if (createOrderTourGuide.fulfilled.match(resultAction)) {
         navigate(-1);
@@ -62,15 +61,15 @@ export function useOrder() {
         }
       }
     },
-    [dispatch, navigate, notification],
+    [dispatch, notification],
   );
 
   const handleNavigateToPayment = useCallback(
-    async (value: RequestTour) => {
+    async (value: RequestTour, navigate: NavigateFunction) => {
       dispatch(setRequestTour(value));
       navigate("/customer/payment");
     },
-    [dispatch, navigate],
+    [dispatch],
   );
 
   return {

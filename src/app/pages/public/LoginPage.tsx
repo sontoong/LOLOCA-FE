@@ -88,22 +88,21 @@ export default function LoginPage() {
               <Input.Password placeholder="Enter your password" />
             </Form.Item>
           </Form>
-          <Link to="/">Forgot Password?</Link>
+          <Link to="/forgot-password">Forgot Password?</Link>
         </div>
         <div className="flex justify-end">
           <PrimaryButton.BoldText
             text="Log In"
-            loading={stateAuth.isFetching}
+            loading={stateAuth.isSending}
             onClick={() => form.submit()}
           />
         </div>
         <div>
-          Don't have an account? <Link to="/register">Sign Up</Link> <br/>
-          Want to become a tour guide? <Link to="/register/tourguide">Sign Up as Tour Guide</Link>
+          Don't have an account? <Link to="/register">Sign Up</Link> <br />
+          Want to become a tour guide?{" "}
+          <Link to="/register/tourguide">Sign Up as Tour Guide</Link>
         </div>
-        <div>
-          
-        </div>
+        <div></div>
       </Space>
       <Modal.OTP
         extraValues={{ email: emailValue }}

@@ -52,9 +52,12 @@ const authSlice = createSlice({
           action.type.startsWith("auth/send/") &&
           action.type.endsWith("/pending") &&
           ![
-            "auth/send/loginVerify/pending",
-            "auth/send/registerVerify/pending",
-          ].includes(action.type),
+            "auth/send/loginVerify",
+            "auth/send/registerVerify",
+            "auth/send/forgetPasswordVerify",
+          ]
+            .map((type) => `${type}/pending`)
+            .includes(action.type),
         () => {
           return { ...initialState, isSending: true };
         },
@@ -66,6 +69,7 @@ const authSlice = createSlice({
           action.type.endsWith("/rejected")),
       (state) => {
         state.isFetching = false;
+        state.isSending = false;
       },
     );
   },
@@ -168,6 +172,63 @@ export const registerVerify = createAsyncThunk<any, VerifyParams>(
   },
 );
 
+export const forgetPassword = createAsyncThunk<any, ForgetPasswordParams>(
+  "auth/send/forgetPassword",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await agent.Auth.forgetPassword({
+        ...data,
+      });
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+    }
+  },
+);
+
+export const forgetPasswordVerify = createAsyncThunk<
+  any,
+  ForgetPasswordVerifyParams
+>("auth/send/forgetPasswordVerify", async (data, { rejectWithValue }) => {
+  try {
+    const response = await agent.Auth.forgetPasswordVerify({
+      ...data,
+    });
+    return response;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+});
+
+export const forgetPasswordNewpassword = createAsyncThunk<
+  any,
+  ForgetPasswordNewPasswordParams
+>("auth/send/forgetPasswordNewpassword", async (data, { rejectWithValue }) => {
+  try {
+    const response = await agent.Auth.forgetPasswordNewpassword({
+      ...data,
+    });
+    return response;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+});
+
 export const { setCurrentUser } = authSlice.actions;
 
 export const isLoggedIn = () => {
@@ -209,5 +270,20 @@ export type LogoutParams = {
 
 export type VerifyParams = {
   email: string;
+  code: string;
+};
+
+export type ForgetPasswordParams = {
+  email: string;
+};
+
+export type ForgetPasswordVerifyParams = {
+  email: string;
+  code: string;
+};
+
+export type ForgetPasswordNewPasswordParams = {
+  email: string;
+  password: string;
   code: string;
 };

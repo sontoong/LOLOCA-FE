@@ -10,7 +10,10 @@ import { Image } from "../../components/image";
 import { Input, InputSelect } from "../../components/inputs";
 import { Modal } from "../../components/modals";
 import { useAuth } from "../../hooks/useAuth";
-import { TourGuideRegisterParams, VerifyParams } from "../../redux/slice/authSlice";
+import {
+  TourGuideRegisterParams,
+  VerifyParams,
+} from "../../redux/slice/authSlice";
 import { useUI } from "../../hooks/useUI";
 import { useCity } from "../../hooks/useCity";
 
@@ -18,7 +21,11 @@ const { Text, Paragraph } = Typography;
 
 export default function TourGuideRegister() {
   const navigate = useNavigate();
-  const { state: stateAuth, handleTourGuideRegister, handleRegisterVerify } = useAuth();
+  const {
+    state: stateAuth,
+    handleTourGuideRegister,
+    handleRegisterVerify,
+  } = useAuth();
   const { state: stateCity, handleGetCities } = useCity();
   const { state: stateUI } = useUI();
   const [policyAccept, setPolicyAccept] = useState(false);
@@ -62,7 +69,7 @@ export default function TourGuideRegister() {
     option.children.toLowerCase().includes(input.toLowerCase());
 
   return (
-    <div className="flex my-[2rem] items-center justify-center">
+    <div className="my-[2rem] flex items-center justify-center">
       <Space size={10}>
         <div className="m-[50px]">
           <Image width={600} src={bannerRegister} preview={false} />
@@ -155,16 +162,16 @@ export default function TourGuideRegister() {
               ]}
             >
               <InputSelect
-                  showSearch
-                  placeholder="Choose your city"
-                  optionFilterProp="children"
-                  filterOption={filterOption}
-                >
-                  {stateCity.cityList.map((city) => (
-                    <InputSelect.Option key={city.cityId} value={city.cityId}>
-                      {city.name}
-                    </InputSelect.Option>
-                  ))}
+                showSearch
+                placeholder="Choose your city"
+                optionFilterProp="children"
+                filterOption={filterOption}
+              >
+                {stateCity.cityList.map((city) => (
+                  <InputSelect.Option key={city.cityId} value={city.cityId}>
+                    {city.name}
+                  </InputSelect.Option>
+                ))}
               </InputSelect>
             </Form.Item>
             <Form.Item
@@ -173,7 +180,7 @@ export default function TourGuideRegister() {
               rules={[
                 {
                   required: true,
-                  message: 'Please select your gender!',
+                  message: "Please select your gender!",
                 },
               ]}
             >
@@ -223,7 +230,7 @@ export default function TourGuideRegister() {
               text="Create"
               disabled={!policyAccept}
               onClick={() => form.submit()}
-              loading={stateAuth.isFetching}
+              loading={stateAuth.isSending}
             />
           </div>
           <div>

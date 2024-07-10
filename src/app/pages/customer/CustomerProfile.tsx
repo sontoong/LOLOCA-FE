@@ -170,7 +170,7 @@ const CustomerProfile = () => {
           <PrimaryButton
             text="Submit"
             onClick={() => form.submit()}
-            loading={stateCustomer.isFetching}
+            loading={stateCustomer.isSending}
           />
         </div>
       </Form>

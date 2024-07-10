@@ -7,12 +7,14 @@ type TOrder = {
   requestTour: RequestTour;
   currentOrderList: OrderList;
   isFetching: boolean;
+  isSending: boolean;
 };
 
 const initialState: TOrder = {
   requestTour: {} as TOrder["requestTour"],
   currentOrderList: [],
   isFetching: false,
+  isSending: false,
 };
 
 const orderSlice = createSlice({
@@ -51,6 +53,7 @@ const orderSlice = createSlice({
           action.type.endsWith("/rejected")),
       (state) => {
         state.isFetching = false;
+        state.isSending = false;
       },
     );
   },

@@ -1,6 +1,6 @@
 import { App } from "antd";
 import { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import {
   createBookingTourGuide,
@@ -16,13 +16,12 @@ import {
 } from "../redux/slice/bookingTourGuideSlice";
 
 export function useBookingTourGuide() {
-  const navigate = useNavigate();
   const { notification } = App.useApp();
   const state = useAppSelector((state) => state.bookingTourGuide);
   const dispatch = useAppDispatch();
 
   const handleCreateBookingTourGuide = useCallback(
-    async (value: CreateBookingTourGuideParams) => {
+    async (value: CreateBookingTourGuideParams, navigate: NavigateFunction) => {
       const resultAction = await dispatch(createBookingTourGuide(value));
       if (createBookingTourGuide.fulfilled.match(resultAction)) {
         navigate("/customer/booking-successful");
@@ -42,7 +41,7 @@ export function useBookingTourGuide() {
         }
       }
     },
-    [dispatch, notification, navigate],
+    [dispatch, notification],
   );
 
   const handleGetBookingTourGuideByCustomerId = useCallback(

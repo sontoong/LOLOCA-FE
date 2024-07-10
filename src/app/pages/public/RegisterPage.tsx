@@ -162,7 +162,7 @@ export default function RegisterPage() {
               text="Create"
               disabled={!policyAccept}
               onClick={() => form.submit()}
-              loading={stateAuth.isFetching}
+              loading={stateAuth.isSending}
             />
           </div>
           <div>

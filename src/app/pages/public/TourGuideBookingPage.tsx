@@ -9,12 +9,13 @@ import GuideInfoModal from "../../ui/customer_ui/guideInfoModal";
 import InstructionModal from "../../ui/customer_ui/instructionModal";
 import TourGuideBookingInfo from "../../ui/customer_ui/tourGuideBookingInfo";
 import { useTourGuide } from "../../hooks/useTourGuide";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useBookingTourGuide } from "../../hooks/useBookingTourGuide";
 
 const { Step } = Steps;
 
 const TourGuideBookingPage = () => {
+  const navigate = useNavigate();
   const { tourGuideId } = useParams();
   const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
   const { handleCreateBookingTourGuide } = useBookingTourGuide();
@@ -70,11 +71,14 @@ const TourGuideBookingPage = () => {
   const handleSubmit = (values: typeof initialValues) => {
     console.log(values);
     console.log("Form Values: ", values);
-    handleCreateBookingTourGuide({
-      ...values,
-      customerId: localStorage.getItem("userId") ?? "",
-      tourGuideId: tourGuideId ?? "",
-    });
+    handleCreateBookingTourGuide(
+      {
+        ...values,
+        customerId: localStorage.getItem("userId") ?? "",
+        tourGuideId: tourGuideId ?? "",
+      },
+      navigate,
+    );
   };
 
   return (
