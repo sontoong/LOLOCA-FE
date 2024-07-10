@@ -296,26 +296,22 @@ const TourDetailPage = () => {
               Recent Reviews
             </Title>
 
-            {/* fix data below */}
             <Text>
               {stateFeedback.currentFeedbackList.averageStar} <StarFilled /> (
-              {stateFeedback.currentFeedbackList.totalFeedbacks} reviews)
+              {`${stateFeedback.currentFeedbackList.totalFeedbacks}  reviews`})
             </Text>
             {stateFeedback.currentFeedbackList.feedbacks?.map(
               (rating, index) => (
                 <div key={index} className="my-[3rem]">
                   <Row>
                     <Col>
-                      <img
-                        src={VietNamBanner}
-                        className="h-[3rem] w-[3rem] rounded-full object-cover"
-                      />
+                      <Avatar size={48} />
                     </Col>
                     <Col className="ml-[0.5rem]">
                       <Paragraph
                         style={{ fontWeight: "bold", marginBottom: "0" }}
                       >
-                        {rating.customerId}
+                        {rating.customerName}
                       </Paragraph>
                       <Paragraph>
                         {formatDateToLocal(rating.timeFeedback)}

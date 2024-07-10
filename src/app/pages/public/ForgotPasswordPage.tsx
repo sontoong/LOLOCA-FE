@@ -17,7 +17,7 @@ import {
 import { useUI } from "../../hooks/useUI";
 import { FormInstance } from "antd/lib";
 
-const { Text, Paragraph } = Typography;
+const { Title, Text, Paragraph } = Typography;
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -128,6 +128,7 @@ function ForgotPasswordForm1({
 
   return (
     <>
+      <Title level={3}>Enter Your Account Email</Title>
       <Form
         form={form}
         initialValues={initialValues}
@@ -136,7 +137,6 @@ function ForgotPasswordForm1({
       >
         <Form.Item
           name="email"
-          label="Email"
           rules={[
             {
               type: "email",
@@ -180,6 +180,7 @@ function ForgotPasswordForm2({
 
   return (
     <>
+      <Title level={3}>Set New Password</Title>
       <Form
         form={form}
         initialValues={initialValues}
@@ -188,7 +189,6 @@ function ForgotPasswordForm2({
       >
         <Form.Item
           name="password"
-          label="New Password"
           rules={[
             {
               type: "string",

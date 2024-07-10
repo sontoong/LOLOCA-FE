@@ -1,6 +1,7 @@
 export type Feedback = {
   feedbackId: number;
   customerId: number;
+  customerName: string;
   tourGuideId: number;
   bookingTourRequestsId?: number;
   bookingTourGuideRequestId?: number;

@@ -1,5 +1,6 @@
 export type TourGuide = {
   accountStatus: number;
+  cityId: number;
   cityName: string;
   firstName: string;
   lastName: string;

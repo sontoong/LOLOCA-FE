@@ -20,13 +20,16 @@ const UISlice = createSlice({
       state.OTPModal = action.payload;
     },
     resetOTPModal: (state) => {
-      state.OTPModal = { open: false, extraValues: {} };
+      state.OTPModal = initialState.OTPModal;
     },
     setForgotPasswordForm: (
       state,
       action: PayloadAction<TUI["forgotPasswordForm"]>,
     ) => {
       state.forgotPasswordForm = action.payload;
+    },
+    resetForgotPasswordForm: (state) => {
+      state.forgotPasswordForm = initialState.forgotPasswordForm;
     },
   },
   extraReducers: (builder) => {

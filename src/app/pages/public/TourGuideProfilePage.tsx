@@ -4,18 +4,17 @@ import { Card, Col, Row, Typography } from "antd";
 import { Divider } from "../../components/divider";
 import { PrimaryButton } from "../../components/buttons";
 import { StarFilled } from "@ant-design/icons";
-import { formatUnixToLocal } from "../../utils/utils";
+import { formatDateToLocal } from "../../utils/utils";
 import { useTourGuide } from "../../hooks/useTourGuide";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useTour } from "../../hooks/useTour";
-// import { useFeedback } from "../../hooks/useFeedback";
-import { reviewsData } from "../../utils/testData";
 import { genderGenerator } from "../../utils/generators/gender";
 import { Image } from "../../components/image";
 import { CardListGrid } from "../../components/grids";
 import { CardSkeleton, Skeleton } from "../../components/skeletons";
 import { Avatar } from "../../components/avatar";
+import { useFeedback } from "../../hooks/useFeedback";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -24,7 +23,7 @@ const TourGuideProfile = () => {
   const { tourGuideId } = useParams();
   const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
   const { state: stateTour, handleGetTourByTourGuide } = useTour();
-  // const {state: stateFeedback, handleGetTourGuideFeedback} = useFeedback()
+  const { state: stateFeedback, handleGetTourGuideFeedback } = useFeedback();
 
   useEffect(() => {
     if (tourGuideId) {
@@ -34,9 +33,16 @@ const TourGuideProfile = () => {
         page: 1,
         pageSize: 10,
       });
-      // handleGetTourGuideFeedback({ cityId: stateTourGuide});
     }
-  }, [handleGetTourGuidebyId, tourGuideId, handleGetTourByTourGuide]);
+  }, [handleGetTourByTourGuide, handleGetTourGuidebyId, tourGuideId]);
+
+  useEffect(() => {
+    if (stateTourGuide.currentTourguide.cityId) {
+      handleGetTourGuideFeedback({
+        cityId: stateTourGuide.currentTourguide.cityId.toString(),
+      });
+    }
+  }, [handleGetTourGuideFeedback, stateTourGuide.currentTourguide.cityId]);
 
   const handleBooking = () => {
     navigate(`booking`);
@@ -196,8 +202,7 @@ const TourGuideProfile = () => {
             Recent Reviews
           </Title>
 
-          {/* fix data */}
-          {stateTourGuide.isFetching ? (
+          {stateFeedback.isFetching ? (
             <>
               {Array(2)
                 .fill({})
@@ -210,35 +215,38 @@ const TourGuideProfile = () => {
           ) : (
             <>
               <Text>
-                {reviewsData.stars} <StarFilled /> ({reviewsData.amount}
-                reviews)
+                {stateFeedback.currentFeedbackList.averageStar} <StarFilled /> (
+                {`${stateFeedback.currentFeedbackList.totalFeedbacks}
+                 reviews`}
+                )
               </Text>
-              {reviewsData.ratings.map((rating, index) => (
-                <div key={index} className="my-[3rem]">
-                  <Row>
-                    <Col>
-                      <img
-                        src={VietNamBanner}
-                        className="h-[3rem] w-[3rem] rounded-full object-cover"
-                      />
-                    </Col>
-                    <Col className="ml-[0.5rem]">
-                      <Paragraph
-                        style={{ fontWeight: "bold", marginBottom: "0" }}
-                      >
-                        {rating.name}
-                      </Paragraph>
-                      <Paragraph>{formatUnixToLocal(rating.date)}</Paragraph>
-                    </Col>
-                    <Col offset={1}>
-                      <Paragraph>
-                        <StarFilled /> {rating.star}
-                      </Paragraph>
-                    </Col>
-                  </Row>
-                  <Paragraph>{rating.description}</Paragraph>
-                </div>
-              ))}
+              {stateFeedback.currentFeedbackList.feedbacks.map(
+                (rating, index) => (
+                  <div key={index} className="my-[3rem]">
+                    <Row>
+                      <Col>
+                        <Avatar size={48} />
+                      </Col>
+                      <Col className="ml-[0.5rem]">
+                        <Paragraph
+                          style={{ fontWeight: "bold", marginBottom: "0" }}
+                        >
+                          {rating.customerName}
+                        </Paragraph>
+                        <Paragraph>
+                          {formatDateToLocal(rating.timeFeedback)}
+                        </Paragraph>
+                      </Col>
+                      <Col offset={1}>
+                        <Paragraph>
+                          <StarFilled /> {rating.numOfStars}
+                        </Paragraph>
+                      </Col>
+                    </Row>
+                    <Paragraph>{rating.content}</Paragraph>
+                  </div>
+                ),
+              )}
             </>
           )}
         </div>
