@@ -1,9 +1,9 @@
-import RequestListPage from "./tour-guide/RequestListPage";
+import AddFundPage from "./customer/AddFundPage";
 
 const TestPage = () => {
   return (
-    <div className="mx-5">
-      <RequestListPage/>
+    <div>
+      <AddFundPage/>
     </div>
   );
 };

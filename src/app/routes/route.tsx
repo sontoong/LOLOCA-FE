@@ -35,6 +35,7 @@ import TourGuideProfile from "../pages/tour-guide/TourGuideProfile";
 import GuideTourPage from "../pages/tour-guide/GuideTourPage";
 import RequestListPage from "../pages/tour-guide/RequestListPage";
 import TourGuideTourDetailPage from "../pages/tour-guide/TourGuideTourDetailPage";
+import AddFundPage from "../pages/customer/AddFundPage";
 
 export const router = createBrowserRouter([
   {
@@ -145,6 +146,14 @@ export const router = createBrowserRouter([
             element: (
               <Suspense fallback={<></>}>
                 <CustomerProfile />
+              </Suspense>
+            ),
+          },
+          {
+            path: "add-fund",
+            element: (
+              <Suspense fallback={<></>}>
+                <AddFundPage />
               </Suspense>
             ),
           },

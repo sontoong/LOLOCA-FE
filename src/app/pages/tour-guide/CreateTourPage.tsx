@@ -21,6 +21,8 @@ const CreateTourPage = () => {
   const [tourImages, setTourImages] = useState<UploadFile[]>([]);
   const [duration, setDuration] = useState<number | undefined>(undefined);
   const [itineraryCount, setItineraryCount] = useState<number>(1);
+  const tourGuideId = Number(localStorage.getItem("userId") ?? "");
+  
 
   const next = () => {
     window.scrollTo(0, 0);
@@ -50,7 +52,7 @@ const CreateTourPage = () => {
     TotalTouristFrom: [0],
     TotalTouristTo: [0],
     CityId: 0,
-    TourGuideId: 0,
+    TourGuideId: tourGuideId,
   };
 
   useEffect(() => {
@@ -81,15 +83,14 @@ const CreateTourPage = () => {
   ];
 
   const handleSubmit = (values: any) => {
-    // Extracting values from the 'prices' array
     const { price, ...restValues } = values;
   
     const formattedValues: any = {
-      ...restValues, // Copying all other values except 'prices'
-      AdultPrices: price?.map((item: any) => item.AdultPrices), // Extracting 'AdultPrices' from each 'prices' item
-      ChildPrices: price?.map((item: any) => item.ChildPrices), // Extracting 'ChildPrices' from each 'prices' item
-      TotalTouristFrom: price?.map((item: any) => item.TotalTouristFrom), // Extracting 'TotalTouristFrom' from each 'prices' item
-      TotalTouristTo: price?.map((item: any) => item.TotalTouristTo), // Extracting 'TotalTouristTo' from each 'prices' item
+      ...restValues, 
+      AdultPrices: price?.map((item: any) => item.AdultPrices), 
+      ChildPrices: price?.map((item: any) => item.ChildPrices), 
+      TotalTouristFrom: price?.map((item: any) => item.TotalTouristFrom), 
+      TotalTouristTo: price?.map((item: any) => item.TotalTouristTo), 
     };
   
     console.log("Formatted Create Tour Values: ", formattedValues);
