@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Steps, UploadFile } from "antd";
 import { PrimaryButton } from "../../components/buttons";
 import { Form } from "../../components/form";
@@ -10,6 +10,7 @@ import CreateTourItinerary from "../../ui/guide_ui/createTourItinerary";
 import CreateTourPrice from "../../ui/guide_ui/createTourPrice";
 import { useTour } from "../../hooks/useTour";
 import { CreateTourParams } from "../../redux/slice/tourSlice";
+import { useTourGuide } from "../../hooks/useTourGuide";
 
 const { Step } = Steps;
 
@@ -20,9 +21,15 @@ const CreateTourPage = () => {
   const { handleUploadTour } = useTour();
   const [tourImages, setTourImages] = useState<UploadFile[]>([]);
   const [duration, setDuration] = useState<number | undefined>(undefined);
-  const [itineraryCount, setItineraryCount] = useState<number>(1);
-  const tourGuideId = Number(localStorage.getItem("userId") ?? "");
-  
+  const tourGuideId = localStorage.getItem("userId") ?? "";
+  const userId = Number(tourGuideId);
+  const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
+
+  useEffect(() => {
+    if (!isNaN(userId)) {
+      handleGetTourGuidebyId({ tourGuideId: tourGuideId });
+    }
+  }, [handleGetTourGuidebyId, userId, tourGuideId]);
 
   const next = () => {
     window.scrollTo(0, 0);
@@ -34,7 +41,7 @@ const CreateTourPage = () => {
     setCurrentStep(currentStep - 1);
   };
 
-  const initialValues: CreateTourParams = {
+  const initialValues: CreateTourParams = useMemo(() => ({
     Name: "",
     Category: "",
     Duration: duration || 0,
@@ -45,28 +52,50 @@ const CreateTourPage = () => {
     HighlightDetails: [""],
     IncludeDetails: [""],
     ExcludeDetails: [""],
-    ItineraryNames: Array.from({ length: itineraryCount }, () => ""),
-    ItineraryDescriptions: Array.from({ length: itineraryCount }, () => ""),
+    ItineraryNames: [""],
+    ItineraryDescriptions: [""],
     AdultPrices: [0],
     ChildPrices: [0],
     TotalTouristFrom: [0],
     TotalTouristTo: [0],
-    CityId: 0,
-    TourGuideId: tourGuideId,
-  };
+    CityId: stateTourGuide.currentTourguide.cityId,
+    TourGuideId: userId,
+  }), [duration, stateTourGuide.currentTourguide.cityId, userId]);
 
   useEffect(() => {
-    // Update itinerary names and descriptions in mainForm when itineraryCount changes
-    mainForm.setFieldsValue({
-      ItineraryNames: Array.from({ length: itineraryCount }, () => ""),
-      ItineraryDescriptions: Array.from({ length: itineraryCount }, () => ""),
+    const itineraries = initialValues.ItineraryNames.map((name: any, index: any) => ({
+      name,
+      description: initialValues.ItineraryDescriptions[index],
+    }));
+    form.setFieldsValue({
+      itineraries,
     });
-  }, [itineraryCount, mainForm]);
+
+    const prices = initialValues.AdultPrices.map((_, index: any) => ({
+      TotalTouristFrom: initialValues.TotalTouristFrom[index],
+      TotalTouristTo: initialValues.TotalTouristTo[index],
+      AdultPrices: initialValues.AdultPrices[index],
+      ChildPrices: initialValues.ChildPrices[index],
+    }));
+    form.setFieldsValue({
+      price: prices,
+    });
+
+  }, [form, initialValues]);
 
   const steps = [
     {
       title: "Step 1",
-      content: <CreateTourInfo form={form} initialValues={initialValues} setTourImages={setTourImages} tourImages={tourImages} setDuration={setDuration} duration={duration}/>,
+      content: (
+        <CreateTourInfo
+          form={form}
+          initialValues={initialValues}
+          setTourImages={setTourImages}
+          tourImages={tourImages}
+          setDuration={setDuration}
+          duration={duration}
+        />
+      ),
     },
     {
       title: "Step 2",
@@ -74,27 +103,29 @@ const CreateTourPage = () => {
     },
     {
       title: "Step 3",
-      content: <CreateTourItinerary form={form} initialValues={initialValues} setItineraryCount={setItineraryCount} />,
+      content: <CreateTourItinerary form={form} />,
     },
     {
       title: "Step 4",
-      content: <CreateTourPrice form={form} initialValues={initialValues} />,
+      content: <CreateTourPrice form={form} />,
     },
   ];
 
   const handleSubmit = (values: any) => {
-    const { price, ...restValues } = values;
-  
+    const { price, itineraries, ...restValues } = values;
+
     const formattedValues: any = {
-      ...restValues, 
-      AdultPrices: price?.map((item: any) => item.AdultPrices), 
-      ChildPrices: price?.map((item: any) => item.ChildPrices), 
-      TotalTouristFrom: price?.map((item: any) => item.TotalTouristFrom), 
-      TotalTouristTo: price?.map((item: any) => item.TotalTouristTo), 
+      ...restValues,
+      ItineraryNames: itineraries?.map((item: any) => item.name),
+      ItineraryDescriptions: itineraries?.map((item: any) => item.description),
+      AdultPrices: price?.map((item: any) => item.AdultPrices),
+      ChildPrices: price?.map((item: any) => item.ChildPrices),
+      TotalTouristFrom: price?.map((item: any) => item.TotalTouristFrom),
+      TotalTouristTo: price?.map((item: any) => item.TotalTouristTo),
     };
-  
+
     console.log("Formatted Create Tour Values: ", formattedValues);
-  
+
     handleUploadTour(formattedValues);
   };
 
@@ -134,12 +165,8 @@ const CreateTourPage = () => {
           }}
         >
           <div>{steps[currentStep].content}</div>
-          <Form
-            initialValues={initialValues}
-            name="mainForm"
-            form={mainForm}
-            onFinish={handleSubmit}
-          >
+          <Form initialValues={initialValues} name="mainForm" form={mainForm} onFinish={handleSubmit}>
+            {/* Hidden fields to keep the main form state */}
             <Form.Item name="Name" hidden />
             <Form.Item name="Category" hidden />
             <Form.Item name="Duration" hidden />
@@ -150,23 +177,19 @@ const CreateTourPage = () => {
             <Form.Item name="HighlightDetails" hidden />
             <Form.Item name="IncludeDetails" hidden />
             <Form.Item name="ExcludeDetails" hidden />
-            <Form.Item name="ItineraryNames" hidden />
-            <Form.Item name="ItineraryDescriptions" hidden />
+            <Form.Item name="itineraries" hidden />
             <Form.Item name="AdultPrices" hidden />
             <Form.Item name="ChildPrices" hidden />
             <Form.Item name="TotalTouristFrom" hidden />
             <Form.Item name="TotalTouristTo" hidden />
             <Form.Item name="CityId" hidden />
             <Form.Item name="TourGuideId" hidden />
-            <Form.Item name="price" hidden/>
+            <Form.Item name="price" hidden />
+            <Form.Item name="itineraries" hidden />
             <div>
               <div className="mt-4 flex justify-end">
                 {currentStep > 0 && (
-                  <PrimaryButton
-                    text="Previous"
-                    className="mr-[1%]"
-                    onClick={() => prev()}
-                  />
+                  <PrimaryButton text="Previous" className="mr-[1%]" onClick={() => prev()} />
                 )}
                 {currentStep < steps.length - 1 && (
                   <PrimaryButton text="Next" onClick={() => form.submit()} />
