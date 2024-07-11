@@ -5,6 +5,7 @@ import { User } from "../../models/user";
 import { jwtDecode } from "jwt-decode";
 import { Customer } from "../../models/customer";
 import { TourGuide } from "../../models/tourGuide";
+import { excludedActionsPending } from "./uiSlice";
 
 const token = localStorage.getItem("access_token");
 let initUser = {};
@@ -39,7 +40,8 @@ const authSlice = createSlice({
       .addMatcher(
         (action) =>
           action.type.startsWith("auth/fetch/") &&
-          action.type.endsWith("/pending"),
+          action.type.endsWith("/pending") &&
+          !excludedActionsPending.includes(action.type),
         () => {
           return {
             ...initialState,
@@ -51,13 +53,7 @@ const authSlice = createSlice({
         (action) =>
           action.type.startsWith("auth/send/") &&
           action.type.endsWith("/pending") &&
-          ![
-            "auth/send/loginVerify",
-            "auth/send/registerVerify",
-            "auth/send/forgetPasswordVerify",
-          ]
-            .map((type) => `${type}/pending`)
-            .includes(action.type),
+          !excludedActionsPending.includes(action.type),
         () => {
           return { ...initialState, isSending: true };
         },

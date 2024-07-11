@@ -1,5 +1,6 @@
 import { Col, Flex, Row } from "antd";
 import React from "react";
+import NotFound from "../not-found/not-found";
 
 function CardListGrid<RecordType>({
   items,
@@ -20,6 +21,9 @@ function CardListGrid<RecordType>({
   }
 
   if (Array.isArray(items)) {
+    if (items.length === 0) {
+      return <NotFound />;
+    }
     return (
       <Row gutter={[{ xs: 8, sm: 16, md: 24, lg: 32, xl: 40, xxl: 48 }, 28]}>
         {items.map((item, index) => (
@@ -51,6 +55,9 @@ function CardListGridHorizontal<RecordType>({
   }
 
   if (Array.isArray(items)) {
+    if (items.length === 0) {
+      return <NotFound />;
+    }
     return (
       <Flex gap={"middle"}>
         {items.map((item, index) => (

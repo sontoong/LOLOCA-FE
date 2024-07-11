@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import agent from "../../utils/agent";
 import { AxiosError } from "axios";
 import { City, CityList } from "../../models/city";
+import { excludedActionsPending } from "./uiSlice";
 
 type TCity = {
   currentCity: City;
@@ -33,7 +34,8 @@ const citySlice = createSlice({
       .addMatcher(
         (action) =>
           action.type.startsWith("city/fetch/") &&
-          action.type.endsWith("/pending"),
+          action.type.endsWith("/pending") &&
+          !excludedActionsPending.includes(action.type),
         () => {
           return { ...initialState, isFetching: true };
         },
@@ -41,7 +43,8 @@ const citySlice = createSlice({
       .addMatcher(
         (action) =>
           action.type.startsWith("city/send/") &&
-          action.type.endsWith("/pending"),
+          action.type.endsWith("/pending") &&
+          !excludedActionsPending.includes(action.type),
         () => {
           return { ...initialState, isSending: true };
         },

@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import agent from "../../utils/agent";
 import { AxiosError } from "axios";
 import { BookingTourGuideRequest } from "../../models/bookingTourGuide";
+import { excludedActionsPending } from "./uiSlice";
 
 type TBookingTourGuide = {
   currentBookingTourGuide: BookingTourGuideRequest;
@@ -39,7 +40,8 @@ const bookingTourGuideSlice = createSlice({
       .addMatcher(
         (action) =>
           action.type.startsWith("bookingTourGuide/fetch/") &&
-          action.type.endsWith("/pending"),
+          action.type.endsWith("/pending") &&
+          !excludedActionsPending.includes(action.type),
         () => {
           return { ...initialState, isFetching: true };
         },
@@ -47,7 +49,8 @@ const bookingTourGuideSlice = createSlice({
       .addMatcher(
         (action) =>
           action.type.startsWith("bookingTourGuide/send/") &&
-          action.type.endsWith("/pending"),
+          action.type.endsWith("/pending") &&
+          !excludedActionsPending.includes(action.type),
         () => {
           return { ...initialState, isSending: true };
         },
