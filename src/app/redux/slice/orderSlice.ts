@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import agent from "../../utils/agent";
 import { AxiosError } from "axios";
 import { OrderList, RequestTour } from "../../models/order";
+import { excludedActionsPending } from "./uiSlice";
 
 type TOrder = {
   requestTour: RequestTour;
@@ -33,7 +34,8 @@ const orderSlice = createSlice({
       .addMatcher(
         (action) =>
           action.type.startsWith("order/fetch/") &&
-          action.type.endsWith("/pending"),
+          action.type.endsWith("/pending") &&
+          !excludedActionsPending.includes(action.type),
         () => {
           return { ...initialState, isFetching: true };
         },
@@ -41,7 +43,8 @@ const orderSlice = createSlice({
       .addMatcher(
         (action) =>
           action.type.startsWith("order/send/") &&
-          action.type.endsWith("/pending"),
+          action.type.endsWith("/pending") &&
+          !excludedActionsPending.includes(action.type),
         () => {
           return { ...initialState, isSending: true };
         },

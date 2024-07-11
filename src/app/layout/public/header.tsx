@@ -20,7 +20,7 @@ export default function MyHeader() {
     handleGetUserInfo();
   }, [handleGetUserInfo]);
 
-  const logOut = async () => {
+  const logOut = () => {
     handleLogout();
   };
 
@@ -97,7 +97,12 @@ export default function MyHeader() {
   }
 
   const onClick: MenuProps["onClick"] = (e) => {
-    if (e.key) navigate(e.key);
+    if (e.key) {
+      navigate(e.key);
+    }
+    if (typeof e.key == "function") {
+      // e.key();
+    }
   };
 
   return (
@@ -185,11 +190,13 @@ function generateItemProfile(
   key: React.Key,
   icon?: React.ReactNode,
   children?: ItemType[],
+  onClick?: () => void,
 ): ItemType {
   return {
     key,
     icon,
     children,
     label,
+    onClick,
   };
 }

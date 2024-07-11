@@ -1,10 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const watchActions = [
+export const excludedActions = [
   "auth/send/loginVerify",
   "auth/send/registerVerify",
   "auth/send/forgetPasswordVerify",
 ];
+export const excludedActionsPending = excludedActions.map(
+  (action) => `${action}/pending`,
+);
 
 const initialState: TUI = {
   OTPModal: { open: false, extraValues: {} },
@@ -43,7 +46,7 @@ const UISlice = createSlice({
           );
           return (
             action.type.endsWith("/pending") &&
-            watchActions.includes(baseActionType)
+            excludedActions.includes(baseActionType)
           );
         },
         (state) => {
@@ -59,7 +62,7 @@ const UISlice = createSlice({
           return (
             (action.type.endsWith("/fulfilled") ||
               action.type.endsWith("/rejected")) &&
-            watchActions.includes(baseActionType)
+            excludedActions.includes(baseActionType)
           );
         },
         (state) => {

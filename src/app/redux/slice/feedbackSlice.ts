@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import agent from "../../utils/agent";
 import { AxiosError } from "axios";
 import { FeedbackList } from "../../models/feedback";
+import { excludedActionsPending } from "./uiSlice";
 
 type TFeedback = {
   currentFeedbackList: {
@@ -41,7 +42,8 @@ const feedbackSlice = createSlice({
       .addMatcher(
         (action) =>
           action.type.startsWith("feedback/fetch/") &&
-          action.type.endsWith("/pending"),
+          action.type.endsWith("/pending") &&
+          !excludedActionsPending.includes(action.type),
         () => {
           return { ...initialState, isFetching: true };
         },
@@ -49,7 +51,8 @@ const feedbackSlice = createSlice({
       .addMatcher(
         (action) =>
           action.type.startsWith("feedback/send/") &&
-          action.type.endsWith("/pending"),
+          action.type.endsWith("/pending") &&
+          !excludedActionsPending.includes(action.type),
         () => {
           return { ...initialState, isSending: true };
         },

@@ -2,15 +2,13 @@ import { Banner } from "../../components/banner";
 import VietNamBanner from "../../../assets/banner.png";
 import { Card, Col, Row, Typography } from "antd";
 import { Divider } from "../../components/divider";
-// import { PrimaryButton } from "../../components/buttons";
 import { StarFilled } from "@ant-design/icons";
-import { formatUnixToLocal } from "../../utils/utils";
+import { formatDateToLocal } from "../../utils/utils";
 import { useTour } from "../../hooks/useTour";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CardListGrid } from "../../components/grids";
 import { CardSkeleton, Skeleton } from "../../components/skeletons";
-import { reviewsData } from "../../utils/testData";
 import { Image } from "../../components/image";
 import { Avatar } from "../../components/avatar";
 import { genderGenerator } from "../../utils/generators/gender";
@@ -19,6 +17,7 @@ import ProfileEditModal from "../../ui/guide_ui/profileEditModal";
 import { useAuth } from "../../hooks/useAuth";
 import { TourGuide } from "../../models/tourGuide";
 import { useTourGuide } from "../../hooks/useTourGuide";
+import { useFeedback } from "../../hooks/useFeedback";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -28,7 +27,7 @@ const TourGuideProfile = () => {
   const { state: stateUser } = useAuth();
   const { state: stateTourGuide } = useTourGuide();
   const { state: stateTour, handleGetTourByTourGuide } = useTour();
-  // const {state: stateFeedback, handleGetTourGuideFeedback} = useFeedback()
+  const { state: stateFeedback, handleGetTourGuideFeedback } = useFeedback();
   const currentUser = stateUser.currentUser as TourGuide;
 
   useEffect(() => {
@@ -38,9 +37,16 @@ const TourGuideProfile = () => {
         page: 1,
         pageSize: 10,
       });
-      // handleGetTourGuideFeedback({ cityId: stateTourGuide});
     }
   }, [tourGuideId, handleGetTourByTourGuide]);
+
+  useEffect(() => {
+    if (stateTourGuide.currentTourguide.cityId) {
+      handleGetTourGuideFeedback({
+        cityId: stateTourGuide.currentTourguide.cityId.toString(),
+      });
+    }
+  }, [handleGetTourGuideFeedback, stateTourGuide.currentTourguide.cityId]);
 
   const renderTours = () => {
     if (stateTour.isFetching) {
@@ -196,7 +202,7 @@ const TourGuideProfile = () => {
           </Title>
 
           {/* fix data */}
-          {stateUser.isFetching ? (
+          {stateFeedback.isFetching ? (
             <>
               {Array(2)
                 .fill({})
@@ -209,35 +215,40 @@ const TourGuideProfile = () => {
           ) : (
             <>
               <Text>
-                {reviewsData.stars} <StarFilled /> ({reviewsData.amount}
+                {stateFeedback.currentFeedbackList.averageStar} <StarFilled /> (
+                {stateFeedback.currentFeedbackList.totalFeedbacks}
                 reviews)
               </Text>
-              {reviewsData.ratings.map((rating, index) => (
-                <div key={index} className="my-[3rem]">
-                  <Row>
-                    <Col>
-                      <img
-                        src={VietNamBanner}
-                        className="h-[3rem] w-[3rem] rounded-full object-cover"
-                      />
-                    </Col>
-                    <Col className="ml-[0.5rem]">
-                      <Paragraph
-                        style={{ fontWeight: "bold", marginBottom: "0" }}
-                      >
-                        {rating.name}
-                      </Paragraph>
-                      <Paragraph>{formatUnixToLocal(rating.date)}</Paragraph>
-                    </Col>
-                    <Col offset={1}>
-                      <Paragraph>
-                        <StarFilled /> {rating.star}
-                      </Paragraph>
-                    </Col>
-                  </Row>
-                  <Paragraph>{rating.description}</Paragraph>
-                </div>
-              ))}
+              {stateFeedback.currentFeedbackList.feedbacks.map(
+                (rating, index) => (
+                  <div key={index} className="my-[3rem]">
+                    <Row>
+                      <Col>
+                        <img
+                          src={VietNamBanner}
+                          className="h-[3rem] w-[3rem] rounded-full object-cover"
+                        />
+                      </Col>
+                      <Col className="ml-[0.5rem]">
+                        <Paragraph
+                          style={{ fontWeight: "bold", marginBottom: "0" }}
+                        >
+                          {rating.customerName}
+                        </Paragraph>
+                        <Paragraph>
+                          {formatDateToLocal(rating.timeFeedback)}
+                        </Paragraph>
+                      </Col>
+                      <Col offset={1}>
+                        <Paragraph>
+                          <StarFilled /> {rating.numOfStars}
+                        </Paragraph>
+                      </Col>
+                    </Row>
+                    <Paragraph>{rating.content}</Paragraph>
+                  </div>
+                ),
+              )}
             </>
           )}
         </div>
