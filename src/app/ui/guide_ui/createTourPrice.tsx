@@ -1,72 +1,22 @@
-import { useMemo, useEffect } from "react";
 import { Form, InputNumber, Typography } from "antd";
 import { MinusCircleFilled, PlusOutlined } from "@ant-design/icons";
 import { PrimaryButton } from "../../components/buttons";
-
-interface TourPrice {
-  TotalTouristFrom: number;
-  TotalTouristTo: number;
-  AdultPrices: number;
-  ChildPrices: number;
-}
 
 const { Title } = Typography;
 
 const CreateTourPrice = ({
   form,
-  initialValues,
 }: {
   form: any;
-  initialValues: any;
 }) => {
-  const initialAdultPrices = useMemo(
-    () => initialValues.AdultPrices || [0],
-    [initialValues.AdultPrices]
-  );
-  const initialChildPrices = useMemo(
-    () => initialValues.ChildPrices || [0],
-    [initialValues.ChildPrices]
-  );
-  const initialTotalTouristFrom = useMemo(
-    () => initialValues.TotalTouristFrom || [0],
-    [initialValues.TotalTouristFrom]
-  );
-  const initialTotalTouristTo = useMemo(
-    () => initialValues.TotalTouristTo || [0],
-    [initialValues.TotalTouristTo]
-  );
 
-  const initialData = useMemo(() => {
-    const maxLength = Math.max(
-      initialAdultPrices.length,
-      initialChildPrices.length,
-      initialTotalTouristFrom.length,
-      initialTotalTouristTo.length
-    );
-    const data: TourPrice[] = [];
-    for (let i = 0; i < maxLength; i++) {
-      data.push({
-        TotalTouristFrom: initialTotalTouristFrom[i] || 0,
-        TotalTouristTo: initialTotalTouristTo[i] || 0,
-        AdultPrices: initialAdultPrices[i] || 0,
-        ChildPrices: initialChildPrices[i] || 0,
-      });
-    }
-    return data;
-  }, [initialAdultPrices, initialChildPrices, initialTotalTouristFrom, initialTotalTouristTo]);
-
-  useEffect(() => {
-    form.setFieldsValue({
-      prices: initialData,
-    });
-  }, [form, initialData]);
 
   const onFinish = (values: any) => {
     const formattedValues = {
-      AdultPrices: values.prices.map((item: any) => item.AdultPrices),
-      ChildPrices: values.prices.map((item: any) => item.ChildPrices),
-      TotalTouristFrom: values.prices.map((item: any) => item.TotalTouristFrom),
-      TotalTouristTo: values.prices.map((item: any) => item.TotalTouristTo),
+      AdultPrices: values.price.map((item: any) => item.AdultPrices),
+      ChildPrices: values.price.map((item: any) => item.ChildPrices),
+      TotalTouristFrom: values.price.map((item: any) => item.TotalTouristFrom),
+      TotalTouristTo: values.price.map((item: any) => item.TotalTouristTo),
     };
     console.log("Formatted Form Values: ", formattedValues);
   };
@@ -105,12 +55,7 @@ const CreateTourPrice = ({
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
-        <Form.List
-          name="price"
-          initialValue={[
-            { TotalTouristFrom: 0, TotalTouristTo: 0, AdultPrices: 0, ChildPrices: 0 },
-          ]}
-        >
+        <Form.List name="price">
           {(fields, { add, remove }) => (
             <>
               {fields.map((field, index) => (
