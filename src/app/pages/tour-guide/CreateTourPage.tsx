@@ -10,7 +10,9 @@ import CreateTourItinerary from "../../ui/guide_ui/createTourItinerary";
 import CreateTourPrice from "../../ui/guide_ui/createTourPrice";
 import { useTour } from "../../hooks/useTour";
 import { CreateTourParams } from "../../redux/slice/tourSlice";
-import { useTourGuide } from "../../hooks/useTourGuide";
+import { base64ToBlob } from "../../utils/utils";
+import { useAuth } from "../../hooks/useAuth";
+import { TourGuide } from "../../models/tourGuide";
 
 const { Step } = Steps;
 
@@ -21,15 +23,9 @@ const CreateTourPage = () => {
   const { handleUploadTour } = useTour();
   const [tourImages, setTourImages] = useState<UploadFile[]>([]);
   const [duration, setDuration] = useState<number | undefined>(undefined);
-  const tourGuideId = localStorage.getItem("userId") ?? "";
-  const userId = Number(tourGuideId);
-  const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
-
-  useEffect(() => {
-    if (!isNaN(userId)) {
-      handleGetTourGuidebyId({ tourGuideId: tourGuideId });
-    }
-  }, [handleGetTourGuidebyId, userId, tourGuideId]);
+  const { state: stateUser } = useAuth();
+  const TourGuideId = Number(localStorage.getItem("userId") ?? "");
+ 
 
   const next = () => {
     window.scrollTo(0, 0);
@@ -41,26 +37,29 @@ const CreateTourPage = () => {
     setCurrentStep(currentStep - 1);
   };
 
-  const initialValues: CreateTourParams = useMemo(() => ({
-    Name: "",
-    Category: "",
-    Duration: duration || 0,
-    images: [],
-    TypeDetails: [],
-    Activity: "",
-    Description: "",
-    HighlightDetails: [""],
-    IncludeDetails: [""],
-    ExcludeDetails: [""],
-    ItineraryNames: [""],
-    ItineraryDescriptions: [""],
-    AdultPrices: [0],
-    ChildPrices: [0],
-    TotalTouristFrom: [0],
-    TotalTouristTo: [0],
-    CityId: stateTourGuide.currentTourguide.cityId,
-    TourGuideId: userId,
-  }), [duration, stateTourGuide.currentTourguide.cityId, userId]);
+  const initialValues: CreateTourParams = useMemo(() => {
+    const { cityId } = stateUser.currentUser as TourGuide || {};
+    return {
+      Name: "",
+      Category: "",
+      Duration: duration || 0,
+      images: [],
+      TypeDetails: [],
+      Activity: "",
+      Description: "",
+      HighlightDetails: [""],
+      IncludeDetails: [""],
+      ExcludeDetails: [""],
+      ItineraryNames: [""],
+      ItineraryDescriptions: [""],
+      AdultPrices: [0],
+      ChildPrices: [0],
+      TotalTouristFrom: [0],
+      TotalTouristTo: [0],
+      CityId: cityId,
+      TourGuideId: TourGuideId,
+    };
+  }, [duration, TourGuideId, stateUser.currentUser, ]);
 
   useEffect(() => {
     const itineraries = initialValues.ItineraryNames.map((name: any, index: any) => ({
@@ -112,7 +111,7 @@ const CreateTourPage = () => {
   ];
 
   const handleSubmit = (values: any) => {
-    const { price, itineraries, ...restValues } = values;
+    const { price, itineraries, images, ...restValues } = values;
 
     const formattedValues: any = {
       ...restValues,
@@ -122,6 +121,16 @@ const CreateTourPage = () => {
       ChildPrices: price?.map((item: any) => item.ChildPrices),
       TotalTouristFrom: price?.map((item: any) => item.TotalTouristFrom),
       TotalTouristTo: price?.map((item: any) => item.TotalTouristTo),
+      images: images.flatMap((image : any) => {
+        if (image.originFileObj) {
+          return [image.originFileObj];
+        } else if (image.url) {
+          const blob = base64ToBlob(image.url, image.name);
+          return blob ? [blob] : [];
+        } else {
+          return [];
+        }
+      }),
     };
 
     console.log("Formatted Create Tour Values: ", formattedValues);
