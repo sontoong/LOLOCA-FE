@@ -165,7 +165,7 @@ const TourGuideProfile = () => {
           onClick={handleBooking}
         />
       </div>
-      <div className="flex justify-evenly">
+      <div className="mb-5 flex justify-evenly">
         <div className="w-[30%] font-bold">
           <Title level={2} style={{ fontWeight: "bolder", color: "#004AAD" }}>
             Information
@@ -222,7 +222,10 @@ const TourGuideProfile = () => {
               </Text>
               {stateFeedback.currentFeedbackList.feedbacks.map(
                 (rating, index) => (
-                  <div key={index} className="my-[3rem]">
+                  <div
+                    key={index}
+                    className={`mt-[3rem] ${index === stateFeedback.currentFeedbackList.feedbacks.length - 1 ? "" : "mb-[3rem]"}`}
+                  >
                     <Row>
                       <Col>
                         <Avatar size={48} />

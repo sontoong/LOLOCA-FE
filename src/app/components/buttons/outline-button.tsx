@@ -8,7 +8,7 @@ function OutlineButton({ text, ...rest }: CustomButtonProps) {
           Button: {
             algorithm: true,
             defaultColor: "#004aad",
-            defaultBorderColor: "#004aad"
+            defaultBorderColor: "#004aad",
           },
         },
       }}
@@ -28,7 +28,7 @@ function OutlineButtonBoldText({ text, ...rest }: CustomButtonProps) {
           Button: {
             algorithm: true,
             defaultColor: "#004aad",
-            defaultBorderColor: "#004aad"
+            defaultBorderColor: "#004aad",
           },
         },
       }}
@@ -45,5 +45,5 @@ OutlineButton.BoldText = OutlineButtonBoldText;
 export default OutlineButton;
 
 type CustomButtonProps = ButtonProps & {
-  text: string;
+  text?: string;
 };

@@ -1,7 +1,7 @@
 export type BookingTourGuideRequest = {
-  bookingTourGuideRequestId: number;
-  tourGuideId: number;
-  customerId: number;
+  bookingTourGuideRequestId: string;
+  tourGuideId: string;
+  customerId: string;
   tourGuideName: string;
   requestDate: string; // ISO 8601 format
   requestTimeOut: string; // ISO 8601 format

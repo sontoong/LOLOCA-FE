@@ -2,18 +2,18 @@ import { Avatar, Card, Popover, Space, Tag, Typography, Modal } from "antd";
 import VietNamBanner from "../../../assets/banner.png";
 import { PrimaryButton } from "../../components/buttons";
 import OutlineButton from "../../components/buttons/outline-button";
-import { BookingTourRequest } from "../../models/bookingTour";
+import { BookingTourGuideRequest } from "../../models/bookingTourGuide";
 
-const RequestCardTour = ({
+const { Title, Paragraph } = Typography;
+const { confirm } = Modal;
+
+const RequestCardTourGuide = ({
   request,
   customerId,
 }: {
-  request: BookingTourRequest;
+  request: BookingTourGuideRequest;
   customerId: string;
 }) => {
-  const { Title, Paragraph } = Typography;
-  const { confirm } = Modal;
-
   const showConfirm = (action: string) => {
     confirm({
       title: `Are you sure you want to ${action}?`,
@@ -76,7 +76,7 @@ const RequestCardTour = ({
                   level={2}
                   style={{ fontWeight: "bolder", color: "#004AAD", margin: 0 }}
                 >
-                  {request.tourName}
+                  {request.tourGuideName}
                 </Title>
                 {/* <Tag style={{ height: "1.5rem" }} color="processing">
                   {request.tag}
@@ -114,4 +114,4 @@ const RequestCardTour = ({
   );
 };
 
-export default RequestCardTour;
+export default RequestCardTourGuide;

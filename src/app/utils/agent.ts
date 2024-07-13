@@ -120,7 +120,8 @@ const TourGuide = {
   updateAvatar: (data: any) =>
     requests.post(`${_tourGuide}/update-avatar`, data),
   updateCover: (data: any) => requests.post(`${_tourGuide}/update-cover`, data),
-  updateInfo: (tourGuideId : string, data: any) => requests.post(`${_tourGuide}/update-info/${tourGuideId}`, data),
+  updateInfo: (tourGuideId: string, data: any) =>
+    requests.post(`${_tourGuide}/update-info/${tourGuideId}`, data),
   changePassword: (data: any) =>
     requests.post(`${_tourGuide}/change-password`, data),
   getTourGuideById: (tourGuideId: string) =>
@@ -146,9 +147,9 @@ const _tour = "Tour";
 const Tour = {
   uploadTour: (data: any) => requests.post(`uploadtour`, data),
   updateTour: (tourId: string, data: any) =>
-    requests.put(`${_tour}/${tourId}`, data),
+    requests.put(`updatetour/${tourId}`, data),
   acceptTourChangeStatus: (tourId: string, data: any) =>
-    requests.put(`${_tour}/${tourId}`, data),
+    requests.put(`accept-tour-change-status/${tourId}`, data),
   deleteTour: (tourId: string) => requests.del(`${_tour}/${tourId}`),
   getTourById: (tourId: string) => baseRequests.get(`${_tour}/${tourId}`),
   getRandomTours: (params: any) => baseRequests.get(`${_tour}/random`, params),
@@ -190,6 +191,34 @@ const Order = {
     requests.put(`${_order}/${orderId}/${status}`, data),
 };
 
+const _paymentRequest = "PaymentRequest";
+const PaymentRequest = {
+  createDeposit: (data: any) =>
+    requests.post(`${_paymentRequest}/create-deposit`, data),
+  getAllDeposit: (status: number) =>
+    requests.get(`${_paymentRequest}/get-all-deposit`, status),
+  getDepositByPaymentRequestId: (PaymentRequestId: string) =>
+    requests.get(`${_paymentRequest}/deposit/${PaymentRequestId}`),
+  getDepositByCustomerId: (params: any) =>
+    requests.get(`${_paymentRequest}/deposit/customer`, params),
+  getDepositByTourGuideId: (params: any) =>
+    requests.get(`${_paymentRequest}/deposit/tourguide`, params),
+  updateDeposit: (params: any) =>
+    requests.put(`${_paymentRequest}/update-deposit`, params),
+  createWithdrawal: (data: any) =>
+    requests.post(`${_paymentRequest}/withdrawal`, data),
+  updateWithdrawal: (PaymentRequestId: string) =>
+    requests.get(`${_paymentRequest}/get-all-withdrawal`, PaymentRequestId),
+  getWithdrawalByStatus: (status: number) =>
+    requests.get(`${_paymentRequest}/create-withdrawal`, status),
+  getWithdrawalByPaymentRequestId: (paymentRequestId: string) =>
+    requests.get(`${_paymentRequest}/withdrawal/${paymentRequestId}`),
+  getWithdrawalByCustomerId: (params: any) =>
+    requests.get(`${_paymentRequest}/withdrawal/customer`, params),
+  getWithdrawalByTourGuideId: (params: any) =>
+    requests.get(`${_paymentRequest}/withdrawal/tourguide`, params),
+};
+
 const agent = {
   Auth,
   BookingTour,
@@ -200,5 +229,6 @@ const agent = {
   TourGuide,
   Feedback,
   Order,
+  PaymentRequest,
 };
 export default agent;
