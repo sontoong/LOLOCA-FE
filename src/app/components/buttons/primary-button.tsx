@@ -21,8 +21,6 @@ function PrimaryButton({ text, bgColor, ...rest }: CustomButtonProps) {
   );
 }
 
-
-
 function PrimaryButtonBoldText({ text, bgColor, ...rest }: CustomButtonProps) {
   const { token } = theme.useToken();
 
@@ -49,6 +47,6 @@ PrimaryButton.BoldText = PrimaryButtonBoldText;
 export default PrimaryButton;
 
 type CustomButtonProps = ButtonProps & {
-  text: string;
+  text?: string;
   bgColor?: string;
 };

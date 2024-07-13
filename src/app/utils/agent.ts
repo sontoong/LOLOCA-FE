@@ -120,7 +120,8 @@ const TourGuide = {
   updateAvatar: (data: any) =>
     requests.post(`${_tourGuide}/update-avatar`, data),
   updateCover: (data: any) => requests.post(`${_tourGuide}/update-cover`, data),
-  updateInfo: (tourGuideId : string, data: any) => requests.post(`${_tourGuide}/update-info/${tourGuideId}`, data),
+  updateInfo: (tourGuideId: string, data: any) =>
+    requests.post(`${_tourGuide}/update-info/${tourGuideId}`, data),
   changePassword: (data: any) =>
     requests.post(`${_tourGuide}/change-password`, data),
   getTourGuideById: (tourGuideId: string) =>
@@ -146,9 +147,9 @@ const _tour = "Tour";
 const Tour = {
   uploadTour: (data: any) => requests.post(`uploadtour`, data),
   updateTour: (tourId: string, data: any) =>
-    requests.put(`${_tour}/${tourId}`, data),
+    requests.put(`updatetour/${tourId}`, data),
   acceptTourChangeStatus: (tourId: string, data: any) =>
-    requests.put(`${_tour}/${tourId}`, data),
+    requests.put(`accept-tour-change-status/${tourId}`, data),
   deleteTour: (tourId: string) => requests.del(`${_tour}/${tourId}`),
   getTourById: (tourId: string) => baseRequests.get(`${_tour}/${tourId}`),
   getRandomTours: (params: any) => baseRequests.get(`${_tour}/random`, params),

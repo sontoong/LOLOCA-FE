@@ -67,9 +67,11 @@ export default function MyHeader() {
             type: "divider",
           },
           generateItemProfile(
-            <div onClick={logOut}>Đăng xuất</div>,
+            "Đăng xuất",
             "",
             <LogoutOutlined />,
+            undefined,
+            logOut,
           ),
         ];
       case ROLE.tourguide:
@@ -80,17 +82,21 @@ export default function MyHeader() {
             <UserOutlined />,
           ),
           generateItemProfile(
-            <div onClick={logOut}>Đăng xuất</div>,
+            "Đăng xuất",
             "",
             <LogoutOutlined />,
+            undefined,
+            logOut,
           ),
         ];
       default:
         return [
           generateItemProfile(
-            <div onClick={logOut}>Đăng xuất</div>,
+            "Đăng xuất",
             "",
             <LogoutOutlined />,
+            undefined,
+            logOut,
           ),
         ];
     }
@@ -99,9 +105,6 @@ export default function MyHeader() {
   const onClick: MenuProps["onClick"] = (e) => {
     if (e.key) {
       navigate(e.key);
-    }
-    if (typeof e.key == "function") {
-      // e.key();
     }
   };
 

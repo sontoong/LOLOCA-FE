@@ -6,14 +6,14 @@ import { SpaceProps } from "antd/lib";
 function Radio() {}
 
 function RadioGroup<RecordType>({
-  defaultValue,
+  defaultActiveIndex,
   activeRender,
   items,
   render,
   gap = 10,
   direction = "horizontal",
 }: RadioGroupProps<RecordType>) {
-  const [selectedValue, setSelectedValue] = useState(defaultValue);
+  const [selectedValue, setSelectedValue] = useState(defaultActiveIndex);
 
   const handleClick = (value: number) => {
     setSelectedValue(value);
@@ -40,7 +40,7 @@ Radio.ButtonGroup = RadioGroup;
 export default Radio;
 
 type RadioGroupProps<RecordType> = {
-  defaultValue: number;
+  defaultActiveIndex?: number;
   items: RecordType[] | number;
   gap?: SpaceProps["size"];
   direction?: SpaceProps["direction"];

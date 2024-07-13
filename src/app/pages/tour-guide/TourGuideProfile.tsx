@@ -1,5 +1,4 @@
 import { Banner } from "../../components/banner";
-import VietNamBanner from "../../../assets/banner.png";
 import { Card, Col, Row, Typography } from "antd";
 import { Divider } from "../../components/divider";
 import { StarFilled } from "@ant-design/icons";
@@ -166,7 +165,7 @@ const TourGuideProfile = () => {
         My Tours
       </Title>
       {renderTours()}
-      <div className="flex justify-evenly">
+      <div className="mb-5 flex justify-evenly">
         <div className="w-[30%] font-bold">
           <Title level={2} style={{ fontWeight: "bolder", color: "#004AAD" }}>
             Information
@@ -190,7 +189,7 @@ const TourGuideProfile = () => {
             </div>
           )}
         </div>
-        <div>
+        <div className="mb-5">
           <Title
             style={{
               color: "#004AAD",
@@ -216,18 +215,19 @@ const TourGuideProfile = () => {
             <>
               <Text>
                 {stateFeedback.currentFeedbackList.averageStar} <StarFilled /> (
-                {stateFeedback.currentFeedbackList.totalFeedbacks}
-                reviews)
+                {`${stateFeedback.currentFeedbackList.totalFeedbacks}
+                 reviews`}
+                )
               </Text>
               {stateFeedback.currentFeedbackList.feedbacks.map(
                 (rating, index) => (
-                  <div key={index} className="my-[3rem]">
+                  <div
+                    key={index}
+                    className={`mt-[3rem] ${index === stateFeedback.currentFeedbackList.feedbacks.length - 1 ? "" : "mb-[3rem]"}`}
+                  >
                     <Row>
                       <Col>
-                        <img
-                          src={VietNamBanner}
-                          className="h-[3rem] w-[3rem] rounded-full object-cover"
-                        />
+                        <Avatar size={48} />
                       </Col>
                       <Col className="ml-[0.5rem]">
                         <Paragraph
