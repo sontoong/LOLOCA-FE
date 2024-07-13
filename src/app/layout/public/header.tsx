@@ -1,4 +1,9 @@
-import { BookOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  BookOutlined,
+  HistoryOutlined,
+  LogoutOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { Avatar, Dropdown, Layout, Menu, MenuProps, Modal, Spin } from "antd";
 import { ItemType } from "antd/es/menu/interface";
 import { useEffect } from "react";
@@ -62,6 +67,11 @@ export default function MyHeader() {
             "Danh sách chờ",
             "/customer/request",
             <BookOutlined />,
+          ),
+          generateItemProfile(
+            "Lịch sử giao dịch",
+            "/customer/payment-history",
+            <HistoryOutlined />,
           ),
           {
             type: "divider",

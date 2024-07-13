@@ -1,19 +1,19 @@
+import { StarFilled } from "@ant-design/icons";
+import { Carousel, Col, Modal, Row, Steps, Typography } from "antd";
 import React, { useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useTour } from "../../hooks/useTour";
-import { Loader } from "../../components/loader/loader";
-import NotFound from "../../components/not-found/not-found";
-import { Typography, Row, Col, Steps, Carousel, Modal } from "antd";
 import VietNamBanner from "../../../assets/banner.png";
+import { Avatar } from "../../components/avatar";
 import { PrimaryButton } from "../../components/buttons";
 import { Divider } from "../../components/divider";
-import { Table } from "../../components/table";
-import { formatDateToLocal } from "../../utils/utils";
-import { StarFilled } from "@ant-design/icons";
 import { Image } from "../../components/image";
+import { Loader } from "../../components/loader/loader";
+import NotFound from "../../components/not-found/not-found";
+import { Table } from "../../components/table";
 import { useFeedback } from "../../hooks/useFeedback";
+import { useTour } from "../../hooks/useTour";
 import { useTourGuide } from "../../hooks/useTourGuide";
-import { Avatar } from "../../components/avatar";
+import { formatDateToLocal } from "../../utils/utils";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -306,7 +306,6 @@ const TourGuideTourDetailPage = () => {
               Recent Reviews
             </Title>
 
-            {/* fix data below */}
             <Text>
               {stateFeedback.currentFeedbackList.averageStar} <StarFilled /> (
               {stateFeedback.currentFeedbackList.totalFeedbacks} reviews)
@@ -316,10 +315,7 @@ const TourGuideTourDetailPage = () => {
                 <div key={index} className="my-[3rem]">
                   <Row>
                     <Col>
-                      <img
-                        src={VietNamBanner}
-                        className="h-[3rem] w-[3rem] rounded-full object-cover"
-                      />
+                      <Avatar size={48} />
                     </Col>
                     <Col className="ml-[0.5rem]">
                       <Paragraph

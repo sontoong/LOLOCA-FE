@@ -65,12 +65,12 @@ const DropDownRequest = ({
             <p>
               <strong>Number of Children:</strong> {record.numOfChild}
             </p>
-            {/* <p>
+            <p>
               <strong>Tour Types:</strong>{" "}
               {record.tourTypeDTOs
                 ?.map((type: any) => type.typeDetail)
                 .join(", ")}
-            </p> */}
+            </p>
           </div>
         ),
         onOk() {},

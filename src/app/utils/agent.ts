@@ -191,6 +191,34 @@ const Order = {
     requests.put(`${_order}/${orderId}/${status}`, data),
 };
 
+const _paymentRequest = "PaymentRequest";
+const PaymentRequest = {
+  createDeposit: (data: any) =>
+    requests.post(`${_paymentRequest}/create-deposit`, data),
+  getAllDeposit: (status: number) =>
+    requests.get(`${_paymentRequest}/get-all-deposit`, status),
+  getDepositByPaymentRequestId: (PaymentRequestId: string) =>
+    requests.get(`${_paymentRequest}/deposit/${PaymentRequestId}`),
+  getDepositByCustomerId: (params: any) =>
+    requests.get(`${_paymentRequest}/deposit/customer`, params),
+  getDepositByTourGuideId: (params: any) =>
+    requests.get(`${_paymentRequest}/deposit/tourguide`, params),
+  updateDeposit: (params: any) =>
+    requests.put(`${_paymentRequest}/update-deposit`, params),
+  createWithdrawal: (data: any) =>
+    requests.post(`${_paymentRequest}/withdrawal`, data),
+  updateWithdrawal: (PaymentRequestId: string) =>
+    requests.get(`${_paymentRequest}/get-all-withdrawal`, PaymentRequestId),
+  getWithdrawalByStatus: (status: number) =>
+    requests.get(`${_paymentRequest}/create-withdrawal`, status),
+  getWithdrawalByPaymentRequestId: (paymentRequestId: string) =>
+    requests.get(`${_paymentRequest}/withdrawal/${paymentRequestId}`),
+  getWithdrawalByCustomerId: (params: any) =>
+    requests.get(`${_paymentRequest}/withdrawal/customer`, params),
+  getWithdrawalByTourGuideId: (params: any) =>
+    requests.get(`${_paymentRequest}/withdrawal/tourguide`, params),
+};
+
 const agent = {
   Auth,
   BookingTour,
@@ -201,5 +229,6 @@ const agent = {
   TourGuide,
   Feedback,
   Order,
+  PaymentRequest,
 };
 export default agent;

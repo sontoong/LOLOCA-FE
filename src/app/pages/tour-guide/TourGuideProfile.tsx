@@ -200,7 +200,6 @@ const TourGuideProfile = () => {
             Recent Reviews
           </Title>
 
-          {/* fix data */}
           {stateFeedback.isFetching ? (
             <>
               {Array(2)

@@ -25,19 +25,24 @@ import TourGuideBookingPage from "../pages/public/TourGuideBookingPage";
 import TourGuideProfilePage from "../pages/public/TourGuideProfilePage";
 import TourGuideRegister from "../pages/public/TourGuideRegister";
 
-//other page
-import ErrorPage from "../pages/public/ErrorPage";
-import TestPage from "../pages/TestPage";
+//customer page
 import CustomerProfile from "../pages/customer/CustomerProfile";
 import CustomerRequesList from "../pages/customer/CustomerRequesList";
 import PaymentPage from "../pages/customer/PaymentPage";
 import BookingSuccess from "../pages/customer/BookingSuccess";
+import AddFundPage from "../pages/customer/AddFundPage";
+import PaymentHistory from "../pages/customer/PaymentHistory";
+
+//tour guide page
 import CreateTourPage from "../pages/tour-guide/CreateTourPage";
 import TourGuideProfile from "../pages/tour-guide/TourGuideProfile";
 import GuideTourPage from "../pages/tour-guide/GuideTourPage";
 import RequestListPage from "../pages/tour-guide/RequestListPage";
 import TourGuideTourDetailPage from "../pages/tour-guide/TourGuideTourDetailPage";
-import AddFundPage from "../pages/customer/AddFundPage";
+
+//other page
+import ErrorPage from "../pages/public/ErrorPage";
+import TestPage from "../pages/TestPage";
 
 export const router = createBrowserRouter([
   {
@@ -158,6 +163,14 @@ export const router = createBrowserRouter([
             element: (
               <Suspense fallback={<></>}>
                 <AddFundPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "payment-history",
+            element: (
+              <Suspense fallback={<></>}>
+                <PaymentHistory />
               </Suspense>
             ),
           },
