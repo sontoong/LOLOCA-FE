@@ -151,7 +151,7 @@ const CreateTourPrice = ({
               <PrimaryButton
                 onClick={() => add()}
                 icon={<PlusOutlined />}
-                style={{ width: "100%" }}
+                style={{ width: "100%", display: "none" }}
                 text="Add Price"
               />
             </>
