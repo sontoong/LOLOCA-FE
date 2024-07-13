@@ -6,7 +6,7 @@ import { useState } from "react";
 import AddFundModal from "../../ui/customer_ui/addFundModal";
 import { PrimaryButton } from "../../components/buttons";
 import FundDetailModal from "../../ui/customer_ui/fundDetailModal";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const { Step } = Steps;
 
@@ -14,7 +14,7 @@ const AddFundPage = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [form] = Form.useForm();
   const [mainForm] = Form.useForm();
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
   const next = () => {
     window.scrollTo(0, 0);
@@ -22,7 +22,8 @@ const AddFundPage = () => {
   };
 
   const initialValues = {
-    fund: 50000,
+    amount: 50000,
+    transactionalCode: "",
   };
 
   const fundDetail={
@@ -34,13 +35,14 @@ const AddFundPage = () => {
 
   const steps = [
     {
-      title: "Add Fund",
-      content: <AddFundModal form={form} initialValues={initialValues} />,
-    },
-    {
       title: "Transfer Fund",
       content: <FundDetailModal values={fundDetail}/>,
     },
+    {
+      title: "Add Fund",
+      content: <AddFundModal form={form} initialValues={initialValues} />,
+    },
+
   ];
 
   const handleSubmit = () => {};
@@ -76,16 +78,16 @@ const AddFundPage = () => {
             form={mainForm}
             onFinish={handleSubmit}
           >
+            <Form.Item name="amount" hidden/>
+            <Form.Item name="transactionalCode" hidden/>
             <div className="mt-4 flex justify-end">
             {currentStep < steps.length - 1 && currentStep != 1 && (
-              <PrimaryButton text="Next" onClick={() => form.submit()} />
+              <PrimaryButton text="Next" onClick={() => next()} />
             )}
             {currentStep === steps.length - 1 && (
               <PrimaryButton
+                onClick={() => form.submit()}
                 text="Ok"
-                onClick={() => {
-                    navigate('/')
-                }}
               />
             )}
             </div>

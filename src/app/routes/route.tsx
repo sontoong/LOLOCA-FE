@@ -31,7 +31,7 @@ import CustomerRequesList from "../pages/customer/CustomerRequesList";
 import PaymentPage from "../pages/customer/PaymentPage";
 import BookingSuccess from "../pages/customer/BookingSuccess";
 import AddFundPage from "../pages/customer/AddFundPage";
-import PaymentHistory from "../pages/customer/PaymentHistory";
+import PaymentHistory from "../pages/customer/FundList";
 
 //tour guide page
 import CreateTourPage from "../pages/tour-guide/CreateTourPage";
