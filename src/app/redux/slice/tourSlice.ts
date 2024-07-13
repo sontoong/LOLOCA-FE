@@ -178,30 +178,30 @@ export const uploadTour = createAsyncThunk<any, CreateTourParams>(
     formData.append("Duration", Duration.toString());
 
     ExcludeDetails.forEach((detail) =>
-      formData.append("ExcludeDetails[]", detail),
+      formData.append("ExcludeDetails", detail),
     );
     HighlightDetails.forEach((detail) =>
-      formData.append("HighlightDetails[]", detail),
+      formData.append("HighlightDetails", detail),
     );
     IncludeDetails.forEach((detail) =>
-      formData.append("IncludeDetails[]", detail),
+      formData.append("IncludeDetails", detail),
     );
-    ItineraryNames.forEach((name) => formData.append("ItineraryNames[]", name));
+    ItineraryNames.forEach((name) => formData.append("ItineraryNames", name));
     ItineraryDescriptions.forEach((description) =>
-      formData.append("ItineraryDescriptions[]", description),
+      formData.append("ItineraryDescriptions", description),
     );
-    TypeDetails.forEach((type) => formData.append("TypeDetails[]", type));
+    TypeDetails.forEach((type) => formData.append("TypeDetails", type));
     TotalTouristFrom.forEach((total) =>
-      formData.append("TotalTouristFrom[]", total.toString()),
+      formData.append("TotalTouristFrom", total.toString()),
     );
     TotalTouristTo.forEach((total) =>
-      formData.append("TotalTouristTo[]", total.toString()),
+      formData.append("TotalTouristTo", total.toString()),
     );
     AdultPrices.forEach((price) =>
-      formData.append("AdultPrices[]", price.toString()),
+      formData.append("AdultPrices", price.toString()),
     );
     ChildPrices.forEach((price) =>
-      formData.append("ChildPrices[]", price.toString()),
+      formData.append("ChildPrices", price.toString()),
     );
 
     images.forEach((file) => {

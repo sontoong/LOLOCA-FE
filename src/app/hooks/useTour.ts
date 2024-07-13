@@ -15,6 +15,7 @@ import {
   CreateTourParams
 } from "../redux/slice/tourSlice";
 import { useCallback } from "react";
+import { NavigateFunction } from "react-router-dom";
 
 export function useTour() {
   const { notification } = App.useApp();
@@ -118,9 +119,10 @@ export function useTour() {
   );
 
   const handleUploadTour = useCallback(
-    async (tourData: CreateTourParams) => {
+    async (tourData: CreateTourParams, navigate: NavigateFunction) => {
       const resultAction = await dispatch(uploadTour(tourData));
       if (uploadTour.fulfilled.match(resultAction)) {
+        navigate('/guide/profile')
         notification.success({
           message: "Success",
           description: "Tour uploaded successfully",

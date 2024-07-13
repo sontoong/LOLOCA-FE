@@ -13,6 +13,7 @@ import { CreateTourParams } from "../../redux/slice/tourSlice";
 import { base64ToBlob } from "../../utils/utils";
 import { useAuth } from "../../hooks/useAuth";
 import { TourGuide } from "../../models/tourGuide";
+import { useNavigate } from "react-router-dom";
 
 const { Step } = Steps;
 
@@ -25,6 +26,9 @@ const CreateTourPage = () => {
   const [duration, setDuration] = useState<number | undefined>(undefined);
   const { state: stateUser } = useAuth();
   const TourGuideId = Number(localStorage.getItem("userId") ?? "");
+  const { cityId } = stateUser.currentUser as TourGuide || {};
+  const navigate = useNavigate()
+
  
 
   const next = () => {
@@ -38,7 +42,6 @@ const CreateTourPage = () => {
   };
 
   const initialValues: CreateTourParams = useMemo(() => {
-    const { cityId } = stateUser.currentUser as TourGuide || {};
     return {
       Name: "",
       Category: "",
@@ -56,12 +59,13 @@ const CreateTourPage = () => {
       ChildPrices: [0],
       TotalTouristFrom: [0],
       TotalTouristTo: [0],
-      CityId: cityId,
-      TourGuideId: TourGuideId,
+      CityId: 0,
+      TourGuideId: 0,
     };
-  }, [duration, TourGuideId, stateUser.currentUser, ]);
+  }, [duration ]);
 
   useEffect(() => {
+
     const itineraries = initialValues.ItineraryNames.map((name: any, index: any) => ({
       name,
       description: initialValues.ItineraryDescriptions[index],
@@ -115,6 +119,8 @@ const CreateTourPage = () => {
 
     const formattedValues: any = {
       ...restValues,
+      TourGuideId: TourGuideId,
+      CityId: cityId,
       ItineraryNames: itineraries?.map((item: any) => item.name),
       ItineraryDescriptions: itineraries?.map((item: any) => item.description),
       AdultPrices: price?.map((item: any) => item.AdultPrices),
@@ -131,11 +137,13 @@ const CreateTourPage = () => {
           return [];
         }
       }),
+
+
     };
 
     console.log("Formatted Create Tour Values: ", formattedValues);
 
-    handleUploadTour(formattedValues);
+    handleUploadTour(formattedValues, navigate);
   };
 
   return (
