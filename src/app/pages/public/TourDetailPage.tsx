@@ -90,20 +90,20 @@ const TourDetailPage = () => {
       <Title level={1} style={{ fontWeight: "bolder" }}>
         {tour.name}
       </Title>
-      <Row align="middle">
+      <Row align="middle" className="mb-[2rem]">
         <Col>
           <Title level={3}>Tour Category</Title>
-          <Paragraph className="text-[1.2rem] font-extrabold">
+          <Text className="text-[1.2rem] font-extrabold">
             {tour.category}
-          </Paragraph>
+          </Text>
         </Col>
         <Col offset={1}>
           <Title level={3}>Tour Type</Title>
           {tour.tourTypeDTOs?.map((typeDTO: any, index: number) => (
             <React.Fragment key={index}>
-              <Paragraph className="text-[1.2rem] font-extrabold">
+              <Text className="text-[1.2rem] font-extrabold">
                 {typeDTO.typeDetail}
-              </Paragraph>
+              </Text>
               {index !==
                 (tour.tourTypeDTOs ? tour.tourTypeDTOs.length - 1 : 0) && (
                 <span>, </span>
@@ -113,13 +113,13 @@ const TourDetailPage = () => {
         </Col>
         <Col offset={1}>
           <Title level={3}>Duration</Title>
-          <Paragraph className="text-[1.2rem] font-extrabold">
+          <Text className="text-[1.2rem] font-extrabold">
             {tour.duration} hours
-          </Paragraph>
+          </Text>
         </Col>
         <Col offset={1}>
           <Title level={3}>Activity Level</Title>
-          <Paragraph className="text-[1.2rem] font-extrabold">Easy</Paragraph>
+          <Text className="text-[1.2rem] font-extrabold">Easy</Text>
         </Col>
         <Col offset={1}>
           <PrimaryButton
