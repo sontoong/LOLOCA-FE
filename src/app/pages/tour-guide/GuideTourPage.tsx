@@ -27,11 +27,14 @@ export default function GuideTourPage() {
   const [currentPageSize, setCurrentPageSize] = useState(8);
   const tourGuideId = localStorage.getItem("userId") ?? "";
 
-
   const renderTours = stateTour.currentTourList;
 
   useEffect(() => {
-    handleGetTourByTourGuide({ page: currentPage, pageSize: currentPageSize, TourGuideId: tourGuideId});
+    handleGetTourByTourGuide({
+      page: currentPage,
+      pageSize: currentPageSize,
+      TourGuideId: tourGuideId,
+    });
   }, [currentPage, currentPageSize, handleGetTourByTourGuide, tourGuideId]);
 
   const onChangePage: PaginationProps["onChange"] = (page) => {
@@ -47,7 +50,7 @@ export default function GuideTourPage() {
   };
 
   const handleCardClick = (tourId: number) => {
-    navigate(`/tours/${tourId}`);
+    navigate(`/guide/tours/${tourId}`);
   };
 
   const renderContent = () => {

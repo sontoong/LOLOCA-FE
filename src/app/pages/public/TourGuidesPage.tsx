@@ -23,15 +23,15 @@ const { Title, Paragraph } = Typography;
 export default function GuidesPage() {
   const navigate = useNavigate();
 
-  const { state: stateTourGuide, handleGetRandomTourGuides } = useTourGuide();
+  const { state: stateTourGuide, handleGetAllTourGuides } = useTourGuide();
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageSize, setCurrentPageSize] = useState(8);
 
   const renderTourGuides = stateTourGuide.currentTourGuideList;
 
   useEffect(() => {
-    handleGetRandomTourGuides({ page: currentPage, pageSize: currentPageSize });
-  }, [currentPage, currentPageSize, handleGetRandomTourGuides]);
+    handleGetAllTourGuides({ page: currentPage, pageSize: currentPageSize });
+  }, [currentPage, currentPageSize, handleGetAllTourGuides]);
 
   const onChangePage: PaginationProps["onChange"] = (page) => {
     setCurrentPage(page);
@@ -72,7 +72,7 @@ export default function GuidesPage() {
                   <Card
                     className="h-[390px]"
                     hoverable
-                    onClick={() => handleCardClick(tourGuide.id)}
+                    onClick={() => handleCardClick(tourGuide.tourGuideId)}
                     cover={
                       <Image
                         alt={tourGuide.firstName}
@@ -97,7 +97,7 @@ export default function GuidesPage() {
               }
             }}
           />
-          <div className="mb-[2%] mr-[5%] flex justify-end">
+          <div className="mb-[2%] mr-[5%] mt-5 flex justify-end">
             <Pagination
               current={currentPage}
               onChange={onChangePage}

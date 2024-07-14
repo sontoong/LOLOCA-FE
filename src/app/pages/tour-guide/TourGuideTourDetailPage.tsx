@@ -1,12 +1,10 @@
 import { StarFilled } from "@ant-design/icons";
-import { Carousel, Col, Modal, Row, Steps, Typography } from "antd";
+import { Col, Modal, Row, Steps, Typography } from "antd";
 import React, { useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import VietNamBanner from "../../../assets/banner.png";
 import { Avatar } from "../../components/avatar";
 import { PrimaryButton } from "../../components/buttons";
 import { Divider } from "../../components/divider";
-import { Image } from "../../components/image";
 import { Loader } from "../../components/loader/loader";
 import NotFound from "../../components/not-found/not-found";
 import { Table } from "../../components/table";
@@ -14,13 +12,16 @@ import { useFeedback } from "../../hooks/useFeedback";
 import { useTour } from "../../hooks/useTour";
 import { useTourGuide } from "../../hooks/useTourGuide";
 import { formatDateToLocal } from "../../utils/utils";
+import { Carousel } from "../../components/carousel";
+import { Image } from "../../components/image";
 
 const { Title, Paragraph, Text } = Typography;
 
 const TourGuideTourDetailPage = () => {
   const navigate = useNavigate();
+  const [modal, contextHolder] = Modal.useModal();
   const { tourId } = useParams<{ tourId: string }>();
-  const { state: stateTour, handleGetTourById } = useTour();
+  const { state: stateTour, handleGetTourById, handleDeleteTour } = useTour();
   const { state: stateFeedback, handleGetTourFeedback } = useFeedback();
   const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
 
@@ -56,16 +57,14 @@ const TourGuideTourDetailPage = () => {
     child: item.childPrice,
   }));
 
-  const handleDeleteTour = () => {
-    Modal.confirm({
+  const onDeleteTour = () => {
+    modal.confirm({
       title: "Confirm Delete",
       content: "Are you sure you want to delete this tour?",
       onOk() {
-        console.log("OK");
-        // Handle delete logic here
-      },
-      onCancel() {
-        console.log("Cancel");
+        if (tourId) {
+          handleDeleteTour({ tourId: tourId }, navigate);
+        }
       },
     });
   };
@@ -89,258 +88,260 @@ const TourGuideTourDetailPage = () => {
   ];
 
   return (
-    <div className="p-[2rem]">
-      <Title level={1} style={{ fontWeight: "bolder" }}>
-        {tour.name}
-      </Title>
-      <Row align="middle">
-        <Col>
-          <Title level={3}>Tour Category</Title>
-          <Paragraph className="text-[1.2rem] font-extrabold">
-            {tour.category}
-          </Paragraph>
-        </Col>
-        <Col offset={1}>
-          <Title level={3}>Tour Type</Title>
-          {tour.tourTypeDTOs?.map((typeDTO: any, index: number) => (
-            <React.Fragment key={index}>
-              <Paragraph className="text-[1.2rem] font-extrabold">
-                {typeDTO.typeDetail}
-              </Paragraph>
-              {index !==
-                (tour.tourTypeDTOs ? tour.tourTypeDTOs.length - 1 : 0) && (
-                <span>, </span>
-              )}
-            </React.Fragment>
-          ))}
-        </Col>
-        <Col offset={1}>
-          <Title level={3}>Duration</Title>
-          <Paragraph className="text-[1.2rem] font-extrabold">
-            {tour.duration} hours
-          </Paragraph>
-        </Col>
-        <Col offset={1}>
-          <Title level={3}>Activity Level</Title>
-          <Paragraph className="text-[1.2rem] font-extrabold">Easy</Paragraph>
-        </Col>
-        <Col offset={1}>
-          <div className="flex justify-evenly">
-            <PrimaryButton
-              text="Edit Tour"
-              className="px-[4rem]"
-              onClick={() => navigate(`/guide/tour/edit/${tourId}`)}
-            />
-            <PrimaryButton
-              text="Delete Tour"
-              className="px-[4rem]"
-              onClick={() => handleDeleteTour()}
-            />
-          </div>
-        </Col>
-      </Row>
-      <Carousel arrows autoplay draggable>
-        {tour.tourImgViewList?.length ? (
-          tour.tourImgViewList?.map((imgUrl, index) => (
-            <Image
-              key={index}
-              src={imgUrl}
-              alt={`Image ${index + 1}`}
-              preview={true}
-            />
-          ))
-        ) : (
-          <Image src={VietNamBanner} preview={true} />
-        )}
-      </Carousel>
-      <div className="flex justify-between">
-        <Steps
-          progressDot
-          current={7}
-          direction="vertical"
-          style={{ width: "60%" }}
-          items={[
-            {
-              title: (
-                <Title
-                  className="m-0"
-                  style={{ color: "#004AAD", fontWeight: "bolder" }}
-                >
-                  Description
-                </Title>
-              ),
-              description: (
-                <Paragraph className="text-[1.2rem]">
-                  {tour.description}
+    <>
+      {contextHolder}
+      <div className="p-[2rem]">
+        <Title level={1} style={{ fontWeight: "bolder" }}>
+          {tour.name}
+        </Title>
+        <Row align="middle">
+          <Col>
+            <Title level={3}>Tour Category</Title>
+            <Paragraph className="text-[1.2rem] font-extrabold">
+              {tour.category}
+            </Paragraph>
+          </Col>
+          <Col offset={1}>
+            <Title level={3}>Tour Type</Title>
+            {tour.tourTypeDTOs?.map((typeDTO: any, index: number) => (
+              <React.Fragment key={index}>
+                <Paragraph className="text-[1.2rem] font-extrabold">
+                  {typeDTO.typeDetail}
                 </Paragraph>
-              ),
-            },
-            {
-              title: (
-                <Title
-                  className="m-0"
-                  style={{ color: "#FFDE59", fontWeight: "bolder" }}
-                >
-                  Highlights
-                </Title>
-              ),
-              description: (
-                <div>
-                  {tour.tourHighlightDTOs?.map((highlight, index) => (
-                    <Paragraph
-                      key={index}
-                      className="flex items-center text-[1.2rem]"
-                    >
-                      <span className="text-[2rem]">&#x2022;</span>{" "}
-                      {highlight.highlightDetail}
-                    </Paragraph>
-                  ))}
-                </div>
-              ),
-            },
-            {
-              title: (
-                <Title
-                  className="m-0"
-                  style={{ color: "#004AAD", fontWeight: "bolder" }}
-                >
-                  Itinerary
-                </Title>
-              ),
-              description: tour.tourItineraryDTOs?.map((day, index) => (
-                <div key={index}>
-                  <Title level={3}>{day.name}</Title>
-                  <Divider colorSplit="black" />
-                  {/* {day.activities.map((activity, activityIndex) => ( */}
-                  <Paragraph className="flex items-center text-[1.2rem]">
-                    <span className="text-[2rem]">&#x2022;</span>{" "}
-                    {day.description}
-                  </Paragraph>
-                  {/* ))} */}
-                </div>
-              )),
-            },
-            {
-              title: (
-                <Title
-                  className="m-0"
-                  style={{ color: "#FFDE59", fontWeight: "bolder" }}
-                >
-                  What's Included
-                </Title>
-              ),
-              description: tour.tourIncludeDTOs?.map((item, index) => (
-                <Paragraph
-                  key={index}
-                  className="flex items-center text-[1.2rem]"
-                >
-                  - {item.includeDetail}
-                </Paragraph>
-              )),
-            },
-            {
-              title: (
-                <Title
-                  className="m-0"
-                  style={{ color: "#004AAD", fontWeight: "bolder" }}
-                >
-                  What's Excluded
-                </Title>
-              ),
-              description: tour.tourExcludeDTOs?.map((item, index) => (
-                <Paragraph
-                  key={index}
-                  className="flex items-center text-[1.2rem]"
-                >
-                  - {item.excludeDetail}
-                </Paragraph>
-              )),
-            },
-            {
-              title: (
-                <Title
-                  className="m-0"
-                  style={{ color: "#FFDE59", fontWeight: "bolder" }}
-                >
-                  Price Details
-                </Title>
-              ),
-              description: (
-                <Table
-                  dataSource={priceData}
-                  columns={columns}
-                  pagination={false}
-                />
-              ),
-            },
-          ]}
-        />
-        <div className="w-[35%]">
-          {stateTourGuide.currentTourguide ? (
-            <div>
-              <Title style={{ color: "#004AAD", fontWeight: "bolder" }}>
-                Tour Guide
-              </Title>
-              <Link to={`/guide/${stateTour.currentTour?.tourGuideId}`}>
-                <Avatar
-                  size={160}
-                  src={stateTourGuide.currentTourguide.avatar}
-                />
-                <Title style={{ fontWeight: "bolder" }} className="underline">
-                  {`${stateTourGuide.currentTourguide.firstName} ${stateTourGuide.currentTourguide.lastName}`}
-                </Title>
-              </Link>
+                {index !==
+                  (tour.tourTypeDTOs ? tour.tourTypeDTOs.length - 1 : 0) && (
+                  <span>, </span>
+                )}
+              </React.Fragment>
+            ))}
+          </Col>
+          <Col offset={1}>
+            <Title level={3}>Duration</Title>
+            <Paragraph className="text-[1.2rem] font-extrabold">
+              {tour.duration} hours
+            </Paragraph>
+          </Col>
+          <Col offset={1}>
+            <Title level={3}>Activity Level</Title>
+            <Paragraph className="text-[1.2rem] font-extrabold">Easy</Paragraph>
+          </Col>
+          <Col offset={1}>
+            <div className="flex justify-evenly">
+              <PrimaryButton
+                text="Edit Tour"
+                className="px-[4rem]"
+                onClick={() => navigate(`/guide/tour/edit/${tourId}`)}
+              />
+              <PrimaryButton
+                text="Delete Tour"
+                className="px-[4rem]"
+                onClick={() => onDeleteTour()}
+              />
             </div>
-          ) : (
-            <></>
-          )}
-          <Divider colorSplit="black" />
-          <div>
-            <Title
+          </Col>
+        </Row>
+        <Carousel
+          items={tour.tourImgViewList}
+          render={(img) => (
+            <Image
+              src={img?.imagePath}
+              preview={true}
               style={{
-                color: "#004AAD",
-                fontWeight: "bolder",
-                marginBottom: 0,
+                objectFit: "contain",
               }}
-            >
-              Recent Reviews
-            </Title>
-
-            <Text>
-              {stateFeedback.currentFeedbackList.averageStar} <StarFilled /> (
-              {stateFeedback.currentFeedbackList.totalFeedbacks} reviews)
-            </Text>
-            {stateFeedback.currentFeedbackList.feedbacks?.map(
-              (rating, index) => (
-                <div key={index} className="my-[3rem]">
-                  <Row>
-                    <Col>
-                      <Avatar size={48} />
-                    </Col>
-                    <Col className="ml-[0.5rem]">
+              height={"100%"}
+              width={"100%"}
+            />
+          )}
+        />
+        <div className="flex justify-between">
+          <Steps
+            progressDot
+            current={7}
+            direction="vertical"
+            style={{ width: "60%" }}
+            items={[
+              {
+                title: (
+                  <Title
+                    className="m-0"
+                    style={{ color: "#004AAD", fontWeight: "bolder" }}
+                  >
+                    Description
+                  </Title>
+                ),
+                description: (
+                  <Paragraph className="text-[1.2rem]">
+                    {tour.description}
+                  </Paragraph>
+                ),
+              },
+              {
+                title: (
+                  <Title
+                    className="m-0"
+                    style={{ color: "#FFDE59", fontWeight: "bolder" }}
+                  >
+                    Highlights
+                  </Title>
+                ),
+                description: (
+                  <div>
+                    {tour.tourHighlightDTOs?.map((highlight, index) => (
                       <Paragraph
-                        style={{ fontWeight: "bold", marginBottom: "0" }}
+                        key={index}
+                        className="flex items-center text-[1.2rem]"
                       >
-                        {rating.customerId}
+                        <span className="text-[2rem]">&#x2022;</span>{" "}
+                        {highlight.highlightDetail}
                       </Paragraph>
-                      <Paragraph>
-                        {formatDateToLocal(rating.timeFeedback)}
-                      </Paragraph>
-                    </Col>
-                    <Col offset={1}>
-                      <Paragraph>
-                        <StarFilled /> {rating.numOfStars}
-                      </Paragraph>
-                    </Col>
-                  </Row>
-                  <Paragraph>{rating.content}</Paragraph>
-                </div>
-              ),
+                    ))}
+                  </div>
+                ),
+              },
+              {
+                title: (
+                  <Title
+                    className="m-0"
+                    style={{ color: "#004AAD", fontWeight: "bolder" }}
+                  >
+                    Itinerary
+                  </Title>
+                ),
+                description: tour.tourItineraryDTOs?.map((day, index) => (
+                  <div key={index}>
+                    <Title level={3}>{day.name}</Title>
+                    <Divider colorSplit="black" />
+                    {/* {day.activities.map((activity, activityIndex) => ( */}
+                    <Paragraph className="flex items-center text-[1.2rem]">
+                      <span className="text-[2rem]">&#x2022;</span>{" "}
+                      {day.description}
+                    </Paragraph>
+                    {/* ))} */}
+                  </div>
+                )),
+              },
+              {
+                title: (
+                  <Title
+                    className="m-0"
+                    style={{ color: "#FFDE59", fontWeight: "bolder" }}
+                  >
+                    What's Included
+                  </Title>
+                ),
+                description: tour.tourIncludeDTOs?.map((item, index) => (
+                  <Paragraph
+                    key={index}
+                    className="flex items-center text-[1.2rem]"
+                  >
+                    - {item.includeDetail}
+                  </Paragraph>
+                )),
+              },
+              {
+                title: (
+                  <Title
+                    className="m-0"
+                    style={{ color: "#004AAD", fontWeight: "bolder" }}
+                  >
+                    What's Excluded
+                  </Title>
+                ),
+                description: tour.tourExcludeDTOs?.map((item, index) => (
+                  <Paragraph
+                    key={index}
+                    className="flex items-center text-[1.2rem]"
+                  >
+                    - {item.excludeDetail}
+                  </Paragraph>
+                )),
+              },
+              {
+                title: (
+                  <Title
+                    className="m-0"
+                    style={{ color: "#FFDE59", fontWeight: "bolder" }}
+                  >
+                    Price Details
+                  </Title>
+                ),
+                description: (
+                  <Table
+                    dataSource={priceData}
+                    columns={columns}
+                    pagination={false}
+                  />
+                ),
+              },
+            ]}
+          />
+          <div className="w-[35%]">
+            {stateTourGuide.currentTourguide ? (
+              <div>
+                <Title style={{ color: "#004AAD", fontWeight: "bolder" }}>
+                  Tour Guide
+                </Title>
+                <Link to={`/guide/${stateTour.currentTour?.tourGuideId}`}>
+                  <Avatar
+                    size={160}
+                    src={stateTourGuide.currentTourguide.avatar}
+                  />
+                  <Title style={{ fontWeight: "bolder" }} className="underline">
+                    {`${stateTourGuide.currentTourguide.firstName} ${stateTourGuide.currentTourguide.lastName}`}
+                  </Title>
+                </Link>
+              </div>
+            ) : (
+              <></>
             )}
+            <Divider colorSplit="black" />
+            <div>
+              <Title
+                style={{
+                  color: "#004AAD",
+                  fontWeight: "bolder",
+                  marginBottom: 0,
+                }}
+              >
+                Recent Reviews
+              </Title>
+              <Text>
+                {stateFeedback.currentFeedbackList.averageStar} <StarFilled /> (
+                {stateFeedback.currentFeedbackList.totalFeedbacks} reviews)
+              </Text>
+              {stateFeedback.currentFeedbackList.feedbacks?.map(
+                (rating, index) => (
+                  <div key={index} className="my-[3rem]">
+                    <Row>
+                      <Col>
+                        <Avatar size={48} />
+                      </Col>
+                      <Col className="ml-[0.5rem]">
+                        <Paragraph
+                          style={{ fontWeight: "bold", marginBottom: "0" }}
+                        >
+                          {rating.customerId}
+                        </Paragraph>
+                        <Paragraph>
+                          {formatDateToLocal(rating.timeFeedback)}
+                        </Paragraph>
+                      </Col>
+                      <Col offset={1}>
+                        <Paragraph>
+                          <StarFilled /> {rating.numOfStars}
+                        </Paragraph>
+                      </Col>
+                    </Row>
+                    <Paragraph>{rating.content}</Paragraph>
+                  </div>
+                ),
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

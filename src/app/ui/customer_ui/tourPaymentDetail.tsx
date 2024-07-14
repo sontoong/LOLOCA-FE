@@ -3,9 +3,9 @@ import { Typography } from "antd";
 import { Tour } from "../../models/tour";
 import { Image } from "../../components/image";
 
-const TourPaymentDetail = ({ tourDetails }: { tourDetails: Tour }) => {
-  const { Title, Paragraph } = Typography;
+const { Title, Paragraph } = Typography;
 
+const TourPaymentDetail = ({ tourDetails }: { tourDetails: Tour }) => {
   return (
     <div>
       <Title level={3} style={{ fontWeight: "bolder" }}>
@@ -16,7 +16,7 @@ const TourPaymentDetail = ({ tourDetails }: { tourDetails: Tour }) => {
         <Image
           src={
             tourDetails.tourImgViewList
-              ? tourDetails.tourImgViewList[0]
+              ? tourDetails.tourImgViewList[0].imagePath
               : undefined
           }
           style={{ objectFit: "cover", width: "6rem", aspectRatio: 1 / 1 }}

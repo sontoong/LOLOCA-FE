@@ -119,22 +119,6 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "guides/tour/edit/:tourId",
-        element: (
-          <Suspense fallback={<></>}>
-            <CreateTourPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: "guides/tour/:tourId",
-        element: (
-          <Suspense fallback={<></>}>
-            <TourGuideTourDetailPage />
-          </Suspense>
-        ),
-      },
-      {
         path: "guides/:tourGuideId/booking",
         element: (
           <Suspense fallback={<></>}>
@@ -225,10 +209,26 @@ export const router = createBrowserRouter([
             ),
           },
           {
+            path: "tour/edit/:tourId",
+            element: (
+              <Suspense fallback={<></>}>
+                <CreateTourPage />
+              </Suspense>
+            ),
+          },
+          {
             path: "tours",
             element: (
               <Suspense fallback={<></>}>
                 <GuideTourPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "tours/:tourId",
+            element: (
+              <Suspense fallback={<></>}>
+                <TourGuideTourDetailPage />
               </Suspense>
             ),
           },

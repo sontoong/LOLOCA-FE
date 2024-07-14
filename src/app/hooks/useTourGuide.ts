@@ -15,9 +15,10 @@ import {
   updateTourGuideAvatar,
   updateTourGuideCover,
   UpdateTourGuideImageParams,
+  getAllTourGuides,
+  GetAllTourGuideParams,
 } from "../redux/slice/tourguideSlice";
 import { useCallback } from "react";
-
 
 export function useTourGuide() {
   const { notification } = App.useApp();
@@ -52,6 +53,30 @@ export function useTourGuide() {
     async (value: GetRandomTourGuideParams) => {
       const resultAction = await dispatch(getRandomTourGuide(value));
       if (getRandomTourGuide.fulfilled.match(resultAction)) {
+        dispatch(setCurrentTourGuideList(resultAction.payload));
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
+  const handleGetAllTourGuides = useCallback(
+    async (value: GetAllTourGuideParams) => {
+      const resultAction = await dispatch(getAllTourGuides(value));
+      if (getAllTourGuides.fulfilled.match(resultAction)) {
         dispatch(setCurrentTourGuideList(resultAction.payload));
       } else {
         if (resultAction.payload) {
@@ -151,7 +176,7 @@ export function useTourGuide() {
         }
       }
     },
-    [dispatch, notification]
+    [dispatch, notification],
   );
 
   const handleUpdateTourguideCover = useCallback(
@@ -180,10 +205,8 @@ export function useTourGuide() {
         }
       }
     },
-    [dispatch, notification]
+    [dispatch, notification],
   );
-
-
 
   return {
     state,
@@ -193,5 +216,6 @@ export function useTourGuide() {
     handleUpdateTourGuideInfo,
     handleUpdateTourGuideAvatar,
     handleUpdateTourguideCover,
+    handleGetAllTourGuides,
   };
 }

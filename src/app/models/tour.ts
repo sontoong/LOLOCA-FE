@@ -8,7 +8,10 @@ export type Tour = {
   activity?: string;
   duration: number;
   status: number;
-  tourImgViewList?: string[];
+  tourImgViewList?: {
+    imagePath: string;
+    uploadDate: string;
+  }[];
   tourExcludeDTOs?: {
     excludeDetail: string;
   }[];

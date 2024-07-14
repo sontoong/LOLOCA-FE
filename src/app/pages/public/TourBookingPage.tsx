@@ -24,7 +24,7 @@ const TourBookingPage = () => {
   const { tourId } = useParams();
   const { state: stateTour, handleGetTourById } = useTour();
   const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
-  const { handleCreateBookingTour } = useBookingTour();
+  const { state: stateBookingTour, handleCreateBookingTour } = useBookingTour();
   const { executeOrRedirect } = useProtectedAction();
   const [currentStep, setCurrentStep] = useState(0);
   const [form] = Form.useForm();
@@ -154,6 +154,7 @@ const TourBookingPage = () => {
                     text="Previous"
                     className="mr-[1%]"
                     onClick={() => prev()}
+                    disabled={stateBookingTour.isSending}
                   />
                 )}
                 {currentStep < steps.length - 1 && currentStep != 1 && (
@@ -168,7 +169,7 @@ const TourBookingPage = () => {
                     onClick={() => {
                       mainForm.submit();
                     }}
-                    loading={stateTour.isFetching}
+                    loading={stateBookingTour.isSending}
                   />
                 )}
               </div>

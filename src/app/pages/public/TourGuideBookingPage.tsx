@@ -18,7 +18,8 @@ const TourGuideBookingPage = () => {
   const navigate = useNavigate();
   const { tourGuideId } = useParams();
   const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
-  const { handleCreateBookingTourGuide } = useBookingTourGuide();
+  const { state: stateBookingTourGuide, handleCreateBookingTourGuide } =
+    useBookingTourGuide();
   const [currentStep, setCurrentStep] = useState(0);
   const [form] = Form.useForm();
   const [mainForm] = Form.useForm();
@@ -132,6 +133,7 @@ const TourGuideBookingPage = () => {
                     text="Previous"
                     className="mr-[1%]"
                     onClick={() => prev()}
+                    disabled={stateBookingTourGuide.isSending}
                   />
                 )}
                 {currentStep < steps.length - 1 && currentStep != 1 && (
@@ -146,6 +148,7 @@ const TourGuideBookingPage = () => {
                     onClick={() => {
                       mainForm.submit();
                     }}
+                    loading={stateBookingTourGuide.isSending}
                   />
                 )}
               </div>

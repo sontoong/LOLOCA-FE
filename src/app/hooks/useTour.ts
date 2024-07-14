@@ -12,7 +12,9 @@ import {
   setCurrentTour,
   setCurrentTourList,
   uploadTour,
-  CreateTourParams
+  CreateTourParams,
+  DeleteTourParams,
+  deleteTour,
 } from "../redux/slice/tourSlice";
 import { useCallback } from "react";
 import { NavigateFunction } from "react-router-dom";
@@ -118,17 +120,16 @@ export function useTour() {
     [dispatch, notification],
   );
 
-  const handleUploadTour = useCallback(
-    async (tourData: CreateTourParams, navigate: NavigateFunction) => {
-      const resultAction = await dispatch(uploadTour(tourData));
-      if (uploadTour.fulfilled.match(resultAction)) {
-        navigate('/guide/profile')
+  const handleDeleteTour = useCallback(
+    async (value: DeleteTourParams, navigate: NavigateFunction) => {
+      const resultAction = await dispatch(deleteTour(value));
+      if (deleteTour.fulfilled.match(resultAction)) {
+        navigate("/guide/tours");
         notification.success({
           message: "Success",
-          description: "Tour uploaded successfully",
+          description: `${resultAction.payload}`,
           placement: "topRight",
         });
-        dispatch(setCurrentTour(resultAction.payload));
       } else {
         if (resultAction.payload) {
           notification.error({
@@ -145,7 +146,36 @@ export function useTour() {
         }
       }
     },
-    [dispatch, notification]
+    [dispatch, notification],
+  );
+
+  const handleUploadTour = useCallback(
+    async (tourData: CreateTourParams, navigate: NavigateFunction) => {
+      const resultAction = await dispatch(uploadTour(tourData));
+      if (uploadTour.fulfilled.match(resultAction)) {
+        navigate("/guide/profile");
+        notification.success({
+          message: "Success",
+          description: "Tour uploaded successfully",
+          placement: "topRight",
+        });
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
   );
 
   return {
@@ -154,6 +184,7 @@ export function useTour() {
     handleGetTourRandom,
     handleGetTourByCityId,
     handleGetTourByTourGuide,
-    handleUploadTour
+    handleUploadTour,
+    handleDeleteTour,
   };
 }

@@ -59,7 +59,7 @@ function CardListGridHorizontal<RecordType>({
       return <NotFound />;
     }
     return (
-      <Flex gap={"middle"}>
+      <Flex gap={"middle"} className="overflow-x-auto">
         {items.map((item, index) => (
           <React.Fragment key={index}>{render(item)}</React.Fragment>
         ))}

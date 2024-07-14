@@ -18,18 +18,16 @@ import { useNavigate } from "react-router-dom";
 const { Step } = Steps;
 
 const CreateTourPage = () => {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [form] = Form.useForm();
   const [mainForm] = Form.useForm();
-  const { handleUploadTour } = useTour();
+  const { state: stateTour, handleUploadTour } = useTour();
   const [tourImages, setTourImages] = useState<UploadFile[]>([]);
   const [duration, setDuration] = useState<number | undefined>(undefined);
   const { state: stateUser } = useAuth();
   const TourGuideId = Number(localStorage.getItem("userId") ?? "");
-  const { cityId } = stateUser.currentUser as TourGuide || {};
-  const navigate = useNavigate()
-
- 
+  const { cityId } = (stateUser.currentUser as TourGuide) || {};
 
   const next = () => {
     window.scrollTo(0, 0);
@@ -62,14 +60,15 @@ const CreateTourPage = () => {
       CityId: 0,
       TourGuideId: 0,
     };
-  }, [duration ]);
+  }, [duration]);
 
   useEffect(() => {
-
-    const itineraries = initialValues.ItineraryNames.map((name: any, index: any) => ({
-      name,
-      description: initialValues.ItineraryDescriptions[index],
-    }));
+    const itineraries = initialValues.ItineraryNames.map(
+      (name: any, index: any) => ({
+        name,
+        description: initialValues.ItineraryDescriptions[index],
+      }),
+    );
     form.setFieldsValue({
       itineraries,
     });
@@ -83,7 +82,6 @@ const CreateTourPage = () => {
     form.setFieldsValue({
       price: prices,
     });
-
   }, [form, initialValues]);
 
   const steps = [
@@ -127,7 +125,7 @@ const CreateTourPage = () => {
       ChildPrices: price?.map((item: any) => item.ChildPrices),
       TotalTouristFrom: price?.map((item: any) => item.TotalTouristFrom),
       TotalTouristTo: price?.map((item: any) => item.TotalTouristTo),
-      images: images.flatMap((image : any) => {
+      images: images.flatMap((image: any) => {
         if (image.originFileObj) {
           return [image.originFileObj];
         } else if (image.url) {
@@ -137,8 +135,6 @@ const CreateTourPage = () => {
           return [];
         }
       }),
-
-
     };
 
     console.log("Formatted Create Tour Values: ", formattedValues);
@@ -182,7 +178,12 @@ const CreateTourPage = () => {
           }}
         >
           <div>{steps[currentStep].content}</div>
-          <Form initialValues={initialValues} name="mainForm" form={mainForm} onFinish={handleSubmit}>
+          <Form
+            initialValues={initialValues}
+            name="mainForm"
+            form={mainForm}
+            onFinish={handleSubmit}
+          >
             {/* Hidden fields to keep the main form state */}
             <Form.Item name="Name" hidden />
             <Form.Item name="Category" hidden />
@@ -206,7 +207,12 @@ const CreateTourPage = () => {
             <div>
               <div className="mt-4 flex justify-end">
                 {currentStep > 0 && (
-                  <PrimaryButton text="Previous" className="mr-[1%]" onClick={() => prev()} />
+                  <PrimaryButton
+                    text="Previous"
+                    className="mr-[1%]"
+                    onClick={() => prev()}
+                    disabled={stateTour.isSending}
+                  />
                 )}
                 {currentStep < steps.length - 1 && (
                   <PrimaryButton text="Next" onClick={() => form.submit()} />
@@ -217,6 +223,7 @@ const CreateTourPage = () => {
                     onClick={() => {
                       form.submit();
                     }}
+                    loading={stateTour.isSending}
                   />
                 )}
               </div>

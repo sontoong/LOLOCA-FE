@@ -3,8 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTour } from "../../hooks/useTour";
 import { Loader } from "../../components/loader/loader";
 import NotFound from "../../components/not-found/not-found";
-import { Typography, Row, Col, Steps, Carousel } from "antd";
-import VietNamBanner from "../../../assets/banner.png";
+import { Typography, Row, Col, Steps } from "antd";
 import { PrimaryButton } from "../../components/buttons";
 import { Divider } from "../../components/divider";
 import { Table } from "../../components/table";
@@ -16,6 +15,7 @@ import { useTourGuide } from "../../hooks/useTourGuide";
 import { Avatar } from "../../components/avatar";
 import { useProtectedAction } from "../../hooks/useProtectedAction";
 import { isLoggedIn } from "../../redux/slice/authSlice";
+import { Carousel } from "../../components/carousel";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -129,20 +129,20 @@ const TourDetailPage = () => {
           />
         </Col>
       </Row>
-      <Carousel arrows autoplay draggable>
-        {tour.tourImgViewList?.length ? (
-          tour.tourImgViewList?.map((imgUrl, index) => (
-            <Image
-              key={index}
-              src={imgUrl}
-              alt={`Image ${index + 1}`}
-              preview={true}
-            />
-          ))
-        ) : (
-          <Image src={VietNamBanner} preview={true} />
+      <Carousel
+        items={tour.tourImgViewList}
+        render={(img) => (
+          <Image
+            src={img?.imagePath}
+            preview={true}
+            style={{
+              objectFit: "contain",
+            }}
+            height={"100%"}
+            width={"100%"}
+          />
         )}
-      </Carousel>
+      />
       <div className="flex justify-between">
         <Steps
           progressDot

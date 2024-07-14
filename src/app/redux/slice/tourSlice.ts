@@ -54,7 +54,7 @@ const tourSlice = createSlice({
       );
     builder.addMatcher(
       (action) =>
-        action.type.startsWith("tour/") &&
+        action.type.startsWith("tour/fetch/") &&
         (action.type.endsWith("/fulfilled") ||
           action.type.endsWith("/rejected")),
       (state) => {
@@ -144,6 +144,24 @@ export const getTourByTourGuide = createAsyncThunk<
     }
   }
 });
+
+export const deleteTour = createAsyncThunk<any, DeleteTourParams>(
+  "tour/send/deleteTour",
+  async (data, { rejectWithValue }) => {
+    const { tourId } = data;
+    try {
+      const response = await agent.Tour.deleteTour(tourId);
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+    }
+  },
+);
 
 export const uploadTour = createAsyncThunk<any, CreateTourParams>(
   "tour/send/uploadTour",
@@ -266,4 +284,8 @@ export type GetTourByTourGuideParams = {
   TourGuideId: string;
   page: number;
   pageSize: number;
+};
+
+export type DeleteTourParams = {
+  tourId: string;
 };

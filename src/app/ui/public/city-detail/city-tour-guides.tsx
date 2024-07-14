@@ -65,7 +65,7 @@ export default function CityTourGuides() {
                   <Card
                     className="h-[390px]"
                     hoverable
-                    onClick={() => handleCardClick(guide.id)}
+                    onClick={() => handleCardClick(guide.tourGuideId)}
                     cover={
                       <Image
                         alt={guide.firstName}

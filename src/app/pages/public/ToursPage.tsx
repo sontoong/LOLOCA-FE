@@ -96,7 +96,7 @@ export default function ToursPage() {
               }
             }}
           />
-          <div className="mb-[2%] mr-[5%] flex justify-end">
+          <div className="mb-[2%] mr-[5%] mt-5 flex justify-end">
             <Pagination
               current={currentPage}
               onChange={onChangePage}

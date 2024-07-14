@@ -81,7 +81,7 @@ const TourGuideProfile = () => {
                         preview={false}
                       />
                     }
-                    onClick={() => navigate(`/tours/${item.tourId}`)}
+                    onClick={() => navigate(`/guide/tours/${item.tourId}`)}
                   >
                     <Title level={2} className="mt-0">
                       {item.name}

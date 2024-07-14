@@ -22,15 +22,23 @@ export type TourGuide = {
 
 export type TourGuideList = {
   tourGuides: {
-    id: number;
+    tourGuideId: number;
+    accountStatus: number;
+    cityId: number;
+    cityName: string;
     firstName: string;
     lastName: string;
-    description: string;
-    dateOfBirth: Date;
+    dateOfBirth: string; // ISO 8601 date string
     gender: number;
+    description: string;
+    zaloLink: string;
+    facebookLink: string;
+    instagramLink: string;
     pricePerDay: number;
     avatar?: string;
-    avatarUploadedTime?: Date;
+    avatarUploadedTime?: string; // ISO 8601 date string or null
+    cover?: string;
+    coverUploadedTime?: string; // ISO 8601 date string or null
   }[];
   totalPage: number;
 };
