@@ -1,11 +1,16 @@
 import { Banner } from "../../components/banner";
 import { Card, Col, Row, Typography } from "antd";
 import { Divider } from "../../components/divider";
-import { FacebookFilled, InstagramFilled, StarFilled, TwitterCircleFilled } from "@ant-design/icons";
+import {
+  FacebookFilled,
+  InstagramFilled,
+  StarFilled,
+  TwitterCircleFilled,
+} from "@ant-design/icons";
 import { formatDateToLocal } from "../../utils/utils";
 import { useTour } from "../../hooks/useTour";
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { CardListGrid } from "../../components/grids";
 import { CardSkeleton, Skeleton } from "../../components/skeletons";
 import { Image } from "../../components/image";
@@ -24,7 +29,8 @@ const TourGuideProfile = () => {
   const navigate = useNavigate();
   const tourGuideId = localStorage.getItem("userId") ?? "";
   const { state: stateUser } = useAuth();
-  const { state: stateTourGuide } = useTourGuide();
+  const { state: stateTourGuide, handleGetTourGuidePrivateById } =
+    useTourGuide();
   const { state: stateTour, handleGetTourByTourGuide } = useTour();
   const { state: stateFeedback, handleGetTourGuideFeedback } = useFeedback();
   const currentUser = stateUser.currentUser as TourGuide;
@@ -36,9 +42,9 @@ const TourGuideProfile = () => {
         page: 1,
         pageSize: 10,
       });
-
+      handleGetTourGuidePrivateById({ tourGuideId: tourGuideId });
     }
-  }, [tourGuideId, handleGetTourByTourGuide]);
+  }, [tourGuideId, handleGetTourByTourGuide, handleGetTourGuidePrivateById]);
 
   useEffect(() => {
     if (stateTourGuide.currentTourguide.cityId) {
@@ -103,25 +109,40 @@ const TourGuideProfile = () => {
   const renderSocialIcons = () => {
     return (
       <Paragraph>
-        {currentUser.zaloLink || currentUser.facebookLink || currentUser.instagramLink ? (
-        <Title level={3} style={{ color: "#004AAD", fontWeight: "bolder" }}>
-          Socials
-        </Title>
+        {currentUser.zaloLink ||
+        currentUser.facebookLink ||
+        currentUser.instagramLink ? (
+          <Title level={3} style={{ color: "#004AAD", fontWeight: "bolder" }}>
+            Socials
+          </Title>
         ) : null}
-        {currentUser.zaloLink && (
-          <Link to={currentUser.zaloLink} className="mr-[1rem] text-white">
-            <FacebookFilled className="text-[2rem] transition-transform duration-300 hover:scale-125 hover:text-blue-500" />
-          </Link>
-        )}
         {currentUser.facebookLink && (
-          <Link to={currentUser.facebookLink} className="mr-[1rem] text-white">
+          <a
+            href={currentUser.facebookLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mr-[1rem] text-white"
+          >
+            <FacebookFilled className="text-[2rem] transition-transform duration-300 hover:scale-125 hover:text-blue-500" />
+          </a>
+        )}
+        {currentUser.zaloLink && (
+          <a
+            href={currentUser.zaloLink}
+            target="_blank"
+            className="mr-[1rem] text-white"
+          >
             <TwitterCircleFilled className="text-[2rem] transition-transform duration-300 hover:scale-125 hover:text-blue-400" />
-          </Link>
+          </a>
         )}
         {currentUser.instagramLink && (
-          <Link to={currentUser.instagramLink} className="mr-[1rem] text-white">
+          <a
+            href={currentUser.instagramLink}
+            target="_blank"
+            className="mr-[1rem] text-white"
+          >
             <InstagramFilled className="text-[2rem] transition-transform duration-300 hover:scale-125 hover:text-pink-500" />
-          </Link>
+          </a>
         )}
       </Paragraph>
     );

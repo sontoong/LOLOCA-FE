@@ -1,12 +1,16 @@
 export type TourGuide = {
   accountStatus: number;
-  cityId: number;
+  email?: string;
+  tourGuideId?: string;
+  cityId: string;
   cityName: string;
   firstName: string;
   lastName: string;
+  description: string;
   dateOfBirth: string; // ISO 8601 date format
   gender: number;
-  description: string;
+  phoneNumber?: string;
+  address?: string;
   zaloLink: string;
   facebookLink: string;
   instagramLink: string;
@@ -15,8 +19,6 @@ export type TourGuide = {
   avatarUploadedTime?: string;
   cover?: string;
   coverUploadedTime?: string;
-  phoneNumber?: string;
-  address?: string;
   status: number;
 };
 

@@ -45,11 +45,10 @@ const ProfileEditModal = ({
       zaloLink: tourGuideData.zaloLink,
       facebookLink: tourGuideData.facebookLink,
       instagramLink: tourGuideData.instagramLink,
-      pricePerDay: tourGuideData.pricePerDay,
+      pricePerDay: tourGuideData.pricePerDay * 1000,
       status: tourGuideData.status,
     });
 
-    console.log(tourGuideData);
     if (tourGuideData.avatar) {
       setProfileImages([
         {
@@ -84,13 +83,13 @@ const ProfileEditModal = ({
     tourGuideId: "",
     description: "",
     dateOfBirth: "",
-    gender: 0,
+    gender: null,
     phoneNumber: "",
     address: "",
     zaloLink: "",
     facebookLink: "",
     instagramLink: "",
-    pricePerDay: 1000,
+    pricePerDay: 0,
     status: "",
   };
 
@@ -126,13 +125,15 @@ const ProfileEditModal = ({
     });
 
     await handleUpdateTourGuideInfo({
+      ...values,
       tourGuideId: tourGuideId,
       status: tourGuideData.status,
       firstName: tourGuideData.firstName,
       lastName: tourGuideData.lastName,
-      ...values,
+      pricePerDay: values.pricePerDay / 1000,
     });
 
+    setIsModalVisible(false);
     await handleGetUserInfo();
   };
 
@@ -141,9 +142,9 @@ const ProfileEditModal = ({
   };
 
   const genderOptions = [
-    { label: "Male", value: 1 },
-    { label: "Female", value: 2 },
-    { label: "Other", value: 3 },
+    { label: "Male", value: 0 },
+    { label: "Female", value: 1 },
+    { label: "Other", value: 2 },
   ];
 
   return (
@@ -247,7 +248,8 @@ const ProfileEditModal = ({
             >
               <InputNumber
                 placeholder="Price per day"
-                defaultValue={tourGuideData.pricePerDay | 1000}
+                step={1000}
+                suffix={"VND"}
               />
             </Form.Item>
           </Form>
