@@ -16,6 +16,8 @@ import {
 } from "../../redux/slice/authSlice";
 import { useUI } from "../../hooks/useUI";
 import { useCity } from "../../hooks/useCity";
+import { dateToLocalISOString } from "../../utils/utils";
+import dayjs from "dayjs";
 
 const { Text, Paragraph } = Typography;
 
@@ -54,10 +56,11 @@ export default function TourGuideRegister() {
   };
 
   const handleSubmit = (values: TourGuideRegisterParams) => {
+    const { gender, dateOfBirth, ...restValues } =  values
     handleTourGuideRegister({
-      ...values,
-      gender: 0,
-      dateOfBirth: new Date().toISOString(),
+      gender: gender,
+      dateOfBirth: dateToLocalISOString(dayjs(dateOfBirth)),
+      ...restValues
     });
   };
 

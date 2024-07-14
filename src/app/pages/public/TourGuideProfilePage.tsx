@@ -3,10 +3,15 @@ import VietNamBanner from "../../../assets/banner.png";
 import { Card, Col, Row, Typography } from "antd";
 import { Divider } from "../../components/divider";
 import { PrimaryButton } from "../../components/buttons";
-import { StarFilled } from "@ant-design/icons";
+import {
+  FacebookFilled,
+  InstagramFilled,
+  StarFilled,
+  TwitterCircleFilled,
+} from "@ant-design/icons";
 import { formatDateToLocal } from "../../utils/utils";
 import { useTourGuide } from "../../hooks/useTourGuide";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useTour } from "../../hooks/useTour";
 import { genderGenerator } from "../../utils/generators/gender";
@@ -100,6 +105,34 @@ const TourGuideProfile = () => {
     }
   };
 
+
+  const renderSocialIcons = () => {
+    return (
+      <Paragraph>
+        {stateTourGuide.currentTourguide.zaloLink || stateTourGuide.currentTourguide.facebookLink || stateTourGuide.currentTourguide.instagramLink ? (
+        <Title level={3} style={{ color: "#004AAD", fontWeight: "bolder" }}>
+          Socials
+        </Title>
+        ) : null}
+        {stateTourGuide.currentTourguide.zaloLink && (
+          <Link to={stateTourGuide.currentTourguide.zaloLink} className="mr-[1rem] text-white">
+            <FacebookFilled className="text-[2rem] transition-transform duration-300 hover:scale-125 hover:text-blue-500" />
+          </Link>
+        )}
+        {stateTourGuide.currentTourguide.facebookLink && (
+          <Link to={stateTourGuide.currentTourguide.facebookLink} className="mr-[1rem] text-white">
+            <TwitterCircleFilled className="text-[2rem] transition-transform duration-300 hover:scale-125 hover:text-blue-400" />
+          </Link>
+        )}
+        {stateTourGuide.currentTourguide.instagramLink && (
+          <Link to={stateTourGuide.currentTourguide.instagramLink} className="mr-[1rem] text-white">
+            <InstagramFilled className="text-[2rem] transition-transform duration-300 hover:scale-125 hover:text-pink-500" />
+          </Link>
+        )}
+      </Paragraph>
+    );
+  };
+
   const renderGeneralInfo = () => {
     if (stateTourGuide.isFetching) {
       return (
@@ -125,7 +158,9 @@ const TourGuideProfile = () => {
           <div className="flex justify-evenly">
             <Paragraph className="mt-[2rem] w-[40%] text-lg">
               {stateTourGuide.currentTourguide.description}
+              {renderSocialIcons()}
             </Paragraph>
+
             <div className="mt-[-5rem] flex flex-col items-center">
               <Avatar size={240} src={stateTourGuide.currentTourguide.avatar} />
               <Title

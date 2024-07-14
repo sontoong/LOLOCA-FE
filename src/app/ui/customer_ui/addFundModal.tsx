@@ -1,7 +1,6 @@
 import { Typography } from "antd";
 import { Form } from "../../components/form";
-import { InputNumber } from "../../components/inputs";
-import { Divider } from "../../components/divider";
+import { Input, InputNumber } from "../../components/inputs";
 
 const AddFundModal = ({
   form,
@@ -22,8 +21,8 @@ const AddFundModal = ({
     <>
     <div className="px-[2rem] py-[1.25rem] mb-[1rem] rounded-lg text-center">
         <Paragraph>- Minimum fund must be above 50 <span className="font-bold text-[1.2rem]">(50.000VND)</span>.</Paragraph>
-        <Paragraph>- Check your fund carefully before moving to <span className="font-bold text-[1.2rem]">Step 2</span>.</Paragraph>
-        <Divider colorSplit="black"/>
+        <Paragraph>- Check your <span className="font-bold text-[1.2rem]">fund</span> carefully before <span className="font-bold text-[1.2rem]">Pressing OK</span>.</Paragraph>
+        <Paragraph>- Check your <span className="font-bold text-[1.2rem]">Transaction Code</span> carefully.</Paragraph>
     </div>
     <div className="mx-auto w-[50%]">
       <Form
@@ -34,8 +33,8 @@ const AddFundModal = ({
         onFinishFailed={onFinishFailed}
       >
         <Form.Item
-          name="fund"
-          label="Fund"
+          name="amount"
+          label="Amount"
           rules={[
             {
               required: true,
@@ -45,9 +44,24 @@ const AddFundModal = ({
           <InputNumber
             placeholder="Type your fund here"
             min={50000}
-            defaultValue={initialValues.fund}
+            defaultValue={initialValues.amount}
             className="w-full"
             unit="VND"
+          />
+        </Form.Item>
+        <Form.Item
+          name="transactionalCode"
+          label="Transactional Code"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Input
+            placeholder="Type your transactional code"
+            defaultValue={initialValues.transactionalCode}
+            className="w-full"
           />
         </Form.Item>
       </Form>

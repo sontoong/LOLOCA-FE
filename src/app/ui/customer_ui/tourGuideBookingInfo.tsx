@@ -102,7 +102,7 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
             name="startDate"
             label="Start"
             rules={[
-              { required: true, message: "Please select start date" },
+              { required: true },
               { validator: validateStartDate },
             ]}
           >
