@@ -19,7 +19,7 @@ const HistoryPaymentTable = ({ data } : {data : any}) => {
     },
   ];
 
-  const filteredData = data.filter((item : any) => item.status === 1);
+  const filteredData = data.filter((item : any) => item.status === 1 && 2);
 
   return (
     <div>

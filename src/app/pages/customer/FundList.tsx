@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import PendingPaymentTable from "../../ui/customer_ui/PendingPaymentTable";
 import HistoryPaymentTable from "../../ui/customer_ui/HistoryPaymentTable";
-import RejectedPaymentTable from "../../ui/customer_ui/RejectedPaymentTable";
 
 export default function PaymentHistory() {
   const navigate = useNavigate();
@@ -46,8 +45,6 @@ export default function PaymentHistory() {
         return <PendingPaymentTable data={data}/>;
       case "history":
         return <HistoryPaymentTable data={data}/>;
-      case "rejected":
-          return <RejectedPaymentTable data={data}/>;
       default:
         return <HistoryPaymentTable data={data}/>;
     }
