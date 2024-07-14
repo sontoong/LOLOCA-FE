@@ -54,7 +54,7 @@ const tourSlice = createSlice({
       );
     builder.addMatcher(
       (action) =>
-        action.type.startsWith("tour/fetch/") &&
+        action.type.startsWith("tour/") &&
         (action.type.endsWith("/fulfilled") ||
           action.type.endsWith("/rejected")),
       (state) => {

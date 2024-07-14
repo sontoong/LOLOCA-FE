@@ -4,17 +4,11 @@ import { PrimaryButton } from "../../components/buttons";
 
 const { Title } = Typography;
 
-const CreateTourPrice = ({
-  form,
-}: {
-  form: any;
-}) => {
-
-
+const CreateTourPrice = ({ form }: { form: any }) => {
   const onFinish = (values: any) => {
     const formattedValues = {
-      AdultPrices: values.price.map((item: any) => item.AdultPrices),
-      ChildPrices: values.price.map((item: any) => item.ChildPrices),
+      AdultPrices: values.price.map((item: any) => item.AdultPrices / 1000),
+      ChildPrices: values.price.map((item: any) => item.ChildPrices / 1000),
       TotalTouristFrom: values.price.map((item: any) => item.TotalTouristFrom),
       TotalTouristTo: values.price.map((item: any) => item.TotalTouristTo),
     };
@@ -85,7 +79,11 @@ const CreateTourPrice = ({
                             index,
                             "TotalTouristFrom",
                           ]);
-                          if (!value || fromValue === undefined || value > fromValue) {
+                          if (
+                            !value ||
+                            fromValue === undefined ||
+                            value > fromValue
+                          ) {
                             return Promise.resolve();
                           }
                           return Promise.reject(
@@ -108,14 +106,19 @@ const CreateTourPrice = ({
                             return Promise.resolve();
                           }
                           return Promise.reject(
-                            new Error("Price must be 0 or at least 1000")
+                            new Error("Price must be 0 or at least 1000"),
                           );
                         },
                       },
                     ]}
                     style={{ flex: 1, marginRight: 8 }}
                   >
-                    <InputNumber placeholder="Adult Prices" min={0} />
+                    <InputNumber
+                      placeholder="Adult Prices"
+                      min={0}
+                      step={1000}
+                      suffix="VND"
+                    />
                   </Form.Item>
                   <Form.Item
                     name={[field.name, "ChildPrices"]}
@@ -127,14 +130,19 @@ const CreateTourPrice = ({
                             return Promise.resolve();
                           }
                           return Promise.reject(
-                            new Error("Price must be 0 or at least 1000")
+                            new Error("Price must be 0 or at least 1000"),
                           );
                         },
                       },
                     ]}
                     style={{ flex: 1, marginRight: 8 }}
                   >
-                    <InputNumber placeholder="Child Prices" min={0} />
+                    <InputNumber
+                      placeholder="Child Prices"
+                      min={0}
+                      step={1000}
+                      suffix="VND"
+                    />
                   </Form.Item>
                   {fields.length > 1 ? (
                     <MinusCircleFilled

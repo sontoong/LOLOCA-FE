@@ -17,6 +17,8 @@ import {
   UpdateTourGuideImageParams,
   getAllTourGuides,
   GetAllTourGuideParams,
+  getTourGuidePrivateById,
+  GetTourGuidePrivateByIdParams,
 } from "../redux/slice/tourguideSlice";
 import { useCallback } from "react";
 
@@ -25,10 +27,34 @@ export function useTourGuide() {
   const state = useAppSelector((state) => state.tourGuide);
   const dispatch = useAppDispatch();
 
-  const handleGetTourGuidebyId = useCallback(
+  const handleGetTourGuideById = useCallback(
     async (value: GetTourGuideByIdParams) => {
       const resultAction = await dispatch(getTourGuideById(value));
       if (getTourGuideById.fulfilled.match(resultAction)) {
+        dispatch(setCurrentTourGuide(resultAction.payload));
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
+  const handleGetTourGuidePrivateById = useCallback(
+    async (value: GetTourGuidePrivateByIdParams) => {
+      const resultAction = await dispatch(getTourGuidePrivateById(value));
+      if (getTourGuidePrivateById.fulfilled.match(resultAction)) {
         dispatch(setCurrentTourGuide(resultAction.payload));
       } else {
         if (resultAction.payload) {
@@ -210,7 +236,8 @@ export function useTourGuide() {
 
   return {
     state,
-    handleGetTourGuidebyId,
+    handleGetTourGuideById,
+    handleGetTourGuidePrivateById,
     handleGetRandomTourGuides,
     handleGetRandomTourGuidesInCity,
     handleUpdateTourGuideInfo,

@@ -11,7 +11,7 @@ import { Table } from "../../components/table";
 import { useFeedback } from "../../hooks/useFeedback";
 import { useTour } from "../../hooks/useTour";
 import { useTourGuide } from "../../hooks/useTourGuide";
-import { formatDateToLocal } from "../../utils/utils";
+import { formatCurrency, formatDateToLocal } from "../../utils/utils";
 import { Carousel } from "../../components/carousel";
 import { Image } from "../../components/image";
 
@@ -23,7 +23,7 @@ const TourGuideTourDetailPage = () => {
   const { tourId } = useParams<{ tourId: string }>();
   const { state: stateTour, handleGetTourById, handleDeleteTour } = useTour();
   const { state: stateFeedback, handleGetTourFeedback } = useFeedback();
-  const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
+  const { state: stateTourGuide, handleGetTourGuideById } = useTourGuide();
 
   useEffect(() => {
     if (tourId) {
@@ -34,11 +34,11 @@ const TourGuideTourDetailPage = () => {
 
   useEffect(() => {
     if (stateTour.currentTour?.tourGuideId) {
-      handleGetTourGuidebyId({
+      handleGetTourGuideById({
         tourGuideId: stateTour.currentTour.tourGuideId,
       });
     }
-  }, [handleGetTourGuidebyId, stateTour.currentTour?.tourGuideId]);
+  }, [handleGetTourGuideById, stateTour.currentTour?.tourGuideId]);
 
   const tour = stateTour.currentTour;
 
@@ -53,8 +53,8 @@ const TourGuideTourDetailPage = () => {
   const priceData = tour.tourPriceDTOs?.map((item, index) => ({
     key: index,
     amount: `From ${item.totalTouristFrom} to ${item.totalTouristTo}`,
-    adult: item.adultPrice,
-    child: item.childPrice,
+    adult: formatCurrency(item.adultPrice),
+    child: formatCurrency(item.childPrice),
   }));
 
   const onDeleteTour = () => {
@@ -149,7 +149,7 @@ const TourGuideTourDetailPage = () => {
               style={{
                 objectFit: "contain",
               }}
-              height={"100%"}
+              height={"500px"}
               width={"100%"}
             />
           )}

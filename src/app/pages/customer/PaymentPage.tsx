@@ -22,7 +22,7 @@ const PaymentPage = () => {
   const navigate = useNavigate();
   const { state: stateOrder } = useOrder();
   const { state: stateTour, handleGetTourById } = useTour();
-  const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
+  const { state: stateTourGuide, handleGetTourGuideById } = useTourGuide();
   const { state: stateBookingTour, handleGetBookingTourById } =
     useBookingTour();
   const { state: stateBookingTourGuide, handleGetBookingTourGuideById } =
@@ -64,14 +64,14 @@ const PaymentPage = () => {
       });
     }
     if (stateBookingTourGuide.currentBookingTourGuide.tourGuideId) {
-      handleGetTourGuidebyId({
+      handleGetTourGuideById({
         tourGuideId:
           stateBookingTourGuide.currentBookingTourGuide.tourGuideId.toString(),
       });
     }
   }, [
     handleGetTourById,
-    handleGetTourGuidebyId,
+    handleGetTourGuideById,
     stateBookingTour.currentBookingTour.tourId,
     stateBookingTourGuide.currentBookingTourGuide.tourGuideId,
   ]);

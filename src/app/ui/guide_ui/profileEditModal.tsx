@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { PrimaryButton } from "../../components/buttons";
 import { Modal } from "../../components/modals";
-import { Typography, UploadFile } from "antd";
+import { InputNumber, Typography, UploadFile } from "antd";
 import { ImageUpload } from "../../components/image-upload";
 import { Form } from "../../components/form";
-import { Input, InputDate, InputNumber, InputSelect } from "../../components/inputs";
+import { Input, InputDate, InputSelect } from "../../components/inputs";
 import { TourGuide } from "../../models/tourGuide";
 import { useTourGuide } from "../../hooks/useTourGuide";
 import { base64ToBlob, ensureBase64Avatar } from "../../utils/utils";
@@ -46,10 +46,10 @@ const ProfileEditModal = ({
       facebookLink: tourGuideData.facebookLink,
       instagramLink: tourGuideData.instagramLink,
       pricePerDay: tourGuideData.pricePerDay,
-      status: tourGuideData.status
+      status: tourGuideData.status,
     });
 
-    console.log(tourGuideData)
+    console.log(tourGuideData);
     if (tourGuideData.avatar) {
       setProfileImages([
         {
@@ -66,8 +66,6 @@ const ProfileEditModal = ({
         },
       ]);
     }
-
-
   }, [tourGuideData, form, tourGuideId]);
 
   const showModal = () => {
@@ -97,8 +95,6 @@ const ProfileEditModal = ({
   };
 
   const onFinish = async (values: any) => {
-    
-
     // Handle avatar upload
     await handleUpdateTourGuideAvatar({
       TourGuideId: parseInt(tourGuideId),
@@ -133,8 +129,8 @@ const ProfileEditModal = ({
       tourGuideId: tourGuideId,
       status: tourGuideData.status,
       firstName: tourGuideData.firstName,
-      lastName: tourGuideData.lastName,  
-      ...values
+      lastName: tourGuideData.lastName,
+      ...values,
     });
 
     await handleGetUserInfo();
@@ -175,17 +171,17 @@ const ProfileEditModal = ({
         </Title>
         <ImageUpload setImages={setBannerImages} images={bannerImages} />
         <div className="w-[100%]">
-        <Form
+          <Form
             form={form}
             initialValues={initialValues}
             name="DescriptionForm"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
           >
-          <Divider colorSplit="black"/>
-          <Title level={3} style={{ color: "#004AAD", fontWeight: "bolder" }}>
-            General Info
-          </Title>
+            <Divider colorSplit="black" />
+            <Title level={3} style={{ color: "#004AAD", fontWeight: "bolder" }}>
+              General Info
+            </Title>
             <Form.Item
               name="description"
               label="Description"
@@ -198,63 +194,44 @@ const ProfileEditModal = ({
             <Form.Item
               name="dateOfBirth"
               label="Date of Birth"
+              rules={[{ required: true }]}
+            >
+              <InputDate placeholder="Enter date of birth" />
+            </Form.Item>
+            <Form.Item
+              name="phoneNumber"
+              label="Phone Number"
               rules={[
-                { required: true },
+                { required: true, message: "Please enter your phone number" },
+                { pattern: /^\d+$/, message: "Phone number must be numeric" },
               ]}
             >
-              <InputDate
-                placeholder="Enter date of birth"
+              <Input placeholder="Enter your phone number" />
+            </Form.Item>
+            <Form.Item
+              name="gender"
+              label="Gender"
+              rules={[{ required: true, message: "Please select your gender" }]}
+            >
+              <InputSelect
+                placeholder="Select your gender"
+                options={genderOptions}
               />
             </Form.Item>
-            <Form.Item
-            name="phoneNumber"
-            label="Phone Number"
-            rules={[
-              { required: true, message: "Please enter your phone number" },
-              { pattern: /^\d+$/, message: "Phone number must be numeric" },
-            ]}
-          >
-            <Input placeholder="Enter your phone number" />
-          </Form.Item>
-          <Form.Item
-            name="gender"
-            label="Gender"
-            rules={[{ required: true, message: "Please select your gender" }]}
-          >
-            <InputSelect
-              placeholder="Select your gender"
-              options={genderOptions}
-            />
-          </Form.Item>
-          <Divider colorSplit="black"/>
-          <Title level={3} style={{ color: "#004AAD", fontWeight: "bolder" }}>
-            Social Links
-          </Title>
-          <Form.Item
-              name="zaloLink"
-              label="Zalo"
-              rules={[
-              ]}
-            >
+            <Divider colorSplit="black" />
+            <Title level={3} style={{ color: "#004AAD", fontWeight: "bolder" }}>
+              Social Links
+            </Title>
+            <Form.Item name="zaloLink" label="Zalo" rules={[]}>
               <Input placeholder="Enter your zalo" />
             </Form.Item>
-            <Form.Item
-              name="facebookLink"
-              label="Facebook"
-              rules={[
-              ]}
-            >
+            <Form.Item name="facebookLink" label="Facebook" rules={[]}>
               <Input placeholder="Enter your facebook" />
             </Form.Item>
-            <Form.Item
-              name="instagramLink"
-              label="Instagram"
-              rules={[
-              ]}
-            >
+            <Form.Item name="instagramLink" label="Instagram" rules={[]}>
               <Input placeholder="Enter your instagram" />
             </Form.Item>
-            <Divider colorSplit="black"/>
+            <Divider colorSplit="black" />
             <Title level={3} style={{ color: "#004AAD", fontWeight: "bolder" }}>
               Price per day
             </Title>
@@ -265,12 +242,13 @@ const ProfileEditModal = ({
             </div> */}
             <Form.Item
               name="pricePerDay"
-                rules={[
-                  { type: "number", required: true, min: 1000},
-                ]}
-                className="w-full"
+              rules={[{ type: "number", required: true, min: 1000 }]}
+              className="w-full"
             >
-              <InputNumber placeholder="Price per day" defaultValue={tourGuideData.pricePerDay | 1000}/>
+              <InputNumber
+                placeholder="Price per day"
+                defaultValue={tourGuideData.pricePerDay | 1000}
+              />
             </Form.Item>
           </Form>
         </div>

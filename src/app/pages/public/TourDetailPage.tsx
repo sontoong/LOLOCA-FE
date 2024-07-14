@@ -25,7 +25,7 @@ const TourDetailPage = () => {
   const { tourId } = useParams<{ tourId: string }>();
   const { state: stateTour, handleGetTourById } = useTour();
   const { state: stateFeedback, handleGetTourFeedback } = useFeedback();
-  const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
+  const { state: stateTourGuide, handleGetTourGuideById } = useTourGuide();
 
   useEffect(() => {
     if (tourId) {
@@ -36,11 +36,11 @@ const TourDetailPage = () => {
 
   useEffect(() => {
     if (stateTour.currentTour?.tourGuideId) {
-      handleGetTourGuidebyId({
+      handleGetTourGuideById({
         tourGuideId: stateTour.currentTour.tourGuideId,
       });
     }
-  }, [handleGetTourGuidebyId, stateTour.currentTour?.tourGuideId]);
+  }, [handleGetTourGuideById, stateTour.currentTour?.tourGuideId]);
 
   const tour = stateTour.currentTour;
 
@@ -138,7 +138,7 @@ const TourDetailPage = () => {
             style={{
               objectFit: "contain",
             }}
-            height={"100%"}
+            height={"500px"}
             width={"100%"}
           />
         )}

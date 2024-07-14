@@ -81,6 +81,29 @@ export const getTourGuideById = createAsyncThunk<any, GetTourGuideByIdParams>(
   },
 );
 
+export const getTourGuidePrivateById = createAsyncThunk<
+  any,
+  GetTourGuidePrivateByIdParams
+>(
+  "tourGuide/fetch/getTourGuidePrivateById",
+  async (data, { rejectWithValue }) => {
+    const { tourGuideId } = data;
+    try {
+      const response =
+        await agent.TourGuide.getTourGuidePrivateById(tourGuideId);
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+      throw error;
+    }
+  },
+);
+
 export const getRandomTourGuide = createAsyncThunk<
   any,
   GetRandomTourGuideParams
@@ -227,6 +250,10 @@ export type UpdateTourGuideImageParams = {
 };
 
 export type GetTourGuideByIdParams = {
+  tourGuideId: string;
+};
+
+export type GetTourGuidePrivateByIdParams = {
   tourGuideId: string;
 };
 

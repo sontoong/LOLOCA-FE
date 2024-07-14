@@ -26,20 +26,20 @@ const { Title, Paragraph, Text } = Typography;
 const TourGuideProfile = () => {
   const navigate = useNavigate();
   const { tourGuideId } = useParams();
-  const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
+  const { state: stateTourGuide, handleGetTourGuideById } = useTourGuide();
   const { state: stateTour, handleGetTourByTourGuide } = useTour();
   const { state: stateFeedback, handleGetTourGuideFeedback } = useFeedback();
 
   useEffect(() => {
     if (tourGuideId) {
-      handleGetTourGuidebyId({ tourGuideId: tourGuideId });
+      handleGetTourGuideById({ tourGuideId: tourGuideId });
       handleGetTourByTourGuide({
         TourGuideId: tourGuideId,
         page: 1,
         pageSize: 10,
       });
     }
-  }, [handleGetTourByTourGuide, handleGetTourGuidebyId, tourGuideId]);
+  }, [handleGetTourByTourGuide, handleGetTourGuideById, tourGuideId]);
 
   useEffect(() => {
     if (stateTourGuide.currentTourguide.cityId) {
@@ -105,27 +105,37 @@ const TourGuideProfile = () => {
     }
   };
 
-
   const renderSocialIcons = () => {
     return (
       <Paragraph>
-        {stateTourGuide.currentTourguide.zaloLink || stateTourGuide.currentTourguide.facebookLink || stateTourGuide.currentTourguide.instagramLink ? (
-        <Title level={3} style={{ color: "#004AAD", fontWeight: "bolder" }}>
-          Socials
-        </Title>
+        {stateTourGuide.currentTourguide.zaloLink ||
+        stateTourGuide.currentTourguide.facebookLink ||
+        stateTourGuide.currentTourguide.instagramLink ? (
+          <Title level={3} style={{ color: "#004AAD", fontWeight: "bolder" }}>
+            Socials
+          </Title>
         ) : null}
         {stateTourGuide.currentTourguide.zaloLink && (
-          <Link to={stateTourGuide.currentTourguide.zaloLink} className="mr-[1rem] text-white">
+          <Link
+            to={stateTourGuide.currentTourguide.zaloLink}
+            className="mr-[1rem] text-white"
+          >
             <FacebookFilled className="text-[2rem] transition-transform duration-300 hover:scale-125 hover:text-blue-500" />
           </Link>
         )}
         {stateTourGuide.currentTourguide.facebookLink && (
-          <Link to={stateTourGuide.currentTourguide.facebookLink} className="mr-[1rem] text-white">
+          <Link
+            to={stateTourGuide.currentTourguide.facebookLink}
+            className="mr-[1rem] text-white"
+          >
             <TwitterCircleFilled className="text-[2rem] transition-transform duration-300 hover:scale-125 hover:text-blue-400" />
           </Link>
         )}
         {stateTourGuide.currentTourguide.instagramLink && (
-          <Link to={stateTourGuide.currentTourguide.instagramLink} className="mr-[1rem] text-white">
+          <Link
+            to={stateTourGuide.currentTourguide.instagramLink}
+            className="mr-[1rem] text-white"
+          >
             <InstagramFilled className="text-[2rem] transition-transform duration-300 hover:scale-125 hover:text-pink-500" />
           </Link>
         )}

@@ -1,13 +1,21 @@
 import dayjs from "dayjs";
 
-export const formatCurrency = (amount: number | null) => {
+type Locale = "vi-VN" | "en-US" | "fr-FR" | "ja-JP";
+
+export const formatCurrency = (
+  amount: number | null,
+  locale: Locale = "vi-VN",
+) => {
   if (amount === null || amount === undefined) {
     return "";
   }
 
-  const amountCheck = amount < 1000 ? amount * 1000 : amount;
+  let returnAmount = 0;
+  if (locale === "vi-VN") {
+    returnAmount = amount * 1000;
+  }
 
-  return amountCheck.toLocaleString("vi-VN", {
+  return returnAmount.toLocaleString(locale, {
     style: "currency",
     currency: "VND",
   });

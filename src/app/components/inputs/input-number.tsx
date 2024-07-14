@@ -26,7 +26,6 @@ function CustomInputNumber({ unit, pluralUnit, ...props }: TCustomInputNumber) {
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
       <InputNumber
-        size="large"
         className="w-full"
         min={0}
         changeOnWheel

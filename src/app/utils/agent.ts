@@ -126,7 +126,7 @@ const TourGuide = {
     requests.post(`${_tourGuide}/change-password`, data),
   getTourGuideById: (tourGuideId: string) =>
     baseRequests.get(`${_tourGuide}/info/${tourGuideId}`),
-  getTourGuidePrivateById: (tourGuideId: number) =>
+  getTourGuidePrivateById: (tourGuideId: string) =>
     requests.get(`${_tourGuide}/private-info/${tourGuideId}`),
   getRandomTourGuide: (params: any) =>
     baseRequests.get(`${_tourGuide}/get-random-tourguide`, params),

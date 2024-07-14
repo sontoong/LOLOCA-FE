@@ -1,9 +1,9 @@
 import { Carousel } from "antd";
 import { Image } from "../image";
 import VietNamBanner from "../../../assets/banner.png";
+import React from "react";
 
 function CustomCarousel<RecordType>({
-  height = 500,
   items,
   render,
 }: CustomCarouselProps<RecordType>) {
@@ -14,9 +14,7 @@ function CustomCarousel<RecordType>({
     return (
       <Carousel arrows autoplay draggable infinite>
         {items.map((item, index) => (
-          <div key={index} className={`w-full h-[${height}px]`}>
-            {render(item)}
-          </div>
+          <React.Fragment key={index}>{render(item)}</React.Fragment>
         ))}
       </Carousel>
     );

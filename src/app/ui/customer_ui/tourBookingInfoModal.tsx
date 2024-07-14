@@ -131,8 +131,7 @@ const TourBookingInfoModal = ({
           <Title level={4}>
             Tổng:{" "}
             {formatCurrency(
-              calculateTotalPrice(tour.tourPriceDTOs, numOfAdult, numOfChild) *
-                1000,
+              calculateTotalPrice(tour.tourPriceDTOs, numOfAdult, numOfChild),
             )}
           </Title>
         </Form>

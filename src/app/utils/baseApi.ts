@@ -5,8 +5,7 @@ const baseURL = Envs.apiLocal;
 
 const baseApi = axios.create({
   baseURL,
-  timeout: 10000,
-  maxRedirects: 0,
+  timeout: 60000,
   // withCredentials: true,
 });
 

@@ -71,7 +71,7 @@ const CustomerRequestList = () => {
       title: "Total",
       dataIndex: "totalPrice",
       key: "totalPrice",
-      render: (total) => formatCurrency(total * 1000),
+      render: (total) => formatCurrency(total),
     },
     {
       title: "Status",
@@ -121,7 +121,7 @@ const CustomerRequestList = () => {
         title: "Total",
         dataIndex: "totalPrice",
         key: "totalPrice",
-        render: (total) => formatCurrency(total * 1000),
+        render: (total) => formatCurrency(total),
       },
       {
         title: "Status",

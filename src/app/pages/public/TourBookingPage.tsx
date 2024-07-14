@@ -23,7 +23,7 @@ const TourBookingPage = () => {
   const navigate = useNavigate();
   const { tourId } = useParams();
   const { state: stateTour, handleGetTourById } = useTour();
-  const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
+  const { state: stateTourGuide, handleGetTourGuideById } = useTourGuide();
   const { state: stateBookingTour, handleCreateBookingTour } = useBookingTour();
   const { executeOrRedirect } = useProtectedAction();
   const [currentStep, setCurrentStep] = useState(0);
@@ -38,11 +38,11 @@ const TourBookingPage = () => {
 
   useEffect(() => {
     if (stateTour.currentTour.tourGuideId) {
-      handleGetTourGuidebyId({
+      handleGetTourGuideById({
         tourGuideId: stateTour.currentTour.tourGuideId,
       });
     }
-  }, [handleGetTourGuidebyId, stateTour.currentTour.tourGuideId]);
+  }, [handleGetTourGuideById, stateTour.currentTour.tourGuideId]);
 
   const initialValues = {
     note: "",

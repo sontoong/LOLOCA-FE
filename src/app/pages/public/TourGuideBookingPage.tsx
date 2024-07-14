@@ -17,7 +17,7 @@ const { Step } = Steps;
 const TourGuideBookingPage = () => {
   const navigate = useNavigate();
   const { tourGuideId } = useParams();
-  const { state: stateTourGuide, handleGetTourGuidebyId } = useTourGuide();
+  const { state: stateTourGuide, handleGetTourGuideById } = useTourGuide();
   const { state: stateBookingTourGuide, handleCreateBookingTourGuide } =
     useBookingTourGuide();
   const [currentStep, setCurrentStep] = useState(0);
@@ -26,9 +26,9 @@ const TourGuideBookingPage = () => {
 
   useEffect(() => {
     if (tourGuideId) {
-      handleGetTourGuidebyId({ tourGuideId: tourGuideId });
+      handleGetTourGuideById({ tourGuideId: tourGuideId });
     }
-  }, [handleGetTourGuidebyId, tourGuideId]);
+  }, [handleGetTourGuideById, tourGuideId]);
 
   const next = () => {
     window.scrollTo(0, 0);
