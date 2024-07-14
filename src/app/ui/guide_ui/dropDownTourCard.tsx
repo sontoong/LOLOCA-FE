@@ -3,7 +3,7 @@ import { Dropdown, Modal } from "antd";
 import { MenuProps } from "antd/lib";
 import { useNavigate } from "react-router-dom";
 
-const DropDownRequest = ({tourId, name} : {tourId: string, name: string}) => {
+const DropDownTourCard = ({tourId, name} : {tourId: number, name: string}) => {
     const navigate = useNavigate()
 
 
@@ -24,12 +24,12 @@ const DropDownRequest = ({tourId, name} : {tourId: string, name: string}) => {
   const items: MenuProps['items'] = [
     {
       key: "1",
-      label: "View detail",
+      label: "Edit Tour",
       onClick: handleUpdateTour,
     },
     {
       key: "2",
-      label: "Proceed to Payment",
+      label: "Delete Tour",
       onClick: handleDeleteTour,
     },
   ];
@@ -38,12 +38,10 @@ const DropDownRequest = ({tourId, name} : {tourId: string, name: string}) => {
 
 
   return (
-    <Dropdown menu={{ items }} trigger={["click"]}>
-      <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
+    <Dropdown menu={{ items }} trigger={["click"]} className="text-[2rem]">
         <EllipsisOutlined />
-      </a>
     </Dropdown>
   );
 };
 
-export default DropDownRequest;
+export default DropDownTourCard;
