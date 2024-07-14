@@ -20,7 +20,9 @@ const RequestListPage = () => {
   } = useBookingTourGuide();
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageSize, setCurrentPageSize] = useState(8);
-  const [renderData, setRenderData] = useState<RenderData>();
+  const [renderData, setRenderData] = useState<RenderData>({
+    type: "bookingTourGuide",
+  });
 
   useEffect(() => {
     if (userId) {
@@ -47,12 +49,37 @@ const RequestListPage = () => {
   const renderList = () => {
     switch (renderData?.type) {
       case "bookingTour": {
-        if (stateBookingTour.currentBookingTourList.length === 0) {
+        const bookingTour = stateBookingTour.currentBookingTourList.filter(
+          (item) => item.status === 0,
+        );
+        if (bookingTour.length === 0) {
           return <NotFound />;
         }
         return (
           <Space direction="vertical" size={"large"} className="w-[70%]">
-            {stateBookingTour.currentBookingTourList.map((request, index) => {
+            {bookingTour.map((request, index) => {
+              return (
+                <RequestCardTour
+                  key={index}
+                  request={request}
+                  customerId={request.customerId}
+                />
+              );
+            })}
+          </Space>
+        );
+      }
+      case "bookingTourAccepted": {
+        const bookingTourAccepted =
+          stateBookingTour.currentBookingTourList.filter(
+            (item) => item.status === 1,
+          );
+        if (bookingTourAccepted.length === 0) {
+          return <NotFound />;
+        }
+        return (
+          <Space direction="vertical" size={"large"} className="w-[70%]">
+            {bookingTourAccepted.map((request, index) => {
               return (
                 <RequestCardTour
                   key={index}
@@ -65,22 +92,46 @@ const RequestListPage = () => {
         );
       }
       case "bookingTourGuide": {
-        if (stateBookingTourGuide.currentBookingTourGuideList.length === 0) {
+        const bookingTourGuide =
+          stateBookingTourGuide.currentBookingTourGuideList.filter(
+            (item) => item.status === 0,
+          );
+        if (bookingTourGuide.length === 0) {
           return <NotFound />;
         }
         return (
           <Space direction="vertical" size={"large"} className="w-[70%]">
-            {stateBookingTourGuide.currentBookingTourGuideList.map(
-              (request, index) => {
-                return (
-                  <RequestCardTourGuide
-                    key={index}
-                    request={request}
-                    customerId={request.customerId}
-                  />
-                );
-              },
-            )}
+            {bookingTourGuide.map((request, index) => {
+              return (
+                <RequestCardTourGuide
+                  key={index}
+                  request={request}
+                  customerId={request.customerId}
+                />
+              );
+            })}
+          </Space>
+        );
+      }
+      case "bookingTourGuideAccepted": {
+        const bookingTourAccepted =
+          stateBookingTourGuide.currentBookingTourGuideList.filter(
+            (item) => item.status === 1,
+          );
+        if (bookingTourAccepted.length === 0) {
+          return <NotFound />;
+        }
+        return (
+          <Space direction="vertical" size={"large"} className="w-[70%]">
+            {bookingTourAccepted.map((request, index) => {
+              return (
+                <RequestCardTourGuide
+                  key={index}
+                  request={request}
+                  customerId={request.customerId}
+                />
+              );
+            })}
           </Space>
         );
       }
@@ -113,14 +164,14 @@ const RequestListPage = () => {
               text: "Request accepted",
               onClick: () =>
                 setRenderData({
-                  type: "bookingTourGuide",
+                  type: "bookingTourGuideAccepted",
                 }),
             },
             {
               text: "Tour accepted",
               onClick: () =>
                 setRenderData({
-                  type: "bookingTour",
+                  type: "bookingTourAccepted",
                 }),
             },
           ]}
@@ -146,4 +197,10 @@ const RequestListPage = () => {
 
 export default RequestListPage;
 
-type RenderData = { type: "bookingTour" | "bookingTourGuide" };
+type RenderData = {
+  type:
+    | "bookingTour"
+    | "bookingTourAccepted"
+    | "bookingTourGuide"
+    | "bookingTourGuideAccepted";
+};
