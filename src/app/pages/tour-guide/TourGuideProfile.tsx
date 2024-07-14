@@ -1,11 +1,11 @@
 import { Banner } from "../../components/banner";
 import { Card, Col, Row, Typography } from "antd";
 import { Divider } from "../../components/divider";
-import { StarFilled } from "@ant-design/icons";
+import { FacebookFilled, InstagramFilled, StarFilled, TwitterCircleFilled } from "@ant-design/icons";
 import { formatDateToLocal } from "../../utils/utils";
 import { useTour } from "../../hooks/useTour";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CardListGrid } from "../../components/grids";
 import { CardSkeleton, Skeleton } from "../../components/skeletons";
 import { Image } from "../../components/image";
@@ -36,6 +36,7 @@ const TourGuideProfile = () => {
         page: 1,
         pageSize: 10,
       });
+
     }
   }, [tourGuideId, handleGetTourByTourGuide]);
 
@@ -99,6 +100,33 @@ const TourGuideProfile = () => {
     }
   };
 
+  const renderSocialIcons = () => {
+    return (
+      <Paragraph>
+        {currentUser.zaloLink || currentUser.facebookLink || currentUser.instagramLink ? (
+        <Title level={3} style={{ color: "#004AAD", fontWeight: "bolder" }}>
+          Socials
+        </Title>
+        ) : null}
+        {currentUser.zaloLink && (
+          <Link to={currentUser.zaloLink} className="mr-[1rem] text-white">
+            <FacebookFilled className="text-[2rem] transition-transform duration-300 hover:scale-125 hover:text-blue-500" />
+          </Link>
+        )}
+        {currentUser.facebookLink && (
+          <Link to={currentUser.facebookLink} className="mr-[1rem] text-white">
+            <TwitterCircleFilled className="text-[2rem] transition-transform duration-300 hover:scale-125 hover:text-blue-400" />
+          </Link>
+        )}
+        {currentUser.instagramLink && (
+          <Link to={currentUser.instagramLink} className="mr-[1rem] text-white">
+            <InstagramFilled className="text-[2rem] transition-transform duration-300 hover:scale-125 hover:text-pink-500" />
+          </Link>
+        )}
+      </Paragraph>
+    );
+  };
+
   const renderGeneralInfo = () => {
     if (stateTourGuide.isFetching) {
       return (
@@ -124,6 +152,7 @@ const TourGuideProfile = () => {
           <div className="flex justify-evenly">
             <Paragraph className="mt-[2rem] w-[40%] text-lg">
               {currentUser.description}
+              {renderSocialIcons()}
             </Paragraph>
             <div className="mt-[-5rem] flex flex-col items-center">
               <Avatar size={240} src={currentUser.avatar} />

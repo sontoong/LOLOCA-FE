@@ -1,7 +1,6 @@
 import { Typography } from "antd";
 import { Form } from "../../components/form";
 import { Input, InputNumber } from "../../components/inputs";
-import { Divider } from "../../components/divider";
 
 const AddFundModal = ({
   form,
@@ -22,10 +21,8 @@ const AddFundModal = ({
     <>
     <div className="px-[2rem] py-[1.25rem] mb-[1rem] rounded-lg text-center">
         <Paragraph>- Minimum fund must be above 50 <span className="font-bold text-[1.2rem]">(50.000VND)</span>.</Paragraph>
-        <Paragraph>- Check your fund carefully before moving to <span className="font-bold text-[1.2rem]">Step 2</span>.</Paragraph>
+        <Paragraph>- Check your <span className="font-bold text-[1.2rem]">fund</span> carefully before <span className="font-bold text-[1.2rem]">Pressing OK</span>.</Paragraph>
         <Paragraph>- Check your <span className="font-bold text-[1.2rem]">Transaction Code</span> carefully.</Paragraph>
-
-        <Divider colorSplit="black"/>
     </div>
     <div className="mx-auto w-[50%]">
       <Form
