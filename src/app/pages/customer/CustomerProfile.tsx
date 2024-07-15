@@ -24,7 +24,6 @@ const CustomerProfile = () => {
   const { Title } = Typography;
   const [images, setImages] = useState<UploadFile[]>([]);
 
-  const userId = localStorage.getItem("userId") ?? "";
   const currentUser = stateAuth.currentUser as Customer;
 
   useEffect(() => {
@@ -58,6 +57,9 @@ const CustomerProfile = () => {
 
   const onFinish = async (values: any) => {
     const dateOfBirthString = dateToLocalISOString(values.dateOfBirth);
+    const userId = localStorage.getItem("userId");
+
+    if (!userId) return;
 
     await handleUpdateCustomerAvatar({
       CustomerId: parseInt(userId),
@@ -74,7 +76,7 @@ const CustomerProfile = () => {
     });
     await handleUpdateCustomerInformation({
       ...values,
-      customerId: localStorage.getItem("userId") ?? "",
+      customerId: userId,
       dateOfBirth: dateOfBirthString,
     });
     await handleGetUserInfo();

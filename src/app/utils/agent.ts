@@ -134,14 +134,26 @@ const TourGuide = {
     requests.get(`${_tourGuide}/get-all-tourguides`, params),
   getRandomTourGuideInCity: (params: any) =>
     baseRequests.get(`${_tourGuide}/get-random-tourguide-in-city`, params),
-  acceptBookingTourGuideRequest: (data: any) =>
-    requests.post(`${_tourGuide}/accept-booking-tourguide-request`, data),
-  rejectBookingTourGuideRequest: (data: any) =>
-    requests.post(`${_tourGuide}/reject-booking-tourguide-request`, data),
-  acceptBookingTourRequest: (data: any) =>
-    requests.post(`${_tourGuide}/accept-booking-tour-request`, data),
-  rejectBookingTourRequest: (data: any) =>
-    requests.post(`${_tourGuide}/reject-booking-tour-request`, data),
+  acceptBookingTourGuideRequest: (bookingRequestId: string) =>
+    requests.post(
+      `${_tourGuide}/accept-booking-tourguide-request/${bookingRequestId}`,
+      "",
+    ),
+  rejectBookingTourGuideRequest: (bookingRequestId: string) =>
+    requests.post(
+      `${_tourGuide}/reject-booking-tourguide-request/${bookingRequestId}`,
+      "",
+    ),
+  acceptBookingTourRequest: (bookingRequestId: string) =>
+    requests.post(
+      `${_tourGuide}/accept-booking-tour-request/${bookingRequestId}`,
+      "",
+    ),
+  rejectBookingTourRequest: (bookingRequestId: string) =>
+    requests.post(
+      `${_tourGuide}/reject-booking-tour-request/${bookingRequestId}`,
+      "",
+    ),
 };
 
 const _tour = "Tour";

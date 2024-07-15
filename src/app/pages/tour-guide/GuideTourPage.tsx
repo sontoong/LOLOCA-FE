@@ -25,17 +25,20 @@ export default function GuideTourPage() {
   const { state: stateTour, handleGetTourByTourGuide } = useTour();
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageSize, setCurrentPageSize] = useState(8);
-  const tourGuideId = localStorage.getItem("userId") ?? "";
 
   const renderTours = stateTour.currentTourList;
 
   useEffect(() => {
-    handleGetTourByTourGuide({
-      page: currentPage,
-      pageSize: currentPageSize,
-      TourGuideId: tourGuideId,
-    });
-  }, [currentPage, currentPageSize, handleGetTourByTourGuide, tourGuideId]);
+    const tourGuideId = localStorage.getItem("userId");
+
+    if (tourGuideId) {
+      handleGetTourByTourGuide({
+        page: currentPage,
+        pageSize: currentPageSize,
+        TourGuideId: tourGuideId,
+      });
+    }
+  }, [currentPage, currentPageSize, handleGetTourByTourGuide]);
 
   const onChangePage: PaginationProps["onChange"] = (page) => {
     setCurrentPage(page);

@@ -23,7 +23,7 @@ import {
   VerifyParams,
 } from "../redux/slice/authSlice";
 import { getCustomerById } from "../redux/slice/customerSlice";
-import { getTourGuideById } from "../redux/slice/tourguideSlice";
+import { getTourGuidePrivateById } from "../redux/slice/tourguideSlice";
 import {
   resetOTPModal,
   setForgotPasswordForm,
@@ -226,9 +226,9 @@ export function useAuth() {
       }
       case ROLE.tourguide: {
         const resultAction = await dispatch(
-          getTourGuideById({ tourGuideId: userId }),
+          getTourGuidePrivateById({ tourGuideId: userId }),
         );
-        if (getTourGuideById.fulfilled.match(resultAction)) {
+        if (getTourGuidePrivateById.fulfilled.match(resultAction)) {
           dispatch(setCurrentUser(resultAction.payload));
         } else {
           notification.error({

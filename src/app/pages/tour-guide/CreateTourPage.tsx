@@ -26,7 +26,6 @@ const CreateTourPage = () => {
   const [tourImages, setTourImages] = useState<UploadFile[]>([]);
   const [duration, setDuration] = useState<number | undefined>(undefined);
   const { state: stateUser } = useAuth();
-  const TourGuideId = Number(localStorage.getItem("userId") ?? "");
   const { cityId } = (stateUser.currentUser as TourGuide) || {};
 
   const next = () => {
@@ -114,6 +113,7 @@ const CreateTourPage = () => {
 
   const handleSubmit = (values: any) => {
     const { price, itineraries, images, ...restValues } = values;
+    const TourGuideId = localStorage.getItem("userId");
 
     const formattedValues: any = {
       ...restValues,

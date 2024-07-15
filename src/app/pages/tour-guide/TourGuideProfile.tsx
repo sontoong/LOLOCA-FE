@@ -27,7 +27,6 @@ const { Title, Paragraph, Text } = Typography;
 
 const TourGuideProfile = () => {
   const navigate = useNavigate();
-  const tourGuideId = localStorage.getItem("userId") ?? "";
   const { state: stateUser } = useAuth();
   const { state: stateTourGuide, handleGetTourGuidePrivateById } =
     useTourGuide();
@@ -36,15 +35,16 @@ const TourGuideProfile = () => {
   const currentUser = stateUser.currentUser as TourGuide;
 
   useEffect(() => {
+    const tourGuideId = localStorage.getItem("userId");
+
     if (tourGuideId) {
       handleGetTourByTourGuide({
         TourGuideId: tourGuideId,
         page: 1,
         pageSize: 10,
       });
-      handleGetTourGuidePrivateById({ tourGuideId: tourGuideId });
     }
-  }, [tourGuideId, handleGetTourByTourGuide, handleGetTourGuidePrivateById]);
+  }, [handleGetTourByTourGuide, handleGetTourGuidePrivateById]);
 
   useEffect(() => {
     if (stateTourGuide.currentTourguide.cityId) {
@@ -201,7 +201,7 @@ const TourGuideProfile = () => {
       <div className="mr-[5rem] flex justify-end">
         <ProfileEditModal
           tourGuideData={currentUser}
-          tourGuideId={tourGuideId}
+          tourGuideId={currentUser.tourGuideId ?? ""}
         />
         <PrimaryButton
           text="Create Tour"
@@ -231,7 +231,7 @@ const TourGuideProfile = () => {
                 <Paragraph>Languages:</Paragraph>
               </div>
               <div>
-                <Paragraph>{tourGuideId}</Paragraph>
+                <Paragraph>{currentUser.tourGuideId}</Paragraph>
                 <Paragraph>{`${currentUser.firstName} ${currentUser.lastName}`}</Paragraph>
                 <Paragraph>{genderGenerator(currentUser.gender)}</Paragraph>
                 <Paragraph>Vietnamese, English</Paragraph>

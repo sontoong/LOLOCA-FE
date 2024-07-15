@@ -3,9 +3,10 @@ import VietNamBanner from "../../../assets/banner.png";
 import { PrimaryButton } from "../../components/buttons";
 import OutlineButton from "../../components/buttons/outline-button";
 import { BookingTourGuideRequest } from "../../models/bookingTourGuide";
+import { useTourGuide } from "../../hooks/useTourGuide";
+import { useBookingTourGuide } from "../../hooks/useBookingTourGuide";
 
 const { Title, Paragraph } = Typography;
-const { confirm } = Modal;
 
 const RequestCardTourGuide = ({
   request,
@@ -14,15 +15,19 @@ const RequestCardTourGuide = ({
   request: BookingTourGuideRequest;
   customerId: string;
 }) => {
-  const showConfirm = (action: string) => {
-    confirm({
-      title: `Are you sure you want to ${action}?`,
-      onOk() {
-        console.log(`${action} confirmed`);
-        // Handle action logic here
-      },
+  const [modal, contextHolder] = Modal.useModal();
+  const { handleGetBookingTourGuideByTourGuideId } = useBookingTourGuide();
+  const {
+    handleAcceptBookingTourGuideRequest,
+    handleRejectBookingTourGuideRequest,
+  } = useTourGuide();
+
+  const showConfirm = (action: Action) => {
+    modal.confirm({
+      title: `Are you sure you want to ${action.name}?`,
+      onOk: action.action,
       onCancel() {
-        console.log(`${action} canceled`);
+        console.log(`${action.name} canceled`);
       },
     });
   };
@@ -31,16 +36,52 @@ const RequestCardTourGuide = ({
     if (request.status === 0) {
       return (
         <>
-          <PrimaryButton text="Accept" onClick={() => showConfirm("accept")} />
-          <OutlineButton text="Reject" onClick={() => showConfirm("reject")} />
+          <PrimaryButton
+            text="Accept"
+            onClick={() =>
+              showConfirm({
+                name: "accept",
+                action: async () => {
+                  await handleAcceptBookingTourGuideRequest({
+                    bookingRequestId: request.bookingTourGuideRequestId,
+                  });
+                  await handleGetBookingTourGuideByTourGuideId({
+                    tourGuideId: request.tourGuideId,
+                  });
+                },
+              })
+            }
+          />
+          <OutlineButton
+            text="Reject"
+            onClick={() =>
+              showConfirm({
+                name: "reject",
+                action: async () => {
+                  await handleRejectBookingTourGuideRequest({
+                    bookingRequestId: request.bookingTourGuideRequestId,
+                  });
+                  await handleGetBookingTourGuideByTourGuideId({
+                    tourGuideId: request.tourGuideId,
+                  });
+                },
+              })
+            }
+          />
         </>
       );
     }
     if (request.status === 1) {
       return (
         <>
-          <PrimaryButton text="Finish" onClick={() => showConfirm("finish")} />
-          <OutlineButton text="Cancel" onClick={() => showConfirm("cancel")} />
+          <PrimaryButton
+            text="Finish"
+            onClick={() => showConfirm({ name: "finish", action: () => {} })}
+          />
+          <OutlineButton
+            text="Cancel"
+            onClick={() => showConfirm({ name: "cancel", action: () => {} })}
+          />
         </>
       );
     }
@@ -48,13 +89,13 @@ const RequestCardTourGuide = ({
 
   const popoverContent = (
     <div>
-      <p>Name: {customerId}</p>
+      <p>CustomerId: {customerId}</p>
       {/* <p>Email: {customer.email}</p> */}
     </div>
   );
 
   return (
-    <div>
+    <>
       <Card className="w-[100%]" hoverable>
         <Space
           align="start"
@@ -110,8 +151,11 @@ const RequestCardTourGuide = ({
           <Space direction="vertical">{renderButtons()}</Space>
         </Space>
       </Card>
-    </div>
+      {contextHolder}
+    </>
   );
 };
 
 export default RequestCardTourGuide;
+
+type Action = { name: string; action: () => void };

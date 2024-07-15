@@ -239,6 +239,94 @@ export const updateTourGuideCover = createAsyncThunk<
   }
 });
 
+export const acceptBookingTourRequest = createAsyncThunk<
+  any,
+  AcceptBookingTourRequestParams
+>(
+  "tourGuide/send/acceptBookingTourRequest",
+  async (data, { rejectWithValue }) => {
+    const { bookingRequestId } = data;
+    try {
+      const response =
+        await agent.TourGuide.acceptBookingTourRequest(bookingRequestId);
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+    }
+  },
+);
+
+export const rejectBookingTourRequest = createAsyncThunk<
+  any,
+  RejectBookingTourRequestParams
+>(
+  "tourGuide/send/rejectBookingTourRequest",
+  async (data, { rejectWithValue }) => {
+    const { bookingRequestId } = data;
+    try {
+      const response =
+        await agent.TourGuide.rejectBookingTourRequest(bookingRequestId);
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+    }
+  },
+);
+
+export const acceptBookingTourGuideRequest = createAsyncThunk<
+  any,
+  AcceptBookingTourGuideRequestParams
+>(
+  "tourGuide/send/acceptBookingTourGuideRequest",
+  async (data, { rejectWithValue }) => {
+    const { bookingRequestId } = data;
+    try {
+      const response =
+        await agent.TourGuide.acceptBookingTourGuideRequest(bookingRequestId);
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+    }
+  },
+);
+
+export const rejectBookingTourGuideRequest = createAsyncThunk<
+  any,
+  RejectBookingTourGuideRequestParams
+>(
+  "tourGuide/send/rejectBookingTourGuideRequest",
+  async (data, { rejectWithValue }) => {
+    const { bookingRequestId } = data;
+    try {
+      const response =
+        await agent.TourGuide.rejectBookingTourGuideRequest(bookingRequestId);
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+    }
+  },
+);
+
 export const { setCurrentTourGuide, setCurrentTourGuideList } =
   tourGuideSlice.actions;
 
@@ -287,4 +375,20 @@ export type UpdateTourGuideInfoParams = {
   instagramLink: string;
   pricePerDay: number;
   status: number;
+};
+
+export type AcceptBookingTourRequestParams = {
+  bookingRequestId: string;
+};
+
+export type RejectBookingTourRequestParams = {
+  bookingRequestId: string;
+};
+
+export type AcceptBookingTourGuideRequestParams = {
+  bookingRequestId: string;
+};
+
+export type RejectBookingTourGuideRequestParams = {
+  bookingRequestId: string;
 };

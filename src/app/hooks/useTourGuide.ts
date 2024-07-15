@@ -1,5 +1,4 @@
 import { useAppDispatch, useAppSelector } from "../redux/hook";
-// import { NavigateFunction } from "react-router-dom";
 import { App } from "antd";
 import {
   getRandomTourGuide,
@@ -19,6 +18,14 @@ import {
   GetAllTourGuideParams,
   getTourGuidePrivateById,
   GetTourGuidePrivateByIdParams,
+  acceptBookingTourRequest,
+  AcceptBookingTourRequestParams,
+  rejectBookingTourRequest,
+  RejectBookingTourRequestParams,
+  acceptBookingTourGuideRequest,
+  AcceptBookingTourGuideRequestParams,
+  rejectBookingTourGuideRequest,
+  RejectBookingTourGuideRequestParams,
 } from "../redux/slice/tourguideSlice";
 import { useCallback } from "react";
 
@@ -234,6 +241,118 @@ export function useTourGuide() {
     [dispatch, notification],
   );
 
+  const handleAcceptBookingTourRequest = useCallback(
+    async (value: AcceptBookingTourRequestParams) => {
+      const resultAction = await dispatch(acceptBookingTourRequest(value));
+      if (acceptBookingTourRequest.fulfilled.match(resultAction)) {
+        notification.success({
+          message: "Success",
+          description: resultAction.payload,
+          placement: "topRight",
+        });
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
+  const handleRejectBookingTourRequest = useCallback(
+    async (value: RejectBookingTourRequestParams) => {
+      const resultAction = await dispatch(rejectBookingTourRequest(value));
+      if (rejectBookingTourRequest.fulfilled.match(resultAction)) {
+        notification.success({
+          message: "Success",
+          description: resultAction.payload,
+          placement: "topRight",
+        });
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
+  const handleAcceptBookingTourGuideRequest = useCallback(
+    async (value: AcceptBookingTourGuideRequestParams) => {
+      const resultAction = await dispatch(acceptBookingTourGuideRequest(value));
+      if (acceptBookingTourGuideRequest.fulfilled.match(resultAction)) {
+        notification.success({
+          message: "Success",
+          description: resultAction.payload,
+          placement: "topRight",
+        });
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
+  const handleRejectBookingTourGuideRequest = useCallback(
+    async (value: RejectBookingTourGuideRequestParams) => {
+      const resultAction = await dispatch(rejectBookingTourGuideRequest(value));
+      if (rejectBookingTourGuideRequest.fulfilled.match(resultAction)) {
+        notification.success({
+          message: "Success",
+          description: resultAction.payload,
+          placement: "topRight",
+        });
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
   return {
     state,
     handleGetTourGuideById,
@@ -244,5 +363,9 @@ export function useTourGuide() {
     handleUpdateTourGuideAvatar,
     handleUpdateTourguideCover,
     handleGetAllTourGuides,
+    handleAcceptBookingTourRequest,
+    handleRejectBookingTourRequest,
+    handleAcceptBookingTourGuideRequest,
+    handleRejectBookingTourGuideRequest,
   };
 }

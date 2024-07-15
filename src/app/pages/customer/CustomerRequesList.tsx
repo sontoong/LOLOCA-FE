@@ -24,16 +24,14 @@ const CustomerRequestList = () => {
   } = useBookingTourGuide();
   const [currentTable, setCurrentTable] = useState("tour");
 
-  const userId = localStorage.getItem("userId") ?? "";
-
   useEffect(() => {
-    handleGetBookingTourByCustomerId({ customerId: userId });
-    handleGetBookingTourGuideByCustomerId({ customerId: userId });
-  }, [
-    handleGetBookingTourByCustomerId,
-    handleGetBookingTourGuideByCustomerId,
-    userId,
-  ]);
+    const userId = localStorage.getItem("userId");
+
+    if (userId) {
+      handleGetBookingTourByCustomerId({ customerId: userId });
+      handleGetBookingTourGuideByCustomerId({ customerId: userId });
+    }
+  }, [handleGetBookingTourByCustomerId, handleGetBookingTourGuideByCustomerId]);
 
   const handlePaymentNavigation = (record: any) => {
     const requestId =

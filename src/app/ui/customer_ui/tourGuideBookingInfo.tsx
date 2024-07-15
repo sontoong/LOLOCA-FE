@@ -1,12 +1,24 @@
-import { Col, InputNumber, Row } from "antd";
+import { Col, InputNumber, Row, Typography } from "antd";
 import { Input, InputDate, InputSelect } from "../../components/inputs";
 import { Form } from "../../components/form";
 import { useState } from "react";
 import dayjs from "dayjs";
+import { TourGuide } from "../../models/tourGuide";
+import { formatCurrency } from "../../utils/utils";
 
-const TourGuideBookingInfo = ({ form }: { form: any }) => {
+const { Title } = Typography;
+
+const TourGuideBookingInfo = ({
+  form,
+  tourGuide,
+}: {
+  form: any;
+  tourGuide: TourGuide;
+}) => {
   const [totalPrice, setTotalPrice] = useState<number | undefined>(0);
 
+  const numOfAdult = Form.useWatch("numOfAdult", form);
+  const numOfChild = Form.useWatch("numOfChild", form);
   const startDate: dayjs.Dayjs = Form.useWatch("startDate", form);
   const endDate: dayjs.Dayjs = Form.useWatch("endDate", form);
 
@@ -101,10 +113,7 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
           <Form.Item
             name="startDate"
             label="Start"
-            rules={[
-              { required: true },
-              { validator: validateStartDate },
-            ]}
+            rules={[{ required: true }, { validator: validateStartDate }]}
           >
             <InputDate
               placeholder="Enter start date"
@@ -193,8 +202,25 @@ const TourGuideBookingInfo = ({ form }: { form: any }) => {
           options={tourTypes}
         />
       </Form.Item>
+      <Title level={4}>
+        Tổng:{" "}
+        {formatCurrency(
+          calculateTotalPrice(tourGuide.pricePerDay, numOfAdult, numOfChild),
+        )}
+      </Title>
     </Form>
   );
 };
 
 export default TourGuideBookingInfo;
+
+function calculateTotalPrice(
+  pricePerDay: number,
+  adults: number,
+  children: number,
+) {
+  const totalAdultPrice = adults * pricePerDay;
+  const totalChildPrice = children * pricePerDay * 0.7;
+
+  return totalAdultPrice + totalChildPrice;
+}

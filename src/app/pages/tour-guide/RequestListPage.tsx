@@ -9,8 +9,6 @@ import RequestCardTourGuide from "../../ui/guide_ui/request-card-tourguide";
 import RequestCardTour from "../../ui/guide_ui/requestCard";
 import NotFound from "../../components/not-found/not-found";
 
-const userId = localStorage.getItem("userId");
-
 const RequestListPage = () => {
   const { state: stateBookingTour, handleGetBookingTourByTourGuideId } =
     useBookingTour();
@@ -25,6 +23,8 @@ const RequestListPage = () => {
   });
 
   useEffect(() => {
+    const userId = localStorage.getItem("userId");
+
     if (userId) {
       handleGetBookingTourByTourGuideId({ tourGuideId: userId });
       handleGetBookingTourGuideByTourGuideId({ tourGuideId: userId });

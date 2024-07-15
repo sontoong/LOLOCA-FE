@@ -27,12 +27,13 @@ const ProfileEditModal = ({
   const [profileImages, setProfileImages] = useState<UploadFile[]>([]);
   const { state } = useTourGuide();
   const { handleGetUserInfo } = useAuth();
-  const [form] = Form.useForm();
   const {
     handleUpdateTourGuideInfo,
     handleUpdateTourGuideAvatar,
     handleUpdateTourguideCover,
   } = useTourGuide();
+
+  const [form] = Form.useForm();
 
   useEffect(() => {
     form.setFieldsValue({
@@ -162,6 +163,19 @@ const ProfileEditModal = ({
         onCancel={handleCancel}
         closeIcon={null}
         confirmLoading={state.isSending}
+        forceRender
+        modalRender={(dom) => (
+          <Form
+            form={form}
+            initialValues={initialValues}
+            name="DescriptionForm"
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            clearOnDestroy
+          >
+            {dom}
+          </Form>
+        )}
       >
         <Title level={3} style={{ color: "#004AAD", fontWeight: "bolder" }}>
           Profile
@@ -172,87 +186,79 @@ const ProfileEditModal = ({
         </Title>
         <ImageUpload setImages={setBannerImages} images={bannerImages} />
         <div className="w-[100%]">
-          <Form
-            form={form}
-            initialValues={initialValues}
-            name="DescriptionForm"
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
+          <Divider colorSplit="black" />
+          <Title level={3} style={{ color: "#004AAD", fontWeight: "bolder" }}>
+            General Info
+          </Title>
+          <Form.Item
+            name="description"
+            label="Description"
+            rules={[
+              { required: true, message: "Please enter your description" },
+            ]}
           >
-            <Divider colorSplit="black" />
-            <Title level={3} style={{ color: "#004AAD", fontWeight: "bolder" }}>
-              General Info
-            </Title>
-            <Form.Item
-              name="description"
-              label="Description"
-              rules={[
-                { required: true, message: "Please enter your description" },
-              ]}
-            >
-              <Input.TextArea placeholder="Enter your description" />
-            </Form.Item>
-            <Form.Item
-              name="dateOfBirth"
-              label="Date of Birth"
-              rules={[{ required: true }]}
-            >
-              <InputDate placeholder="Enter date of birth" />
-            </Form.Item>
-            <Form.Item
-              name="phoneNumber"
-              label="Phone Number"
-              rules={[
-                { required: true, message: "Please enter your phone number" },
-                { pattern: /^\d+$/, message: "Phone number must be numeric" },
-              ]}
-            >
-              <Input placeholder="Enter your phone number" />
-            </Form.Item>
-            <Form.Item
-              name="gender"
-              label="Gender"
-              rules={[{ required: true, message: "Please select your gender" }]}
-            >
-              <InputSelect
-                placeholder="Select your gender"
-                options={genderOptions}
-              />
-            </Form.Item>
-            <Divider colorSplit="black" />
-            <Title level={3} style={{ color: "#004AAD", fontWeight: "bolder" }}>
-              Social Links
-            </Title>
-            <Form.Item name="zaloLink" label="Zalo" rules={[]}>
-              <Input placeholder="Enter your zalo" />
-            </Form.Item>
-            <Form.Item name="facebookLink" label="Facebook" rules={[]}>
-              <Input placeholder="Enter your facebook" />
-            </Form.Item>
-            <Form.Item name="instagramLink" label="Instagram" rules={[]}>
-              <Input placeholder="Enter your instagram" />
-            </Form.Item>
-            <Divider colorSplit="black" />
-            <Title level={3} style={{ color: "#004AAD", fontWeight: "bolder" }}>
-              Price per day
-            </Title>
-            {/* <div className="px-[2rem] py-[1.25rem] mb-[1rem] rounded-lg text-center">
+            <Input.TextArea placeholder="Enter your description" />
+          </Form.Item>
+          <Form.Item
+            name="dateOfBirth"
+            label="Date of Birth"
+            rules={[{ required: true }]}
+          >
+            <InputDate placeholder="Enter date of birth" />
+          </Form.Item>
+          <Form.Item
+            name="phoneNumber"
+            label="Phone Number"
+            rules={[
+              { required: true, message: "Please enter your phone number" },
+              { pattern: /^\d+$/, message: "Phone number must be numeric" },
+            ]}
+          >
+            <Input placeholder="Enter your phone number" />
+          </Form.Item>
+          <Form.Item
+            name="gender"
+            label="Gender"
+            rules={[{ required: true, message: "Please select your gender" }]}
+          >
+            <InputSelect
+              placeholder="Select your gender"
+              options={genderOptions}
+            />
+          </Form.Item>
+          <Divider colorSplit="black" />
+          <Title level={3} style={{ color: "#004AAD", fontWeight: "bolder" }}>
+            Social Links
+          </Title>
+          <Form.Item name="zaloLink" label="Zalo" rules={[]}>
+            <Input placeholder="Enter your zalo" />
+          </Form.Item>
+          <Form.Item name="facebookLink" label="Facebook" rules={[]}>
+            <Input placeholder="Enter your facebook" />
+          </Form.Item>
+          <Form.Item name="instagramLink" label="Instagram" rules={[]}>
+            <Input placeholder="Enter your instagram" />
+          </Form.Item>
+          <Divider colorSplit="black" />
+          <Title level={3} style={{ color: "#004AAD", fontWeight: "bolder" }}>
+            Price per day
+          </Title>
+          {/* <div className="px-[2rem] py-[1.25rem] mb-[1rem] rounded-lg text-center">
               <Paragraph>- Minimum fund must be above 50 <span className="font-bold text-[1.2rem]">(50.000VND)</span>.</Paragraph>
               <Paragraph>- Check your <span className="font-bold text-[1.2rem]">fund</span> carefully before <span className="font-bold text-[1.2rem]">Pressing OK</span>.</Paragraph>
               <Paragraph>- Check your <span className="font-bold text-[1.2rem]">Transaction Code</span> carefully.</Paragraph>
             </div> */}
-            <Form.Item
-              name="pricePerDay"
-              rules={[{ type: "number", required: true, min: 1000 }]}
-              className="w-full"
-            >
-              <InputNumber
-                placeholder="Price per day"
-                step={1000}
-                suffix={"VND"}
-              />
-            </Form.Item>
-          </Form>
+          <Form.Item
+            name="pricePerDay"
+            rules={[{ type: "number", required: true, min: 1000 }]}
+            className="w-full"
+          >
+            <InputNumber
+              placeholder="Price per day"
+              step={1000}
+              suffix={"VND"}
+            />
+          </Form.Item>
         </div>
       </Modal>
     </div>

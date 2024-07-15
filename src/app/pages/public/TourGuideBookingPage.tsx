@@ -47,7 +47,12 @@ const TourGuideBookingPage = () => {
     },
     {
       title: "Booking Information",
-      content: <TourGuideBookingInfo form={form} />,
+      content: (
+        <TourGuideBookingInfo
+          form={form}
+          tourGuide={stateTourGuide.currentTourguide}
+        />
+      ),
     },
     {
       title: "Tour Guide Information",
@@ -70,12 +75,15 @@ const TourGuideBookingPage = () => {
   };
 
   const handleSubmit = (values: typeof initialValues) => {
-    console.log(values);
     console.log("Form Values: ", values);
+    const userId = localStorage.getItem("userId");
+
+    if (!userId) return;
+
     handleCreateBookingTourGuide(
       {
         ...values,
-        customerId: localStorage.getItem("userId") ?? "",
+        customerId: userId,
         tourGuideId: tourGuideId ?? "",
       },
       navigate,
