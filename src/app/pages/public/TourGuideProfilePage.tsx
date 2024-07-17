@@ -1,5 +1,4 @@
 import { Banner } from "../../components/banner";
-import VietNamBanner from "../../../assets/banner.png";
 import { Card, Col, Row, Typography } from "antd";
 import { Divider } from "../../components/divider";
 import { PrimaryButton } from "../../components/buttons";
@@ -164,7 +163,11 @@ const TourGuideProfile = () => {
     if (stateTourGuide.currentTourguide) {
       return (
         <>
-          <Banner image={VietNamBanner} height="20rem" boxShadow={false} />
+          <Banner
+            image={stateTourGuide.currentTourguide.cover}
+            height="20rem"
+            boxShadow={false}
+          />
           <div className="flex justify-evenly">
             <Paragraph className="mt-[2rem] w-[40%] text-lg">
               {stateTourGuide.currentTourguide.description}
@@ -224,6 +227,7 @@ const TourGuideProfile = () => {
                 <Paragraph>Fullname:</Paragraph>
                 <Paragraph>Gender:</Paragraph>
                 <Paragraph>Languages:</Paragraph>
+                <Paragraph>City:</Paragraph>
               </div>
               <div>
                 <Paragraph>{tourGuideId}</Paragraph>
@@ -232,6 +236,9 @@ const TourGuideProfile = () => {
                   {genderGenerator(stateTourGuide.currentTourguide.gender)}
                 </Paragraph>
                 <Paragraph>Vietnamese, English</Paragraph>
+                <Paragraph>
+                  {stateTourGuide.currentTourguide.cityName}
+                </Paragraph>
               </div>
             </div>
           )}

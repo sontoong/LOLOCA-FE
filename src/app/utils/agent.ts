@@ -132,6 +132,8 @@ const TourGuide = {
     baseRequests.get(`${_tourGuide}/get-random-tourguide`, params),
   getAllTourGuides: (params: any) =>
     requests.get(`${_tourGuide}/get-all-tourguides`, params),
+  getAllTourGuidesInCity: (cityId: string) =>
+    requests.get(`${_tourGuide}/${cityId}`),
   getRandomTourGuideInCity: (params: any) =>
     baseRequests.get(`${_tourGuide}/get-random-tourguide-in-city`, params),
   acceptBookingTourGuideRequest: (bookingRequestId: string) =>

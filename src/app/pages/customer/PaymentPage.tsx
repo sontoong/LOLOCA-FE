@@ -37,6 +37,27 @@ const PaymentPage = () => {
     }
   }, [navigate, stateOrder.requestTour.id]);
 
+  //left side
+  useEffect(() => {
+    if (stateBookingTour.currentBookingTour.tourId) {
+      handleGetTourById({
+        tourId: stateBookingTour.currentBookingTour.tourId.toString(),
+      });
+    }
+    if (stateBookingTourGuide.currentBookingTourGuide.tourGuideId) {
+      handleGetTourGuideById({
+        tourGuideId:
+          stateBookingTourGuide.currentBookingTourGuide.tourGuideId.toString(),
+      });
+    }
+  }, [
+    handleGetTourById,
+    handleGetTourGuideById,
+    stateBookingTour.currentBookingTour.tourId,
+    stateBookingTourGuide.currentBookingTourGuide.tourGuideId,
+  ]);
+
+  //right side
   useEffect(() => {
     switch (stateOrder.requestTour.type) {
       case "tour":
@@ -55,25 +76,6 @@ const PaymentPage = () => {
     handleGetBookingTourGuideById,
     stateOrder.requestTour.id,
     stateOrder.requestTour.type,
-  ]);
-
-  useEffect(() => {
-    if (stateBookingTour.currentBookingTour.tourId) {
-      handleGetTourById({
-        tourId: stateBookingTour.currentBookingTour.tourId.toString(),
-      });
-    }
-    if (stateBookingTourGuide.currentBookingTourGuide.tourGuideId) {
-      handleGetTourGuideById({
-        tourGuideId:
-          stateBookingTourGuide.currentBookingTourGuide.tourGuideId.toString(),
-      });
-    }
-  }, [
-    handleGetTourById,
-    handleGetTourGuideById,
-    stateBookingTour.currentBookingTour.tourId,
-    stateBookingTourGuide.currentBookingTourGuide.tourGuideId,
   ]);
 
   const handleNext = () => {
@@ -186,7 +188,7 @@ const PaymentPage = () => {
           return <Skeleton />;
         }
         return (
-          <div className="ml-[2rem] w-[20%]">
+          <>
             <Title level={5} style={{ fontWeight: "bolder" }}>
               {stateTourGuide.currentTourguide.firstName}
             </Title>
@@ -227,7 +229,7 @@ const PaymentPage = () => {
                   <Col className="font-light">Total:</Col>
                   <Col className="font-bold">
                     {formatCurrency(
-                      stateBookingTour.currentBookingTour.totalPrice,
+                      stateBookingTourGuide.currentBookingTourGuide.totalPrice,
                     )}
                   </Col>
                 </Row>
@@ -248,7 +250,7 @@ const PaymentPage = () => {
                 )}
               </div>
             </div>
-          </div>
+          </>
         );
 
       default:
@@ -264,11 +266,15 @@ const PaymentPage = () => {
           {currentStep === 1 && (
             <div>
               {stateOrder.requestTour.type === "tour" && (
-                <TourPaymentDetail tourDetails={stateTour.currentTour} />
+                <TourPaymentDetail
+                  tourDetails={stateTour.currentTour}
+                  loading={stateTour.isFetching}
+                />
               )}
               {stateOrder.requestTour.type === "tourGuide" && (
                 <TourGuidePaymentDetail
                   tourGuideDetails={stateTourGuide.currentTourguide}
+                  loading={stateTourGuide.isFetching}
                 />
               )}
               <div>

@@ -3,6 +3,10 @@ import VietNamBanner from "../../../assets/banner.png";
 import { PrimaryButton } from "../../components/buttons";
 import OutlineButton from "../../components/buttons/outline-button";
 import { BookingTourRequest } from "../../models/bookingTour";
+import { useTourGuide } from "../../hooks/useTourGuide";
+import { useBookingTour } from "../../hooks/useBookingTour";
+
+const { Title, Paragraph } = Typography;
 
 const RequestCardTour = ({
   request,
@@ -11,16 +15,15 @@ const RequestCardTour = ({
   request: BookingTourRequest;
   customerId: string;
 }) => {
-  const { Title, Paragraph } = Typography;
-  const { confirm } = Modal;
+  const [modal, contextHolder] = Modal.useModal();
+  const { handleGetBookingTourByTourGuideId } = useBookingTour();
+  const { handleAcceptBookingTourRequest, handleRejectBookingTourRequest } =
+    useTourGuide();
 
-  const showConfirm = (action: string) => {
-    confirm({
+  const showConfirm = (action: Action) => {
+    modal.confirm({
       title: `Are you sure you want to ${action}?`,
-      onOk() {
-        console.log(`${action} confirmed`);
-        // Handle action logic here
-      },
+      onOk: action.action,
       onCancel() {
         console.log(`${action} canceled`);
       },
@@ -31,16 +34,52 @@ const RequestCardTour = ({
     if (request.status === 0) {
       return (
         <>
-          <PrimaryButton text="Accept" onClick={() => showConfirm("accept")} />
-          <OutlineButton text="Reject" onClick={() => showConfirm("reject")} />
+          <PrimaryButton
+            text="Accept"
+            onClick={() =>
+              showConfirm({
+                name: "accept",
+                action: async () => {
+                  await handleAcceptBookingTourRequest({
+                    bookingRequestId: request.bookingTourRequestId,
+                  });
+                  await handleGetBookingTourByTourGuideId({
+                    tourGuideId: localStorage.getItem("userId") ?? "",
+                  });
+                },
+              })
+            }
+          />
+          <OutlineButton
+            text="Reject"
+            onClick={() =>
+              showConfirm({
+                name: "reject",
+                action: async () => {
+                  await handleRejectBookingTourRequest({
+                    bookingRequestId: request.bookingTourRequestId,
+                  });
+                  await handleGetBookingTourByTourGuideId({
+                    tourGuideId: localStorage.getItem("userId") ?? "",
+                  });
+                },
+              })
+            }
+          />
         </>
       );
     }
     if (request.status === 1) {
       return (
         <>
-          <PrimaryButton text="Finish" onClick={() => showConfirm("finish")} />
-          <OutlineButton text="Cancel" onClick={() => showConfirm("cancel")} />
+          <PrimaryButton
+            text="Finish"
+            onClick={() => showConfirm({ name: "finish", action: () => {} })}
+          />
+          <OutlineButton
+            text="Cancel"
+            onClick={() => showConfirm({ name: "cancel", action: () => {} })}
+          />
         </>
       );
     }
@@ -110,8 +149,11 @@ const RequestCardTour = ({
           <Space direction="vertical">{renderButtons()}</Space>
         </Space>
       </Card>
+      {contextHolder}
     </div>
   );
 };
 
 export default RequestCardTour;
+
+type Action = { name: string; action: () => void };

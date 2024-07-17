@@ -26,6 +26,8 @@ import {
   AcceptBookingTourGuideRequestParams,
   rejectBookingTourGuideRequest,
   RejectBookingTourGuideRequestParams,
+  GetAllTourGuidesInCityParams,
+  getAllTourGuidesInCity,
 } from "../redux/slice/tourguideSlice";
 import { useCallback } from "react";
 
@@ -110,6 +112,32 @@ export function useTourGuide() {
     async (value: GetAllTourGuideParams) => {
       const resultAction = await dispatch(getAllTourGuides(value));
       if (getAllTourGuides.fulfilled.match(resultAction)) {
+        dispatch(setCurrentTourGuideList(resultAction.payload));
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
+  const handleGetAllTourGuidesInCity = useCallback(
+    async (value: GetAllTourGuidesInCityParams) => {
+      const resultAction = await dispatch(
+        getAllTourGuidesInCity({ cityId: value.cityId }),
+      );
+      if (getAllTourGuidesInCity.fulfilled.match(resultAction)) {
         dispatch(setCurrentTourGuideList(resultAction.payload));
       } else {
         if (resultAction.payload) {
@@ -367,5 +395,6 @@ export function useTourGuide() {
     handleRejectBookingTourRequest,
     handleAcceptBookingTourGuideRequest,
     handleRejectBookingTourGuideRequest,
+    handleGetAllTourGuidesInCity,
   };
 }

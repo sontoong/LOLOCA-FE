@@ -6,7 +6,7 @@ import Radio from "../../components/radio/Radio";
 import { useBookingTour } from "../../hooks/useBookingTour";
 import { useBookingTourGuide } from "../../hooks/useBookingTourGuide";
 import RequestCardTourGuide from "../../ui/guide_ui/request-card-tourguide";
-import RequestCardTour from "../../ui/guide_ui/requestCard";
+import RequestCardTour from "../../ui/guide_ui/request-card-tour";
 import NotFound from "../../components/not-found/not-found";
 
 const RequestListPage = () => {

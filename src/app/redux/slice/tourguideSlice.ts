@@ -26,7 +26,14 @@ const tourGuideSlice = createSlice({
       state.currentTourguide = action.payload;
     },
     setCurrentTourGuideList: (state, action: PayloadAction<TourGuideList>) => {
-      state.currentTourGuideList = action.payload;
+      if (!action.payload.totalPage) {
+        state.currentTourGuideList = {
+          tourGuides: action.payload as unknown as TourGuideList["tourGuides"],
+          totalPage: 1,
+        };
+      } else {
+        state.currentTourGuideList = action.payload;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -135,6 +142,28 @@ export const getAllTourGuides = createAsyncThunk<any, GetAllTourGuideParams>(
         page,
         pageSize,
       });
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+      throw error;
+    }
+  },
+);
+
+export const getAllTourGuidesInCity = createAsyncThunk<
+  any,
+  GetAllTourGuidesInCityParams
+>(
+  "tourGuide/fetch/getAllTourGuidesInCity",
+  async (data, { rejectWithValue }) => {
+    const { cityId } = data;
+    try {
+      const response = await agent.TourGuide.getAllTourGuidesInCity(cityId);
       return response;
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -359,6 +388,10 @@ export type GetRandomTourGuideInCityParams = {
   page: number;
   pageSize: number;
   CityId: number;
+};
+
+export type GetAllTourGuidesInCityParams = {
+  cityId: string;
 };
 
 export type UpdateTourGuideInfoParams = {

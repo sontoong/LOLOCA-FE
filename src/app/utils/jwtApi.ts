@@ -26,7 +26,7 @@ apiJWT.interceptors.request.use(async (config) => {
 
     if (decodeToken.exp < date.getTime() / 1000) {
       try {
-        const { data } = await agent.Auth.refreshToken({
+        const data = await agent.Auth.refreshToken({
           refreshToken: refreshToken,
         });
         config.headers["Authorization"] = `Bearer ${data.accessToken}`;
@@ -34,6 +34,7 @@ apiJWT.interceptors.request.use(async (config) => {
         localStorage.setItem("refresh_token", data.refreshToken);
       } catch (error) {
         if (error instanceof AxiosError) {
+          console.log(error);
           if (error.response?.status === 400) {
             localStorage.clear();
             window.location.href = "/login";

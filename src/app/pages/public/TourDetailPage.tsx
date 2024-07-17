@@ -93,9 +93,7 @@ const TourDetailPage = () => {
       <Row align="middle" className="mb-[2rem]">
         <Col>
           <Title level={3}>Tour Category</Title>
-          <Text className="text-[1.2rem] font-extrabold">
-            {tour.category}
-          </Text>
+          <Text className="text-[1.2rem] font-extrabold">{tour.category}</Text>
         </Col>
         <Col offset={1}>
           <Title level={3}>Tour Type</Title>
@@ -300,32 +298,36 @@ const TourDetailPage = () => {
               {stateFeedback.currentFeedbackList.averageStar} <StarFilled /> (
               {`${stateFeedback.currentFeedbackList.totalFeedbacks}  reviews`})
             </Text>
-            {stateFeedback.currentFeedbackList.feedbacks?.map(
-              (rating, index) => (
-                <div key={index} className="my-[3rem]">
-                  <Row>
-                    <Col>
-                      <Avatar size={48} />
-                    </Col>
-                    <Col className="ml-[0.5rem]">
-                      <Paragraph
-                        style={{ fontWeight: "bold", marginBottom: "0" }}
-                      >
-                        {rating.customerName}
-                      </Paragraph>
-                      <Paragraph>
-                        {formatDateToLocal(rating.timeFeedback)}
-                      </Paragraph>
-                    </Col>
-                    <Col offset={1}>
-                      <Paragraph>
-                        <StarFilled /> {rating.numOfStars}
-                      </Paragraph>
-                    </Col>
-                  </Row>
-                  <Paragraph>{rating.content}</Paragraph>
-                </div>
-              ),
+            {stateFeedback.currentFeedbackList.feedbacks.length === 0 ? (
+              <Title level={3}>No reviews yet</Title>
+            ) : (
+              stateFeedback.currentFeedbackList.feedbacks.map(
+                (rating, index) => (
+                  <div key={index} className="my-[3rem]">
+                    <Row>
+                      <Col>
+                        <Avatar size={48} />
+                      </Col>
+                      <Col className="ml-[0.5rem]">
+                        <Paragraph
+                          style={{ fontWeight: "bold", marginBottom: "0" }}
+                        >
+                          {rating.customerName}
+                        </Paragraph>
+                        <Paragraph>
+                          {formatDateToLocal(rating.timeFeedback)}
+                        </Paragraph>
+                      </Col>
+                      <Col offset={1}>
+                        <Paragraph>
+                          <StarFilled /> {rating.numOfStars}
+                        </Paragraph>
+                      </Col>
+                    </Row>
+                    <Paragraph>{rating.content}</Paragraph>
+                  </div>
+                ),
+              )
             )}
           </div>
         </div>

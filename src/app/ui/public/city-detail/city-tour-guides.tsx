@@ -14,19 +14,16 @@ export default function CityTourGuides() {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageSize, setCurrentPageSize] = useState(8);
-  const { state, handleGetRandomTourGuidesInCity } = useTourGuide();
-
-  const renderToursGuides = state.currentTourGuideList;
+  const { state: stateTourGuide, handleGetAllTourGuidesInCity } =
+    useTourGuide();
 
   useEffect(() => {
     if (cityId) {
-      handleGetRandomTourGuidesInCity({
-        page: currentPage,
-        pageSize: currentPageSize,
-        CityId: parseInt(cityId),
+      handleGetAllTourGuidesInCity({
+        cityId: cityId,
       });
     }
-  }, [cityId, currentPage, currentPageSize, handleGetRandomTourGuidesInCity]);
+  }, [cityId, currentPage, currentPageSize, handleGetAllTourGuidesInCity]);
 
   const onChangePage: PaginationProps["onChange"] = (page) => {
     setCurrentPage(page);
@@ -45,7 +42,7 @@ export default function CityTourGuides() {
   };
 
   const renderContent = () => {
-    if (state.isFetching) {
+    if (stateTourGuide.isFetching) {
       return (
         <CardListGrid
           items={15}
@@ -53,12 +50,11 @@ export default function CityTourGuides() {
         />
       );
     }
-
-    if (renderToursGuides) {
+    if (stateTourGuide.currentTourGuideList.tourGuides) {
       return (
         <>
           <CardListGrid
-            items={renderToursGuides.tourGuides}
+            items={stateTourGuide.currentTourGuideList.tourGuides}
             render={(guide) => {
               if (guide) {
                 return (
@@ -90,11 +86,11 @@ export default function CityTourGuides() {
               }
             }}
           />
-          <div className="mb-[2%] mr-[5%] flex justify-end">
+          <div className="mb-[2%] mr-[5%] mt-5 flex justify-end">
             <Pagination
               current={currentPage}
               onChange={onChangePage}
-              total={renderToursGuides?.totalPage}
+              total={stateTourGuide.currentTourGuideList.totalPage}
               showSizeChanger
               onShowSizeChange={onShowSizeChange}
             />
