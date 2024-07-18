@@ -6,19 +6,28 @@ import { useState } from "react";
 import AddFundModal from "../../ui/customer_ui/addFundModal";
 import { PrimaryButton } from "../../components/buttons";
 import FundDetailModal from "../../ui/customer_ui/fundDetailModal";
-// import { useNavigate } from "react-router-dom";
+import { usePayment } from "../../hooks/usePayment";
+import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const { Step } = Steps;
 
 const AddFundPage = () => {
+  const { state: stateUser } = useAuth();
+  const { state: statePayment, handleCreateDeposit } = usePayment();
   const [currentStep, setCurrentStep] = useState(0);
   const [form] = Form.useForm();
   const [mainForm] = Form.useForm();
-  // const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const next = () => {
     window.scrollTo(0, 0);
     setCurrentStep(currentStep + 1);
+  };
+
+  const back = () => {
+    window.scrollTo(0, 0);
+    setCurrentStep(1);
   };
 
   const initialValues = {
@@ -26,26 +35,34 @@ const AddFundPage = () => {
     transactionalCode: "",
   };
 
-  const fundDetail={
+  const fundDetail = {
     name: "Nguyen Van A",
     phone: "12345678901",
     walletNumber: "12345678901",
     description: "LO12345678901",
-  }
+  };
 
   const steps = [
     {
       title: "Transfer Fund",
-      content: <FundDetailModal values={fundDetail}/>,
+      content: <FundDetailModal values={fundDetail} />,
     },
     {
       title: "Add Fund",
       content: <AddFundModal form={form} initialValues={initialValues} />,
     },
-
   ];
 
-  const handleSubmit = () => {};
+  const handleSubmit = (values: any) => {
+    handleCreateDeposit(
+      {
+        accountId: stateUser.currentUser.AccountId,
+        amount: values.amount / 1000,
+        transactionCode: values.transactionalCode,
+      },
+      navigate,
+    );
+  };
 
   return (
     <div
@@ -66,8 +83,7 @@ const AddFundPage = () => {
             const { mainForm } = forms;
             if (name === "AddFundForm") {
               mainForm.setFieldsValue({ ...values });
-              mainForm.submit()
-              next();
+              mainForm.submit();
             }
           }}
         >
@@ -78,18 +94,22 @@ const AddFundPage = () => {
             form={mainForm}
             onFinish={handleSubmit}
           >
-            <Form.Item name="amount" hidden/>
-            <Form.Item name="transactionalCode" hidden/>
-            <div className="mt-4 flex justify-end">
-            {currentStep < steps.length - 1 && currentStep != 1 && (
-              <PrimaryButton text="Next" onClick={() => next()} />
-            )}
-            {currentStep === steps.length - 1 && (
-              <PrimaryButton
-                onClick={() => form.submit()}
-                text="Ok"
-              />
-            )}
+            <Form.Item name="amount" hidden />
+            <Form.Item name="transactionalCode" hidden />
+            <div className="mt-4 flex justify-end gap-2">
+              {currentStep < steps.length - 1 && currentStep != 1 && (
+                <PrimaryButton text="Next" onClick={() => next()} />
+              )}
+              {currentStep === steps.length - 1 && (
+                <>
+                  <PrimaryButton text="Next" onClick={() => back()} />
+                  <PrimaryButton
+                    onClick={() => form.submit()}
+                    text="Ok"
+                    loading={statePayment.isSending}
+                  />
+                </>
+              )}
             </div>
           </Form>
         </Form.Provider>

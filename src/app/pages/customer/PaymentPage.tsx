@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
-import { Banner } from "../../components/banner";
-import LolocaBanner from "../../../assets/loloca-banner.png";
 import { Col, CollapseProps, Row, Space, Typography } from "antd";
-import { Divider } from "../../components/divider";
-import { Input } from "../../components/inputs";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import LolocaBanner from "../../../assets/loloca-banner.png";
+import { Banner } from "../../components/banner";
 import { PrimaryButton } from "../../components/buttons";
 import { Collapse } from "../../components/collapse";
-import TourPaymentDetail from "../../ui/customer_ui/tourPaymentDetail";
-import TourGuidePaymentDetail from "../../ui/customer_ui/tourGuidePaymentDetail";
-import { useOrder } from "../../hooks/useOrder";
-import { useBookingTourGuide } from "../../hooks/useBookingTourGuide";
+import { Divider } from "../../components/divider";
+import { Input } from "../../components/inputs";
+import { Skeleton } from "../../components/skeletons";
+import { useAuth } from "../../hooks/useAuth";
 import { useBookingTour } from "../../hooks/useBookingTour";
+import { useBookingTourGuide } from "../../hooks/useBookingTourGuide";
+import { useOrder } from "../../hooks/useOrder";
 import { useTour } from "../../hooks/useTour";
 import { useTourGuide } from "../../hooks/useTourGuide";
-import { useAuth } from "../../hooks/useAuth";
-import { Skeleton } from "../../components/skeletons";
+import TourGuidePaymentDetail from "../../ui/customer_ui/tourGuidePaymentDetail";
+import TourPaymentDetail from "../../ui/customer_ui/tourPaymentDetail";
 import { formatCurrency, formatDateToLocal } from "../../utils/utils";
-import { useNavigate } from "react-router-dom";
 
 const PaymentPage = () => {
   const navigate = useNavigate();
@@ -27,6 +27,7 @@ const PaymentPage = () => {
     useBookingTour();
   const { state: stateBookingTourGuide, handleGetBookingTourGuideById } =
     useBookingTourGuide();
+  const { handleCreateOrderTour, handleCreateOrderTourGuide } = useOrder();
   const { state: stateAuth } = useAuth();
   const { Title, Paragraph } = Typography;
   const [currentStep, setCurrentStep] = useState(1);
@@ -37,7 +38,7 @@ const PaymentPage = () => {
     }
   }, [navigate, stateOrder.requestTour.id]);
 
-  //left side
+  //fetch info left side
   useEffect(() => {
     if (stateBookingTour.currentBookingTour.tourId) {
       handleGetTourById({
@@ -57,7 +58,7 @@ const PaymentPage = () => {
     stateBookingTourGuide.currentBookingTourGuide.tourGuideId,
   ]);
 
-  //right side
+  //fetch info right side
   useEffect(() => {
     switch (stateOrder.requestTour.type) {
       case "tour":
@@ -87,7 +88,32 @@ const PaymentPage = () => {
   };
 
   const handleBooking = () => {
-    // Navigate to the booking confirmation page or handle booking logic here
+    switch (stateOrder.requestTour.type) {
+      case "tour":
+        handleCreateOrderTour(
+          {
+            bookingTourRequestsId: stateOrder.requestTour.id,
+            paymentProvider: "",
+            transactionCode: "",
+          },
+          navigate,
+        );
+        break;
+
+      case "tourGuide":
+        handleCreateOrderTourGuide(
+          {
+            bookingTourGuideRequestId: stateOrder.requestTour.id,
+            paymentProvider: "",
+            transactionCode: "",
+          },
+          navigate,
+        );
+        break;
+
+      default:
+        break;
+    }
   };
 
   const items: CollapseProps["items"] = [

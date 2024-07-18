@@ -32,7 +32,7 @@ const bookingTourSlice = createSlice({
       state,
       action: PayloadAction<TBookingTour["currentBookingTourList"]>,
     ) => {
-      state.currentBookingTourList = action.payload.reverse();
+      state.currentBookingTourList = action.payload;
     },
   },
   extraReducers: (builder) => {

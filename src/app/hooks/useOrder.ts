@@ -25,7 +25,7 @@ export function useOrder() {
         if (resultAction.payload) {
           notification.error({
             message: "Error",
-            description: `${resultAction.payload}`,
+            description: `Order tour failed. Please check your fund.`,
             placement: "topRight",
           });
         } else {
@@ -44,7 +44,7 @@ export function useOrder() {
     async (value: CreateOrderTourGuideParams, navigate: NavigateFunction) => {
       const resultAction = await dispatch(createOrderTourGuide(value));
       if (createOrderTourGuide.fulfilled.match(resultAction)) {
-        navigate(-1);
+        navigate("/customer/booking-successful");
       } else {
         if (resultAction.payload) {
           notification.error({

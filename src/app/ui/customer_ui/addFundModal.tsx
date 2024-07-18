@@ -1,6 +1,6 @@
-import { Typography } from "antd";
+import { InputNumber, Typography } from "antd";
 import { Form } from "../../components/form";
-import { Input, InputNumber } from "../../components/inputs";
+import { Input } from "../../components/inputs";
 
 const AddFundModal = ({
   form,
@@ -11,61 +11,70 @@ const AddFundModal = ({
 }) => {
   const { Paragraph } = Typography;
 
-
   const onFinish = () => {};
 
   const onFinishFailed = () => {};
 
-
   return (
     <>
-    <div className="px-[2rem] py-[1.25rem] mb-[1rem] rounded-lg text-center">
-        <Paragraph>- Minimum fund must be above 50 <span className="font-bold text-[1.2rem]">(50.000VND)</span>.</Paragraph>
-        <Paragraph>- Check your <span className="font-bold text-[1.2rem]">fund</span> carefully before <span className="font-bold text-[1.2rem]">Pressing OK</span>.</Paragraph>
-        <Paragraph>- Check your <span className="font-bold text-[1.2rem]">Transaction Code</span> carefully.</Paragraph>
-    </div>
-    <div className="mx-auto w-[50%]">
-      <Form
-        form={form}
-        initialValues={initialValues}
-        name="AddFundForm"
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-      >
-        <Form.Item
-          name="amount"
-          label="Amount"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
+      <div className="mb-[1rem] rounded-lg px-[2rem] py-[1.25rem] text-center">
+        <Paragraph>
+          - Minimum fund must be above 50{" "}
+          <span className="text-[1.2rem] font-bold">(50.000VND)</span>.
+        </Paragraph>
+        <Paragraph>
+          - Check your <span className="text-[1.2rem] font-bold">fund</span>{" "}
+          carefully before{" "}
+          <span className="text-[1.2rem] font-bold">Pressing OK</span>.
+        </Paragraph>
+        <Paragraph>
+          - Check your{" "}
+          <span className="text-[1.2rem] font-bold">Transaction Code</span>{" "}
+          carefully.
+        </Paragraph>
+      </div>
+      <div className="mx-auto w-[50%]">
+        <Form
+          form={form}
+          initialValues={initialValues}
+          name="AddFundForm"
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
         >
-          <InputNumber
-            placeholder="Type your fund here"
-            min={50000}
-            defaultValue={initialValues.amount}
-            className="w-full"
-            unit="VND"
-          />
-        </Form.Item>
-        <Form.Item
-          name="transactionalCode"
-          label="Transactional Code"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Input
-            placeholder="Type your transactional code"
-            defaultValue={initialValues.transactionalCode}
-            className="w-full"
-          />
-        </Form.Item>
-      </Form>
-    </div>
+          <Form.Item
+            name="amount"
+            label="Amount"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <InputNumber
+              placeholder="Type your fund here"
+              min={50000}
+              defaultValue={initialValues.amount}
+              className="w-full"
+              suffix="VND"
+            />
+          </Form.Item>
+          <Form.Item
+            name="transactionalCode"
+            label="Transactional Code"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input
+              placeholder="Type your transactional code"
+              defaultValue={initialValues.transactionalCode}
+              className="w-full"
+            />
+          </Form.Item>
+        </Form>
+      </div>
     </>
   );
 };

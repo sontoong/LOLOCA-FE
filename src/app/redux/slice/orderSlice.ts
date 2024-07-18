@@ -129,13 +129,13 @@ export const { setCurrentOrderList, setRequestTour } = orderSlice.actions;
 export default orderSlice.reducer;
 
 export type CreateOrderTourParams = {
-  bookingTourRequestsId: number;
+  bookingTourRequestsId: string;
   paymentProvider: string;
   transactionCode: string;
 };
 
 export type CreateOrderTourGuideParams = {
-  bookingTourGuideRequestId: 0;
+  bookingTourGuideRequestId: string;
   paymentProvider: string;
   transactionCode: string;
 };

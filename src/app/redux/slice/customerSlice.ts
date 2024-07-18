@@ -134,6 +134,54 @@ export const updateCustomerAvatar = createAsyncThunk<
   }
 });
 
+export const changeStatusBookingTour = createAsyncThunk<
+  any,
+  ChangeStatusBookingTourParams
+>(
+  "customer/send/changeStatusBookingTour",
+  async (data, { rejectWithValue }) => {
+    const { bookingTourRequestId } = data;
+    try {
+      const response = await agent.Customer.changeStatusBookingTour(
+        bookingTourRequestId,
+        {},
+      );
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+    }
+  },
+);
+
+export const changeStatusBookingTourGuide = createAsyncThunk<
+  any,
+  ChangeStatusBookingTourGuideParams
+>(
+  "customer/send/changeStatusBookingTourGuide",
+  async (data, { rejectWithValue }) => {
+    const { bookingTourGuideRequestId } = data;
+    try {
+      const response = await agent.Customer.changeStatusBookingTourGuide(
+        bookingTourGuideRequestId,
+        {},
+      );
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+    }
+  },
+);
+
 export const { setCurrentCustomer } = customerSlice.actions;
 
 export default customerSlice.reducer;
@@ -155,4 +203,12 @@ export type UpdateCustomerInformationParams = {
 export type UpdateCustomerAvatarParams = {
   files: File[];
   CustomerId: number;
+};
+
+export type ChangeStatusBookingTourParams = {
+  bookingTourRequestId: string;
+};
+
+export type ChangeStatusBookingTourGuideParams = {
+  bookingTourGuideRequestId: string;
 };

@@ -171,14 +171,16 @@ const CustomerRequestList = () => {
       {currentTable === "tour" ? (
         <Table
           columns={bookingTourColumns}
-          dataSource={stateBookingTour.currentBookingTourList}
+          dataSource={[...stateBookingTour.currentBookingTourList].reverse()}
           rowKey={(record) => record.bookingTourRequestId}
           loading={stateBookingTour.isFetching}
         />
       ) : (
         <Table
           columns={bookingTourGuideColumns}
-          dataSource={stateBookingTourGuide.currentBookingTourGuideList}
+          dataSource={[
+            ...stateBookingTourGuide.currentBookingTourGuideList,
+          ].reverse()}
           rowKey={(record) => record.bookingTourGuideRequestId}
           loading={stateBookingTourGuide.isFetching}
         />

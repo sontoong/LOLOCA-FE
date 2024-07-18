@@ -3,55 +3,66 @@ import { PrimaryButton } from "../../components/buttons";
 import OutlineButton from "../../components/buttons/outline-button";
 import Radio from "../../components/radio/Radio";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PendingPaymentTable from "../../ui/customer_ui/PendingPaymentTable";
 import HistoryPaymentTable from "../../ui/customer_ui/HistoryPaymentTable";
+import { useAuth } from "../../hooks/useAuth";
+import { Customer } from "../../models/customer";
+import { formatCurrency } from "../../utils/utils";
+import { Typography } from "antd";
+import { usePayment } from "../../hooks/usePayment";
+
+const { Title } = Typography;
 
 export default function PaymentHistory() {
   const navigate = useNavigate();
-  const [type, setType] = useState<RenderData>();
+  const { state: stateAuth } = useAuth();
+  const { state: statePayment, handleGetDepositByCustomerId } = usePayment();
+  const [type, setType] = useState<RenderData>({ type: "pending" });
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      handleGetDepositByCustomerId({ customerId: userId, status: 0 });
+    }
+  }, [handleGetDepositByCustomerId]);
+
+  const currentUser = stateAuth.currentUser as Customer;
 
   const onAddFund = () => {
     navigate("/customer/add-fund");
   };
 
-  const data = [
-    {
-      key: '1',
-      amount: '$100.00',
-      transactionalCode: 'TXN001',
-      requestDate: '2024-07-14',
-      status: 0
-    },
-    {
-      key: '2',
-      amount: '$200.00',
-      transactionalCode: 'TXN002',
-      requestDate: '2024-07-15',
-      status: 1
-    },
-    {
-      key: '3',
-      amount: '$300.00',
-      transactionalCode: 'TXN003',
-      requestDate: '2024-07-16',
-      status: 2
-    },
-  ];
-
   const renderTable = () => {
     switch (type?.type) {
       case "pending":
-        return <PendingPaymentTable data={data}/>;
+        return (
+          <PendingPaymentTable
+            data={statePayment.currentDepositList
+              .filter((item: any) => item.status === 0)
+              .reverse()}
+            loading={statePayment.isFetching}
+          />
+        );
       case "history":
-        return <HistoryPaymentTable data={data}/>;
+        return (
+          <HistoryPaymentTable
+            data={statePayment.currentDepositList
+              .filter((item: any) => item.status === 1 && 2)
+              .reverse()}
+            loading={statePayment.isFetching}
+          />
+        );
       default:
-        return <HistoryPaymentTable data={data}/>;
+        return null;
     }
   };
 
   return (
     <div className="mx-[4rem] my-[2rem]">
+      <Title level={2}>
+        Số tiền hiện tại của bạn: {formatCurrency(currentUser.balance)}
+      </Title>
       <div className="mb-[2rem] flex justify-between">
         <Radio.ButtonGroup
           defaultActiveIndex={0}
@@ -68,12 +79,6 @@ export default function PaymentHistory() {
                 setType({ type: "history" });
               },
             },
-            {
-              text: "Rejected",
-              onClick: () => {
-                setType({ type: "rejected" });
-              },
-            },
           ]}
           activeRender={(item) => <OutlineButton text={item?.text} />}
           render={(item) => (
@@ -81,7 +86,7 @@ export default function PaymentHistory() {
           )}
         />
         <PrimaryButton
-          text="Add Fund"
+          text="Nạp thêm"
           icon={<PlusOutlined />}
           onClick={onAddFund}
         />
@@ -91,4 +96,4 @@ export default function PaymentHistory() {
   );
 }
 
-type RenderData = { type: "pending" | "history"  | "rejected"};
+type RenderData = { type: "pending" | "history" };

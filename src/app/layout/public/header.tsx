@@ -69,7 +69,7 @@ export default function MyHeader() {
             <BookOutlined />,
           ),
           generateItemProfile(
-            "Lịch sử giao dịch",
+            "Giao dịch",
             "/customer/payment-history",
             <HistoryOutlined />,
           ),

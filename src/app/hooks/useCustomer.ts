@@ -2,6 +2,10 @@ import { useAppDispatch, useAppSelector } from "../redux/hook";
 // import { NavigateFunction } from "react-router-dom";
 import { App } from "antd";
 import {
+  changeStatusBookingTour,
+  changeStatusBookingTourGuide,
+  ChangeStatusBookingTourGuideParams,
+  ChangeStatusBookingTourParams,
   getCustomerById,
   GetCustomerByIdParams,
   setCurrentCustomer,
@@ -97,10 +101,68 @@ export function useCustomer() {
     [dispatch, notification],
   );
 
+  const handleChangeStatusBookingTour = useCallback(
+    async (value: ChangeStatusBookingTourParams) => {
+      const resultAction = await dispatch(changeStatusBookingTour(value));
+      if (changeStatusBookingTour.fulfilled.match(resultAction)) {
+        notification.success({
+          message: "Success",
+          description: resultAction.payload,
+          placement: "topRight",
+        });
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
+  const handleChangeStatusBookingTourGuide = useCallback(
+    async (value: ChangeStatusBookingTourGuideParams) => {
+      const resultAction = await dispatch(changeStatusBookingTourGuide(value));
+      if (changeStatusBookingTourGuide.fulfilled.match(resultAction)) {
+        notification.success({
+          message: "Success",
+          description: resultAction.payload,
+          placement: "topRight",
+        });
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
   return {
     state,
     handleGetCustomerbyId,
     handleUpdateCustomerInformation,
     handleUpdateCustomerAvatar,
+    handleChangeStatusBookingTour,
+    handleChangeStatusBookingTourGuide,
   };
 }

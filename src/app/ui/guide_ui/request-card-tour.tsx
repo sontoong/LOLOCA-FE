@@ -5,6 +5,7 @@ import OutlineButton from "../../components/buttons/outline-button";
 import { BookingTourRequest } from "../../models/bookingTour";
 import { useTourGuide } from "../../hooks/useTourGuide";
 import { useBookingTour } from "../../hooks/useBookingTour";
+import { useCustomer } from "../../hooks/useCustomer";
 
 const { Title, Paragraph } = Typography;
 
@@ -17,16 +18,15 @@ const RequestCardTour = ({
 }) => {
   const [modal, contextHolder] = Modal.useModal();
   const { handleGetBookingTourByTourGuideId } = useBookingTour();
+  const { handleChangeStatusBookingTour } = useCustomer();
   const { handleAcceptBookingTourRequest, handleRejectBookingTourRequest } =
     useTourGuide();
 
   const showConfirm = (action: Action) => {
     modal.confirm({
-      title: `Are you sure you want to ${action}?`,
+      title: `Are you sure you want to ${action.name}?`,
       onOk: action.action,
-      onCancel() {
-        console.log(`${action} canceled`);
-      },
+      onCancel() {},
     });
   };
 
@@ -74,11 +74,35 @@ const RequestCardTour = ({
         <>
           <PrimaryButton
             text="Finish"
-            onClick={() => showConfirm({ name: "finish", action: () => {} })}
+            onClick={() =>
+              showConfirm({
+                name: "finish",
+                action: async () => {
+                  await handleChangeStatusBookingTour({
+                    bookingTourRequestId: request.bookingTourRequestId,
+                  });
+                  await handleGetBookingTourByTourGuideId({
+                    tourGuideId: localStorage.getItem("userId") ?? "",
+                  });
+                },
+              })
+            }
           />
           <OutlineButton
             text="Cancel"
-            onClick={() => showConfirm({ name: "cancel", action: () => {} })}
+            onClick={() =>
+              showConfirm({
+                name: "cancel",
+                action: async () => {
+                  await handleRejectBookingTourRequest({
+                    bookingRequestId: request.bookingTourRequestId,
+                  });
+                  await handleGetBookingTourByTourGuideId({
+                    tourGuideId: localStorage.getItem("userId") ?? "",
+                  });
+                },
+              })
+            }
           />
         </>
       );
