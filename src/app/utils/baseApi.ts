@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Envs } from "./env";
 
-const baseURL = Envs.apiLocal;
+const baseURL = Envs.api;
 
 const baseApi = axios.create({
   baseURL,

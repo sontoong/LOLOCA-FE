@@ -7,7 +7,7 @@ import "nprogress/nprogress.css";
 import agent from "./agent";
 import { Envs } from "./env";
 
-const baseURL = Envs.apiLocal;
+const baseURL = Envs.api;
 
 const apiJWT = axios.create({
   baseURL,
