@@ -145,25 +145,25 @@ const CustomerRequestList = () => {
       <div className="mb-[2rem]">
         {currentTable === "tour" ? (
           <OutlineButton.BoldText
-            text="Show Tour Table"
+            text="Tour Requests"
             onClick={() => setCurrentTable("tour")}
             className="mr-[1rem]"
           />
         ) : (
           <PrimaryButton
-            text="Show Tour Table"
+            text="Tour Requests"
             onClick={() => setCurrentTable("tour")}
             className="mr-[1rem]"
           />
         )}
         {currentTable === "tour-guide" ? (
           <OutlineButton.BoldText
-            text="Show Tour Guide Table"
+            text="Tour Guide Requests"
             onClick={() => setCurrentTable("tour-guide")}
           />
         ) : (
           <PrimaryButton
-            text="Show Tour Guide Table"
+            text="Tour Guide Requests"
             onClick={() => setCurrentTable("tour-guide")}
           />
         )}

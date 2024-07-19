@@ -31,7 +31,7 @@ import CustomerRequesList from "../pages/customer/CustomerRequesList";
 import PaymentPage from "../pages/customer/PaymentPage";
 import BookingSuccess from "../pages/customer/BookingSuccess";
 import AddFundPage from "../pages/customer/AddFundPage";
-import PaymentHistory from "../pages/customer/FundList";
+import TransactionListCustomer from "../pages/customer/TransactionListCustomer";
 
 //tour guide page
 import CreateTourPage from "../pages/tour-guide/CreateTourPage";
@@ -39,6 +39,7 @@ import TourGuideProfile from "../pages/tour-guide/TourGuideProfile";
 import GuideTourPage from "../pages/tour-guide/GuideTourPage";
 import RequestListPage from "../pages/tour-guide/RequestListPage";
 import TourGuideTourDetailPage from "../pages/tour-guide/TourGuideTourDetailPage";
+import TransactionListTourGuide from "../pages/tour-guide/TransactionListTourGuide";
 
 //other page
 import ErrorPage from "../pages/public/ErrorPage";
@@ -154,7 +155,7 @@ export const router = createBrowserRouter([
             path: "payment-history",
             element: (
               <Suspense fallback={<></>}>
-                <PaymentHistory />
+                <TransactionListCustomer />
               </Suspense>
             ),
           },
@@ -237,6 +238,14 @@ export const router = createBrowserRouter([
             element: (
               <Suspense fallback={<></>}>
                 <RequestListPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "payment-history",
+            element: (
+              <Suspense fallback={<></>}>
+                <TransactionListTourGuide />
               </Suspense>
             ),
           },

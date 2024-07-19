@@ -142,10 +142,9 @@ export const changeStatusBookingTour = createAsyncThunk<
   async (data, { rejectWithValue }) => {
     const { bookingTourRequestId } = data;
     try {
-      const response = await agent.Customer.changeStatusBookingTour(
+      const response = await agent.Customer.changeStatusBookingTour({
         bookingTourRequestId,
-        {},
-      );
+      });
       return response;
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -166,10 +165,9 @@ export const changeStatusBookingTourGuide = createAsyncThunk<
   async (data, { rejectWithValue }) => {
     const { bookingTourGuideRequestId } = data;
     try {
-      const response = await agent.Customer.changeStatusBookingTourGuide(
+      const response = await agent.Customer.changeStatusBookingTourGuide({
         bookingTourGuideRequestId,
-        {},
-      );
+      });
       return response;
     } catch (error) {
       if (error instanceof AxiosError) {

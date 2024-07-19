@@ -63,7 +63,10 @@ const CreateTourPrice = ({ form }: { form: any }) => {
                 >
                   <Form.Item
                     name={[field.name, "TotalTouristFrom"]}
-                    rules={[{ required: true }]}
+                    rules={[
+                      { type: "number", required: true },
+                      { type: "number", min: 1, message: "Phải ít nhất 1" },
+                    ]}
                     style={{ flex: 1, marginRight: 8 }}
                   >
                     <InputNumber placeholder="From" min={0} />
@@ -71,7 +74,8 @@ const CreateTourPrice = ({ form }: { form: any }) => {
                   <Form.Item
                     name={[field.name, "TotalTouristTo"]}
                     rules={[
-                      { required: true },
+                      { type: "number", required: true },
+                      { type: "number", min: 1, message: "Phải ít nhất 1" },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
                           const fromValue = getFieldValue([
@@ -102,11 +106,11 @@ const CreateTourPrice = ({ form }: { form: any }) => {
                       { required: true },
                       {
                         validator(_, value) {
-                          if (value === 0 || value >= 1000) {
+                          if (value >= 1000) {
                             return Promise.resolve();
                           }
                           return Promise.reject(
-                            new Error("Price must be 0 or at least 1000"),
+                            new Error("Price must be at least 1000"),
                           );
                         },
                       },
@@ -126,11 +130,11 @@ const CreateTourPrice = ({ form }: { form: any }) => {
                       { required: true },
                       {
                         validator(_, value) {
-                          if (value === 0 || value >= 1000) {
+                          if (value >= 1000) {
                             return Promise.resolve();
                           }
                           return Promise.reject(
-                            new Error("Price must be 0 or at least 1000"),
+                            new Error("Price must be at least 1000"),
                           );
                         },
                       },

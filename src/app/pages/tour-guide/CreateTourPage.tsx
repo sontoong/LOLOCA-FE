@@ -121,8 +121,8 @@ const CreateTourPage = () => {
       CityId: cityId,
       ItineraryNames: itineraries?.map((item: any) => item.name),
       ItineraryDescriptions: itineraries?.map((item: any) => item.description),
-      AdultPrices: price?.map((item: any) => item.AdultPrices),
-      ChildPrices: price?.map((item: any) => item.ChildPrices),
+      AdultPrices: price?.map((item: any) => item.AdultPrices / 1000),
+      ChildPrices: price?.map((item: any) => item.ChildPrices / 1000),
       TotalTouristFrom: price?.map((item: any) => item.TotalTouristFrom),
       TotalTouristTo: price?.map((item: any) => item.TotalTouristTo),
       images: images.flatMap((image: any) => {

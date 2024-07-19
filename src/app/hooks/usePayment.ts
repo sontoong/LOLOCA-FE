@@ -6,6 +6,8 @@ import {
   setCurrentDepositList,
   CreateDepositParams,
   GetDepositByCustomerIdParams,
+  getDepositByTourGuideId,
+  GetDepositByTourGuideIdParams,
 } from "../redux/slice/paymentSlice";
 import { useCallback } from "react";
 import { NavigateFunction } from "react-router-dom";
@@ -68,9 +70,34 @@ export function usePayment() {
     [dispatch, notification],
   );
 
+  const handleGetDepositByTourGuideId = useCallback(
+    async (value: GetDepositByTourGuideIdParams) => {
+      const resultAction = await dispatch(getDepositByTourGuideId(value));
+      if (getDepositByTourGuideId.fulfilled.match(resultAction)) {
+        dispatch(setCurrentDepositList(resultAction.payload));
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
   return {
     state,
     handleCreateDeposit,
     handleGetDepositByCustomerId,
+    handleGetDepositByTourGuideId,
   };
 }

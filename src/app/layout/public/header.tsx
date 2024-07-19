@@ -92,6 +92,14 @@ export default function MyHeader() {
             <UserOutlined />,
           ),
           generateItemProfile(
+            "Giao dịch",
+            "/guide/payment-history",
+            <HistoryOutlined />,
+          ),
+          {
+            type: "divider",
+          },
+          generateItemProfile(
             "Đăng xuất",
             "",
             <LogoutOutlined />,

@@ -100,19 +100,10 @@ const Customer = {
   getCustomerById: (customerId: number) =>
     requests.get(`${_customer}/${customerId}`),
   getPrivate: () => requests.get(`${_customer}/private`),
-  changeStatusBookingTourGuide: (
-    bookingTourGuideRequestId: string,
-    data: any,
-  ) =>
-    requests.post(
-      `${_customer}/change-status-booking-tour-guide/${bookingTourGuideRequestId}`,
-      data,
-    ),
-  changeStatusBookingTour: (bookingTourRequestId: string, data: any) =>
-    requests.post(
-      `${_customer}/change-status-booking-tour/${bookingTourRequestId}`,
-      data,
-    ),
+  changeStatusBookingTourGuide: (data: any) =>
+    requests.post(`${_customer}/change-status-booking-tour-guide`, data),
+  changeStatusBookingTour: (data: any) =>
+    requests.post(`${_customer}/change-status-booking-tour`, data),
 };
 
 const _tourGuide = "TourGuide";

@@ -103,6 +103,30 @@ export const getDepositByCustomerId = createAsyncThunk<
   }
 });
 
+export const getDepositByTourGuideId = createAsyncThunk<
+  any,
+  GetDepositByTourGuideIdParams
+>(
+  "payment/fetch/getDepositByTourGuideId",
+  async (data, { rejectWithValue }) => {
+    const { tourGuideId, status } = data;
+    try {
+      const response = await agent.PaymentRequest.getDepositByTourGuideId({
+        tourGuideId,
+        status,
+      });
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+    }
+  },
+);
+
 export const { setCurrentDepositList } = paymentSlice.actions;
 
 export default paymentSlice.reducer;
@@ -115,5 +139,10 @@ export type CreateDepositParams = {
 
 export type GetDepositByCustomerIdParams = {
   customerId: string;
+  status: number;
+};
+
+export type GetDepositByTourGuideIdParams = {
+  tourGuideId: string;
   status: number;
 };
