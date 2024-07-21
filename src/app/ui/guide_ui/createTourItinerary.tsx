@@ -4,26 +4,33 @@ import { Divider } from "../../components/divider";
 
 const { Title } = Typography;
 
-const CreateTourItinerary = ({ form }: { form: any }) => {
-  const onFinish = (values: any) => {
-    console.log("Form Values: ", values);
-  };
-
+const CreateTourItinerary = ({
+  form,
+  initialValues,
+}: {
+  form: any;
+  initialValues: any;
+}) => {
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
 
   return (
-    <Form form={form} name="CreateTourItineraryForm" onFinish={onFinish} onFinishFailed={onFinishFailed}>
+    <Form
+      form={form}
+      name="CreateTourItineraryForm"
+      onFinishFailed={onFinishFailed}
+      initialValues={initialValues}
+    >
       <Title style={{ color: "#004AAD" }}>Itinerary</Title>
 
-      <Form.List name="itineraries">
+      <Form.List name="tourItineraryDTOs">
         {(fields, { add, remove }) => (
           <>
             {fields.map(({ key, name, ...restField }, index) => (
               <div key={key}>
                 {index > 0 && <Divider colorSplit="black" />}
-                <div className="flex justify-end mb-[1rem]">
+                <div className="mb-[1rem] flex justify-end">
                   {fields.length > 1 && (
                     <PrimaryButton
                       text="Delete Itinerary"
@@ -35,21 +42,23 @@ const CreateTourItinerary = ({ form }: { form: any }) => {
                 </div>
                 <Form.Item
                   {...restField}
-                  name={[name, 'name']}
+                  name={[name, "name"]}
                   label="Itinerary"
-                  rules={[{ required: true, message: 'Please enter itinerary name' }]}
+                  rules={[
+                    { required: true, message: "Please enter itinerary name" },
+                  ]}
                 >
                   <Input placeholder="Enter itinerary name" />
                 </Form.Item>
                 <Form.Item
                   {...restField}
-                  name={[name, 'description']}
+                  name={[name, "description"]}
                   label="Description"
                   rules={[
                     {
                       required: true,
                       whitespace: true,
-                      message: 'Please enter itinerary description',
+                      message: "Please enter itinerary description",
                     },
                   ]}
                 >
@@ -61,7 +70,7 @@ const CreateTourItinerary = ({ form }: { form: any }) => {
               text="Add Itinerary"
               className="w-full"
               onClick={() => {
-                add({ name: "", description: "" });
+                add();
               }}
             />
           </>

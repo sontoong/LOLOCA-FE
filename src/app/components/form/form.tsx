@@ -18,6 +18,7 @@ function DefaultForm(props: DefaultFormProps) {
         block: "center",
         inline: "center",
       }}
+      requiredMark="optional"
     >
       <>{children}</>
     </Form>

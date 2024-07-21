@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Steps, UploadFile } from "antd";
 import { PrimaryButton } from "../../components/buttons";
 import { Form } from "../../components/form";
@@ -9,11 +9,12 @@ import CreateTourDetail from "../../ui/guide_ui/createTourDetail";
 import CreateTourItinerary from "../../ui/guide_ui/createTourItinerary";
 import CreateTourPrice from "../../ui/guide_ui/createTourPrice";
 import { useTour } from "../../hooks/useTour";
-import { CreateTourParams } from "../../redux/slice/tourSlice";
 import { base64ToBlob } from "../../utils/utils";
 import { useAuth } from "../../hooks/useAuth";
 import { TourGuide } from "../../models/tourGuide";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { Tour } from "../../models/tour";
+import { CreateTourParams } from "../../redux/slice/tourSlice";
 
 const { Step } = Steps;
 
@@ -22,11 +23,16 @@ const CreateTourPage = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [form] = Form.useForm();
   const [mainForm] = Form.useForm();
-  const { state: stateTour, handleUploadTour } = useTour();
+  const { state: stateTour, handleUploadTour, handleGetTourById } = useTour();
   const [tourImages, setTourImages] = useState<UploadFile[]>([]);
-  const [duration, setDuration] = useState<number | undefined>(undefined);
   const { state: stateUser } = useAuth();
-  const { cityId } = (stateUser.currentUser as TourGuide) || {};
+  const { tourId } = useParams();
+
+  useEffect(() => {
+    if (tourId) {
+      handleGetTourById({ tourId: tourId });
+    }
+  }, [handleGetTourById, tourId]);
 
   const next = () => {
     window.scrollTo(0, 0);
@@ -38,50 +44,26 @@ const CreateTourPage = () => {
     setCurrentStep(currentStep - 1);
   };
 
-  const initialValues: CreateTourParams = useMemo(() => {
-    return {
-      Name: "",
-      Category: "",
-      Duration: duration || 0,
-      images: [],
-      TypeDetails: [],
-      Activity: "",
-      Description: "",
-      HighlightDetails: [""],
-      IncludeDetails: [""],
-      ExcludeDetails: [""],
-      ItineraryNames: [""],
-      ItineraryDescriptions: [""],
-      AdultPrices: [0],
-      ChildPrices: [0],
-      TotalTouristFrom: [0],
-      TotalTouristTo: [0],
-      CityId: 0,
-      TourGuideId: 0,
-    };
-  }, [duration]);
-
-  useEffect(() => {
-    const itineraries = initialValues.ItineraryNames.map(
-      (name: any, index: any) => ({
-        name,
-        description: initialValues.ItineraryDescriptions[index],
-      }),
-    );
-    form.setFieldsValue({
-      itineraries,
-    });
-
-    const prices = initialValues.AdultPrices.map((_, index: any) => ({
-      TotalTouristFrom: initialValues.TotalTouristFrom[index],
-      TotalTouristTo: initialValues.TotalTouristTo[index],
-      AdultPrices: initialValues.AdultPrices[index],
-      ChildPrices: initialValues.ChildPrices[index],
-    }));
-    form.setFieldsValue({
-      price: prices,
-    });
-  }, [form, initialValues]);
+  const initialValues: Tour = {
+    name: "",
+    category: "",
+    duration: 0,
+    tourImgViewList: [],
+    tourTypeDTOs: [{ typeDetail: "" }],
+    activity: "",
+    description: "",
+    tourHighlightDTOs: [{ highlightDetail: "" }],
+    tourIncludeDTOs: [{ includeDetail: "" }],
+    tourExcludeDTOs: [{ excludeDetail: "" }],
+    tourItineraryDTOs: [{ description: "", name: "" }],
+    tourPriceDTOs: [
+      { totalTouristTo: 0, totalTouristFrom: 0, adultPrice: 0, childPrice: 0 },
+    ],
+    tourId: 0,
+    cityId: 0,
+    tourGuideId: "",
+    status: 0,
+  };
 
   const steps = [
     {
@@ -92,8 +74,6 @@ const CreateTourPage = () => {
           initialValues={initialValues}
           setTourImages={setTourImages}
           tourImages={tourImages}
-          setDuration={setDuration}
-          duration={duration}
         />
       ),
     },
@@ -103,29 +83,59 @@ const CreateTourPage = () => {
     },
     {
       title: "Step 3",
-      content: <CreateTourItinerary form={form} />,
+      content: (
+        <CreateTourItinerary form={form} initialValues={initialValues} />
+      ),
     },
     {
       title: "Step 4",
-      content: <CreateTourPrice form={form} />,
+      content: <CreateTourPrice form={form} initialValues={initialValues} />,
     },
   ];
 
-  const handleSubmit = (values: any) => {
-    const { price, itineraries, images, ...restValues } = values;
+  const handleSubmit = (values: Tour) => {
+    const {
+      tourPriceDTOs,
+      tourItineraryDTOs,
+      tourImgViewList,
+      name,
+      activity,
+      category,
+      description,
+      duration,
+      tourExcludeDTOs,
+      tourTypeDTOs,
+      tourHighlightDTOs,
+      tourIncludeDTOs,
+    } = values;
     const TourGuideId = localStorage.getItem("userId");
+    const { cityId } = stateUser.currentUser as TourGuide;
 
-    const formattedValues: any = {
-      ...restValues,
-      TourGuideId: TourGuideId,
-      CityId: cityId,
-      ItineraryNames: itineraries?.map((item: any) => item.name),
-      ItineraryDescriptions: itineraries?.map((item: any) => item.description),
-      AdultPrices: price?.map((item: any) => item.AdultPrices / 1000),
-      ChildPrices: price?.map((item: any) => item.ChildPrices / 1000),
-      TotalTouristFrom: price?.map((item: any) => item.TotalTouristFrom),
-      TotalTouristTo: price?.map((item: any) => item.TotalTouristTo),
-      images: images.flatMap((image: any) => {
+    const formattedValues: CreateTourParams = {
+      TourGuideId: TourGuideId ?? "",
+      CityId: cityId ?? "",
+      Name: name,
+      Activity: activity ?? "",
+      Category: category ?? "",
+      Description: description,
+      Duration: duration,
+      ExcludeDetails: tourExcludeDTOs?.map((value) => value.excludeDetail),
+      TypeDetails: tourTypeDTOs?.map((value) => value.typeDetail),
+      HighlightDetails: tourHighlightDTOs?.map(
+        (value) => value.highlightDetail,
+      ),
+      IncludeDetails: tourIncludeDTOs?.map((value) => value.includeDetail),
+      ItineraryNames: tourItineraryDTOs?.map((item: any) => item.name),
+      ItineraryDescriptions: tourItineraryDTOs?.map(
+        (item: any) => item.description,
+      ),
+      AdultPrices: tourPriceDTOs?.map((item: any) => item.adultPrice / 1000),
+      ChildPrices: tourPriceDTOs?.map((item: any) => item.childPrice / 1000),
+      TotalTouristFrom: tourPriceDTOs?.map(
+        (item: any) => item.totalTouristFrom,
+      ),
+      TotalTouristTo: tourPriceDTOs?.map((item: any) => item.totalTouristTo),
+      images: tourImgViewList?.flatMap((image: any) => {
         if (image.originFileObj) {
           return [image.originFileObj];
         } else if (image.url) {
@@ -136,8 +146,6 @@ const CreateTourPage = () => {
         }
       }),
     };
-
-    console.log("Formatted Create Tour Values: ", formattedValues);
 
     handleUploadTour(formattedValues, navigate);
   };
@@ -150,7 +158,11 @@ const CreateTourPage = () => {
       }}
       className="h-full py-[2rem]"
     >
-      <Card cardTitle="Create your tour" className="mx-auto w-[50%]">
+      <Card
+        cardTitle="Create your tour"
+        className="mx-auto w-[50%]"
+        bordered={false}
+      >
         <Steps current={currentStep} className="my-[5%]">
           {steps.map((step, index) => (
             <Step key={index} title={step.title} />
@@ -184,26 +196,19 @@ const CreateTourPage = () => {
             form={mainForm}
             onFinish={handleSubmit}
           >
-            {/* Hidden fields to keep the main form state */}
-            <Form.Item name="Name" hidden />
-            <Form.Item name="Category" hidden />
-            <Form.Item name="Duration" hidden />
-            <Form.Item name="images" hidden />
-            <Form.Item name="TypeDetails" hidden />
-            <Form.Item name="Activity" hidden />
-            <Form.Item name="Description" hidden />
-            <Form.Item name="HighlightDetails" hidden />
-            <Form.Item name="IncludeDetails" hidden />
-            <Form.Item name="ExcludeDetails" hidden />
-            <Form.Item name="itineraries" hidden />
-            <Form.Item name="AdultPrices" hidden />
-            <Form.Item name="ChildPrices" hidden />
-            <Form.Item name="TotalTouristFrom" hidden />
-            <Form.Item name="TotalTouristTo" hidden />
-            <Form.Item name="CityId" hidden />
-            <Form.Item name="TourGuideId" hidden />
-            <Form.Item name="price" hidden />
-            <Form.Item name="itineraries" hidden />
+            <Form.Item name="name" hidden />
+            <Form.Item name="category" hidden />
+            <Form.Item name="duration" hidden />
+            <Form.Item name="tourImgViewList" hidden />
+            <Form.Item name="tourTypeDTOs" hidden />
+            <Form.Item name="activity" hidden />
+            <Form.Item name="description" hidden />
+            <Form.Item name="tourHighlightDTOs" hidden />
+            <Form.Item name="tourIncludeDTOs" hidden />
+            <Form.Item name="tourExcludeDTOs" hidden />
+            <Form.Item name="tourItineraryDTOs" hidden />
+            <Form.Item name="tourPriceDTOs" hidden />
+
             <div>
               <div className="mt-4 flex justify-end">
                 {currentStep > 0 && (

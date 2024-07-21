@@ -124,12 +124,12 @@ export function useTour() {
     async (value: DeleteTourParams, navigate: NavigateFunction) => {
       const resultAction = await dispatch(deleteTour(value));
       if (deleteTour.fulfilled.match(resultAction)) {
-        navigate("/guide/tours");
         notification.success({
           message: "Success",
           description: `${resultAction.payload}`,
           placement: "topRight",
         });
+        navigate("/guide/tours");
       } else {
         if (resultAction.payload) {
           notification.error({

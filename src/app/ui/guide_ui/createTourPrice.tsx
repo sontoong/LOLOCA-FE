@@ -4,17 +4,13 @@ import { PrimaryButton } from "../../components/buttons";
 
 const { Title } = Typography;
 
-const CreateTourPrice = ({ form }: { form: any }) => {
-  const onFinish = (values: any) => {
-    const formattedValues = {
-      AdultPrices: values.price.map((item: any) => item.AdultPrices / 1000),
-      ChildPrices: values.price.map((item: any) => item.ChildPrices / 1000),
-      TotalTouristFrom: values.price.map((item: any) => item.TotalTouristFrom),
-      TotalTouristTo: values.price.map((item: any) => item.TotalTouristTo),
-    };
-    console.log("Formatted Form Values: ", formattedValues);
-  };
-
+const CreateTourPrice = ({
+  form,
+  initialValues,
+}: {
+  form: any;
+  initialValues: any;
+}) => {
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
@@ -46,15 +42,15 @@ const CreateTourPrice = ({ form }: { form: any }) => {
       <Form
         form={form}
         name="CreateTourPriceForm"
-        onFinish={onFinish}
         onFinishFailed={onFinishFailed}
+        initialValues={initialValues}
       >
-        <Form.List name="price">
+        <Form.List name="tourPriceDTOs">
           {(fields, { add, remove }) => (
             <>
-              {fields.map((field, index) => (
+              {fields.map(({ name, key }, index) => (
                 <div
-                  key={field.key}
+                  key={key}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -62,7 +58,7 @@ const CreateTourPrice = ({ form }: { form: any }) => {
                   }}
                 >
                   <Form.Item
-                    name={[field.name, "TotalTouristFrom"]}
+                    name={[name, "totalTouristFrom"]}
                     rules={[
                       { type: "number", required: true },
                       { type: "number", min: 1, message: "Phải ít nhất 1" },
@@ -72,16 +68,16 @@ const CreateTourPrice = ({ form }: { form: any }) => {
                     <InputNumber placeholder="From" min={0} />
                   </Form.Item>
                   <Form.Item
-                    name={[field.name, "TotalTouristTo"]}
+                    name={[name, "totalTouristTo"]}
                     rules={[
                       { type: "number", required: true },
                       { type: "number", min: 1, message: "Phải ít nhất 1" },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
                           const fromValue = getFieldValue([
-                            "price",
+                            "tourPriceDTOs",
                             index,
-                            "TotalTouristFrom",
+                            "totalTouristFrom",
                           ]);
                           if (
                             !value ||
@@ -101,7 +97,7 @@ const CreateTourPrice = ({ form }: { form: any }) => {
                     <InputNumber placeholder="To" min={0} />
                   </Form.Item>
                   <Form.Item
-                    name={[field.name, "AdultPrices"]}
+                    name={[name, "adultPrice"]}
                     rules={[
                       { required: true },
                       {
@@ -125,7 +121,7 @@ const CreateTourPrice = ({ form }: { form: any }) => {
                     />
                   </Form.Item>
                   <Form.Item
-                    name={[field.name, "ChildPrices"]}
+                    name={[name, "childPrice"]}
                     rules={[
                       { required: true },
                       {
@@ -155,7 +151,7 @@ const CreateTourPrice = ({ form }: { form: any }) => {
                         fontSize: "2.5rem",
                         cursor: "pointer",
                       }}
-                      onClick={() => remove(field.name)}
+                      onClick={() => remove(name)}
                     />
                   ) : null}
                 </div>

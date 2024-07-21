@@ -166,6 +166,7 @@ export const deleteTour = createAsyncThunk<any, DeleteTourParams>(
 export const uploadTour = createAsyncThunk<any, CreateTourParams>(
   "tour/send/uploadTour",
   async (data, { rejectWithValue }) => {
+    console.log(data);
     const {
       images,
       Activity,
@@ -195,40 +196,40 @@ export const uploadTour = createAsyncThunk<any, CreateTourParams>(
     formData.append("Activity", Activity);
     formData.append("Duration", Duration.toString());
 
-    ExcludeDetails.forEach((detail) =>
+    ExcludeDetails?.forEach((detail) =>
       formData.append("ExcludeDetails", detail),
     );
-    HighlightDetails.forEach((detail) =>
+    HighlightDetails?.forEach((detail) =>
       formData.append("HighlightDetails", detail),
     );
-    IncludeDetails.forEach((detail) =>
+    IncludeDetails?.forEach((detail) =>
       formData.append("IncludeDetails", detail),
     );
-    ItineraryNames.forEach((name) => formData.append("ItineraryNames", name));
-    ItineraryDescriptions.forEach((description) =>
+    ItineraryNames?.forEach((name) => formData.append("ItineraryNames", name));
+    ItineraryDescriptions?.forEach((description) =>
       formData.append("ItineraryDescriptions", description),
     );
-    TypeDetails.forEach((type) => formData.append("TypeDetails", type));
-    TotalTouristFrom.forEach((total) =>
+    TypeDetails?.forEach((type) => formData.append("TypeDetails", type));
+    TotalTouristFrom?.forEach((total) =>
       formData.append("TotalTouristFrom", total.toString()),
     );
-    TotalTouristTo.forEach((total) =>
+    TotalTouristTo?.forEach((total) =>
       formData.append("TotalTouristTo", total.toString()),
     );
-    AdultPrices.forEach((price) =>
+    AdultPrices?.forEach((price) =>
       formData.append("AdultPrices", price.toString()),
     );
-    ChildPrices.forEach((price) =>
+    ChildPrices?.forEach((price) =>
       formData.append("ChildPrices", price.toString()),
     );
 
-    images.forEach((file) => {
+    images?.forEach((file) => {
       formData.append("images", file as File);
     });
 
     try {
-      const response = await agent.Tour.uploadTour(formData);
-      return response;
+      // const response = await agent.Tour.uploadTour(formData);
+      // return response;
     } catch (error) {
       if (error instanceof AxiosError) {
         if (!error.response) {
@@ -250,24 +251,24 @@ export type GetTourRandomParams = {
 };
 
 export type CreateTourParams = {
-  CityId: number;
-  TourGuideId: number;
+  CityId: string;
+  TourGuideId: string;
   Name: string;
   Description: string;
   Category: string;
   Activity: string;
   Duration: number;
-  ExcludeDetails: string[];
-  HighlightDetails: string[];
-  IncludeDetails: string[];
-  ItineraryNames: string[];
-  ItineraryDescriptions: string[];
-  TypeDetails: string[];
-  TotalTouristFrom: number[];
-  TotalTouristTo: number[];
-  AdultPrices: number[];
-  ChildPrices: number[];
-  images: File[];
+  ExcludeDetails?: string[];
+  HighlightDetails?: string[];
+  IncludeDetails?: string[];
+  ItineraryNames?: string[];
+  ItineraryDescriptions?: string[];
+  TypeDetails?: string[];
+  TotalTouristFrom?: number[];
+  TotalTouristTo?: number[];
+  AdultPrices?: number[];
+  ChildPrices?: number[];
+  images?: File[];
 };
 
 export type GetTourByCityParams = {

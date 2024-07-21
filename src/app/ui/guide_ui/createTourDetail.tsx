@@ -3,12 +3,14 @@ import { MinusCircleFilled, PlusCircleFilled } from "@ant-design/icons";
 import { Input } from "../../components/inputs";
 import { Divider } from "../../components/divider";
 
-const CreateTourDetail = ({ form, initialValues }: { form: any, initialValues: any }) => {
+const CreateTourDetail = ({
+  form,
+  initialValues,
+}: {
+  form: any;
+  initialValues: any;
+}) => {
   const { Title } = Typography;
-
-  const onFinish = (values: any) => {
-    console.log("Form Values: ", values);
-  };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
@@ -19,11 +21,10 @@ const CreateTourDetail = ({ form, initialValues }: { form: any, initialValues: a
       form={form}
       initialValues={initialValues}
       name="CreateTourDetailForm"
-      onFinish={onFinish}
       onFinishFailed={onFinishFailed}
     >
       <Form.Item
-        name="Description"
+        name="description"
         label="Description"
         rules={[
           {
@@ -39,7 +40,7 @@ const CreateTourDetail = ({ form, initialValues }: { form: any, initialValues: a
       <Title level={3} style={{ color: "#004AAD" }}>
         Highlight
       </Title>
-      <Form.List name="HighlightDetails">
+      <Form.List name="tourHighlightDTOs">
         {(fields, { add, remove }) => (
           <>
             {fields.map(({ key, name, ...restField }, index) => (
@@ -47,7 +48,7 @@ const CreateTourDetail = ({ form, initialValues }: { form: any, initialValues: a
                 <Col flex="auto">
                   <Form.Item
                     {...restField}
-                    name={[name]}
+                    name={[name, "highlightDetail"]}
                     rules={[
                       {
                         required: true,
@@ -84,7 +85,7 @@ const CreateTourDetail = ({ form, initialValues }: { form: any, initialValues: a
       <Title level={3} style={{ color: "#004AAD" }}>
         Include
       </Title>
-      <Form.List name="IncludeDetails">
+      <Form.List name="tourIncludeDTOs">
         {(fields, { add, remove }) => (
           <>
             {fields.map(({ key, name, ...restField }, index) => (
@@ -92,7 +93,7 @@ const CreateTourDetail = ({ form, initialValues }: { form: any, initialValues: a
                 <Col flex="auto">
                   <Form.Item
                     {...restField}
-                    name={[name]}
+                    name={[name, "includeDetail"]}
                     rules={[
                       {
                         required: true,
@@ -129,7 +130,7 @@ const CreateTourDetail = ({ form, initialValues }: { form: any, initialValues: a
       <Title level={3} style={{ color: "#004AAD" }}>
         Exclude
       </Title>
-      <Form.List name="ExcludeDetails">
+      <Form.List name="tourExcludeDTOs">
         {(fields, { add, remove }) => (
           <>
             {fields.map(({ key, name, ...restField }, index) => (
@@ -137,7 +138,7 @@ const CreateTourDetail = ({ form, initialValues }: { form: any, initialValues: a
                 <Col flex="auto">
                   <Form.Item
                     {...restField}
-                    name={[name]}
+                    name={[name, "excludeDetail"]}
                     rules={[
                       {
                         required: true,
@@ -173,6 +174,5 @@ const CreateTourDetail = ({ form, initialValues }: { form: any, initialValues: a
     </Form>
   );
 };
-
 
 export default CreateTourDetail;
