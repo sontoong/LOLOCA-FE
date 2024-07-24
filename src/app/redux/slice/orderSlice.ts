@@ -43,10 +43,18 @@ const orderSlice = createSlice({
       .addMatcher(
         (action) =>
           action.type.startsWith("order/send/") &&
-          action.type.endsWith("/fulfilled") &&
+          action.type.endsWith("/pending") &&
           !excludedActionsPending.includes(action.type),
+        (state) => {
+          return { ...state, isSending: true };
+        },
+      )
+      .addMatcher(
+        (action) =>
+          action.type.startsWith("order/send/") &&
+          action.type.endsWith("/fulfilled"),
         () => {
-          return { ...initialState, isSending: true };
+          return { ...initialState };
         },
       );
     builder.addMatcher(
