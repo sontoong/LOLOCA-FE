@@ -52,7 +52,7 @@ const authSlice = createSlice({
       .addMatcher(
         (action) =>
           action.type.startsWith("auth/send/") &&
-          action.type.endsWith("/pending") &&
+          action.type.endsWith("/fulfilled") &&
           !excludedActionsPending.includes(action.type),
         () => {
           return { ...initialState, isSending: true };

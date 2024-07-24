@@ -46,7 +46,7 @@ const tourSlice = createSlice({
       .addMatcher(
         (action) =>
           action.type.startsWith("tour/send/") &&
-          action.type.endsWith("/pending") &&
+          action.type.endsWith("/fulfilled") &&
           !excludedActionsPending.includes(action.type),
         () => {
           return { ...initialState, isSending: true };

@@ -41,7 +41,7 @@ const paymentSlice = createSlice({
       .addMatcher(
         (action) =>
           action.type.startsWith("payment/send/") &&
-          action.type.endsWith("/pending") &&
+          action.type.endsWith("/fulfilled") &&
           !excludedActionsPending.includes(action.type),
         () => {
           return { ...initialState, isSending: true };

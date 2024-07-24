@@ -17,7 +17,6 @@ import { Tour } from "../../models/tour";
 import { CreateTourParams } from "../../redux/slice/tourSlice";
 import { v4 as uuidv4 } from "uuid";
 import { Skeleton } from "../../components/skeletons";
-import { useUI } from "../../hooks/useUI";
 
 const { Step } = Steps;
 
@@ -32,7 +31,6 @@ const CreateTourPage = () => {
     handleGetTourById,
     handleUpdateTour,
   } = useTour();
-  const { state: stateUI } = useUI();
   const [tourImages, setTourImages] = useState<UploadFile[]>([]);
   const { state: stateUser } = useAuth();
   const { tourId } = useParams();
@@ -261,7 +259,7 @@ const CreateTourPage = () => {
                       text="Previous"
                       className="mr-[1%]"
                       onClick={() => prev()}
-                      disabled={stateTour.isSending || stateUI.isLoading}
+                      disabled={stateTour.isSending}
                     />
                   )}
                   {currentStep < steps.length - 1 && (
@@ -273,7 +271,7 @@ const CreateTourPage = () => {
                       onClick={() => {
                         form.submit();
                       }}
-                      loading={stateTour.isSending || stateUI.isLoading}
+                      loading={stateTour.isSending}
                     />
                   )}
                 </div>
