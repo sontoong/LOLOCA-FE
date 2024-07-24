@@ -1,6 +1,8 @@
-import { Input, Typography, Form } from "antd";
+import { Input, Typography } from "antd";
 import { PrimaryButton } from "../../components/buttons";
 import { Divider } from "../../components/divider";
+import { Form } from "../../components/form";
+import { useEffect } from "react";
 
 const { Title } = Typography;
 
@@ -11,6 +13,10 @@ const CreateTourItinerary = ({
   form: any;
   initialValues: any;
 }) => {
+  useEffect(() => {
+    form.setFieldsValue({ ...initialValues });
+  }, [form, initialValues]);
+
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };

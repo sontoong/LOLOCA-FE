@@ -124,15 +124,15 @@ const TourGuideBookingPage = () => {
             form={mainForm}
             onFinish={handleSubmit}
           >
-            {/* <Form.Item name="tourName" hidden /> */}
-            <Form.Item name="note" hidden />
-            <Form.Item name="startDate" hidden />
-            <Form.Item name="endDate" hidden />
-            {/* <Form.Item name="arrivalTime" hidden /> */}
-            {/* <Form.Item name="departureTime" hidden /> */}
-            <Form.Item name="numOfAdult" hidden />
-            <Form.Item name="numOfChild" hidden />
-            {/* <Form.Item name="tourType" hidden /> */}
+            {/* <Form.Item name="tourName" noStyle /> */}
+            <Form.Item name="note" noStyle />
+            <Form.Item name="startDate" noStyle />
+            <Form.Item name="endDate" noStyle />
+            {/* <Form.Item name="arrivalTime" noStyle /> */}
+            {/* <Form.Item name="departureTime" noStyle /> */}
+            <Form.Item name="numOfAdult" noStyle />
+            <Form.Item name="numOfChild" noStyle />
+            {/* <Form.Item name="tourType" noStyle /> */}
 
             <div>
               <div className="mt-4 flex justify-end">

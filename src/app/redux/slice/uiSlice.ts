@@ -4,6 +4,7 @@ export const excludedActions = [
   "auth/send/loginVerify",
   "auth/send/registerVerify",
   "auth/send/forgetPasswordVerify",
+  "tour/send/updateTour",
 ];
 export const excludedActionsPending = excludedActions.map(
   (action) => `${action}/pending`,

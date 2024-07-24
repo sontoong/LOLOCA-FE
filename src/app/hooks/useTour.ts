@@ -15,6 +15,8 @@ import {
   CreateTourParams,
   DeleteTourParams,
   deleteTour,
+  updateTour,
+  UpdateTourParams,
 } from "../redux/slice/tourSlice";
 import { useCallback } from "react";
 import { NavigateFunction } from "react-router-dom";
@@ -178,6 +180,35 @@ export function useTour() {
     [dispatch, notification],
   );
 
+  const handleUpdateTour = useCallback(
+    async (tourData: UpdateTourParams, navigate: NavigateFunction) => {
+      const resultAction = await dispatch(updateTour(tourData));
+      if (updateTour.fulfilled.match(resultAction)) {
+        navigate("/guide/profile");
+        notification.success({
+          message: "Success",
+          description: "Tour updated successfully",
+          placement: "topRight",
+        });
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Error",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Error",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
   return {
     state,
     handleGetTourById,
@@ -186,5 +217,6 @@ export function useTour() {
     handleGetTourByTourGuide,
     handleUploadTour,
     handleDeleteTour,
+    handleUpdateTour,
   };
 }

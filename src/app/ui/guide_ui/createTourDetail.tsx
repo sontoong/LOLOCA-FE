@@ -3,6 +3,8 @@ import { MinusCircleFilled, PlusCircleFilled } from "@ant-design/icons";
 import { Input } from "../../components/inputs";
 import { Divider } from "../../components/divider";
 
+const { Title } = Typography;
+
 const CreateTourDetail = ({
   form,
   initialValues,
@@ -10,8 +12,6 @@ const CreateTourDetail = ({
   form: any;
   initialValues: any;
 }) => {
-  const { Title } = Typography;
-
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };

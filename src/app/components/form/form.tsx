@@ -29,5 +29,6 @@ DefaultForm.useWatch = Form.useWatch;
 DefaultForm.Item = Form.Item;
 DefaultForm.useForm = Form.useForm;
 DefaultForm.Provider = Form.Provider;
+DefaultForm.List = Form.List;
 
 export default DefaultForm;

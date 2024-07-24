@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTour } from "../../hooks/useTour";
-import { Loader } from "../../components/loader/loader";
 import NotFound from "../../components/not-found/not-found";
 import { Typography, Row, Col, Steps } from "antd";
 import { PrimaryButton } from "../../components/buttons";
@@ -16,6 +15,7 @@ import { Avatar } from "../../components/avatar";
 import { useProtectedAction } from "../../hooks/useProtectedAction";
 import { isLoggedIn } from "../../redux/slice/authSlice";
 import { Carousel } from "../../components/carousel";
+import { Skeleton } from "../../components/skeletons";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -45,7 +45,12 @@ const TourDetailPage = () => {
   const tour = stateTour.currentTour;
 
   if (stateTour.isFetching) {
-    return <Loader />;
+    return (
+      <div className="p-[2rem]">
+        <Skeleton />
+        <Skeleton.Image height={400} />
+      </div>
+    );
   }
 
   if (!tour) {

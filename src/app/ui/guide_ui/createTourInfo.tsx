@@ -1,8 +1,9 @@
-import { Col, InputNumber, Row } from "antd";
+import { Col, FormInstance, InputNumber, Row } from "antd";
 import { Form } from "../../components/form";
 import { Input, InputSelect } from "../../components/inputs";
 import { ImageUpload } from "../../components/image-upload";
 import { UploadFile } from "antd/lib";
+import { useEffect } from "react";
 
 const CreateTourInfo = ({
   form,
@@ -10,11 +11,15 @@ const CreateTourInfo = ({
   setTourImages,
   tourImages,
 }: {
-  form: any;
+  form: FormInstance;
   initialValues: any;
   setTourImages: any;
   tourImages: UploadFile[];
 }) => {
+  useEffect(() => {
+    form.setFieldsValue({ ...initialValues });
+  }, [form, initialValues, setTourImages]);
+
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
@@ -76,7 +81,7 @@ const CreateTourInfo = ({
         />
       </Form.Item>
       <Form.Item
-        name={["tourTypeDTOs", "typeDetail"]}
+        name={"tourTypeDTOs"}
         label="Tour Type"
         rules={[
           {

@@ -4,13 +4,15 @@ function Loader() {
   return <div className="flex justify-center">Loading</div>;
 }
 
-function LoaderFullScreen({ spinning, percent }: LoaderProps) {
+function LoaderFullScreen({ spinning = true, percent }: LoaderProps) {
   return <Spin spinning={spinning} percent={percent} fullscreen />;
 }
 
-export { Loader, LoaderFullScreen };
+Loader.FullScreen = LoaderFullScreen;
+
+export { Loader };
 
 type LoaderProps = {
-  spinning: boolean;
+  spinning?: boolean;
   percent?: number;
 };

@@ -5,7 +5,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Avatar } from "../../components/avatar";
 import { PrimaryButton } from "../../components/buttons";
 import { Divider } from "../../components/divider";
-import { Loader } from "../../components/loader/loader";
 import NotFound from "../../components/not-found/not-found";
 import { Table } from "../../components/table";
 import { useFeedback } from "../../hooks/useFeedback";
@@ -14,6 +13,7 @@ import { useTourGuide } from "../../hooks/useTourGuide";
 import { formatCurrency, formatDateToLocal } from "../../utils/utils";
 import { Carousel } from "../../components/carousel";
 import { Image } from "../../components/image";
+import { Skeleton } from "../../components/skeletons";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -43,7 +43,12 @@ const TourGuideTourDetailPage = () => {
   const tour = stateTour.currentTour;
 
   if (stateTour.isFetching) {
-    return <Loader />;
+    return (
+      <div className="p-[2rem]">
+        <Skeleton />
+        <Skeleton.Image height={400} />
+      </div>
+    );
   }
 
   if (!tour) {
@@ -101,7 +106,7 @@ const TourGuideTourDetailPage = () => {
               {tour.category}
             </Text>
           </Col>
-          <Col offset={1} >
+          <Col offset={1}>
             <Title level={3}>Tour Type</Title>
             {tour.tourTypeDTOs?.map((typeDTO: any, index: number) => (
               <React.Fragment key={index}>

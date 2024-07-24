@@ -152,8 +152,7 @@ const TourGuide = {
 const _tour = "Tour";
 const Tour = {
   uploadTour: (data: any) => requests.post(`uploadtour`, data),
-  updateTour: (tourId: string, data: any) =>
-    requests.put(`updatetour/${tourId}`, data),
+  updateTour: (data: any) => requests.put(`updatetour`, data),
   acceptTourChangeStatus: (tourId: string, data: any) =>
     requests.put(`accept-tour-change-status/${tourId}`, data),
   deleteTour: (tourId: string) => requests.del(`${_tour}/${tourId}`),

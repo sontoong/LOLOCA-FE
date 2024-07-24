@@ -94,8 +94,8 @@ const AddFundPage = () => {
             form={mainForm}
             onFinish={handleSubmit}
           >
-            <Form.Item name="amount" hidden />
-            <Form.Item name="transactionalCode" hidden />
+            <Form.Item name="amount" noStyle />
+            <Form.Item name="transactionalCode" noStyle />
             <div className="mt-4 flex justify-end gap-2">
               {currentStep < steps.length - 1 && currentStep != 1 && (
                 <PrimaryButton text="Next" onClick={() => next()} />

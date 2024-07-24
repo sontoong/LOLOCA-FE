@@ -1,6 +1,8 @@
-import { Form, InputNumber, Typography } from "antd";
+import { InputNumber, Typography } from "antd";
 import { MinusCircleFilled, PlusOutlined } from "@ant-design/icons";
 import { PrimaryButton } from "../../components/buttons";
+import { Form } from "../../components/form";
+import { useEffect } from "react";
 
 const { Title } = Typography;
 
@@ -11,6 +13,11 @@ const CreateTourPrice = ({
   form: any;
   initialValues: any;
 }) => {
+  console.log(initialValues);
+  useEffect(() => {
+    form.setFieldsValue({ ...initialValues });
+  }, [form, initialValues]);
+
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };

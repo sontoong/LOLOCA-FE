@@ -141,12 +141,12 @@ const TourBookingPage = () => {
             form={mainForm}
             onFinish={handleSubmit}
           >
-            <Form.Item name="note" hidden />
-            <Form.Item name="startDate" hidden />
-            <Form.Item name="endDate" hidden />
-            <Form.Item name="numOfAdult" hidden />
-            <Form.Item name="numOfChild" hidden />
-            <Form.Item name="totalPrice" hidden />
+            <Form.Item name="note" noStyle />
+            <Form.Item name="startDate" noStyle />
+            <Form.Item name="endDate" noStyle />
+            <Form.Item name="numOfAdult" noStyle />
+            <Form.Item name="numOfChild" noStyle />
+            <Form.Item name="totalPrice" noStyle />
             <div>
               <div className="mt-4 flex justify-end">
                 {currentStep > 0 && (
