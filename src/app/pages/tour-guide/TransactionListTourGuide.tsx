@@ -1,4 +1,4 @@
-import { PlusOutlined } from "@ant-design/icons";
+import { CheckSquareOutlined } from "@ant-design/icons";
 import { PrimaryButton } from "../../components/buttons";
 import OutlineButton from "../../components/buttons/outline-button";
 import Radio from "../../components/radio/Radio";
@@ -28,10 +28,6 @@ export default function PaymentHistory() {
   }, [handleGetDepositByTourGuideId]);
 
   const currentUser = stateAuth.currentUser as Customer;
-
-  const onAddFund = () => {
-    navigate("/customer/add-fund");
-  };
 
   const renderTable = () => {
     switch (type?.type) {
@@ -86,9 +82,9 @@ export default function PaymentHistory() {
           )}
         />
         <PrimaryButton
-          text="Nạp thêm"
-          icon={<PlusOutlined />}
-          onClick={onAddFund}
+          text="Rút tiền"
+          icon={<CheckSquareOutlined />}
+          onClick={() => navigate("/withdraw")}
         />
       </div>
       {renderTable()}
