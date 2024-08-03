@@ -97,7 +97,7 @@ export default function CitiesPage() {
             className="ml-[4%] text-[1.5rem] font-bold text-black"
           >
             <Space>
-              Click me
+              Filters
               <DownOutlined />
             </Space>
           </a>

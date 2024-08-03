@@ -122,13 +122,7 @@ export default function GuideTourPage() {
 
   return (
     <div>
-      <Banner
-        image={VietNamBanner}
-        title={"Các tour ở Việt Nam"}
-        description={
-          "Việt Nam, một đất nước tuy nhỏ nhưng đa dạng về văn hóa, phong cảnh và ẩm thực. Từ những dãy núi hùng vĩ đến những bãi biển tuyệt đẹp, Việt Nam là điểm đến hấp dẫn của du khách."
-        }
-      />
+      <Banner image={VietNamBanner} title={"Danh sách tour"} />
       <div className="mt-[3%]">
         <Dropdown menu={{ items: filterItems }} trigger={["click"]}>
           <a
@@ -136,7 +130,7 @@ export default function GuideTourPage() {
             className="ml-[4%] text-[1.5rem] font-bold text-black"
           >
             <Space>
-              Click me
+              Filters
               <DownOutlined />
             </Space>
           </a>

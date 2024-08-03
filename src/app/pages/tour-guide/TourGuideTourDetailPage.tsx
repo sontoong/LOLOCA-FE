@@ -66,9 +66,9 @@ const TourGuideTourDetailPage = () => {
     modal.confirm({
       title: "Confirm Delete",
       content: `Are you sure you want to delete ${stateTour.currentTour.name}?`,
-      onOk() {
+      onOk: async () => {
         if (tourId) {
-          handleDeleteTour({ tourId: tourId }, navigate);
+          await handleDeleteTour({ tourId: tourId }, navigate);
         }
       },
     });
@@ -287,7 +287,7 @@ const TourGuideTourDetailPage = () => {
                 <Title style={{ color: "#004AAD", fontWeight: "bolder" }}>
                   Tour Guide
                 </Title>
-                <Link to={`/guide/${stateTour.currentTour?.tourGuideId}`}>
+                <Link to={`/guide/profile}`}>
                   <Avatar
                     size={160}
                     src={stateTourGuide.currentTourguide.avatar}
