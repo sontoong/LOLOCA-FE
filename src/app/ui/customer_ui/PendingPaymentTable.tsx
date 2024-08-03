@@ -11,6 +11,7 @@ const PendingPaymentTable = ({
   loading?: TableProps["loading"];
 }) => {
   const { state: statePayment, handleGetDepositByCustomerId } = usePayment();
+
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     if (userId) {

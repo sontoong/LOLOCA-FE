@@ -10,14 +10,14 @@ const HistoryPaymentTable = ({
 }: {
   loading?: TableProps["loading"];
 }) => {
-  const { state: statePayment, handleGetDepositByCustomerId } = usePayment();
+  const { state: statePayment, handleGetDepositByTourGuideId } = usePayment();
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     if (userId) {
-      handleGetDepositByCustomerId({ customerId: userId, status: 1 });
+      handleGetDepositByTourGuideId({ tourGuideId: userId, status: 1 });
     }
-  }, [handleGetDepositByCustomerId]);
+  }, [handleGetDepositByTourGuideId]);
 
   const columns = [
     {

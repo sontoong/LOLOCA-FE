@@ -5,19 +5,19 @@ import { usePayment } from "../../hooks/usePayment";
 import { paymentStatusGenerator } from "../../utils/generators/paymentStatus";
 import { formatCurrency, formatDateToLocal } from "../../utils/utils";
 
-const HistoryPaymentTable = ({
+const PendingPaymentTable = ({
   loading,
 }: {
   loading?: TableProps["loading"];
 }) => {
-  const { state: statePayment, handleGetDepositByCustomerId } = usePayment();
+  const { state: statePayment, handleGetDepositByTourGuideId } = usePayment();
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     if (userId) {
-      handleGetDepositByCustomerId({ customerId: userId, status: 1 });
+      handleGetDepositByTourGuideId({ tourGuideId: userId, status: 0 });
     }
-  }, [handleGetDepositByCustomerId]);
+  }, [handleGetDepositByTourGuideId]);
 
   const columns = [
     {
@@ -51,15 +51,13 @@ const HistoryPaymentTable = ({
   ];
 
   return (
-    <div>
-      <Table
-        columns={columns}
-        dataSource={statePayment.currentDepositList}
-        loading={loading}
-        rowKey={(record) => record.paymentId}
-      />
-    </div>
+    <Table
+      columns={columns}
+      dataSource={statePayment.currentDepositList}
+      loading={loading}
+      rowKey={(record) => record.paymentId}
+    />
   );
 };
 
-export default HistoryPaymentTable;
+export default PendingPaymentTable;
