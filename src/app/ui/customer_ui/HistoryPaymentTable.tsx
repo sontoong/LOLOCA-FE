@@ -1,16 +1,23 @@
 import { TableProps } from "antd";
 import { Table } from "../../components/table";
-import { DepositList } from "../../models/payment";
 import { paymentStatusGenerator } from "../../utils/generators/paymentStatus";
 import { formatCurrency, formatDateToLocal } from "../../utils/utils";
+import { usePayment } from "../../hooks/usePayment";
+import { useEffect } from "react";
 
 const HistoryPaymentTable = ({
-  data,
   loading,
 }: {
-  data: DepositList;
   loading?: TableProps["loading"];
 }) => {
+  const { state: statePayment, handleGetDepositByCustomerId } = usePayment();
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      handleGetDepositByCustomerId({ customerId: userId, status: 1 });
+    }
+  }, [handleGetDepositByCustomerId]);
+
   const columns = [
     {
       title: "Mã GD",
@@ -46,7 +53,7 @@ const HistoryPaymentTable = ({
     <div>
       <Table
         columns={columns}
-        dataSource={data}
+        dataSource={statePayment.currentDepositList}
         loading={loading}
         rowKey={(record) => record.paymentId}
       />

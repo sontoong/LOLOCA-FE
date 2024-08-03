@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import { PrimaryButton } from "../../components/buttons";
 import { Modal } from "../../components/modals";
-import { InputNumber, Typography, UploadFile } from "antd";
+import { Typography, UploadFile } from "antd";
 import { ImageUpload } from "../../components/image-upload";
 import { Form } from "../../components/form";
-import { Input, InputDate, InputSelect } from "../../components/inputs";
+import {
+  Input,
+  InputDate,
+  InputNumber,
+  InputSelect,
+} from "../../components/inputs";
 import { TourGuide } from "../../models/tourGuide";
 import { useTourGuide } from "../../hooks/useTourGuide";
 import { base64ToBlob, ensureBase64Avatar } from "../../utils/utils";
@@ -253,10 +258,10 @@ const ProfileEditModal = ({
             rules={[{ type: "number", required: true, min: 1000 }]}
             className="w-full"
           >
-            <InputNumber
+            <InputNumber.Currency
+              className="w-1/2"
               placeholder="Price per day"
               step={1000}
-              suffix={"VND"}
             />
           </Form.Item>
         </div>

@@ -1,5 +1,5 @@
-import { Col, InputNumber, Row, Typography } from "antd";
-import { InputDate, Input } from "../../components/inputs";
+import { Col, Row, Typography } from "antd";
+import { InputDate, Input, InputNumber } from "../../components/inputs";
 import { Form } from "../../components/form";
 import { useEffect } from "react";
 import dayjs from "dayjs";
@@ -78,8 +78,6 @@ const TourBookingInfoModal = ({
               >
                 <InputNumber
                   placeholder="How many adults will there be?"
-                  // unit="adult"
-                  // pluralUnit="adults"
                   min={0}
                   max={12}
                 />
@@ -104,8 +102,6 @@ const TourBookingInfoModal = ({
               >
                 <InputNumber
                   placeholder="How many children will there be?"
-                  // unit="child"
-                  // pluralUnit="children"
                   min={0}
                   max={12}
                 />

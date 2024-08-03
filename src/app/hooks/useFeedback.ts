@@ -21,11 +21,11 @@ export function useFeedback() {
         dispatch(setCurrentFeedbacks(resultAction.payload));
       } else {
         if (resultAction.payload) {
-          notification.error({
-            message: "Error",
-            description: `${resultAction.payload}`,
-            placement: "topRight",
-          });
+          // notification.error({
+          //   message: "Error",
+          //   description: `${resultAction.payload}`,
+          //   placement: "topRight",
+          // });
         } else {
           notification.error({
             message: "Error",
@@ -45,11 +45,11 @@ export function useFeedback() {
         dispatch(setCurrentFeedbacks(resultAction.payload));
       } else {
         if (resultAction.payload) {
-          notification.error({
-            message: "Error",
-            description: `${resultAction.payload}`,
-            placement: "topRight",
-          });
+          // notification.error({
+          //   message: "Error",
+          //   description: `${resultAction.payload}`,
+          //   placement: "topRight",
+          // });
         } else {
           notification.error({
             message: "Error",

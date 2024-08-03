@@ -84,6 +84,29 @@ export const getCustomerById = createAsyncThunk<any, GetCustomerByIdParams>(
   },
 );
 
+export const getCustomerPrivateById = createAsyncThunk<
+  any,
+  GetCustomerPrivateByIdParams
+>(
+  "customer/fetch/getCustomerPrivateById",
+  async (data, { rejectWithValue }) => {
+    const { customerId } = data;
+    try {
+      const response = await agent.Customer.getPrivate(customerId);
+      return response;
+    } catch (error) {
+      console.log(error);
+
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+    }
+  },
+);
+
 export const updateCustomerInformation = createAsyncThunk<
   any,
   UpdateCustomerInformationParams
@@ -195,6 +218,10 @@ export default customerSlice.reducer;
 
 export type GetCustomerByIdParams = {
   customerId: number;
+};
+
+export type GetCustomerPrivateByIdParams = {
+  customerId: string;
 };
 
 export type UpdateCustomerInformationParams = {

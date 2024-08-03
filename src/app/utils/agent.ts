@@ -99,7 +99,8 @@ const Customer = {
   getAllCustomer: () => baseRequests.get(`${_customer}`),
   getCustomerById: (customerId: number) =>
     requests.get(`${_customer}/${customerId}`),
-  getPrivate: () => requests.get(`${_customer}/private`),
+  getPrivate: (customerId: string) =>
+    requests.get(`${_customer}/private`, { customerId }),
   changeStatusBookingTourGuide: (data: any) =>
     requests.post(`${_customer}/change-status-booking-tour-guide`, data),
   changeStatusBookingTour: (data: any) =>

@@ -22,7 +22,7 @@ import {
   TourGuideRegisterParams,
   VerifyParams,
 } from "../redux/slice/authSlice";
-import { getCustomerById } from "../redux/slice/customerSlice";
+import { getCustomerPrivateById } from "../redux/slice/customerSlice";
 import { getTourGuidePrivateById } from "../redux/slice/tourguideSlice";
 import {
   resetOTPModal,
@@ -209,9 +209,9 @@ export function useAuth() {
     switch (role) {
       case ROLE.customer: {
         const resultAction = await dispatch(
-          getCustomerById({ customerId: parseInt(userId) }),
+          getCustomerPrivateById({ customerId: userId }),
         );
-        if (getCustomerById.fulfilled.match(resultAction)) {
+        if (getCustomerPrivateById.fulfilled.match(resultAction)) {
           dispatch(setCurrentUser(resultAction.payload));
         } else {
           notification.error({

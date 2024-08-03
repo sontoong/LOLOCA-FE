@@ -1,6 +1,6 @@
-import { InputNumber, Typography } from "antd";
+import { Typography } from "antd";
 import { Form } from "../../components/form";
-import { Input } from "../../components/inputs";
+import { Input, InputNumber } from "../../components/inputs";
 
 const AddFundModal = ({
   form,
@@ -50,12 +50,12 @@ const AddFundModal = ({
               },
             ]}
           >
-            <InputNumber
+            <InputNumber.Currency
               placeholder="Type your fund here"
               min={50000}
-              defaultValue={initialValues.amount}
+              max={1000000}
               className="w-full"
-              suffix="VND"
+              step={1000}
             />
           </Form.Item>
           <Form.Item
@@ -69,7 +69,6 @@ const AddFundModal = ({
           >
             <Input
               placeholder="Type your transactional code"
-              defaultValue={initialValues.transactionalCode}
               className="w-full"
             />
           </Form.Item>

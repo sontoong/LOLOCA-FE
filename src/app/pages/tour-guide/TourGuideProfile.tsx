@@ -171,7 +171,10 @@ const TourGuideProfile = () => {
         <>
           <Banner image={currentUser.cover} height="20rem" boxShadow={false} />
           <div className="flex justify-evenly">
-            <Paragraph className="mt-[2rem] w-[40%] text-lg">
+            <Paragraph
+              className="mt-[2rem] w-[40%] text-lg"
+              ellipsis={{ rows: 6, expandable: "collapsible" }}
+            >
               {currentUser.description}
               {renderSocialIcons()}
             </Paragraph>

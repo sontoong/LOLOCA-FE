@@ -1,14 +1,14 @@
-import { Card } from "../../components/card";
-import VietNamBanner from "../../../assets/banner.png";
 import { Steps } from "antd";
-import { Form } from "../../components/form";
 import { useState } from "react";
-import AddFundModal from "../../ui/customer_ui/addFundModal";
-import { PrimaryButton } from "../../components/buttons";
-import FundDetailModal from "../../ui/customer_ui/fundDetailModal";
-import { usePayment } from "../../hooks/usePayment";
-import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import VietNamBanner from "../../../assets/banner.png";
+import { PrimaryButton } from "../../components/buttons";
+import { Card } from "../../components/card";
+import { Form } from "../../components/form";
+import { useAuth } from "../../hooks/useAuth";
+import { usePayment } from "../../hooks/usePayment";
+import AddFundModal from "../../ui/customer_ui/addFundModal";
+import FundDetailModal from "../../ui/customer_ui/fundDetailModal";
 
 const { Step } = Steps;
 
@@ -27,7 +27,7 @@ const AddFundPage = () => {
 
   const back = () => {
     window.scrollTo(0, 0);
-    setCurrentStep(1);
+    setCurrentStep(currentStep - 1);
   };
 
   const initialValues = {
@@ -36,7 +36,7 @@ const AddFundPage = () => {
   };
 
   const fundDetail = {
-    name: "Nguyen Van A",
+    name: "Vo Minh Thang",
     phone: "12345678901",
     walletNumber: "12345678901",
     description: "LO12345678901",
@@ -102,7 +102,7 @@ const AddFundPage = () => {
               )}
               {currentStep === steps.length - 1 && (
                 <>
-                  <PrimaryButton text="Next" onClick={() => back()} />
+                  <PrimaryButton text="Back" onClick={() => back()} />
                   <PrimaryButton
                     onClick={() => form.submit()}
                     text="Ok"

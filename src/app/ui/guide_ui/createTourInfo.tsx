@@ -1,6 +1,6 @@
-import { Col, FormInstance, InputNumber, Row } from "antd";
+import { Col, FormInstance, Row } from "antd";
 import { Form } from "../../components/form";
-import { Input, InputSelect } from "../../components/inputs";
+import { Input, InputNumber, InputSelect } from "../../components/inputs";
 import { ImageUpload } from "../../components/image-upload";
 import { UploadFile } from "antd/lib";
 import { useEffect } from "react";

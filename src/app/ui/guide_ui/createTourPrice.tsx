@@ -1,8 +1,9 @@
-import { InputNumber, Typography } from "antd";
 import { MinusCircleFilled, PlusOutlined } from "@ant-design/icons";
+import { Typography } from "antd";
+import { useEffect } from "react";
 import { PrimaryButton } from "../../components/buttons";
 import { Form } from "../../components/form";
-import { useEffect } from "react";
+import { InputNumber } from "../../components/inputs";
 
 const { Title } = Typography;
 
