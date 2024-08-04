@@ -200,9 +200,11 @@ const TourGuideProfile = () => {
       </Title>
       {renderTours()}
       <div className="my-[3rem] flex items-center justify-end">
-        <Title level={4}>Can't find your suitable tour</Title>
+        <Title level={4} style={{ margin: 0 }}>
+          Can't find your suitable tour?
+        </Title>
         <PrimaryButton
-          text="Booking"
+          text="Book Custom Tour"
           className="ml-[1rem] mr-[5rem]"
           size="large"
           onClick={handleBooking}

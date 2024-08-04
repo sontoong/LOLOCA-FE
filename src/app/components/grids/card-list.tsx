@@ -61,7 +61,7 @@ function CardListGridHorizontal<RecordType>({
     return (
       <Flex gap={"middle"} className="overflow-x-auto overflow-y-hidden py-3">
         {items.map((item, index) => (
-          <div key={index} className="z-[100]">
+          <div key={index} className="z-[10]">
             {render(item)}
           </div>
         ))}
