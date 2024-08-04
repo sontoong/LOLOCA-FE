@@ -282,23 +282,27 @@ const TourGuideTourDetailPage = () => {
             ]}
           />
           <div className="w-[35%]">
-            {stateTourGuide.currentTourguide ? (
-              <div>
-                <Title style={{ color: "#004AAD", fontWeight: "bolder" }}>
-                  Tour Guide
+            <Title style={{ color: "#004AAD", fontWeight: "bolder" }}>
+              Tour Guide
+            </Title>
+            {!stateTourGuide.isFetching ? (
+              <Link to={`/guide/profile}`}>
+                <Avatar
+                  size={160}
+                  src={stateTourGuide.currentTourguide.avatar}
+                />
+                <Title style={{ fontWeight: "bolder" }}>
+                  {`${stateTourGuide.currentTourguide.firstName} ${stateTourGuide.currentTourguide.lastName}`}
                 </Title>
-                <Link to={`/guide/profile}`}>
-                  <Avatar
-                    size={160}
-                    src={stateTourGuide.currentTourguide.avatar}
-                  />
-                  <Title style={{ fontWeight: "bolder" }} className="underline">
-                    {`${stateTourGuide.currentTourguide.firstName} ${stateTourGuide.currentTourguide.lastName}`}
-                  </Title>
-                </Link>
-              </div>
+              </Link>
             ) : (
-              <></>
+              <>
+                <Skeleton.Avatar size={160} />
+                <Skeleton.Paragraph
+                  title={{ width: "300px" }}
+                  paragraph={false}
+                />
+              </>
             )}
             <Divider colorSplit="black" />
             <div>

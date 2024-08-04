@@ -1,5 +1,5 @@
 import { DownOutlined } from "@ant-design/icons";
-import { Card, Dropdown, MenuProps, Space, Typography } from "antd";
+import { Dropdown, MenuProps, Space } from "antd";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import VietNamBanner from "../../../assets/banner.png";
@@ -9,8 +9,7 @@ import NotFound from "../../components/not-found/not-found";
 import { useCity } from "../../hooks/useCity";
 import { CardListGrid } from "../../components/grids";
 import { CardSkeleton } from "../../components/skeletons";
-
-const { Title, Paragraph } = Typography;
+import { Card } from "../../components/card";
 
 export default function CitiesPage() {
   const navigate = useNavigate();
@@ -41,6 +40,8 @@ export default function CitiesPage() {
             items={renderCities}
             render={(city) => (
               <Card
+                title={city?.name}
+                description={city?.cityDescription}
                 className="h-[390px]"
                 hoverable
                 cover={
@@ -54,14 +55,7 @@ export default function CitiesPage() {
                   />
                 }
                 onClick={() => navigate(`/cities/${city?.cityId}`)}
-              >
-                <Title level={2} className="mt-0">
-                  {city?.name}
-                </Title>
-                <Paragraph ellipsis={{ rows: 3, expandable: false }}>
-                  {city?.cityDescription}
-                </Paragraph>
-              </Card>
+              />
             )}
           />
           {/* <div className="flex justify-end mr-[5%] mb-[2%]">

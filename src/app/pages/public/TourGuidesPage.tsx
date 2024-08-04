@@ -1,14 +1,6 @@
 import Banner from "../../components/banner/banner";
 import VietNamBanner from "../../../assets/banner.png";
-import {
-  Card,
-  Dropdown,
-  MenuProps,
-  Pagination,
-  PaginationProps,
-  Space,
-  Typography,
-} from "antd";
+import { Dropdown, MenuProps, Pagination, PaginationProps, Space } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { useTourGuide } from "../../hooks/useTourGuide";
 import NotFound from "../../components/not-found/not-found";
@@ -17,8 +9,7 @@ import { Image } from "../../components/image";
 import { useNavigate } from "react-router-dom";
 import { CardListGrid } from "../../components/grids";
 import { CardSkeleton } from "../../components/skeletons";
-
-const { Title, Paragraph } = Typography;
+import { Card } from "../../components/card";
 
 export default function GuidesPage() {
   const navigate = useNavigate();
@@ -70,6 +61,8 @@ export default function GuidesPage() {
               if (tourGuide) {
                 return (
                   <Card
+                    title={`${tourGuide.firstName} ${tourGuide.lastName}`}
+                    description={tourGuide.description}
                     className="h-[390px]"
                     hoverable
                     onClick={() => handleCardClick(tourGuide.tourGuideId)}
@@ -85,14 +78,7 @@ export default function GuidesPage() {
                         preview={false}
                       />
                     }
-                  >
-                    <Title level={2} className="mt-0">
-                      {`${tourGuide.firstName} ${tourGuide.lastName}`}
-                    </Title>
-                    <Paragraph ellipsis={{ rows: 3, expandable: false }}>
-                      {tourGuide.description}
-                    </Paragraph>
-                  </Card>
+                  />
                 );
               }
             }}

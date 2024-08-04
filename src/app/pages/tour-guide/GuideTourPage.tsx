@@ -1,13 +1,5 @@
 import { DownOutlined } from "@ant-design/icons";
-import {
-  Card,
-  Dropdown,
-  MenuProps,
-  Pagination,
-  PaginationProps,
-  Space,
-  Typography,
-} from "antd";
+import { Dropdown, MenuProps, Pagination, PaginationProps, Space } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import VietNamBanner from "../../../assets/banner.png";
@@ -17,8 +9,7 @@ import NotFound from "../../components/not-found/not-found";
 import { useTour } from "../../hooks/useTour";
 import { CardListGrid } from "../../components/grids";
 import { CardSkeleton } from "../../components/skeletons";
-
-const { Title, Paragraph } = Typography;
+import { Card } from "../../components/card";
 
 export default function GuideTourPage() {
   const navigate = useNavigate();
@@ -77,6 +68,8 @@ export default function GuideTourPage() {
               if (tour) {
                 return (
                   <Card
+                    title={tour.name}
+                    description={tour.description}
                     className="h-[390px]"
                     hoverable
                     onClick={() => handleCardClick(tour.tourId)}
@@ -92,14 +85,7 @@ export default function GuideTourPage() {
                         preview={false}
                       />
                     }
-                  >
-                    <Title level={2} className="mt-0">
-                      {tour.name}
-                    </Title>
-                    <Paragraph ellipsis={{ rows: 3, expandable: false }}>
-                      {tour.description}
-                    </Paragraph>
-                  </Card>
+                  />
                 );
               }
             }}

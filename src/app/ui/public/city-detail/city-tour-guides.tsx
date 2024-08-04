@@ -1,4 +1,4 @@
-import { Card, Pagination, PaginationProps, Typography } from "antd";
+import { Pagination, PaginationProps } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Image } from "../../../components/image";
@@ -6,8 +6,7 @@ import NotFound from "../../../components/not-found/not-found";
 import { useTourGuide } from "../../../hooks/useTourGuide";
 import { CardListGrid } from "../../../components/grids";
 import { CardSkeleton } from "../../../components/skeletons";
-
-const { Title, Paragraph } = Typography;
+import { Card } from "../../../components/card";
 
 export default function CityTourGuides() {
   const { cityId } = useParams();
@@ -59,6 +58,8 @@ export default function CityTourGuides() {
               if (guide) {
                 return (
                   <Card
+                    title={`${guide.firstName} ${guide.lastName}`}
+                    description={guide.description}
                     className="h-[390px]"
                     hoverable
                     onClick={() => handleCardClick(guide.tourGuideId)}
@@ -74,14 +75,7 @@ export default function CityTourGuides() {
                         preview={false}
                       />
                     }
-                  >
-                    <Title level={2} className="mt-0">
-                      {`${guide.firstName} ${guide.lastName}`}
-                    </Title>
-                    <Paragraph ellipsis={{ rows: 3, expandable: false }}>
-                      {guide.description}
-                    </Paragraph>
-                  </Card>
+                  />
                 );
               }
             }}

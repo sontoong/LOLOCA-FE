@@ -1,5 +1,5 @@
 import { Banner } from "../../components/banner";
-import { Card, Col, Row, Typography } from "antd";
+import { Col, Row, Typography } from "antd";
 import { Divider } from "../../components/divider";
 import { PrimaryButton } from "../../components/buttons";
 import {
@@ -19,6 +19,7 @@ import { CardListGrid } from "../../components/grids";
 import { CardSkeleton, Skeleton } from "../../components/skeletons";
 import { Avatar } from "../../components/avatar";
 import { useFeedback } from "../../hooks/useFeedback";
+import { Card } from "../../components/card";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -73,8 +74,9 @@ const TourGuideProfile = () => {
               if (item) {
                 return (
                   <Card
-                    key={item.tourId}
-                    className="h-96 w-80 flex-shrink-0"
+                    title={item.name}
+                    description={item.description}
+                    className="h-[400px] w-80 flex-shrink-0"
                     hoverable
                     cover={
                       <Image
@@ -87,14 +89,7 @@ const TourGuideProfile = () => {
                       />
                     }
                     onClick={() => navigate(`/tours/${item.tourId}`)}
-                  >
-                    <Title level={2} className="mt-0">
-                      {item.name}
-                    </Title>
-                    <Paragraph ellipsis={{ rows: 3, expandable: false }}>
-                      {item.description}
-                    </Paragraph>
-                  </Card>
+                  />
                 );
               }
             }}

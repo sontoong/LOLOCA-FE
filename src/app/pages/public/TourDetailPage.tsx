@@ -6,7 +6,7 @@ import { Typography, Row, Col, Steps } from "antd";
 import { PrimaryButton } from "../../components/buttons";
 import { Divider } from "../../components/divider";
 import { Table } from "../../components/table";
-import { formatDateToLocal } from "../../utils/utils";
+import { formatCurrency, formatDateToLocal } from "../../utils/utils";
 import { StarFilled } from "@ant-design/icons";
 import { Image } from "../../components/image";
 import { useFeedback } from "../../hooks/useFeedback";
@@ -60,8 +60,8 @@ const TourDetailPage = () => {
   const priceData = tour.tourPriceDTOs?.map((item, index) => ({
     key: index,
     amount: `From ${item.totalTouristFrom} to ${item.totalTouristTo}`,
-    adult: item.adultPrice,
-    child: item.childPrice,
+    adult: formatCurrency(item.adultPrice),
+    child: formatCurrency(item.childPrice),
   }));
 
   const columns = [
@@ -126,7 +126,7 @@ const TourDetailPage = () => {
         </Col>
         <Col offset={1}>
           <PrimaryButton
-            text="Booking"
+            text="Book"
             className="px-[4rem]"
             onClick={onBooking}
           />
@@ -269,23 +269,24 @@ const TourDetailPage = () => {
           ]}
         />
         <div className="w-[35%]">
-          {stateTourGuide.currentTourguide ? (
-            <div>
-              <Title style={{ color: "#004AAD", fontWeight: "bolder" }}>
-                Tour Guide
+          <Title style={{ color: "#004AAD", fontWeight: "bolder" }}>
+            Tour Guide
+          </Title>
+          {!stateTourGuide.isFetching ? (
+            <Link to={`/guides/${stateTour.currentTour?.tourGuideId}`}>
+              <Avatar size={160} src={stateTourGuide.currentTourguide.avatar} />
+              <Title style={{ fontWeight: "bolder" }}>
+                {`${stateTourGuide.currentTourguide.firstName} ${stateTourGuide.currentTourguide.lastName}`}
               </Title>
-              <Link to={`/guides/${stateTour.currentTour?.tourGuideId}`}>
-                <Avatar
-                  size={160}
-                  src={stateTourGuide.currentTourguide.avatar}
-                />
-                <Title style={{ fontWeight: "bolder" }} className="underline">
-                  {`${stateTourGuide.currentTourguide.firstName} ${stateTourGuide.currentTourguide.lastName}`}
-                </Title>
-              </Link>
-            </div>
+            </Link>
           ) : (
-            <></>
+            <>
+              <Skeleton.Avatar size={160} />
+              <Skeleton.Paragraph
+                title={{ width: "300px" }}
+                paragraph={false}
+              />
+            </>
           )}
           <Divider colorSplit="black" />
           <div>

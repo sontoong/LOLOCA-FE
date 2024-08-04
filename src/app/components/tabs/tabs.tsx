@@ -5,7 +5,7 @@ function BannerTabs(props: CustomTabsProps) {
     <ConfigProvider
       theme={{
         token: {
-          colorBorderSecondary: "#00000000",
+          colorBorderSecondary: "#00000030",
         },
         components: {
           Tabs: {

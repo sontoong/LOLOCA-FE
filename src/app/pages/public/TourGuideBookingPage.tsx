@@ -1,16 +1,16 @@
 import { Steps } from "antd";
 import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import VietNamBanner from "../../../assets/banner.png";
 import { PrimaryButton } from "../../components/buttons";
-import { Card } from "../../components/card";
+import { ScreenCard } from "../../components/card";
 import { Form } from "../../components/form";
+import { useBookingTourGuide } from "../../hooks/useBookingTourGuide";
+import { useTourGuide } from "../../hooks/useTourGuide";
 import GuideInfoModal from "../../ui/customer_ui/guideInfoModal";
 import InstructionModal from "../../ui/customer_ui/instructionModal";
 import TourGuideBookingInfo from "../../ui/customer_ui/tourGuideBookingInfo";
-import { useTourGuide } from "../../hooks/useTourGuide";
-import { useNavigate, useParams } from "react-router-dom";
-import { useBookingTourGuide } from "../../hooks/useBookingTourGuide";
 
 const { Step } = Steps;
 
@@ -98,7 +98,7 @@ const TourGuideBookingPage = () => {
       }}
       className="h-full py-[2rem]"
     >
-      <Card
+      <ScreenCard
         cardTitle="Create your tour"
         className="mx-auto w-[50%]"
         bordered={false}
@@ -163,7 +163,7 @@ const TourGuideBookingPage = () => {
             </div>
           </Form>
         </Form.Provider>
-      </Card>
+      </ScreenCard>
     </div>
   );
 };

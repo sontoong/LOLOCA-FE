@@ -3,9 +3,10 @@ import { jwtDecode } from "jwt-decode";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
-// import { router } from "../routes/route";
 import agent from "./agent";
 import { Envs } from "./env";
+
+NProgress.configure({ showSpinner: false });
 
 const baseURL = Envs.api;
 

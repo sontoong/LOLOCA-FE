@@ -1,9 +1,10 @@
 import { Steps } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import VietNamBanner from "../../../assets/banner.png";
 import { PrimaryButton } from "../../components/buttons";
-import { Card } from "../../components/card";
+import { ScreenCard } from "../../components/card";
 import { Form } from "../../components/form";
 import { useAuth } from "../../hooks/useAuth";
 import { usePayment } from "../../hooks/usePayment";
@@ -72,7 +73,11 @@ const AddFundPage = () => {
       }}
       className="h-full py-[2rem]"
     >
-      <Card cardTitle="Add Fund" className="mx-auto w-[50%]" bordered={false}>
+      <ScreenCard
+        cardTitle="Add Fund"
+        className="mx-auto w-[50%]"
+        bordered={false}
+      >
         <Steps current={currentStep} className="my-[5%]">
           {steps.map((step, index) => (
             <Step key={index} title={step.title} />
@@ -113,7 +118,7 @@ const AddFundPage = () => {
             </div>
           </Form>
         </Form.Provider>
-      </Card>
+      </ScreenCard>
     </div>
   );
 };

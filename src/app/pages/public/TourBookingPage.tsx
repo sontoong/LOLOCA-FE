@@ -1,21 +1,21 @@
-import { useEffect, useState } from "react";
 import { Steps } from "antd";
+import { useEffect, useState } from "react";
+import dayjs from "dayjs";
+import { useNavigate, useParams } from "react-router-dom";
 
-import { PrimaryButton } from "../../components/buttons";
-import { Form } from "../../components/form";
-import { Card } from "../../components/card";
 import VietNamBanner from "../../../assets/banner.png";
+import { PrimaryButton } from "../../components/buttons";
+import { ScreenCard } from "../../components/card";
+import { Form } from "../../components/form";
+import { useBookingTour } from "../../hooks/useBookingTour";
+import { useProtectedAction } from "../../hooks/useProtectedAction";
+import { useTour } from "../../hooks/useTour";
+import { useTourGuide } from "../../hooks/useTourGuide";
+import { isLoggedIn } from "../../redux/slice/authSlice";
+import GuideInfoModal from "../../ui/customer_ui/guideInfoModal";
 import InstructionModal from "../../ui/customer_ui/instructionModal";
 import TourBookingInfoModal from "../../ui/customer_ui/tourBookingInfoModal";
-import GuideInfoModal from "../../ui/customer_ui/guideInfoModal";
-import { useNavigate, useParams } from "react-router-dom";
-import { useTour } from "../../hooks/useTour";
-import { useProtectedAction } from "../../hooks/useProtectedAction";
-import { isLoggedIn } from "../../redux/slice/authSlice";
-import { useBookingTour } from "../../hooks/useBookingTour";
 import { dateToLocalISOString } from "../../utils/utils";
-import dayjs from "dayjs";
-import { useTourGuide } from "../../hooks/useTourGuide";
 
 const { Step } = Steps;
 
@@ -115,7 +115,7 @@ const TourBookingPage = () => {
       }}
       className="h-full py-[2rem]"
     >
-      <Card
+      <ScreenCard
         cardTitle="Create your tour"
         className="mx-auto w-[50%]"
         bordered={false}
@@ -176,7 +176,7 @@ const TourBookingPage = () => {
             </div>
           </Form>
         </Form.Provider>
-      </Card>
+      </ScreenCard>
     </div>
   );
 };

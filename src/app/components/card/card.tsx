@@ -1,41 +1,23 @@
-import { Card, CardProps, ConfigProvider, Typography } from "antd";
+import { Card, CardProps, Typography } from "antd";
 
-const CustomCard = ({ cardTitle, ...rest }: CustomCardProps) => {
-  const { Title } = Typography;
+const { Title, Paragraph } = Typography;
 
+const CustomCard = ({ title, description, ...rest }: CustomCardProps) => {
   return (
-    <ConfigProvider
-      theme={{
-        components: {
-          Card: {
-            headerBg: "#004AAD",
-          },
-        },
-      }}
-    >
-      <Card
-        title={
-          <Title
-            level={4}
-            style={{
-              margin: 0,
-              textTransform: "uppercase",
-              color: "#FFDE59",
-              textAlign: "center",
-              fontWeight: "bold",
-            }}
-          >
-            {cardTitle}
-          </Title>
-        }
-        {...rest}
-      />
-    </ConfigProvider>
+    <Card {...rest}>
+      <Title level={2} className="mt-0" ellipsis={{ rows: 2 }}>
+        {title}
+      </Title>
+      <Paragraph ellipsis={{ rows: 3, expandable: false }}>
+        {description}
+      </Paragraph>
+    </Card>
   );
 };
 
-type CustomCardProps = Omit<CardProps, "title"> & {
-  cardTitle: string;
-};
-
 export default CustomCard;
+
+type CustomCardProps = CardProps & {
+  title?: string;
+  description?: string;
+};

@@ -1,5 +1,5 @@
 import { Banner } from "../../components/banner";
-import { Card, Col, Row, Typography } from "antd";
+import { Col, Row, Typography } from "antd";
 import { Divider } from "../../components/divider";
 import {
   FacebookFilled,
@@ -22,6 +22,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { TourGuide } from "../../models/tourGuide";
 import { useTourGuide } from "../../hooks/useTourGuide";
 import { useFeedback } from "../../hooks/useFeedback";
+import { Card } from "../../components/card";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -75,7 +76,8 @@ const TourGuideProfile = () => {
               if (item) {
                 return (
                   <Card
-                    key={item.tourId}
+                    title={item.name}
+                    description={item.description}
                     className="h-96 w-80 flex-shrink-0"
                     hoverable
                     cover={
@@ -89,14 +91,7 @@ const TourGuideProfile = () => {
                       />
                     }
                     onClick={() => navigate(`/guide/tours/${item.tourId}`)}
-                  >
-                    <Title level={2} className="mt-0">
-                      {item.name}
-                    </Title>
-                    <Paragraph ellipsis={{ rows: 3, expandable: false }}>
-                      {item.description}
-                    </Paragraph>
-                  </Card>
+                  />
                 );
               }
             }}

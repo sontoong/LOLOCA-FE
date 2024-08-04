@@ -1,22 +1,23 @@
-import { useEffect, useState } from "react";
 import { Steps, UploadFile } from "antd";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+
+import VietNamBanner from "../../../assets/banner.png";
 import { PrimaryButton } from "../../components/buttons";
 import { Form } from "../../components/form";
-import { Card } from "../../components/card";
-import VietNamBanner from "../../../assets/banner.png";
-import CreateTourInfo from "../../ui/guide_ui/createTourInfo";
+import { Skeleton } from "../../components/skeletons";
+import { useAuth } from "../../hooks/useAuth";
+import { useTour } from "../../hooks/useTour";
+import { Tour } from "../../models/tour";
+import { TourGuide } from "../../models/tourGuide";
+import { CreateTourParams } from "../../redux/slice/tourSlice";
 import CreateTourDetail from "../../ui/guide_ui/createTourDetail";
+import CreateTourInfo from "../../ui/guide_ui/createTourInfo";
 import CreateTourItinerary from "../../ui/guide_ui/createTourItinerary";
 import CreateTourPrice from "../../ui/guide_ui/createTourPrice";
-import { useTour } from "../../hooks/useTour";
 import { base64ToBlob, ensureBase64Avatar } from "../../utils/utils";
-import { useAuth } from "../../hooks/useAuth";
-import { TourGuide } from "../../models/tourGuide";
-import { useNavigate, useParams } from "react-router-dom";
-import { Tour } from "../../models/tour";
-import { CreateTourParams } from "../../redux/slice/tourSlice";
-import { v4 as uuidv4 } from "uuid";
-import { Skeleton } from "../../components/skeletons";
+import { ScreenCard } from "../../components/card";
 
 const { Step } = Steps;
 
@@ -198,7 +199,7 @@ const CreateTourPage = () => {
       }}
       className="h-full py-[2rem]"
     >
-      <Card
+      <ScreenCard
         cardTitle="Create your tour"
         className="mx-auto w-[50%]"
         bordered={false}
@@ -279,7 +280,7 @@ const CreateTourPage = () => {
             </Form>
           </Form.Provider>
         )}
-      </Card>
+      </ScreenCard>
     </div>
   );
 };
