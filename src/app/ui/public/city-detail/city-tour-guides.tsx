@@ -83,8 +83,12 @@ export default function CityTourGuides() {
           <div className="mb-[2%] mr-[5%] mt-5 flex justify-end">
             <Pagination
               current={currentPage}
+              pageSize={currentPageSize}
+              pageSizeOptions={[8, 16, 24, 32, 40]}
               onChange={onChangePage}
-              total={stateTourGuide.currentTourGuideList.totalPage}
+              total={
+                stateTourGuide.currentTourGuideList.totalPage * currentPageSize
+              }
               showSizeChanger
               onShowSizeChange={onShowSizeChange}
             />

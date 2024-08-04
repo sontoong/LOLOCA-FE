@@ -185,6 +185,7 @@ const RequestListPage = () => {
       <div className="mb-[2%] mr-[5%] flex justify-end">
         <Pagination
           current={currentPage}
+          pageSize={currentPageSize}
           onChange={onChangePage}
           total={currentPageSize}
           showSizeChanger

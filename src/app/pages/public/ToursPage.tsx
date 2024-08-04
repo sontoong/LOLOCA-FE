@@ -28,10 +28,10 @@ export default function ToursPage() {
   };
 
   const onShowSizeChange: PaginationProps["onShowSizeChange"] = (
-    current,
+    _,
     pageSize,
   ) => {
-    setCurrentPage(current);
+    setCurrentPage(1);
     setCurrentPageSize(pageSize);
   };
 
@@ -85,8 +85,10 @@ export default function ToursPage() {
           <div className="mb-[2%] mr-[5%] mt-5 flex justify-end">
             <Pagination
               current={currentPage}
+              pageSize={currentPageSize}
+              pageSizeOptions={[8, 16, 24, 32, 40]}
               onChange={onChangePage}
-              total={renderTours?.totalPage}
+              total={(renderTours?.totalPage - 1) * currentPageSize}
               showSizeChanger
               onShowSizeChange={onShowSizeChange}
             />

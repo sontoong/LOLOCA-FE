@@ -93,8 +93,10 @@ export default function GuideTourPage() {
           <div className="mb-[2%] mr-[5%] flex justify-end">
             <Pagination
               current={currentPage}
+              pageSize={currentPageSize}
+              pageSizeOptions={[8, 16, 24, 32, 40]}
               onChange={onChangePage}
-              total={renderTours?.totalPage}
+              total={(renderTours.totalPage - 1) * currentPageSize}
               showSizeChanger
               onShowSizeChange={onShowSizeChange}
             />
