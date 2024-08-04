@@ -42,7 +42,7 @@ function CardListGridHorizontal<RecordType>({
 }: CardListGridProps<RecordType>) {
   if (typeof items === "number") {
     return (
-      <Flex gap={"middle"} className="h-fit overflow-x-auto py-3">
+      <Flex gap={"middle"} className="h-fit overflow-x-auto px-2 py-3">
         {Array(items)
           .fill({})
           .map((_, index) => (
@@ -59,7 +59,10 @@ function CardListGridHorizontal<RecordType>({
       return <NotFound />;
     }
     return (
-      <Flex gap={"middle"} className="overflow-x-auto overflow-y-hidden py-3">
+      <Flex
+        gap={"middle"}
+        className="overflow-x-auto overflow-y-hidden px-2 py-3"
+      >
         {items.map((item, index) => (
           <div key={index} className="z-[10]">
             {render(item)}

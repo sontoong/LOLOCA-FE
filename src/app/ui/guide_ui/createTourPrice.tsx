@@ -14,7 +14,6 @@ const CreateTourPrice = ({
   form: any;
   initialValues: any;
 }) => {
-  console.log(initialValues);
   useEffect(() => {
     form.setFieldsValue({ ...initialValues });
   }, [form, initialValues]);
@@ -121,12 +120,7 @@ const CreateTourPrice = ({
                     ]}
                     style={{ flex: 1, marginRight: 8 }}
                   >
-                    <InputNumber
-                      placeholder="Adult Prices"
-                      min={0}
-                      step={1000}
-                      suffix="VND"
-                    />
+                    <InputNumber.Currency min={0} max={1000000} step={1000} />
                   </Form.Item>
                   <Form.Item
                     name={[name, "childPrice"]}
@@ -145,12 +139,7 @@ const CreateTourPrice = ({
                     ]}
                     style={{ flex: 1, marginRight: 8 }}
                   >
-                    <InputNumber
-                      placeholder="Child Prices"
-                      min={0}
-                      step={1000}
-                      suffix="VND"
-                    />
+                    <InputNumber.Currency min={0} max={1000000} step={1000} />
                   </Form.Item>
                   {fields.length > 1 ? (
                     <MinusCircleFilled
