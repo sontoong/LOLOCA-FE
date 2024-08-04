@@ -10,7 +10,7 @@ import {
 } from "@ant-design/icons";
 import { formatDateToLocal } from "../../utils/utils";
 import { useTourGuide } from "../../hooks/useTourGuide";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useTour } from "../../hooks/useTour";
 import { genderGenerator } from "../../utils/generators/gender";
@@ -109,29 +109,33 @@ const TourGuideProfile = () => {
             Socials
           </Title>
         ) : null}
-        {stateTourGuide.currentTourguide.zaloLink && (
-          <Link
-            to={stateTourGuide.currentTourguide.zaloLink}
+        {stateTourGuide.currentTourguide.facebookLink && (
+          <a
+            href={stateTourGuide.currentTourguide.facebookLink}
+            target="_blank"
+            rel="noopener noreferrer"
             className="mr-[1rem] text-white"
           >
             <FacebookFilled className="text-[2rem] transition-transform duration-300 hover:scale-125 hover:text-blue-500" />
-          </Link>
+          </a>
         )}
-        {stateTourGuide.currentTourguide.facebookLink && (
-          <Link
-            to={stateTourGuide.currentTourguide.facebookLink}
+        {stateTourGuide.currentTourguide.zaloLink && (
+          <a
+            href={stateTourGuide.currentTourguide.facebookLink}
+            target="_blank"
             className="mr-[1rem] text-white"
           >
             <TwitterCircleFilled className="text-[2rem] transition-transform duration-300 hover:scale-125 hover:text-blue-400" />
-          </Link>
+          </a>
         )}
         {stateTourGuide.currentTourguide.instagramLink && (
-          <Link
-            to={stateTourGuide.currentTourguide.instagramLink}
+          <a
+            href={stateTourGuide.currentTourguide.instagramLink}
+            target="_blank"
             className="mr-[1rem] text-white"
           >
             <InstagramFilled className="text-[2rem] transition-transform duration-300 hover:scale-125 hover:text-pink-500" />
-          </Link>
+          </a>
         )}
       </Paragraph>
     );
