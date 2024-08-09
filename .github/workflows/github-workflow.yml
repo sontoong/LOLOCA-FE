@@ -1,0 +1,82 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build Docker Image
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl
+          curl -L "https://github.com/docker/compose/releases/download/v2.27.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          chmod +x /usr/local/bin/docker-compose
+          sudo apt-get install -y openssh-client bash
+
+      - name: Build Docker Image
+        run: docker-compose -f ${{ secrets.DOCKER_COMPOSE_PATH }} build
+
+      - name: Check Docker Image
+        run: docker images
+
+      - name: Tag Docker Image
+        run: docker tag ${{ secrets.DOCKER_IMAGE_BUILD_NAME }} ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:v1.0
+
+      - name: Save Docker Image
+        run: docker save -o petcare_docker_image.tar ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:v1.0
+
+      - name: Upload Docker Image as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: petcare_docker_image
+          path: petcare_docker_image.tar
+
+  push:
+    name: Push Docker Image to Docker Hub
+    runs-on: self-hosted
+    needs: build
+    steps:
+      - name: Download Docker Image Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: petcare_docker_image
+
+      - name: Load Docker Image
+        run: docker load -i petcare_docker_image.tar
+
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Push Docker Image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:v1.0
+
+  deploy:
+    name: Deploy to VPS
+    runs-on: self-hosted
+    needs: push
+    steps:
+      - name: Install SSH Client
+        run: sudo apt-get install -y openssh-client
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Test SSH Connection
+        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} 'echo "SSH connection successful"'
+
+      - name: Deploy via SSH
+        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} 'sudo su - ${{ secrets.VPS_USER }} ${{ secrets.DEPLOY_SCRIPTS_PATH }}'

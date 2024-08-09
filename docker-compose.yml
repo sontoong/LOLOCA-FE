@@ -1,0 +1,13 @@
+services:
+  loloca_fe:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    env_file:
+      - path: ./.env
+    environment:
+      - VITE_API=$VITE_API
+    volumes:
+      - ./src:/usr/src/app
