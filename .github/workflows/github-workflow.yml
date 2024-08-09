@@ -12,6 +12,10 @@ jobs:
   build:
     name: Build Docker Image
     runs-on: self-hosted
+    services:
+      docker:
+        image: docker:latest
+        options: --privileged
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -25,10 +29,10 @@ jobs:
           sudo apt-get install -y openssh-client bash
 
       - name: Build Docker Image
-        run: sudo docker-compose -f ${{ secrets.DOCKER_COMPOSE_PATH }} build
+        run: docker-compose -f ${{ secrets.DOCKER_COMPOSE_PATH }} build
 
       - name: Rename Tag Docker Image
-        run: sudo docker tag ${{ secrets.DOCKER_IMAGE_BUILD_NAME }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
+        run: docker tag ${{ secrets.DOCKER_IMAGE_BUILD_NAME }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
 
       - name: Print Current Working Directory
         run: pwd
@@ -36,7 +40,7 @@ jobs:
       - name: Save and Upload Docker Image
         run: |
           pwd
-          sudo docker save -o docker_image.tar ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
+          docker save -o docker_image.tar ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
           sudo chmod 777 docker_image.tar
           
       - name: Upload Docker Image as Artifact
@@ -49,9 +53,13 @@ jobs:
         run: rm -f docker_image.tar
 
   push:
+    needs: build
     name: Push Docker Image to Docker Hub
     runs-on: self-hosted
-    needs: build
+    services:
+      docker:
+        image: docker:latest
+        options: --privileged
     steps:
       - name: Download Docker Image Artifact
         uses: actions/download-artifact@v3
@@ -65,11 +73,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Load Docker Image
-        run: sudo docker load -i docker_image.tar
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
+        run: docker load -i docker_image.tar
 
       - name: Push Docker Image
         uses: docker/build-push-action@v6
@@ -78,9 +82,9 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{secrets.DOCKER_REPO_NAME}}:latest
 
   deploy:
+    needs: push
     name: Deploy to VPS
     runs-on: self-hosted
-    needs: push
     steps:
       - name: Install SSH Client
         run: sudo apt-get install -y openssh-client
