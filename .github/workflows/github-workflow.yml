@@ -34,13 +34,16 @@ jobs:
         run: sudo docker tag ${{ secrets.DOCKER_IMAGE_BUILD_NAME }} ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:v1.0
 
       - name: Save Docker Image
-        run: sudo docker save -o petcare_docker_image.tar ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:v1.0
+        run: sudo docker save -o docker_image.tar ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:v1.0
+
+      - name: Change Docker Image Permissions
+        run: sudo chmod 777 docker_image.tar
 
       - name: Upload Docker Image as Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: petcare_docker_image
-          path: petcare_docker_image.tar
+          name: docker_image
+          path: docker_image.tar
 
   push:
     name: Push Docker Image to Docker Hub
