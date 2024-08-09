@@ -27,10 +27,7 @@ jobs:
       - name: Build Docker Image
         run: sudo docker-compose -f ${{ secrets.DOCKER_COMPOSE_PATH }} build
 
-      - name: Check Docker Image
-        run: sudo docker images
-
-      - name: Tag Docker Image
+      - name: Rename Tag Docker Image
         run: sudo docker tag ${{ secrets.DOCKER_IMAGE_BUILD_NAME }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
 
       - name: Save and Upload Docker Image
@@ -48,11 +45,6 @@ jobs:
     name: Push Docker Image to Docker Hub
     runs-on: self-hosted
     needs: build
-    permissions:
-      packages: write
-      contents: read
-      attestations: write
-      id-token: write
     steps:
       - name: Download Docker Image Artifact
         uses: actions/download-artifact@v3
@@ -69,7 +61,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Push Docker Image
-        run: docker push sontoong/loloca-fe:latest
+        run: sudo docker push sontoong/loloca-fe:latest
 
   deploy:
     name: Deploy to VPS
