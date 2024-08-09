@@ -12,9 +12,6 @@ jobs:
   build:
     name: Build Docker Image
     runs-on: self-hosted
-    services:
-      docker:
-        image: docker:latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -28,10 +25,10 @@ jobs:
           sudo apt-get install -y openssh-client bash
 
       - name: Build Docker Image
-        run: docker-compose -f ${{ secrets.DOCKER_COMPOSE_PATH }} build
+        run: sudo docker-compose -f ${{ secrets.DOCKER_COMPOSE_PATH }} build
 
       - name: Rename Tag Docker Image
-        run: docker tag ${{ secrets.DOCKER_IMAGE_BUILD_NAME }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
+        run: sudo docker tag ${{ secrets.DOCKER_IMAGE_BUILD_NAME }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
 
       - name: Print Current Working Directory
         run: pwd
@@ -39,7 +36,7 @@ jobs:
       - name: Save and Upload Docker Image
         run: |
           pwd
-          docker save -o docker_image.tar ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
+          sudo docker save -o docker_image.tar ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
           sudo chmod 777 docker_image.tar
           
       - name: Upload Docker Image as Artifact
@@ -52,12 +49,9 @@ jobs:
         run: rm -f docker_image.tar
 
   push:
-    needs: build
     name: Push Docker Image to Docker Hub
     runs-on: self-hosted
-    services:
-      docker:
-        image: docker:latest
+    needs: build
     steps:
       - name: Download Docker Image Artifact
         uses: actions/download-artifact@v3
@@ -71,18 +65,15 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Load Docker Image
-        run: docker load -i docker_image.tar
+        run: sudo docker load -i docker_image.tar
 
       - name: Push Docker Image
-        uses: docker/build-push-action@v6
-        with: 
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{secrets.DOCKER_REPO_NAME}}:latest
+        run: sudo docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
 
   deploy:
-    needs: push
     name: Deploy to VPS
     runs-on: self-hosted
+    needs: push
     steps:
       - name: Install SSH Client
         run: sudo apt-get install -y openssh-client
