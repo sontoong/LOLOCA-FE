@@ -15,7 +15,6 @@ jobs:
     services:
       docker:
         image: docker:latest
-        options: --privileged
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -59,7 +58,6 @@ jobs:
     services:
       docker:
         image: docker:latest
-        options: --privileged
     steps:
       - name: Download Docker Image Artifact
         uses: actions/download-artifact@v3
