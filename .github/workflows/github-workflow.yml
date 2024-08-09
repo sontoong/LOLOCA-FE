@@ -33,17 +33,14 @@ jobs:
       - name: Tag Docker Image
         run: sudo docker tag ${{ secrets.DOCKER_IMAGE_BUILD_NAME }} ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
 
-      - name: Save Docker Image
-        run: sudo docker save -o docker_image.tar ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
-
-      - name: Change Docker Image Permissions
-        run: sudo chmod 777 docker_image.tar
-
-      - name: Upload Docker Image as Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: docker_image
-          path: docker_image.tar
+      - name: Save and Upload Docker Image
+        run: |
+          sudo docker save -o docker_image.tar ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
+            sudo chmod 777 docker_image.tar
+            uses: actions/upload-artifact@v3
+            with:
+              name: docker_image
+              path: docker_image.tar
 
   push:
     name: Push Docker Image to Docker Hub
