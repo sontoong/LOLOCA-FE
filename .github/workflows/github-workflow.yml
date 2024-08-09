@@ -48,6 +48,11 @@ jobs:
     name: Push Docker Image to Docker Hub
     runs-on: self-hosted
     needs: build
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
     steps:
       - name: Download Docker Image Artifact
         uses: actions/download-artifact@v3
