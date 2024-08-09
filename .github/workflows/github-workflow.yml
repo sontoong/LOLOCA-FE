@@ -30,8 +30,12 @@ jobs:
       - name: Rename Tag Docker Image
         run: sudo docker tag ${{ secrets.DOCKER_IMAGE_BUILD_NAME }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
 
+      - name: Print Current Working Directory
+        run: pwd
+
       - name: Save and Upload Docker Image
         run: |
+          pwd
           sudo docker save -o docker_image.tar ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
           sudo chmod 777 docker_image.tar
           
@@ -40,6 +44,9 @@ jobs:
         with:
           name: docker_image
           path: docker_image.tar
+
+      - name: Clean Up Docker Image File
+        run: rm -f docker_image.tar
 
   push:
     name: Push Docker Image to Docker Hub
