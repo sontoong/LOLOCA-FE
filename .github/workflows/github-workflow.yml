@@ -31,10 +31,10 @@ jobs:
         run: sudo docker images
 
       - name: Tag Docker Image
-        run: sudo docker tag ${{ secrets.DOCKER_IMAGE_BUILD_NAME }} ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:v1.0
+        run: sudo docker tag ${{ secrets.DOCKER_IMAGE_BUILD_NAME }} ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
 
       - name: Save Docker Image
-        run: sudo docker save -o docker_image.tar ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:v1.0
+        run: sudo docker save -o docker_image.tar ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
 
       - name: Change Docker Image Permissions
         run: sudo chmod 777 docker_image.tar
@@ -62,7 +62,7 @@ jobs:
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Push Docker Image
-        run: sudo docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:v1.0
+        run: sudo docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
 
   deploy:
     name: Deploy to VPS
