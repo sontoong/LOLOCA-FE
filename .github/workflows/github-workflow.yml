@@ -20,22 +20,18 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y curl
-          sudo curl -L "https://github.com/docker/compose/releases/download/v2.27.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo curl -L "https://github.com/docker/compose/releases/download/v2.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
           sudo apt-get install -y openssh-client bash
 
       - name: Build Docker Image
-        run: sudo docker-compose -f ${{ secrets.DOCKER_COMPOSE_PATH }} build
+        run: docker-compose -f ${{ secrets.DOCKER_COMPOSE_PATH }} build
 
       - name: Rename Tag Docker Image
         run: sudo docker tag ${{ secrets.DOCKER_IMAGE_BUILD_NAME }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
 
-      - name: Print Current Working Directory
-        run: pwd
-
-      - name: Save and Upload Docker Image
+      - name: Save Docker Image
         run: |
-          pwd
           sudo docker save -o docker_image.tar ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
           sudo chmod 777 docker_image.tar
           
